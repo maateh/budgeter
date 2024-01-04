@@ -54,6 +54,39 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
+  }
+  a {
+    @apply no-underline hover:underline active:underline;
+  }
+}
+
+@layer utilities {
+  .max-container {
+    @apply w-full max-w-screen-2xl my-0 mx-auto;
+  }
+
+  /* ICONS */
+  .icon-wrapper {
+    @apply flex justify-center items-center gap-2.5;
+  }
+
+  /* CUSTOM BORDERS */
+  .border-sm {
+    @apply rounded-sm rounded-tl-[18px] rounded-br-[12px];
+  }
+  .border-md {
+    @apply rounded-md rounded-tl-[24px] rounded-br-[16px];
+  }
+  .border-lg {
+    @apply rounded-lg rounded-tl-[28px] rounded-br-[20px];
+  }
+
+  /* TYPOGRAPHY */
+  .small-caps {
+    font-variant: small-caps;
+  }
+  .all-small-caps {
+    font-variant: all-small-caps;
   }
 }
