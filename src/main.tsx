@@ -5,10 +5,14 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './globals.css'
 
+import ThemeProvider from '@/components/theme/ThemeProvider.tsx'
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ThemeProvider defaultTheme="dark">
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 )
