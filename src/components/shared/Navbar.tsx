@@ -33,7 +33,7 @@ const Navbar = () => {
             <li key={link.label}>
               <NavLink
                 to={link.link}
-                className="py-2 px-4 text-lg font-normal tracking-wide icon-wrapper border-md [&.active]:bg-secondary"
+                className="py-2 px-4 text-lg font-normal tracking-wide icon-wrapper border-md [&.active]:bg-primary"
               >
                 <link.Icon size={24} />
                 <span>{link.label}</span>
