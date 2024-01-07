@@ -15,8 +15,8 @@ const Navbar = () => {
 
   return (
     <header className="max-container">
-      <nav className=" relative mx-5 my-4 mb-2 px-7 py-3 flex flex-col md:flex-row items-start md:items-center md:justify-between bg-secondary rounded-[2.15rem] md:rounded-full">
-        <div className="w-[93.75%] flex justify-between items-center">
+      <nav className="page-wrapper layout-rounded md:rounded-full py-3 bg-secondary relative flex flex-col md:flex-row items-start md:items-center md:justify-between">
+        <div className="w-full flex justify-between items-center">
           <NavLink to="/" className="icon-wrapper">
             <PiggyBank size={40} strokeWidth={1} />
             <span className="text-xl md:text-2xl font-bold font-heading small-caps overline tracking-wider">
@@ -26,7 +26,7 @@ const Navbar = () => {
 
           <Menu
             onClick={() => linksRef.current?.classList.toggle('mobile-closed')}
-            className="md:hidden cursor-pointer"
+            className="md:hidden cursor-pointer mr-8"
             size={28}
           />
         </div>

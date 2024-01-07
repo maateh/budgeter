@@ -59,11 +59,29 @@
   a {
     @apply no-underline hover:underline active:underline;
   }
+  h1 {
+    @apply text-4xl font-bold small-caps mt-8 mb-4;
+  }
+  h2 {
+    @apply text-2xl font-semibold capitalize;
+  }
+  h3 {
+    @apply text-xl font-normal small-caps;
+  }
+}
+
+@layer components {
+  .layout-rounded {
+    @apply rounded-[2.15rem] px-6 py-5;
+  }
 }
 
 @layer utilities {
   .max-container {
     @apply w-full max-w-screen-2xl my-0 mx-auto;
+  }
+  .page-wrapper {
+    @apply mx-5 my-4;
   }
 
   /* ICONS */
