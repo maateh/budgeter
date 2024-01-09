@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 
 // layouts
 import RootLayout from "./layouts/_root/RootLayout"
-import { Home, Transactions, Wishlist } from "./layouts/_root/pages"
+import { Home, Transactions, Wishlist, Splitter } from "./layouts/_root/pages"
 
 const App = () => {
   return (
@@ -18,6 +18,11 @@ const App = () => {
           <Route path="/transactions" element={
             <Suspense fallback={<>Loading...</>}>
               <Transactions />
+            </Suspense>
+          } />
+          <Route path="/splitter" element={
+            <Suspense fallback={<>Loading...</>}>
+              <Splitter />
             </Suspense>
           } />
           <Route path="/wishlist" element={

@@ -1,11 +1,16 @@
 // icons
-import { Receipt, Gift } from "lucide-react"
+import { Receipt, Coins, Gift } from "lucide-react"
 
 export const navLinks = [
   {
     label: 'Transactions',
     link: '/transactions',
     Icon: Receipt
+  },
+  {
+    label: 'Splitter',
+    link: '/splitter',
+    Icon: Coins
   },
   {
     label: 'Wishlist',
