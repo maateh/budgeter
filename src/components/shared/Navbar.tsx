@@ -17,7 +17,7 @@ const Navbar = () => {
     <header className="max-container">
       <nav className="page-wrapper layout-rounded md:rounded-full py-3 bg-secondary relative flex flex-col md:flex-row items-start md:items-center md:justify-between">
         <div className="w-full flex justify-between items-center">
-          <NavLink to="/" className="icon-wrapper">
+          <NavLink to="/" className="icon-wrapper !items-end">
             <PiggyBank size={40} strokeWidth={1} />
             <span className="text-xl md:text-2xl font-bold font-heading small-caps overline tracking-wider">
               MyBudget

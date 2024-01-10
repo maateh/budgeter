@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Marhey:400|Marhey:700|Nunito:400|Nunito:500|Nunito:600|Nunito:700');
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap'); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -54,19 +57,19 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground min-h-screen;
+    @apply bg-background text-foreground font-body font-normal min-h-screen;
   }
   a {
     @apply no-underline hover:underline active:underline;
   }
   h1 {
-    @apply text-4xl font-bold small-caps mt-8 mb-4;
+    @apply text-4xl font-heading font-bold small-caps mt-8 mb-4;
   }
   h2 {
-    @apply text-2xl font-semibold capitalize;
+    @apply text-2xl font-heading font-normal capitalize;
   }
   h3 {
-    @apply text-xl font-normal small-caps;
+    @apply text-xl font-heading font-normal small-caps;
   }
 }
 
@@ -86,7 +89,7 @@
 
   /* ICONS */
   .icon-wrapper {
-    @apply flex justify-center items-center gap-2.5;
+    @apply flex items-center gap-x-2;
   }
 
   /* CUSTOM BORDERS */
@@ -94,10 +97,10 @@
     @apply rounded-sm rounded-tl-[18px] rounded-br-[12px];
   }
   .border-md {
-    @apply rounded-md rounded-tl-[24px] rounded-br-[16px];
+    @apply rounded-md rounded-tl-[28px] rounded-br-[18px];
   }
   .border-lg {
-    @apply rounded-lg rounded-tl-[28px] rounded-br-[20px];
+    @apply rounded-md rounded-tl-[40px] rounded-br-[24px];
   }
 
   /* TYPOGRAPHY */
