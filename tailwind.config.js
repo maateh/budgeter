@@ -53,7 +53,7 @@ export default {
         },
       },
       fontFamily: {
-        heading: 'Marhey',
+        heading: 'Tektur',
         body: 'Nunito',
       },
       fontWeight: {

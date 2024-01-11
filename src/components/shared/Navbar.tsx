@@ -14,12 +14,12 @@ const Navbar = () => {
   const linksRef = useRef<HTMLUListElement>(null)
 
   return (
-    <header className="max-container">
-      <nav className="page-wrapper layout-rounded md:rounded-full py-3 bg-secondary relative flex flex-col md:flex-row items-start md:items-center md:justify-between">
+    <header className="max-container py-4">
+      <nav className="mx-5 py-3 layout-rounded md:rounded-full bg-secondary relative flex flex-col md:flex-row items-start md:items-center md:justify-between">
         <div className="w-full flex justify-between items-center">
           <NavLink to="/" className="icon-wrapper !items-end">
             <PiggyBank size={40} strokeWidth={1} />
-            <span className="text-xl md:text-2xl font-bold font-heading small-caps overline tracking-wider">
+            <span className="text-3xl font-bold font-heading small-caps overline tracking-wider">
               MyBudget
             </span>
           </NavLink>
@@ -36,7 +36,7 @@ const Navbar = () => {
             <li key={link.label}>
               <NavLink
                 to={link.link}
-                className="py-2 px-4 text-lg font-normal tracking-wide icon-wrapper border-md [&.active]:bg-primary"
+                className="py-2 px-4 text-lg font-medium tracking-wide icon-wrapper border-md [&.active]:bg-primary"
               >
                 <link.Icon size={24} />
                 <span>{link.label}</span>
@@ -45,7 +45,7 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <div className="absolute right-1.5 border-l-[1px] border-l-background">
+        <div className="absolute right-1.5 border-l-[1px] border-l-background/60">
           <ThemeSwitcher />
         </div>
       </nav>
