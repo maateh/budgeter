@@ -13,9 +13,9 @@ const progressVariants = cva(
       variant: {
         default: "bg-primary-foreground hover:bg-primary-foreground/85",
         positive:
-          "bg-green-500 hover:bg-green-500/85",
+          "bg-green-600 dark:bg-green-600 hover:bg-green-600/85 dark:hover:bg-green-500/85",
         negative:
-          "bg-red-500 hover:bg-red-500/85",
+          "bg-red-600 dark:bg-red-600 hover:bg-red-600/85 dark:hover:bg-red-500/85",
       },
     },
     defaultVariants: {
