@@ -80,7 +80,7 @@
 
 @layer utilities {
   .max-container {
-    @apply w-full max-w-screen-2xl my-0 mx-auto;
+    @apply w-full max-w-[1728px] my-0 mx-auto;
   }
   .page-wrapper {
     @apply mx-5 my-4;
