@@ -18,9 +18,9 @@ const badgeVariants = cva(
         positive: "text-neutral-200 bg-green-800 hover:bg-green-700",
         negative: "text-neutral-200 bg-red-800 hover:bg-red-700",
         income:
-          "border-2 border-green-700/75 dark:border-green-500/65 bg-background/80 text-green-700/95 dark:text-green-500/95 font-semibold hover:bg-secondary/10",
+          "text-sm border-2 border-green-700/75 dark:border-green-500/65 bg-background/80 text-green-700/95 dark:text-green-500/95 font-semibold hover:bg-secondary/10",
         loss:
-          "border-2 border-red-700/75 dark:border-red-500/65 bg-background/80 text-red-700/95 dark:text-red-500/95 font-semibold hover:bg-secondary/10"
+          "text-sm border-2 border-red-700/75 dark:border-red-500/65 bg-background/80 text-red-700/95 dark:text-red-500/95 font-semibold hover:bg-secondary/10"
       },
     },
     defaultVariants: {
