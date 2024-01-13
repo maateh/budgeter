@@ -26,9 +26,9 @@ const CreateBudgetSheet = () => {
       name: "",
       type: BudgetType.INCOME,
       balance: {
-        current: 0,
-        starting: 0,
-        max: 0
+        current: undefined,
+        starting: undefined,
+        max: undefined
       },
       theme: {
         background: "",
@@ -63,7 +63,7 @@ const CreateBudgetSheet = () => {
         </SheetHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-6">
             <FormField
               control={form.control}
               name="name"
@@ -102,13 +102,13 @@ const CreateBudgetSheet = () => {
                         <FormControl>
                           <RadioGroupItem value={BudgetType.INCOME} />
                         </FormControl>
-                        <FormLabel>{BudgetType.INCOME}</FormLabel>
+                        <FormLabel className="cursor-pointer">{BudgetType.INCOME}</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
                         <FormControl>
                           <RadioGroupItem value={BudgetType.DEBT} />
                         </FormControl>
-                        <FormLabel>{BudgetType.DEBT}</FormLabel>
+                        <FormLabel className="cursor-pointer">{BudgetType.DEBT}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -224,7 +224,7 @@ const CreateBudgetSheet = () => {
             </div>
 
             <SheetFooter>
-              <Button type="submit" size="lg" className="all-small-caps">
+              <Button type="submit" size="lg" className="mt-4 all-small-caps">
                 Create
               </Button>
             </SheetFooter>
