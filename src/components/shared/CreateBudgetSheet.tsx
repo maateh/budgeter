@@ -16,6 +16,7 @@ import Budget, { BudgetType } from "@/models/Budget"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
+import ColorPicker from "./ColorPicker"
 
 const CreateBudgetSheet = () => {
   const [open, setOpen] = useState(false)
@@ -26,13 +27,13 @@ const CreateBudgetSheet = () => {
       name: "",
       type: BudgetType.INCOME,
       balance: {
-        current: undefined,
-        starting: undefined,
-        max: undefined
+        current: 0,
+        starting: 0,
+        max: 0
       },
       theme: {
-        background: "",
-        foreground: ""
+        background: '#dedede',
+        foreground: '#202020'
       }
     }
   })
@@ -41,6 +42,8 @@ const CreateBudgetSheet = () => {
     const { name, type, balance, theme } = values
     const budget = new Budget(1, name, type, balance, [], theme)
     Budget.create(budget)
+
+    console.log('BUDGET: ', budget)
     // Budget.delete(1)
 
     setOpen(false)
@@ -102,13 +105,13 @@ const CreateBudgetSheet = () => {
                         <FormControl>
                           <RadioGroupItem value={BudgetType.INCOME} />
                         </FormControl>
-                        <FormLabel className="cursor-pointer">{BudgetType.INCOME}</FormLabel>
+                        <FormLabel className="text-md font-semibold cursor-pointer">{BudgetType.INCOME}</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-2">
                         <FormControl>
                           <RadioGroupItem value={BudgetType.DEBT} />
                         </FormControl>
-                        <FormLabel className="cursor-pointer">{BudgetType.DEBT}</FormLabel>
+                        <FormLabel className="text-md font-semibold cursor-pointer">{BudgetType.DEBT}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -179,22 +182,23 @@ const CreateBudgetSheet = () => {
               />
             </div>
 
-            <div className="flex flex-wrap justify-center items-end gap-x-8 gap-y-4">
+            <div className="flex flex-col justify-center gap-y-4">
               <FormField
                 control={form.control}
                 name="theme.background"
                 render={({ field }) => (
-                  <FormItem className="min-w-36 flex-1">
+                  <FormItem className="flex items-center gap-x-4">
                     <FormLabel className="font-heading text-xl small-caps">
                       Custom Background Color
                     </FormLabel>
                     <FormControl>
-                      {/* TODO: color picker */}
-                      <Input
-                        type="string"
-                        placeholder="e.g. #dedede"
-                        {...field}
-                      />
+                      <>
+                        <Input type="hidden" {...field} />
+                        <ColorPicker
+                          color={field.value}
+                          onChange={field.onChange}
+                        />
+                      </>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,17 +209,18 @@ const CreateBudgetSheet = () => {
                 control={form.control}
                 name="theme.foreground"
                 render={({ field }) => (
-                  <FormItem className="min-w-36 flex-1">
+                  <FormItem className="flex items-center gap-x-4">
                     <FormLabel className="font-heading text-xl small-caps">
-                    Custom Foreground Color
+                      Custom Foreground Color
                     </FormLabel>
                     <FormControl>
-                      {/* TODO: color picker */}
-                      <Input
-                        type="string"
-                        placeholder="e.g. #242424"
-                        {...field}
-                      />
+                      <>
+                        <Input type="hidden" {...field} />
+                        <ColorPicker
+                          color={field.value}
+                          onChange={field.onChange}
+                        />
+                      </>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
