@@ -1,13 +1,21 @@
+// shadcn
 import { Badge } from "@/components/ui/badge"
 
+// models
+import Transaction, { TransactionType } from "@/models/Transaction";
+
 type TransactionBadgeProps = {
-    amount: number;
+  transaction: Transaction;
 }
 
-const TransactionBadge = ({ amount }: TransactionBadgeProps) => {
+const TransactionBadge = ({ transaction }: TransactionBadgeProps) => {
   return (
-    <Badge variant={amount > 0 ? "positive" : "negative"}>
-      {amount > 0 ? '+' : '-'}${Math.abs(amount)}
+    <Badge variant={
+      transaction.type === TransactionType.INCOME
+        ? "positive"
+        : "negative"
+    }>
+      {transaction.type === TransactionType.INCOME ? '+' : '-'}${Math.abs(transaction.amount)}
     </Badge>
   )
 }

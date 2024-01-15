@@ -1,11 +1,20 @@
-// shadcn
-// import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
 
 // components
-import BudgetPreview from "@/components/shared/BudgetPreview"
 import CreateBudgetSheet from "@/components/shared/CreateBudgetSheet"
+import BudgetPreview from "@/components/shared/BudgetPreview"
+
+// models
+import Budget from "@/models/Budget"
 
 const AvailableBudgets = () => {
+  const [budgets, setBudgets] = useState<Budget[]>([])
+
+  useEffect(() => {
+    const budgets = Budget.findAll()
+    setBudgets(budgets)
+  }, [])
+
   return (
     <>
       <div className="flex justify-between items-center gap-8 max-sm:flex-col max-sm:items-start max-sm:gap-4">
@@ -14,16 +23,11 @@ const AvailableBudgets = () => {
       </div>
 
       <ul className="w-full mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 items-center gap-8">
-        {/* TODO: every budget should have dedicated background and foreground colors */}
-        <li className="mx-auto max-w-sm" key={1}>
-          <BudgetPreview />
-        </li>
-        <li className="mx-auto max-w-sm" key={2}>
-          <BudgetPreview />
-        </li>
-        <li className="mx-auto max-w-sm" key={3}>
-          <BudgetPreview />
-        </li>
+        {budgets.map(budget => (
+          <li className="mx-auto w-full max-w-sm lg:min-w-96" key={budget.id}>
+            <BudgetPreview budget={budget} />
+          </li>
+        ))}
       </ul>
     </>
   )
