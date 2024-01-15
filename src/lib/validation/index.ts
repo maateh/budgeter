@@ -6,7 +6,7 @@ export const BudgetValidation = z.object({
   name: z.string().min(2, { message: 'Too short.' }).max(50, { message: 'Too long.' }),
   type: z.nativeEnum(BudgetType),
   balance: z.object({
-    current: z.coerce.number(),
+    current: z.coerce.number().lte(0).gte(0),
     starting: z.coerce.number(),
     max: z.coerce.number()
   }),

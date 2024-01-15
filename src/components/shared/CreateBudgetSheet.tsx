@@ -11,12 +11,15 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 
+// components
+import ColorPicker from "@/components/shared/ColorPicker"
+
 // models
 import Budget, { BudgetType } from "@/models/Budget"
+import Transaction, { TransactionType } from "@/models/Transaction"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
-import ColorPicker from "./ColorPicker"
 
 const CreateBudgetSheet = () => {
   const [open, setOpen] = useState(false)
@@ -27,8 +30,8 @@ const CreateBudgetSheet = () => {
       name: "",
       type: BudgetType.INCOME,
       balance: {
-        current: 0,
         starting: 0,
+        current: 0,
         max: 0
       },
       theme: {
@@ -39,12 +42,15 @@ const CreateBudgetSheet = () => {
   })
 
   function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    const { name, type, balance, theme } = values
-    const budget = new Budget(1, name, type, balance, [], theme)
-    Budget.create(budget)
+    const transaction = new Transaction(crypto.randomUUID(), {
+      type: TransactionType.INCOME,
+      amount: values.balance.starting
+    })
 
-    console.log('BUDGET: ', budget)
-    // Budget.delete(1)
+    Budget.save(
+      crypto.randomUUID(),
+      values
+    ).executeTransactions(transaction)
 
     setOpen(false)
     form.reset()
@@ -123,26 +129,6 @@ const CreateBudgetSheet = () => {
             <div className="flex flex-wrap justify-center items-end gap-x-8 gap-y-4">
               <FormField
                 control={form.control}
-                name="balance.current"
-                render={({ field }) => (
-                  <FormItem className="min-w-36 flex-1">
-                    <FormLabel className="font-heading text-xl small-caps">
-                      Current Balance
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="e.g. $35"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="balance.starting"
                 render={({ field }) => (
                   <FormItem className="min-w-36 flex-1">
@@ -167,7 +153,7 @@ const CreateBudgetSheet = () => {
                 render={({ field }) => (
                   <FormItem className="min-w-36 flex-1">
                     <FormLabel className="font-heading text-xl small-caps">
-                      Budget Ceiling
+                      Expected Ceiling
                     </FormLabel>
                     <FormControl>
                       <Input
