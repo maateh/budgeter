@@ -1,5 +1,3 @@
-import { UUID } from "crypto"
-
 export type TransactionProps = {
   amount: number
 }
@@ -7,7 +5,7 @@ export type TransactionProps = {
 class Transaction {
   public amount
 
-  constructor(readonly id: UUID, props: TransactionProps) {
+  constructor(readonly id: string, props: TransactionProps) {
     this.amount = props.amount
   }
 }

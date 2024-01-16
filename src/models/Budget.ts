@@ -1,5 +1,3 @@
-import { UUID } from "crypto"
-
 // models
 import Transaction from "./Transaction"
 
@@ -33,7 +31,7 @@ class Budget {
   public transactions
   public theme
 
-  constructor(readonly id: UUID, props: BudgetProps) {
+  constructor(readonly id: string, props: BudgetProps) {
     this.name = props.name
     this.type = props.type
     this.balance = props.balance
@@ -76,7 +74,7 @@ class Budget {
     return parsedBudgets.map(b => new Budget(b.id, { ...b }))
   }
 
-  static find(id: UUID) {
+  static find(id: string) {
     const budget = this.findAll().find(b => b.id === id)
 
     if (!budget) {
@@ -86,7 +84,7 @@ class Budget {
     return new Budget(budget.id, { ...budget })
   }
 
-  static save(id: UUID, props: BudgetProps) {
+  static save(id: string, props: BudgetProps) {
     const filteredBudgets = this.findAll().filter(b => b.id !== id)
     const budget = new Budget(id, props)
     
@@ -97,7 +95,7 @@ class Budget {
     return budget
   }
 
-  static delete(id: UUID) {
+  static delete(id: string) {
     const budgets = this.findAll()
     const filteredBudgets = budgets.filter(b => b.id !== id)
     localStorage.setItem('budgets', JSON.stringify(filteredBudgets))
