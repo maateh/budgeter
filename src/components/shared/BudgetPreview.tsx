@@ -1,11 +1,13 @@
 // shadcn
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
+import { Badge } from "@/components/ui/badge"
+
+// components
+import TransactionBadge from "@/components/shared/TransactionBadge"
 
 // icons
 import { Landmark, Wallet } from "lucide-react"
-import TransactionBadge from "./TransactionBadge"
-import { Badge } from "../ui/badge"
 
 // models
 import Budget from "@/models/Budget"
@@ -36,15 +38,14 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       <Separator className="py-[1px] bg-neutral-700 dark:bg-neutral-200" />
 
       <div className="px-4 py-3 rounded-b-3xl bg-card/75 shadow-2xl border-2 border-t-0 border-card">
-        <div className="mt-1 flex flex-wrap-reverse justify-between font-semibold">
-          <p>Total profit: ${budget.loss}</p>
-          <p>Max. budget: ${budget.balance.max}</p>
-        </div>
+        <p className="mt-1 flex flex-end font-semibold">
+          Budget ceiling: ${budget.balance.ceiling}
+        </p>
 
         <Progress
           value={budget.balance.current}
-          maxValue={budget.balance.max}
-          variant="positive"
+          maxValue={budget.balance.ceiling}
+          variant={budget.type}
           className="mt-1 mb-2"
         />
 

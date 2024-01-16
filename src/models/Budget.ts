@@ -1,7 +1,7 @@
 import { UUID } from "crypto"
 
 // models
-import Transaction, { TransactionType } from "./Transaction"
+import Transaction from "./Transaction"
 
 export type BudgetProps = {
   name: string,
@@ -13,8 +13,7 @@ export type BudgetProps = {
 
 export type Balance = {
   current: number;
-  starting: number;
-  max: number;
+  ceiling: number;
 }
 
 export type BudgetTheme = {
@@ -24,7 +23,7 @@ export type BudgetTheme = {
 
 export enum BudgetType {
   INCOME = 'income',
-  DEBT = 'debt'
+  EXPENSE = 'expense'
 }
 
 class Budget {
@@ -45,25 +44,25 @@ class Budget {
 
   get income(): number {
     return this.transactions
-      .filter(tr => tr.type === TransactionType.INCOME)
-      .reduce((currentTotal, tr) => currentTotal + tr.amount, -this.balance.starting)
+      .filter(tr => tr.amount > 0)
+      .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
   get loss(): number {
     return this.transactions
-      .filter(tr => tr.type === TransactionType.LOSS)
+      .filter(tr => tr.amount < 0)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
-  }
-
-  get profit(): number {
-    // TODO: [+] and [-] transactions
-    return this.balance.current - this.balance.starting
   }
 
   executeTransactions(...transactions: Transaction[]): Transaction[] {
     transactions.forEach(t => {
       this.transactions.push(t)
-      this.balance.current += t.amount
+
+      if (this.type === BudgetType.INCOME) {
+        this.balance.current += t.amount
+      } else {
+        this.balance.current -= t.amount
+      }
     })
 
     Budget.save(this.id, this)

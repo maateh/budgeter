@@ -2,13 +2,19 @@ import * as z from "zod"
 
 import { BudgetType } from "@/models/Budget"
 
+export const TransactionValidation = z.object({
+  amount: z.coerce.number()
+})
+
 export const BudgetValidation = z.object({
   name: z.string().min(2, { message: 'Too short.' }).max(50, { message: 'Too long.' }),
   type: z.nativeEnum(BudgetType),
   balance: z.object({
-    current: z.coerce.number().lte(0).gte(0),
-    starting: z.coerce.number(),
-    max: z.coerce.number()
+    current: z.coerce.number()
+      .gte(0)
+      .lte(0)
+      .default(0),
+    ceiling: z.coerce.number()
   }),
   theme: z.object({
     background: z.string()
