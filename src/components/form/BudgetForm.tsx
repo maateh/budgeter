@@ -27,6 +27,7 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
   const form = useForm<z.infer<typeof BudgetValidation>>({
     resolver: zodResolver(BudgetValidation),
     defaultValues: {
+      id: crypto.randomUUID(),
       name: "",
       type: BudgetType.INCOME,
       balance: {
@@ -41,11 +42,12 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
   })
 
   function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    Budget.save(crypto.randomUUID(), values)
+    Budget.save(values.id, values)
 
     // TODO: add initial transactions
 
     form.reset()
+    form.setValue("id", crypto.randomUUID())
     cleanForm()
   }
 
