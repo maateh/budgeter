@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge"
 
 // models
 import Transaction from "@/models/Transaction";
-// import Transaction, { TransactionType } from "@/models/Transaction";
 
 type TransactionBadgeProps = {
   transaction: Transaction;

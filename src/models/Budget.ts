@@ -52,7 +52,7 @@ class Budget {
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
-  executeTransactions(...transactions: Transaction[]): Transaction[] {
+  executeTransactions(transactions: Transaction[]): Transaction[] {
     transactions.forEach(t => {
       this.transactions.push(t)
 

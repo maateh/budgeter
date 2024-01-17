@@ -1,13 +1,15 @@
 // shadcn
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Badge } from "@/components/ui/badge"
 
 // components
+import TransactionForm from "@/components/form/TransactionForm"
 import TransactionBadge from "@/components/shared/TransactionBadge"
 
 // icons
-import { Landmark, Wallet } from "lucide-react"
+import { BadgePlus, Landmark, Wallet } from "lucide-react"
 
 // models
 import Budget from "@/models/Budget"
@@ -50,11 +52,29 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         />
 
         <ul className="my-1 flex flex-wrap justify-start gap-x-2 gap-y-1">
+          <li>
+            <Popover>
+              <PopoverTrigger>
+                <Badge variant="outline" className="cursor-pointer flex gap-x-1">
+                  <BadgePlus size={16} />
+                  <span>New</span>
+                </Badge>
+              </PopoverTrigger>
+              <PopoverContent>
+                <p className="pb-1 mb-2 text-lg font-medium font-heading border-b border-border/25">
+                  Add Transactions
+                </p>
+                <TransactionForm budget={budget} />
+              </PopoverContent>
+            </Popover>
+          </li>
+
           {budget.transactions.slice(0, 6).map(transaction => (
             <li key={transaction.id}>
               <TransactionBadge transaction={transaction} />
             </li>
           ))}
+          
           <li>
             <Badge variant="outline" className="cursor-pointer">
               View all

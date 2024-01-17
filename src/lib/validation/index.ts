@@ -2,11 +2,6 @@ import * as z from "zod"
 
 import { BudgetType } from "@/models/Budget"
 
-export const TransactionValidation = z.object({
-  id: z.string().uuid(),
-  amount: z.coerce.number()
-})
-
 export const BudgetValidation = z.object({
   id: z.string().uuid(),
   name: z.string().min(2, { message: 'Too short.' }).max(50, { message: 'Too long.' }),
@@ -26,4 +21,19 @@ export const BudgetValidation = z.object({
     .length(7, { message: 'Foregound value should be a valid HEX color. e.g. #f1f1f1' })
     .regex(/^#/),
   })
+})
+
+export const TransactionValidation = z.object({
+  budgetId: z.string().uuid(),
+  id: z.string().uuid(),
+  amount: z.coerce.number(),
+  date: z.date()
+  // TODO: add multiple transactions at once
+  // transactions: z.array(
+  //   z.object({
+  //     id: z.string().uuid(),
+  //     amount: z.coerce.number(),
+  //     date: z.date(),
+  //   })
+  // )
 })
