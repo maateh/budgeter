@@ -23,7 +23,6 @@ export type TStorageAction = {
   }
 }
 
-export type TStorageContext = {
-  state: TStorageState,
+export type TStorageContext = TStorageState & {
   dispatch: React.Dispatch<TStorageAction>
 }

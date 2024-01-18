@@ -6,7 +6,7 @@ import BudgetPreview from "@/components/shared/BudgetPreview"
 import useStorage from "@/layouts/_root/context/useStorage"
 
 const AvailableBudgets = () => {
-  const { state: { budgets } } = useStorage()
+  const { budgets } = useStorage()
 
   return (
     <>

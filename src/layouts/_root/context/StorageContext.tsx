@@ -39,7 +39,7 @@ const initialStorageState: TStorageState = {
 }
 
 export const StorageContext = createContext<TStorageContext>({
-  state: initialStorageState,
+  ...initialStorageState,
   dispatch: () => {}
 })
 
@@ -56,7 +56,7 @@ const StorageContextProvider = ({ children }: React.PropsWithChildren) => {
   }, [])
 
   return (
-    <StorageContext.Provider value={{ state, dispatch }}>
+    <StorageContext.Provider value={{ ...state, dispatch }}>
       {children}
     </StorageContext.Provider>
   )
