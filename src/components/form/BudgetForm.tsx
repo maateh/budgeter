@@ -18,12 +18,16 @@ import Budget, { BudgetType } from "@/models/Budget"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
+import { addBudget } from "@/layouts/_root/context/actions"
+import useStorage from "@/layouts/_root/context/useStorage"
 
 type BudgetFormProps = {
   cleanForm?: () => void
 }
 
 const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
+  const { dispatch } = useStorage()
+
   const form = useForm<z.infer<typeof BudgetValidation>>({
     resolver: zodResolver(BudgetValidation),
     defaultValues: {
@@ -42,7 +46,8 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
   })
 
   function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    Budget.save(values.id, values)
+    const budget = Budget.save(values.id, values)
+    addBudget(dispatch, budget)
 
     // TODO: add initial transactions
 

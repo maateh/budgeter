@@ -1,19 +1,12 @@
-import { useState, useEffect } from "react"
-
 // components
 import CreateBudgetSheet from "@/components/shared/CreateBudgetSheet"
 import BudgetPreview from "@/components/shared/BudgetPreview"
 
 // models
-import Budget from "@/models/Budget"
+import useStorage from "@/layouts/_root/context/useStorage"
 
 const AvailableBudgets = () => {
-  const [budgets, setBudgets] = useState<Budget[]>([])
-
-  useEffect(() => {
-    const budgets = Budget.findAll()
-    setBudgets(budgets)
-  }, [])
+  const { state: { budgets } } = useStorage()
 
   return (
     <>
