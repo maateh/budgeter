@@ -10,14 +10,14 @@ export enum StorageAction {
 }
 
 export type TStorageState = {
-  budgets: Budget[]
+  budgets: {[key: string]: Budget}
 }
 
 export type TStorageAction = {
   type: StorageAction,
   payload: {
+    budgets?: TStorageState['budgets'],
     budget?: Budget,
-    budgets?: Budget[],
     id?: string,
     transaction?: Transaction
   }

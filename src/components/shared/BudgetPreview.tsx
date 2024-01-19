@@ -69,7 +69,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             </Popover>
           </li>
 
-          {budget.transactions.slice(0, 6).map(transaction => (
+          {Object.values(budget.transactions).slice(0, 6).map(transaction => (
             <li key={transaction.id}>
               <TransactionBadge transaction={transaction} />
             </li>

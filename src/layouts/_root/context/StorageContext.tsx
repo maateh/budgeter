@@ -12,27 +12,43 @@ import { setBudgets } from "./actions"
 const storageReducer = (state: TStorageState, action: TStorageAction): TStorageState => {
   const setBudgets = ({ budgets }: TStorageAction['payload']) => ({
     ...state,
-    budgets: budgets || []
+    budgets: budgets ?? {}
   })
 
-  const addBudget = ({ budget }: TStorageAction['payload']) => ({
-    ...state,
-    budgets: budget ? [
-      ...state.budgets.filter(b => b.id !== budget.id),
-      budget
-    ] : state.budgets
-  })
+  const addBudget = ({ budget }: TStorageAction['payload']) => {
+    if (!budget) {
+      return state
+    }
 
-  const deleteBudget = ({ id }: TStorageAction['payload']) => ({
-    ...state,
-    budgets: state.budgets.filter(b => b.id !== id)
-  })
+    state.budgets[budget.id] = budget
+    return {
+      ...state,
+      budgets: state.budgets
+    }
+  }
+
+  const deleteBudget = ({ id }: TStorageAction['payload']) => {
+    if (!id) {
+      return state
+    }
+
+    state.budgets[id]
+    return {
+      ...state,
+      budgets: state.budgets
+    }
+  }
 
   const addTransaction = ({ budget, transaction }: TStorageAction['payload']) => {
-    const budgetIndex = state.budgets.findIndex(b => b.id === budget?.id)
-    state.budgets[budgetIndex].executeTransactions([transaction])
+    if (!budget || !transaction) {
+      return state
+    }
 
-    return state
+    state.budgets[budget.id].executeTransactions([transaction])
+    return {
+      ...state,
+      budgets: state.budgets
+    }
   }
 
   switch (action.type) {
@@ -50,7 +66,7 @@ const storageReducer = (state: TStorageState, action: TStorageAction): TStorageS
 }
 
 const initialStorageState: TStorageState = {
-  budgets: await Budget.findAll()
+  budgets: {}
 }
 
 export const StorageContext = createContext<TStorageContext>({

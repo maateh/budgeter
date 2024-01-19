@@ -5,7 +5,7 @@ import { StorageAction, TStorageAction } from "../types"
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
-export const setBudgets = (dispatch: React.Dispatch<TStorageAction>, budgets: Budget[]) => {
+export const setBudgets = (dispatch: React.Dispatch<TStorageAction>, budgets: {[key: string]: Budget}) => {
   dispatch({
     type: StorageAction.SET_BUDGETS,
     payload: { budgets }

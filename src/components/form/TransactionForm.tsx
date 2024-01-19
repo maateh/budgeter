@@ -68,7 +68,7 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {budgets.map(b => (
+                    {Object.values(budgets).map(b => (
                       <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
                     ))}
                   </SelectContent>
