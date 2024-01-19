@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom"
 import Navbar from "@/components/shared/Navbar"
 
 // context
-import StorageContextProvider from "./context/StorageContext"
+import StorageContextProvider from "./context/StorageContextProvider"
 
 const RootLayout = () => {
   return (

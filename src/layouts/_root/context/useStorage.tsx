@@ -1,6 +1,6 @@
 import { useContext } from "react"
 
-import { StorageContext } from "./StorageContext"
+import StorageContext from "./StorageContext"
 
 const useStorage = () => {
   const context = useContext(StorageContext)
