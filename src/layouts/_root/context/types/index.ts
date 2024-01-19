@@ -1,3 +1,6 @@
+// types
+import { StorageData } from "@/storage"
+
 // models
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
@@ -10,7 +13,7 @@ export enum StorageAction {
 }
 
 export type TStorageState = {
-  budgets: {[key: string]: Budget}
+  budgets: StorageData['budget']
 }
 
 export type TStorageAction = {

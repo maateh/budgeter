@@ -66,59 +66,6 @@ class Budget {
       }
     })
   }
-
-  // localstorage helper functions
-  static async findAll(): Promise<{[key: string]: Budget}> {
-    const plainBudgets = localStorage.getItem('budgets') || '{}'
-    const parsedBudgets: {[key: string]: Budget} = JSON.parse(plainBudgets)
-
-    return Object.entries(parsedBudgets)
-      .reduce((budgets, [key, budget]) => ({
-        ...budgets,
-        [key]: new Budget(budget.id, budget)
-      }), {})
-  }
-
-  static async find(id: string): Promise<Budget> {
-    const budgets = await Budget.findAll()
-    const budget = budgets[id]
-
-    if (!budget) {
-      throw Error('Budget not found with the specified ID.')
-    }
-
-    return budget
-  }
-
-  static async save(id: string, props: BudgetProps): Promise<Budget> {
-    const budgets = await Budget.findAll()
-
-    budgets[id] = new Budget(id, props)
-    localStorage.setItem('budgets', JSON.stringify(budgets))
-
-    return budgets[id]
-  }
-
-  static async delete(id: string) {
-    const budgets = await Budget.findAll()
-
-    delete budgets[id]
-    localStorage.setItem('budgets', JSON.stringify(budgets))
-  }
-
-  static async addTransactions(budgetId: string, transactions: Transaction[]) {
-    const budget = await Budget.find(budgetId)
-    budget.executeTransactions(transactions)
-
-    await Budget.save(budget.id, budget)
-  }
-
-  static async deleteTransactions(budgetId: string, transactionIds: string[]) {
-    const budget = await Budget.find(budgetId)
-    transactionIds.forEach(id => delete budget.transactions[id])
-
-    await Budget.save(budget.id, budget)
-  }
 }
 
 export default Budget

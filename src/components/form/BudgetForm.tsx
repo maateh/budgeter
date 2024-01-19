@@ -13,13 +13,17 @@ import { Button } from "@/components/ui/button"
 import ColorPicker from "@/components/shared/ColorPicker"
 
 // models
-import Budget, { BudgetType } from "@/models/Budget"
-// import Transaction from "@/models/Transaction"
+import { BudgetType } from "@/models/Budget"
+
+// storage
+import Storage from "@/storage"
+
+// context
+import { addBudget } from "@/layouts/_root/context/actions"
+import useStorage from "@/layouts/_root/context/useStorage"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
-import { addBudget } from "@/layouts/_root/context/actions"
-import useStorage from "@/layouts/_root/context/useStorage"
 
 type BudgetFormProps = {
   cleanForm?: () => void
@@ -46,7 +50,7 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
   })
 
   async function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    const budget = await Budget.save(values.id, values)
+    const budget = await Storage.budget.save(values.id, values)
     addBudget(dispatch, budget)
 
     // TODO: add initial transactions

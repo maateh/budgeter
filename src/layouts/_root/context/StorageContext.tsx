@@ -3,11 +3,11 @@ import { createContext, useEffect, useReducer } from "react"
 // types
 import { StorageAction, TStorageState, TStorageAction, TStorageContext } from "./types"
 
-// models
-import Budget from "@/models/Budget"
-
 // actions
 import { setBudgets } from "./actions"
+
+// storage
+import Storage from "@/storage"
 
 const storageReducer = (state: TStorageState, action: TStorageAction): TStorageState => {
   const setBudgets = ({ budgets }: TStorageAction['payload']) => ({
@@ -79,7 +79,7 @@ const StorageContextProvider = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     const fetchBudgets = async () => {
-      const budgets = await Budget.findAll()
+      const budgets = await Storage.budget.findAll()
       setBudgets(dispatch, budgets)
     }
 

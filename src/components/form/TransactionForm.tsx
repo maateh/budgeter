@@ -9,16 +9,20 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-// context
-import useStorage from "@/layouts/_root/context/useStorage"
 
 // models
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
+// storage
+import Storage from "@/storage"
+
+// context
+import useStorage from "@/layouts/_root/context/useStorage"
+import { addTransaction } from "@/layouts/_root/context/actions"
+
 // validations
 import { TransactionValidation } from "@/lib/validation"
-import { addTransaction } from "@/layouts/_root/context/actions"
 
 type TransactionFormProps = {
   budget?: Budget
@@ -44,7 +48,7 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
       throw new Error('Budget not defined')
     }
 
-    await Budget.addTransactions(budget.id, [transaction])
+    await Storage.budget.addTransactions(budget.id, [transaction])
     addTransaction(dispatch, budget, transaction)
 
     form.reset()
