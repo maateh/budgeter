@@ -52,9 +52,9 @@ class Budget {
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
-  executeTransactions(transactions: Transaction[]): Transaction[] {
+  executeTransactions(transactions: Transaction[]) {
     transactions.forEach(t => {
-      this.transactions.push(t)
+      this.transactions.unshift(t)
 
       if (this.type === BudgetType.INCOME) {
         this.balance.current += t.amount
@@ -62,20 +62,18 @@ class Budget {
         this.balance.current -= t.amount
       }
     })
-
-    Budget.save(this.id, this)
-    return this.transactions
   }
 
   // localstorage helper functions
-  static findAll(): Budget[] {
+  static async findAll(): Promise<Budget[]> {
     const plainBudgets = localStorage.getItem('budgets') || '[]'
     const parsedBudgets: Budget[] = JSON.parse(plainBudgets)
-    return parsedBudgets.map(b => new Budget(b.id, { ...b }))
+    return parsedBudgets.map(b => new Budget(b.id, b))
   }
 
-  static find(id: string) {
-    const budget = this.findAll().find(b => b.id === id)
+  static async find(id: string): Promise<Budget> {
+    const budgets = await this.findAll()
+    const budget = budgets.find(b => b.id === id)
 
     if (!budget) {
       throw Error('Budget not found with the specified ID.')
@@ -84,8 +82,9 @@ class Budget {
     return new Budget(budget.id, { ...budget })
   }
 
-  static save(id: string, props: BudgetProps) {
-    const filteredBudgets = this.findAll().filter(b => b.id !== id)
+  static async save(id: string, props: BudgetProps): Promise<Budget> {
+    const budgets = await this.findAll()
+    const filteredBudgets = budgets.filter(b => b.id !== id)
     const budget = new Budget(id, props)
     
     localStorage.setItem('budgets', JSON.stringify([
@@ -95,10 +94,24 @@ class Budget {
     return budget
   }
 
-  static delete(id: string) {
-    const budgets = this.findAll()
+  static async delete(id: string) {
+    const budgets = await this.findAll()
     const filteredBudgets = budgets.filter(b => b.id !== id)
     localStorage.setItem('budgets', JSON.stringify(filteredBudgets))
+  }
+
+  static async addTransactions(budgetId: string, transactions: Transaction[]) {
+    const budget = await this.find(budgetId)
+    budget.executeTransactions(transactions)
+
+    await Budget.save(budget.id, budget)
+  }
+
+  static async deleteTransactions(budgetId: string, transactionIds: string[]) {
+    const budget = await this.find(budgetId)
+    budget.transactions.filter(t => !transactionIds.includes(t.id))
+
+    await Budget.save(budget.id, budget)
   }
 }
 

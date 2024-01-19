@@ -45,8 +45,8 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
     }
   })
 
-  function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    const budget = Budget.save(values.id, values)
+  async function onSubmit(values: z.infer<typeof BudgetValidation>) {
+    const budget = await Budget.save(values.id, values)
     addBudget(dispatch, budget)
 
     // TODO: add initial transactions

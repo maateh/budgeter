@@ -9,18 +9,24 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
+// context
+import useStorage from "@/layouts/_root/context/useStorage"
+
 // models
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
+import { addTransaction } from "@/layouts/_root/context/actions"
 
 type TransactionFormProps = {
   budget?: Budget
 }
 
 const TransactionForm = ({ budget }: TransactionFormProps) => {
+  const { budgets, dispatch } = useStorage()
+
   const form = useForm<z.infer<typeof TransactionValidation>>({
     resolver: zodResolver(TransactionValidation),
     defaultValues: {
@@ -31,10 +37,15 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
     }
   })
 
-  function onSubmit(values: z.infer<typeof TransactionValidation>) {
+  async function onSubmit(values: z.infer<typeof TransactionValidation>) {
     const transaction = new Transaction(values.id, values)
 
-    budget?.executeTransactions([transaction])
+    if (!budget) {
+      throw new Error('Budget not defined')
+    }
+
+    await Budget.addTransactions(budget.id, [transaction])
+    addTransaction(dispatch, budget, transaction)
 
     form.reset()
     form.setValue("id", crypto.randomUUID())
@@ -57,7 +68,7 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Budget.findAll().map(b => (
+                    {budgets.map(b => (
                       <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
                     ))}
                   </SelectContent>
