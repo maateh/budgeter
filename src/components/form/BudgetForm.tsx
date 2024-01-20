@@ -19,8 +19,8 @@ import { BudgetType } from "@/models/Budget"
 import Storage from "@/storage"
 
 // context
-import { addBudget } from "@/layouts/_root/context/actions"
 import useStorage from "@/layouts/_root/context/useStorage"
+import { setBudget } from "@/layouts/_root/context/actions"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
@@ -51,7 +51,7 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
 
   async function onSubmit(values: z.infer<typeof BudgetValidation>) {
     const budget = await Storage.budget.save(values.id, values)
-    addBudget(dispatch, budget)
+    setBudget(dispatch, budget)
 
     // TODO: add initial transactions
 

@@ -18,51 +18,27 @@ const storageReducer = (state: TStorageState, action: TStorageAction): TStorageS
     budgets: budgets ?? {}
   })
 
-  const addBudget = ({ budget }: TStorageAction['payload']) => {
-    if (!budget) {
-      return state
-    }
+  const setBudget = ({ budget }: TStorageAction['payload']) => {
+    if (!budget) return state
 
     state.budgets[budget.id] = budget
-    return {
-      ...state,
-      budgets: state.budgets
-    }
+    return { ...state, budgets: state.budgets }
   }
 
   const deleteBudget = ({ id }: TStorageAction['payload']) => {
-    if (!id) {
-      return state
-    }
+    if (!id) return state
 
-    state.budgets[id]
-    return {
-      ...state,
-      budgets: state.budgets
-    }
-  }
-
-  const addTransaction = ({ budget, transaction }: TStorageAction['payload']) => {
-    if (!budget || !transaction) {
-      return state
-    }
-
-    state.budgets[budget.id].executeTransactions([transaction])
-    return {
-      ...state,
-      budgets: state.budgets
-    }
+    delete state.budgets[id]
+    return { ...state, budgets: state.budgets }
   }
 
   switch (action.type) {
     case StorageAction.SET_BUDGETS:
       return setBudgets(action.payload)
-    case StorageAction.ADD_BUDGET:
-      return addBudget(action.payload)
+    case StorageAction.SET_BUDGET:
+      return setBudget(action.payload)
     case StorageAction.DELETE_BUDGET:
       return deleteBudget(action.payload)
-    case StorageAction.ADD_TRANSACTION:
-      return addTransaction(action.payload)
     default:
       throw new Error('StorageContext: An unexpected type of action was given.')
   }

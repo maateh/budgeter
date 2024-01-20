@@ -4,7 +4,6 @@ import { StorageData } from "@/storage"
 
 // models
 import Budget from "@/models/Budget"
-import Transaction from "@/models/Transaction"
 
 export const setBudgets = (dispatch: React.Dispatch<TStorageAction>, budgets: StorageData['budget']) => {
   dispatch({
@@ -13,9 +12,9 @@ export const setBudgets = (dispatch: React.Dispatch<TStorageAction>, budgets: St
   })
 }
 
-export const addBudget = (dispatch: React.Dispatch<TStorageAction>, budget: Budget) => {
+export const setBudget = (dispatch: React.Dispatch<TStorageAction>, budget: Budget) => {
   dispatch({
-    type: StorageAction.ADD_BUDGET,
+    type: StorageAction.SET_BUDGET,
     payload: { budget }
   })
 }
@@ -24,12 +23,5 @@ export const deleteBudget = (dispatch: React.Dispatch<TStorageAction>, id: strin
   dispatch({
     type: StorageAction.DELETE_BUDGET,
     payload: { id }
-  })
-}
-
-export const addTransaction = (dispatch: React.Dispatch<TStorageAction>, budget: Budget, transaction: Transaction) => {
-  dispatch({
-    type: StorageAction.ADD_TRANSACTION,
-    payload: { budget, transaction }
   })
 }

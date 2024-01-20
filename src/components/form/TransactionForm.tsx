@@ -19,7 +19,7 @@ import Storage from "@/storage"
 
 // context
 import useStorage from "@/layouts/_root/context/useStorage"
-import { addTransaction } from "@/layouts/_root/context/actions"
+import { setBudget } from "@/layouts/_root/context/actions"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
@@ -48,8 +48,9 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
       throw new Error('Budget not defined')
     }
 
-    await Storage.budget.addTransactions(budget.id, [transaction])
-    addTransaction(dispatch, budget, transaction)
+    budget.executeTransactions([transaction])
+    const updatedBudget = await Storage.budget.save(budget.id, budget)
+    setBudget(dispatch, updatedBudget)
 
     form.reset()
     form.setValue("id", crypto.randomUUID())

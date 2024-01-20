@@ -7,9 +7,8 @@ import Transaction from "@/models/Transaction"
 
 export enum StorageAction {
   SET_BUDGETS = 'SET_BUDGETS',
-  ADD_BUDGET = 'ADD',
-  DELETE_BUDGET = 'DELETE',
-  ADD_TRANSACTION = 'ADD_TRANSACTION'
+  SET_BUDGET = 'SET_BUDGET',
+  DELETE_BUDGET = 'DELETE_BUDGET'
 }
 
 export type TStorageState = {

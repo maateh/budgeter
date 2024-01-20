@@ -36,7 +36,6 @@ class Budget {
     this.type = props.type
     this.balance = props.balance
     this.theme = props.theme
-    
     this.transactions = props.transactions ?? {}
   }
 
