@@ -1,6 +1,7 @@
 import * as z from "zod"
 
 import { BudgetType } from "@/models/Budget"
+import { TransactionType } from "@/models/Transaction"
 
 export const budgetSchema = z.object({
   id: z.string().uuid(),
@@ -25,6 +26,7 @@ export const budgetSchema = z.object({
 
 export const transactionSchema = z.object({
   id: z.string().uuid(),
-  amount: z.coerce.number(),
+  type: z.nativeEnum(TransactionType),
+  amount: z.coerce.number().gt(0),
   date: z.date()
 })
