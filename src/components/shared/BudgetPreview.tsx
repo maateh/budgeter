@@ -64,7 +64,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
                 <p className="pb-1 mb-2 text-lg font-medium font-heading border-b border-border/25">
                   Add Transactions
                 </p>
-                <TransactionForm budget={budget} />
+                <TransactionForm budgetId={budget.id} />
               </PopoverContent>
             </Popover>
           </li>

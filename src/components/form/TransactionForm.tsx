@@ -9,9 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-
 // models
-import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 // storage
@@ -25,16 +23,16 @@ import { setBudget } from "@/layouts/_root/context/actions"
 import { TransactionValidation } from "@/lib/validation"
 
 type TransactionFormProps = {
-  budget?: Budget
+  budgetId?: string
 }
 
-const TransactionForm = ({ budget }: TransactionFormProps) => {
+const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   const { budgets, dispatch } = useStorage()
 
   const form = useForm<z.infer<typeof TransactionValidation>>({
     resolver: zodResolver(TransactionValidation),
     defaultValues: {
-      budgetId: budget?.id,
+      budgetId: budgetId,
       id: crypto.randomUUID(),
       amount: 0,
       date: new Date()
@@ -57,7 +55,7 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
-        {!budget && (
+        {!budgetId && (
           <FormField
             control={form.control}
             name="budgetId"
