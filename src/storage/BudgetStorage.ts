@@ -48,14 +48,16 @@ class BudgetStorage {
     const budget = await this.find(budgetId)
     budget.executeTransactions(transactions)
 
-    await this.save(budget.id, budget)
+    const updatedBudget = await this.save(budget.id, budget)
+    return updatedBudget
   }
 
   static async deleteTransactions(budgetId: string, transactionIds: string[]) {
     const budget = await this.find(budgetId)
     transactionIds.forEach(id => delete budget.transactions[id])
 
-    await this.save(budget.id, budget)
+    const updatedBudget = await this.save(budget.id, budget)
+    return updatedBudget
   }
 }
 

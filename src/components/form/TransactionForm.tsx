@@ -44,12 +44,10 @@ const TransactionForm = ({ budget }: TransactionFormProps) => {
   async function onSubmit(values: z.infer<typeof TransactionValidation>) {
     const transaction = new Transaction(values.id, values)
 
-    if (!budget) {
-      throw new Error('Budget not defined')
-    }
-
-    budget.executeTransactions([transaction])
-    const updatedBudget = await Storage.budget.save(budget.id, budget)
+    const updatedBudget = await Storage.budget.addTransactions(
+      values.budgetId,
+      [transaction]
+    )
     setBudget(dispatch, updatedBudget)
 
     form.reset()
