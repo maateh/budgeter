@@ -12,15 +12,15 @@ import { Button } from "@/components/ui/button"
 // icons
 import { Minus, Plus } from "lucide-react"
 
-// models
-import Transaction, { TransactionType } from "@/models/Transaction"
+// types
+import { TransactionType } from "@/models/Transaction"
 
 // storage
 import Storage from "@/storage"
 
 // context
 import useStorage from "@/layouts/_root/context/useStorage"
-import { setBudget } from "@/layouts/_root/context/actions"
+import { setBudget, setTransaction } from "@/layouts/_root/context/actions"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
@@ -44,13 +44,13 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   })
 
   async function onSubmit(values: z.infer<typeof TransactionValidation>) {
-    const transaction = new Transaction(values.id, values)
-
+    const transaction = await Storage.transaction.save(values.id, values)
     const updatedBudget = await Storage.budget.addTransactions(
       values.budgetId,
       [transaction]
     )
     setBudget(dispatch, updatedBudget)
+    setTransaction(dispatch, transaction)
 
     form.reset()
     form.setValue("id", crypto.randomUUID())
