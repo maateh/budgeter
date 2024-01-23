@@ -1,5 +1,5 @@
 // models
-import Transaction from "./Transaction"
+import Transaction, { TransactionType } from "./Transaction"
 
 export enum BudgetType {
   INCOME = 'income',
@@ -41,13 +41,13 @@ class Budget {
 
   get income(): number {
     return Object.values(this.transactions)
-      .filter(tr => tr.amount > 0)
+      .filter(tr => tr.type === TransactionType.PLUS)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
   get loss(): number {
     return Object.values(this.transactions)
-      .filter(tr => tr.amount < 0)
+      .filter(tr => tr.type === TransactionType.MINUS)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
@@ -58,12 +58,14 @@ class Budget {
         ...this.transactions
       }
 
-      if (this.type === BudgetType.INCOME) {
-        this.balance.current += t.amount
-      } else {
-        this.balance.current -= t.amount
-      }
+      this.updateCurrentBalance(t)
     })
+  }
+
+  private updateCurrentBalance(transaction: Transaction) {
+    this.balance.current += transaction.type === TransactionType.PLUS
+      ? transaction.amount
+      : -transaction.amount
   }
 }
 

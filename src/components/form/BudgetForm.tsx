@@ -50,6 +50,9 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
   })
 
   async function onSubmit(values: z.infer<typeof BudgetValidation>) {
+    values.balance.current = values.type === BudgetType.INCOME
+      ? 0 : values.balance.ceiling
+
     const budget = await Storage.budget.save(values.id, values)
     setBudget(dispatch, budget)
 

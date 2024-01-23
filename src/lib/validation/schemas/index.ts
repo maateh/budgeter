@@ -8,10 +8,7 @@ export const budgetSchema = z.object({
   name: z.string().min(2, { message: 'Too short.' }).max(50, { message: 'Too long.' }),
   type: z.nativeEnum(BudgetType),
   balance: z.object({
-    current: z.coerce.number()
-      .gte(0)
-      .lte(0)
-      .default(0),
+    current: z.coerce.number().default(0),
     ceiling: z.coerce.number()
   }),
   theme: z.object({
