@@ -1,17 +1,10 @@
-// models
-import Budget from "@/models/Budget"
-import Transaction from "@/models/Transaction"
-
 // storages
 import BudgetStorage from "./BudgetStorage"
-
-export type StorageData = {
-  budget: {[key: string]: Budget},
-  transaction: {[key: string]: Transaction}
-}
+import TransactionStorage from "./TransactionStorage"
 
 class Storage {
   static budget = BudgetStorage
+  static transaction = TransactionStorage
 }
 
 export default Storage

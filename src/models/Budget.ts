@@ -6,36 +6,37 @@ export enum BudgetType {
   EXPENSE = 'expense'
 }
 
-type Balance = {
-  current: number;
-  ceiling: number;
+export type Balance = {
+  current: number
+  ceiling: number
 }
 
-type BudgetTheme = {
-  background: string;
-  foreground: string;
+export type BudgetTheme = {
+  background: string
+  foreground: string
 }
 
 export type BudgetProps = {
-  name: string,
-  type: BudgetType,
-  balance: Balance,
-  theme: BudgetTheme,
+  name: string
+  type: BudgetType
+  balance: Balance
+  theme: BudgetTheme
   transactions?: {[key: string]: Transaction}
 }
 
 class Budget {
-  public name
-  public type
-  public balance
-  public transactions
-  public theme
+  public name: string
+  public type: BudgetType
+  public balance: Balance
+  public theme: BudgetTheme
+  public transactions: {[key: string]: Transaction}
 
   constructor(readonly id: string, props: BudgetProps) {
     this.name = props.name
     this.type = props.type
     this.balance = props.balance
     this.theme = props.theme
+
     this.transactions = props.transactions ?? {}
   }
 

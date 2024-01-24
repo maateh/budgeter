@@ -10,7 +10,7 @@ import Storage from "@/storage"
 import StorageContext from "./StorageContext"
 
 // actions
-import { setBudgets } from "./actions"
+import { setBudgets, setTransactions } from "./actions"
 
 const storageReducer = (state: TStorageState, action: TStorageAction): TStorageState => {
   const setBudgets = ({ budgets }: TStorageAction['payload']) => ({
@@ -32,6 +32,25 @@ const storageReducer = (state: TStorageState, action: TStorageAction): TStorageS
     return { ...state, budgets: state.budgets }
   }
 
+  const setTransactions = ({ transactions }: TStorageAction['payload']) => ({
+    ...state,
+    transactions: transactions ?? {}
+  })
+
+  const setTransaction = ({ transaction }: TStorageAction['payload']) => {
+    if (!transaction) return state
+
+    state.transactions[transaction.id] = transaction
+    return { ...state, transactions: state.transactions }
+  }
+
+  const deleteTransaction = ({ id }: TStorageAction['payload']) => {
+    if (!id) return state
+
+    delete state.transactions[id]
+    return { ...state, transactions: state.transactions }
+  }
+
   switch (action.type) {
     case StorageAction.SET_BUDGETS:
       return setBudgets(action.payload)
@@ -39,6 +58,12 @@ const storageReducer = (state: TStorageState, action: TStorageAction): TStorageS
       return setBudget(action.payload)
     case StorageAction.DELETE_BUDGET:
       return deleteBudget(action.payload)
+    case StorageAction.SET_TRANSACTIONS:
+      return setTransactions(action.payload)
+    case StorageAction.SET_TRANSACTION:
+      return setTransaction(action.payload)
+    case StorageAction.DELETE_TRANSACTION:
+      return deleteTransaction(action.payload)
     default:
       throw new Error('StorageContext: An unexpected type of action was given.')
   }
@@ -46,7 +71,8 @@ const storageReducer = (state: TStorageState, action: TStorageAction): TStorageS
 
 const StorageContextProvider = ({ children }: React.PropsWithChildren) => {
   const [state, dispatch] = useReducer(storageReducer, {
-    budgets: {}
+    budgets: {},
+    transactions: {}
   })
 
   useEffect(() => {
@@ -55,7 +81,13 @@ const StorageContextProvider = ({ children }: React.PropsWithChildren) => {
       setBudgets(dispatch, budgets)
     }
 
+    const fetchTransactions = async () => {
+      const transactions = await Storage.transaction.findAll()
+      setTransactions(dispatch, transactions)
+    }
+
     fetchBudgets()
+    fetchTransactions()
   }, [])
 
   return (
