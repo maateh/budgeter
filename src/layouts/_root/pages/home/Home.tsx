@@ -6,19 +6,25 @@ const Home = () => {
     <div className="page-wrapper">
       <h1 className="ml-6">Budgeter <span className="text-accent">Dashboard</span></h1>
 
-      <div className="flex flex-wrap lg:flex-nowrap justify-between gap-4">
-        <div className="w-full lg:max-w-xl lg:flex-1 flex flex-col md:flex-row lg:flex-col gap-4">
-          <section className="min-h-72 md:flex-1 lg:flex-none layout-rounded bg-primary">
+      <div className="grid gap-8">
+        <div className="w-full flex flex-col justify-between gap-4 md:flex-row">
+          <section className="w-full layout-rounded bg-primary md:w-4/6 md:max-w-4xl">
             <BudgetSummary />
           </section>
-          <section className="min-h-80 md:flex-1 lg:flex-none layout-rounded bg-primary">
+          <section className="w-full layout-rounded bg-primary md:w-2/6 md:max-w-lg">
             <RecentTransactions />
           </section>
         </div>
 
-        <section className="w-full lg:w-fit lg:max-w-5xl layout-rounded bg-primary">
-          <AvailableBudgets />
-        </section>
+        {/* TODO: separate income and expense budgets */}
+        <div className="flex flex-col justify-between items-center gap-4 lg:flex-col xl:flex-row">
+          <section className="w-full mr-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
+            <AvailableBudgets />
+          </section>
+          <section className="w-full ml-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
+            <AvailableBudgets />
+          </section>
+        </div>
       </div>
     </div>
   )

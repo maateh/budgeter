@@ -15,9 +15,9 @@ const AvailableBudgets = () => {
         <CreateBudgetSheet />
       </div>
 
-      <ul className="w-full mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 items-center gap-8">
+      <ul className="w-full mt-6 grid grid-cols-1 sm:grid-cols-2 items-center gap-8">
         {Object.values(budgets).map(budget => (
-          <li className="mx-auto w-full max-w-sm lg:min-w-96" key={budget.id}>
+          <li className="mx-auto w-full max-w-sm" key={budget.id}>
             <BudgetPreview budget={budget} />
           </li>
         ))}

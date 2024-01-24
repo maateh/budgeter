@@ -26,7 +26,7 @@ const RecentTransactions = () => {
       </div>
 
       <ul className="w-full mt-5 grid gap-3">
-        {Object.values(transactions).slice(0, 10).map(tr => (
+        {Object.values(transactions).slice(0, 7).map(tr => (
           <li key={tr.id}>
             <TransactionPreview transaction={tr} />
           </li>
