@@ -9,12 +9,28 @@ import Budget, { BudgetProps } from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 class BudgetStorage {
-  static async convertFromDocument(document: BudgetDocument): Promise<Budget> {
+  static async convertToModel(document: BudgetDocument): Promise<Budget> {
     const transactions = await Storage.transaction.findByBudget(document.id)
     return new Budget(document.id, { ...document, transactions })
   }
 
-  static async convertToDocument(budget: Budget): Promise<BudgetDocument> {
+  static async bulkConvertToModel(documents: DocumentData['budget']): Promise<ModelData['budget']> {
+    const transactions = await Storage.transaction.findAll()
+
+    return Object.entries(documents)
+      .reduce((budgets, [key, budgetDoc]) => {
+        const budgetTransactions = Storage.transaction.filterByBudget(budgetDoc.id, transactions)
+        return {
+          ...budgets,
+          [key]: new Budget(budgetDoc.id, {
+            ...budgetDoc,
+            transactions: budgetTransactions
+          })
+        }
+      }, {})
+  }
+
+  static convertToDocument(budget: Budget): BudgetDocument {
     const transactionIds = Object.keys(budget.transactions)
     return {
       id: budget.id,
@@ -33,16 +49,13 @@ class BudgetStorage {
 
   static async findAll(): Promise<ModelData['budget']> {
     const documents = await this.fetchFromStorage()
+    const models = await this.bulkConvertToModel(documents)
 
-    return Object.entries(documents)
-      .reduce(async (budgets, [key, budgetDoc]) => {
-        const budget = await this.convertFromDocument(budgetDoc)
-
-        return {
-          ...budgets,
-          [key]: budget
-        }
-      }, {})
+    return Object.entries(models)
+      .reduce((budgets, [key, budget]) => ({
+        ...budgets,
+        [key]: budget
+      }), {})
   }
 
   static async find(id: string): Promise<Budget> {
@@ -53,14 +66,14 @@ class BudgetStorage {
       throw Error('Budget not found with the specified ID.')
     }
 
-    return await this.convertFromDocument(budgetDoc)
+    return await this.convertToModel(budgetDoc)
   }
 
   static async save(id: string, props: BudgetProps): Promise<Budget> {
     const documents = await this.fetchFromStorage()
 
     const budget = new Budget(id, props)
-    documents[id] = await this.convertToDocument(budget)
+    documents[id] = this.convertToDocument(budget)
     localStorage.setItem('budgets', JSON.stringify(documents))
 
     return budget

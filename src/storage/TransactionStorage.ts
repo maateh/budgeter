@@ -5,11 +5,14 @@ import { DocumentData, ModelData, TransactionDocument } from "@/storage/types"
 import Transaction, { TransactionProps } from "@/models/Transaction"
 
 class TransactionStorage {
-  static async convertFromDocument(document: TransactionDocument): Promise<Transaction> {
-    return new Transaction(document.id, { ...document })
+  static convertToModel(document: TransactionDocument): Transaction {
+    return new Transaction(document.id, {
+      ...document,
+      date: new Date(document.date)
+    })
   }
 
-  static async convertToDocument(transaction: Transaction): Promise<TransactionDocument> {
+  static convertToDocument(transaction: Transaction): TransactionDocument {
     return { ...transaction }
   }
 
@@ -24,20 +27,13 @@ class TransactionStorage {
     return Object.entries(documents)
       .reduce((transactions, [key, transactionDoc]) => ({
         ...transactions,
-        [key]: new Transaction(transactionDoc.id, transactionDoc)
+        [key]: this.convertToModel(transactionDoc)
       }), {})
   }
 
   static async findByBudget(budgetId: string): Promise<ModelData['transaction']> {
-    const documents = await this.fetchFromStorage()
-    // TODO: sort based on date
-
-    return Object.entries(documents)
-      .filter(t => t[1].budgetId === budgetId)
-      .reduce((transactions, [key, transactionDoc]) => ({
-        ...transactions,
-        [key]: new Transaction(transactionDoc.id, transactionDoc)
-      }), {})
+    const models = await this.findAll()
+    return this.filterByBudget(budgetId, models)
   }
 
   static async find(id: string): Promise<Transaction> {
@@ -48,14 +44,14 @@ class TransactionStorage {
       throw Error('Transaction not found with the specified ID.')
     }
 
-    return new Transaction(transactionDoc.id, transactionDoc)
+    return this.convertToModel(transactionDoc)
   }
 
   static async save(id: string, props: TransactionProps): Promise<Transaction> {
     const documents = await this.fetchFromStorage()
 
     const transaction = new Transaction(id, props)
-    documents[id] = await this.convertToDocument(transaction)
+    documents[id] = this.convertToDocument(transaction)
     localStorage.setItem('transactions', JSON.stringify(documents))
 
     return transaction
@@ -66,6 +62,16 @@ class TransactionStorage {
 
     delete documents[id]
     localStorage.setItem('transactions', JSON.stringify(documents))
+  }
+
+  static filterByBudget(budgetId: string, models: ModelData['transaction']): ModelData['transaction'] {
+    return Object.entries(models)
+      .filter(t => t[1].budgetId === budgetId)
+      .sort(t => t[1].date.getTime())
+      .reduce((transactions, [key, transaction]) => ({
+        ...transactions,
+        [key]: transaction
+      }), {})
   }
 }
 
