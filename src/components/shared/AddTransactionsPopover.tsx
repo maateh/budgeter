@@ -12,7 +12,7 @@ type AddTransactionsPopoverProps = {
 const AddTransactionsPopover = ({ budgetId, children }: AddTransactionsPopoverProps) => {
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         {children}
       </PopoverTrigger>
       <PopoverContent>
