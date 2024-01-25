@@ -19,7 +19,7 @@ const Home = () => {
           <section className="w-full layout-rounded bg-primary md:w-4/6 md:max-w-4xl">
             <BudgetSummary />
           </section>
-          <section className="w-full layout-rounded bg-primary md:w-2/6 md:max-w-lg">
+          <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
             <RecentTransactions />
           </section>
         </div>
