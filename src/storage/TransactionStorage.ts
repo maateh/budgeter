@@ -13,7 +13,10 @@ class TransactionStorage {
   }
 
   static convertToDocument(transaction: Transaction): TransactionDocument {
-    return { ...transaction }
+    return {
+      ...transaction,
+      date: transaction.date.toString()
+    }
   }
 
   static async fetchFromStorage(): Promise<DocumentData['transaction']> {
@@ -25,6 +28,7 @@ class TransactionStorage {
     const documents = await this.fetchFromStorage()
 
     return Object.entries(documents)
+      .sort(t => Date.parse(t[1].date))
       .reduce((transactions, [key, transactionDoc]) => ({
         ...transactions,
         [key]: this.convertToModel(transactionDoc)
@@ -67,7 +71,6 @@ class TransactionStorage {
   static filterByBudget(budgetId: string, models: ModelData['transaction']): ModelData['transaction'] {
     return Object.entries(models)
       .filter(t => t[1].budgetId === budgetId)
-      .sort(t => t[1].date.getTime())
       .reduce((transactions, [key, transaction]) => ({
         ...transactions,
         [key]: transaction

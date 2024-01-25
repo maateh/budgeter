@@ -40,8 +40,13 @@ const storageReducer = (state: TStorageState, action: TStorageAction): TStorageS
   const setTransaction = ({ transaction }: TStorageAction['payload']) => {
     if (!transaction) return state
 
-    state.transactions[transaction.id] = transaction
-    return { ...state, transactions: state.transactions }
+    return {
+      ...state,
+      transactions: {
+        [transaction.id]: transaction,
+        ...state.transactions
+      }
+    }
   }
 
   const deleteTransaction = ({ id }: TStorageAction['payload']) => {

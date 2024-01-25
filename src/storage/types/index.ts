@@ -16,7 +16,7 @@ export type TransactionDocument = {
   budgetId: string
   type: TransactionType
   amount: number
-  date: Date
+  date: string
 }
 
 export type DocumentData = {
