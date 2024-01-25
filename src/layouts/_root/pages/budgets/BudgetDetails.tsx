@@ -9,7 +9,6 @@ type BudgetDetailsLoaderData = {
 
 const BudgetDetails = () => {
   const { budget } = useLoaderData() as BudgetDetailsLoaderData
-  if (!budget) throw new Error('Budget ID not defined!')
 
   return (
     <div className="page-wrapper">

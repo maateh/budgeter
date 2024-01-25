@@ -11,6 +11,8 @@ const BudgetLoader = async ({ params }: BudgetLoaderProps) => {
   if (!params.id) throw new Error('Budget ID not defined!')
 
   const budget = await Storage.budget.find(params.id)
+  if (!budget) throw new Error('Budget ID not defined!')
+
   return { budget }
 }
 
