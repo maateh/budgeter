@@ -1,43 +1,74 @@
 import { Suspense } from "react"
-import { Route, Routes } from "react-router-dom"
+import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
 // layouts
 import RootLayout from "./layouts/_root/RootLayout"
-import { Home, Transactions, Wishlist, Splitter } from "./layouts/_root/pages"
+import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "./layouts/_root/pages"
+
+import BudgetLoader from "./layouts/_root/pages/budgets/loader"
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<>Loading...</>}>
+            <Home />
+          </Suspense>
+        )
+      },
+      {
+        path: "/transactions",
+        element: (
+          <Suspense fallback={<>Loading...</>}>
+            <Transactions />
+          </Suspense>
+        )
+      },
+      {
+        path: "/splitter",
+        element: (
+          <Suspense fallback={<>Loading...</>}>
+            <Splitter />
+          </Suspense>
+        )
+      },
+      {
+        path: "/wishlist",
+        element: (
+          <Suspense fallback={<>Loading...</>}>
+            <Wishlist />
+          </Suspense>
+        )
+      },
+      {
+        path: "/budgets/:id",
+        loader: BudgetLoader,
+        element: (
+          <Suspense fallback={<>Loading...</>}>
+            <BudgetDetails />
+          </Suspense>
+        )
+      },
+      {
+        path: "*",
+        element: (
+          <Suspense fallback={<>Loading...</>}>
+            <p>Page not found!</p>
+          </Suspense>
+        )
+      }
+    ]
+  }
+])
 
 const App = () => {
   return (
     <main className="max-container">
-      <Routes>
-        <Route element={<RootLayout />}>
-          <Route index element={
-            <Suspense fallback={<>Loading...</>}>
-              <Home />
-            </Suspense>
-          } />
-          <Route path="/transactions" element={
-            <Suspense fallback={<>Loading...</>}>
-              <Transactions />
-            </Suspense>
-          } />
-          <Route path="/splitter" element={
-            <Suspense fallback={<>Loading...</>}>
-              <Splitter />
-            </Suspense>
-          } />
-          <Route path="/wishlist" element={
-            <Suspense fallback={<>Loading...</>}>
-              <Wishlist />
-            </Suspense>
-          } />
-        </Route>
-
-        <Route path="*" element={
-          <Suspense fallback={<>Loading...</>}>
-            <p>Page not found!</p>
-          </Suspense>
-        } />
-      </Routes>
+      <RouterProvider router={router} />
     </main>
   )
 }
