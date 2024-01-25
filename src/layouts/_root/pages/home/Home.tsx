@@ -1,7 +1,15 @@
+// types
+import { BudgetType } from "@/models/Budget"
+
 // components
-import { RecentTransactions, BudgetSummary, AvailableBudgets } from "./components"
+import { RecentTransactions, BudgetSummary, BudgetList } from "./components"
+
+// context
+import useStorage from "../../context/useStorage"
 
 const Home = () => {
+  const { budgets } = useStorage()
+
   return (
     <div className="page-wrapper">
       <h1 className="ml-6">Budgeter <span className="text-accent">Dashboard</span></h1>
@@ -16,13 +24,24 @@ const Home = () => {
           </section>
         </div>
 
-        {/* TODO: separate income and expense budgets */}
         <div className="flex flex-col justify-between items-center gap-4 lg:flex-col xl:flex-row">
           <section className="w-full mr-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
-            <AvailableBudgets />
+            <BudgetList
+              budgets={
+                Object.values(budgets)
+                  .filter(b => b.type === BudgetType.INCOME)
+              }
+              type={BudgetType.INCOME}
+            />
           </section>
           <section className="w-full ml-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
-            <AvailableBudgets />
+            <BudgetList
+              budgets={
+                Object.values(budgets)
+                  .filter(b => b.type === BudgetType.EXPENSE)
+              }
+              type={BudgetType.EXPENSE}
+            />
           </section>
         </div>
       </div>
