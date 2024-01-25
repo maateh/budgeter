@@ -16,7 +16,7 @@ const RecentTransactions = () => {
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="mb-5 flex justify-between">
         <h2>Recent <span className="text-red-600 overline">Transactions</span></h2>
         <AddTransactionsPopover>
           <Button variant="icon" size="icon">
@@ -25,7 +25,7 @@ const RecentTransactions = () => {
         </AddTransactionsPopover>
       </div>
 
-      <ul className="w-full mt-5 grid gap-3">
+      <ul className="w-full grid gap-3">
         {Object.values(transactions).slice(0, 7).map(tr => (
           <li key={tr.id}>
             <TransactionPreview transaction={tr} />
