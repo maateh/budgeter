@@ -1,3 +1,8 @@
+import { useNavigate } from "react-router-dom"
+
+// icons
+import { BadgePlus, Landmark, Wallet } from "lucide-react"
+
 // shadcn
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
@@ -5,22 +10,26 @@ import { Badge } from "@/components/ui/badge"
 
 // components
 import TransactionBadge from "@/components/shared/TransactionBadge"
+import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 
-// icons
-import { BadgePlus, Landmark, Wallet } from "lucide-react"
-
-// models
+// types
 import Budget from "@/models/Budget"
-import AddTransactionsPopover from "./AddTransactionsPopover"
 
 type BudgetPreviewProps = {
   budget: Budget
 }
 
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
+  const navigate = useNavigate()
+
+  const handleNavigate = () => {
+    navigate(`/budgets/${budget.id}`)
+  }
+
   return (
     <div className="hover:drop-shadow-lg rounded-[1.65rem] bg-primary-foreground/10">
       <div
+        onClick={handleNavigate}
         style={{
           backgroundColor: budget.theme.background,
           color: budget.theme.foreground
@@ -67,7 +76,11 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           ))}
           
           <li>
-            <Badge variant="outline" className="cursor-pointer">
+            <Badge
+              onClick={handleNavigate}
+              variant="outline"
+              className="cursor-pointer"
+            >
               View all
             </Badge>
           </li>
