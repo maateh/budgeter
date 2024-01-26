@@ -2,20 +2,21 @@ import { useState } from "react"
 
 // shadcn
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
 
 // components
 import BudgetForm from "../form/BudgetForm"
 
-const CreateBudgetSheet = () => {
+type BudgetSheetProps = {
+  children: React.JSX.Element
+}
+
+const BudgetSheet = ({ children }: BudgetSheetProps) => {
   const [open, setOpen] = useState(false)
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" border="md" size="xl" className="ml-auto">
-          New Budget
-        </Button>
+        {children}
       </SheetTrigger>
 
       <SheetContent side="top">
@@ -29,4 +30,4 @@ const CreateBudgetSheet = () => {
   )
 }
 
-export default CreateBudgetSheet
+export default BudgetSheet

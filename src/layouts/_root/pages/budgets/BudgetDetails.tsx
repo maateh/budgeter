@@ -1,8 +1,17 @@
 import { useLoaderData } from "react-router-dom"
 
+// icons
+import { Pencil, Trash2 } from "lucide-react"
+
+// shadcm
+import { Button } from "@/components/ui/button"
+
+// components
+import TransactionList from "@/components/shared/RecentTransactions"
+import CreateBudgetSheet from "@/components/shared/BudgetSheet"
+
 // types
 import Budget from "@/models/Budget"
-import TransactionList from "@/components/shared/RecentTransactions"
 
 type BudgetDetailsLoaderData = {
   budget: Budget
@@ -16,16 +25,41 @@ const BudgetDetails = () => {
       <h1 className="ml-6">Budget <span className="text-green-400">Details</span></h1>
       
       <div className="w-full flex flex-col justify-between gap-4 md:flex-row">
-        <section className="w-full layout-rounded bg-primary md:w-4/6 md:max-w-5xl">
-          <h2
-            className="w-fit px-12 py-4 overline rounded-full"
-            style={{
-              backgroundColor: budget.theme.background,
-              color: budget.theme.foreground
-            }}
-          >
-            {budget.name}
-          </h2>
+        <section className="w-full h-fit min-h-96 layout-rounded bg-primary md:w-4/6 md:max-w-5xl">
+          <div className="flex justify-between items-center">
+            <h2
+              className="px-12 py-4 overline rounded-full"
+              style={{
+                backgroundColor: budget.theme.background,
+                color: budget.theme.foreground
+              }}
+            >
+              {budget.name}
+            </h2>
+
+            <div className="flex justify-center items-center gap-x-4 gap-y">
+              <Button
+                variant="destructive"
+                size="sm"
+                className="flex items-center gap-x-1.5 "
+              >
+                <Trash2 size={18} />
+                <span>Delete</span>
+              </Button>
+              
+              <CreateBudgetSheet>
+                <Button
+                  variant="default"
+                  border="md"
+                  size="lg"
+                  className="flex items-center gap-x-2"
+                >
+                  <Pencil size={18} />
+                  <span>Edit</span>
+                </Button>
+              </CreateBudgetSheet>
+            </div>
+          </div>
         </section>
 
         <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
