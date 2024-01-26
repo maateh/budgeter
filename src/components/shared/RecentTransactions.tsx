@@ -27,14 +27,10 @@ const RecentTransactions = ({
   loadingQuantity = 0,
   budget
 }: RecentTransactionsProps) => {
-  const [slicedTransactions, setSlicedTransactions] = useState(
-    transactions.slice(0, startingQuantity)
-  )
+  const [quantity, setQuantity] = useState(startingQuantity)
 
   const handleSlice = () => {
-    setSlicedTransactions(prev => {
-      return transactions.slice(0, prev.length + loadingQuantity)
-    })
+    setQuantity(prev => prev + loadingQuantity)
   }
 
   return (
@@ -49,14 +45,14 @@ const RecentTransactions = ({
       </div>
 
       <ul className="w-full px-2 grid gap-3">
-        {slicedTransactions.map(tr => (
+        {transactions.slice(0, quantity).map(tr => (
           <li key={tr.id}>
             <TransactionPreview transaction={tr} />
           </li>
         ))}
       </ul>
 
-      {loadingQuantity > 0 && slicedTransactions.length < transactions.length && (
+      {loadingQuantity > 0 && transactions.length > quantity && (
         <div className="w-full mt-4 flex justify-center items-center">
           <Button
             onClick={handleSlice}
