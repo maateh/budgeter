@@ -2,13 +2,14 @@
 import { BudgetType } from "@/models/Budget"
 
 // components
-import { RecentTransactions, BudgetSummary, BudgetList } from "./components"
+import RecentTransactions from "@/components/shared/RecentTransactions"
+import { BudgetSummary, BudgetList } from "./components"
 
 // context
 import useStorage from "../../context/useStorage"
 
 const Home = () => {
-  const { budgets } = useStorage()
+  const { budgets, transactions } = useStorage()
 
   return (
     <div className="page-wrapper">
@@ -20,7 +21,10 @@ const Home = () => {
             <BudgetSummary />
           </section>
           <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-            <RecentTransactions />
+            <RecentTransactions
+              transactions={Object.values(transactions)}
+              startingQuantity={7}
+            />
           </section>
         </div>
 
