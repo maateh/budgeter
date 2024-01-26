@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import ColorPicker from "@/components/shared/ColorPicker"
 
 // models
-import { BudgetType } from "@/models/Budget"
+import Budget, { BudgetType } from "@/models/Budget"
 
 // storage
 import Storage from "@/storage"
@@ -26,23 +26,25 @@ import { setBudget } from "@/layouts/_root/context/actions"
 import { BudgetValidation } from "@/lib/validation"
 
 type BudgetFormProps = {
+  type: "create" | "edit"
+  budget?: Budget
   cleanForm?: () => void
 }
 
-const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
+const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => {
   const { dispatch } = useStorage()
 
   const form = useForm<z.infer<typeof BudgetValidation>>({
     resolver: zodResolver(BudgetValidation),
     defaultValues: {
-      id: crypto.randomUUID(),
-      name: "",
-      type: BudgetType.INCOME,
-      balance: {
+      id: budget?.id || crypto.randomUUID(),
+      name: budget?.name || "",
+      type: budget?.type || BudgetType.INCOME,
+      balance: budget?.balance || {
         current: 0,
         ceiling: 0
       },
-      theme: {
+      theme: budget?.theme || {
         background: '#dedede',
         foreground: '#202020'
       }
@@ -187,8 +189,12 @@ const BudgetForm = ({ cleanForm = () => {} }: BudgetFormProps) => {
           />
         </div>
 
-        <Button type="submit" size="lg" className="mt-4 sm:ml-auto all-small-caps">
-          Create
+        <Button
+          type="submit"
+          size="lg"
+          className="mt-4 sm:ml-auto small-caps capitalize"
+        >
+          {type}
         </Button>
       </form>
     </Form>

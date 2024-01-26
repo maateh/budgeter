@@ -4,13 +4,18 @@ import { useState } from "react"
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 
 // components
-import BudgetForm from "../form/BudgetForm"
+import BudgetForm from "@/components/form/BudgetForm"
+
+// types
+import Budget from "@/models/Budget"
 
 type BudgetSheetProps = {
+  type?: "create" | "edit"
+  budget?: Budget
   children: React.JSX.Element
 }
 
-const BudgetSheet = ({ children }: BudgetSheetProps) => {
+const BudgetSheet = ({ type = "create", budget, children }: BudgetSheetProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -21,10 +26,14 @@ const BudgetSheet = ({ children }: BudgetSheetProps) => {
 
       <SheetContent side="top">
         <SheetHeader>
-          <SheetTitle>Create a Budget</SheetTitle>
+          <SheetTitle>{type === "create" ? "Create" : "Edit"} Budget</SheetTitle>
         </SheetHeader>
 
-        <BudgetForm cleanForm={() => setOpen(false)} />
+        <BudgetForm
+          type={type}
+          budget={budget}
+          cleanForm={() => setOpen(false)}
+        />
       </SheetContent>
     </Sheet>
   )

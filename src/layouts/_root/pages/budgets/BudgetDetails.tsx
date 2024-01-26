@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router-dom"
 // icons
 import { Pencil, Trash2 } from "lucide-react"
 
-// shadcm
+// shadcn
 import { Button } from "@/components/ui/button"
 
 // components
@@ -46,8 +46,8 @@ const BudgetDetails = () => {
                 <Trash2 size={18} />
                 <span>Delete</span>
               </Button>
-              
-              <CreateBudgetSheet>
+
+              <CreateBudgetSheet type="edit" budget={budget}>
                 <Button
                   variant="default"
                   border="md"
