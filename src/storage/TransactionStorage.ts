@@ -73,17 +73,11 @@ class TransactionStorage {
     localStorage.setItem('transactions', JSON.stringify(documents))
   }
 
-  static async deleteByBudget(budgetId: string) {
+  static async bulkDelete(ids: string[]) {
     const documents = await this.fetchFromStorage()
-
-    const filteredDocs: DocumentData['transaction'] = Object.entries(documents)
-      .filter(([, doc]) => doc.budgetId !== budgetId)
-      .reduce((filteredDocs, [key, value]) => ({
-        ...filteredDocs,
-        [key]: value
-      }), {})
+    ids.forEach(id => delete documents[id])
     
-    await this.bulkSave(filteredDocs)
+    await this.bulkSave(documents)
   }
 
   static filterByBudget(budgetId: string, models: ModelData['transaction']): ModelData['transaction'] {

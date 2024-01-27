@@ -68,7 +68,7 @@ class BudgetStorage {
 
   static async delete(id: string) {
     const documents = await this.fetchFromStorage()
-    await Storage.transaction.deleteByBudget(id)
+    await Storage.transaction.bulkDelete(documents[id].transactionIds)
 
     delete documents[id]
     localStorage.setItem('budgets', JSON.stringify(documents))
