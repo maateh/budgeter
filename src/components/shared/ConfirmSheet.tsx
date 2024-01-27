@@ -20,12 +20,12 @@ const ConfirmSheet = ({ title, message, confirm, children }: ConfirmSheetProps) 
         {children}
       </SheetTrigger>
 
-      <SheetContent side="bottom">
+      <SheetContent side="bottom" variant="confirm">
         <SheetHeader>
           <SheetTitle className="capitalize">{title}</SheetTitle>
         </SheetHeader>
 
-        <SheetDescription className="text-base font-medium">
+        <SheetDescription className="text-base font-semibold">
           {message}
         </SheetDescription>
 
@@ -34,7 +34,7 @@ const ConfirmSheet = ({ title, message, confirm, children }: ConfirmSheetProps) 
             Cancel
           </Button>
 
-          <Button variant="destructive" onClick={confirm}>
+          <Button variant="destructive" border="md" onClick={confirm}>
             Confirm
           </Button>
         </SheetFooter>

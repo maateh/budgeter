@@ -26,7 +26,7 @@ const BudgetSheet = ({ type = "create", budget, children }: BudgetSheetProps) =>
 
       <SheetContent side="top">
         <SheetHeader>
-          <SheetTitle>{type === "create" ? "Create" : "Edit"} Budget</SheetTitle>
+          <SheetTitle className="capitalize">{type} Budget</SheetTitle>
         </SheetHeader>
 
         <BudgetForm
