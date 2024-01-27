@@ -11,7 +11,8 @@ export enum StorageAction {
   DELETE_BUDGET = 'DELETE_BUDGET',
   SET_TRANSACTIONS = 'SET_TRANSACTIONS',
   SET_TRANSACTION = 'SET_TRANSACTION',
-  DELETE_TRANSACTION = 'DELETE_TRANSACTION'
+  DELETE_TRANSACTION = 'DELETE_TRANSACTION',
+  DELETE_TRANSACTIONS = 'DELETE_TRANSACTIONS'
 }
 
 export type TStorageState = {
@@ -27,6 +28,7 @@ export type TStorageAction = {
     transactions?: TStorageState['transactions'],
     transaction?: Transaction,
     id?: string
+    ids?: string[]
   }
 }
 

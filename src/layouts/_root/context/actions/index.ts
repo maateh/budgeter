@@ -47,3 +47,10 @@ export const deleteTransaction = (dispatch: React.Dispatch<TStorageAction>, id: 
     payload: { id }
   })
 }
+
+export const deleteTransactions = (dispatch: React.Dispatch<TStorageAction>, ids: string[]) => {
+  dispatch({
+    type: StorageAction.DELETE_TRANSACTIONS,
+    payload: { ids }
+  })
+}

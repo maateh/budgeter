@@ -61,11 +61,29 @@ class TransactionStorage {
     return transaction
   }
 
+  static async bulkSave(documents: DocumentData['transaction']): Promise<ModelData['transaction']> {
+    localStorage.setItem('transactions', JSON.stringify(documents))
+    return await this.findAll()
+  }
+
   static async delete(id: string) {
     const documents = await this.fetchFromStorage()
 
     delete documents[id]
     localStorage.setItem('transactions', JSON.stringify(documents))
+  }
+
+  static async deleteByBudget(budgetId: string) {
+    const documents = await this.fetchFromStorage()
+
+    const filteredDocs: DocumentData['transaction'] = Object.entries(documents)
+      .filter(([, doc]) => doc.budgetId !== budgetId)
+      .reduce((filteredDocs, [key, value]) => ({
+        ...filteredDocs,
+        [key]: value
+      }), {})
+    
+    await this.bulkSave(filteredDocs)
   }
 
   static filterByBudget(budgetId: string, models: ModelData['transaction']): ModelData['transaction'] {
