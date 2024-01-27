@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useNavigate } from "react-router-dom"
 
 // icons
 import { Pencil, Trash2 } from "lucide-react"
@@ -9,6 +9,14 @@ import { Button } from "@/components/ui/button"
 // components
 import TransactionList from "@/components/shared/RecentTransactions"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
+import ConfirmSheet from "@/components/shared/ConfirmSheet"
+
+// storage
+import Storage from "@/storage"
+
+// context
+import { deleteBudget, deleteTransactions } from "../../context/actions"
+import useStorage from "../../context/useStorage"
 
 // types
 import Budget from "@/models/Budget"
@@ -18,7 +26,18 @@ type BudgetDetailsLoaderData = {
 }
 
 const BudgetDetails = () => {
+  const navigate = useNavigate()
+
   const { budget } = useLoaderData() as BudgetDetailsLoaderData
+  const { dispatch } = useStorage()
+
+  const deleteConfirm = async () => {
+    await Storage.budget.delete(budget.id)
+    deleteBudget(dispatch, budget.id)
+    deleteTransactions(dispatch, Object.keys(budget.transactions))
+
+    navigate('/')
+  }
 
   return (
     <div className="page-wrapper">
@@ -38,14 +57,20 @@ const BudgetDetails = () => {
             </h2>
 
             <div className="flex justify-center items-center gap-x-4 gap-y">
-              <Button
-                variant="destructive"
-                size="sm"
-                className="flex items-center gap-x-1.5 "
+              <ConfirmSheet
+                title={`Delete "${budget.name}" Budget`}
+                message="Are you sure you want to delete this budget?"
+                confirm={deleteConfirm}
               >
-                <Trash2 size={18} />
-                <span>Delete</span>
-              </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="flex items-center gap-x-1.5 "
+                >
+                  <Trash2 size={18} />
+                  <span>Delete</span>
+                </Button>
+              </ConfirmSheet>
 
               <CreateBudgetSheet type="edit" budget={budget}>
                 <Button
