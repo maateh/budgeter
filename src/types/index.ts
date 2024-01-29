@@ -19,12 +19,12 @@ export type TransactionDocument = {
   date: string
 }
 
-export type DocumentData = {
+export type DocumentCollection = {
   budget: {[key: string]: BudgetDocument},
   transaction: {[key: string]: TransactionDocument}
 }
 
-export type ModelData = {
+export type ModelCollection = {
   budget: {[key: string]: Budget},
   transaction: {[key: string]: Transaction}
 }

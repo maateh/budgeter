@@ -1,5 +1,5 @@
 // types
-import { DocumentData, ModelData, BudgetDocument } from "@/storage/types"
+import { DocumentCollection, ModelCollection, BudgetDocument } from "@/types"
 
 // storage
 import Storage from "@/storage"
@@ -9,10 +9,12 @@ import Budget, { BudgetProps } from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 class BudgetStorage {
-  static convertToModel(document: BudgetDocument, transactions: ModelData['transaction']): Budget {
+  // TODO: move it elsewhere
+  static convertToModel(document: BudgetDocument, transactions: ModelCollection['transaction']): Budget {
     return new Budget(document.id, { ...document, transactions })
   }
 
+  // TODO: move it elsewhere
   static convertToDocument(budget: Budget): BudgetDocument {
     const transactionIds = Object.keys(budget.transactions)
     return {
@@ -25,12 +27,12 @@ class BudgetStorage {
     }
   }
 
-  static async fetchFromStorage(): Promise<DocumentData['budget']> {
+  static async fetchFromStorage(): Promise<DocumentCollection['budget']> {
     const plainBudgets = localStorage.getItem('budgets') || '{}'
     return JSON.parse(plainBudgets)
   }
 
-  static async findAll(): Promise<ModelData['budget']> {
+  static async findAll(): Promise<ModelCollection['budget']> {
     const documents = await this.fetchFromStorage()
     const transactions = await Storage.transaction.findAll()
 
@@ -56,6 +58,8 @@ class BudgetStorage {
     return this.convertToModel(budgetDoc, transactions)
   }
 
+  // TODO: bulkSave
+
   static async save(id: string, props: BudgetProps): Promise<Budget> {
     const documents = await this.fetchFromStorage()
 
@@ -65,6 +69,8 @@ class BudgetStorage {
 
     return budget
   }
+
+  // TODO: bulkDelete
 
   static async delete(id: string) {
     const documents = await this.fetchFromStorage()

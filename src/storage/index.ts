@@ -1,6 +1,6 @@
 // storages
-import BudgetStorage from "./BudgetStorage"
-import TransactionStorage from "./TransactionStorage"
+import BudgetStorage from "@/storage/BudgetStorage"
+import TransactionStorage from "@/storage/TransactionStorage"
 
 class Storage {
   static budget = BudgetStorage
