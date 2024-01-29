@@ -1,15 +1,12 @@
-// api
-import BudgetAPI from '@/api/budgets'
-import TransactionAPI from '@/api/transactions'
-
 // storage
-import Storage from '@/storage'
+import BudgetStorage from '@/api/storage/BudgetStorage'
+import TransactionStorage from '@/api/storage/TransactionStorage'
 
-class API {
-  static useStorage = true
+class API {  
+  // TODO: implement remote api calls when there will be an external db
 
-  static budget = this.useStorage ? Storage.budget : BudgetAPI
-  static transaction = this.useStorage ? Storage.transaction : TransactionAPI
+  static budget = BudgetStorage.getInstance()
+  static transaction = TransactionStorage.getInstance()
 }
 
 export default API
