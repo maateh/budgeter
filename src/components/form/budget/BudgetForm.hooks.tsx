@@ -10,12 +10,11 @@ export const useSaveBudgetMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ['saveBudget'],
+    mutationKey: ['budget', 'save'],
     mutationFn: (budget: Budget) => API.budget.save(budget),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['budgets']
-      })
+    onSuccess: (budget) => {
+      queryClient.invalidateQueries({ queryKey: ['budget', 'findAll'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', 'find', budget.id] })
     }
   })
 }

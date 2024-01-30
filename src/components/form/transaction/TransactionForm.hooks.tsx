@@ -21,9 +21,12 @@ export const useSaveTransactionMutation = () => {
       await API.budget.addTransactions(transaction.budgetId, [transaction])
       return await API.transaction.save(transaction)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['budgets'] })
-      queryClient.invalidateQueries({ queryKey: ['transactions'] })
+    onSuccess: (transaction) => {
+      queryClient.invalidateQueries({ queryKey: ['transaction', 'findAll'] })
+      queryClient.invalidateQueries({ queryKey: ['transaction', 'find', transaction.id] })
+      
+      queryClient.invalidateQueries({ queryKey: ['budget', 'findAll'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', 'find', transaction.budgetId] })
     }
   })
 }

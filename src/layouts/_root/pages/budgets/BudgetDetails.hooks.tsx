@@ -28,12 +28,8 @@ export const useDeleteBudgetMutation = () => {
       return await API.budget.delete(budget.id)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['budget', id]
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['budget', id]
-      })
+      queryClient.invalidateQueries({ queryKey: ['budget', 'findAll'] })
+      queryClient.invalidateQueries({ queryKey: ['transaction', 'findAll'] })
     }
   })
 }
