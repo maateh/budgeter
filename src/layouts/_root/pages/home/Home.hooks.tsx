@@ -7,11 +7,11 @@ export const useDashboardQuery = () => {
   return useQueries({
     queries: [
       {
-        queryKey: ['budgets'],
+        queryKey: ['budget', 'findAll'],
         queryFn: () => API.budget.findAll()
       },
       {
-        queryKey: ['transactions'],
+        queryKey: ['transaction', 'findAll'],
         queryFn: () => API.transaction.findAll()
       }
     ]

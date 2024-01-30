@@ -29,7 +29,7 @@ const Home = () => {
                 startingQuantity={7}
               />
             ) : (
-              <>Loading...</>
+              <>Loading...</> // TODO: skeleton
             )}
           </section>
         </div>
@@ -57,7 +57,7 @@ const Home = () => {
               </section>
             </>
           ) : (
-            <>Loading...</>
+            <>Loading...</> // TODO: skeleton
           )}
         </div>
       </div>

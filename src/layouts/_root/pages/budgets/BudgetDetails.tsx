@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 // icons
 import { Pencil, Trash2 } from "lucide-react"
@@ -11,35 +11,28 @@ import TransactionList from "@/components/shared/RecentTransactions"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 
-// storage
-import Storage from "@/storage"
-
-// context
-import { deleteBudget, deleteTransactions } from "../../context/actions"
-import useStorage from "../../context/useStorage"
-
-// types
-import Budget from "@/models/Budget"
-
-type BudgetDetailsLoaderData = {
-  budget: Budget
-}
+// hooks
+import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
 
 const BudgetDetails = () => {
   const navigate = useNavigate()
-
-  const { budget } = useLoaderData() as BudgetDetailsLoaderData
-  const { dispatch } = useStorage()
+  const { data: budget, isLoading } = useLoadBudgetQuery()
+  const { mutateAsync: deleteBudget } = useDeleteBudgetMutation()
 
   const deleteConfirm = async () => {
-    await Storage.budget.delete(budget.id)
-    deleteBudget(dispatch, budget.id)
-    deleteTransactions(dispatch, Object.keys(budget.transactions))
+    try {
+      if (!budget) {
+        throw new Error('Something unexpected happened.')
+      }
 
-    navigate('/')
+      await deleteBudget(budget) 
+      navigate('/')
+    } catch (err) {
+      console.error(err)
+    }
   }
 
-  return (
+  return !isLoading && budget ? (
     <div className="page-wrapper">
       <h1 className="ml-6">Budget <span className="text-green-400">Details</span></h1>
       
@@ -97,6 +90,8 @@ const BudgetDetails = () => {
         </section>
       </div>
     </div>
+  ) : (
+    <>Loading</> // TODO: skeleton
   )
 }
 
