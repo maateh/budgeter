@@ -1,5 +1,5 @@
 // types
-import { BudgetDocument, ModelCollection } from "@/types"
+import { BudgetDocument, DocumentCollection, ModelCollection } from "@/types"
 
 // models
 import Transaction, { TransactionType } from "@/models/Transaction"
@@ -86,6 +86,28 @@ class Budget {
       theme: model.theme,
       transactionIds
     }
+  }
+
+  static bulkConvertToModel(
+    documents: DocumentCollection['budget'],
+    transactions: ModelCollection['transaction']
+  ): ModelCollection['budget'] {
+    return Object.entries(documents)
+      .reduce((models, [key, document]) => {
+        const budgetTransactions = Transaction.filterByBudget(key, transactions)
+        return {
+          ...models,
+          [key]: Budget.convertToModel(document, budgetTransactions)
+        } 
+      }, {})
+  }
+
+  static bulkConvertToDocument(models: ModelCollection['budget']): DocumentCollection['budget'] {
+    return Object.entries(models)
+      .reduce((documents, [key, model]) => ({
+        ...documents,
+        [key]: this.convertToDocument(model)
+      }), {})
   }
 }
 

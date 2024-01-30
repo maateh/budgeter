@@ -55,7 +55,7 @@ class BudgetStorage implements IBudgetAPI {
   async bulkSave(models: ModelCollection['budget']): Promise<ModelCollection['budget']> {
     const documents = {
       ...await this.fetchFromStorage(),
-      ...bulkConvertToDocument(models) // TODO:
+      ...Budget.bulkConvertToDocument(models)
     }
 
     localStorage.setItem('budgets', JSON.stringify(documents))

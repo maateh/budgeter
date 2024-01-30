@@ -1,5 +1,5 @@
 // types
-import { ModelCollection, TransactionDocument } from "@/types"
+import { DocumentCollection, ModelCollection, TransactionDocument } from "@/types"
 
 export enum TransactionType {
   PLUS = '+',
@@ -38,6 +38,23 @@ class Transaction {
       ...model,
       date: model.date.toString()
     }
+  }
+
+  static bulkConvertToModel(documents: DocumentCollection['transaction']): ModelCollection['transaction'] {   
+    return Object.entries(documents)
+      .sort(doc => Date.parse(doc[1].date))
+      .reduce((models, [key, document]) => ({
+        ...models,
+        [key]: this.convertToModel(document)
+      }), {})
+  }
+
+  static bulkConvertToDocument(models: ModelCollection['transaction']): DocumentCollection['transaction'] {
+    return Object.entries(models)
+      .reduce((documents, [key, model]) => ({
+        ...documents,
+        [key]: this.convertToDocument(model)
+      }), {})
   }
 
   static filterByBudget(budgetId: string, models: ModelCollection['transaction']): ModelCollection['transaction'] {

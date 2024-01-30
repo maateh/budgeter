@@ -24,13 +24,7 @@ class TransactionStorage implements ITransactionAPI {
 
   async findAll(): Promise<ModelCollection['transaction']> {
     const documents = await this.fetchFromStorage()
-
-    return Object.entries(documents)
-      .sort(t => Date.parse(t[1].date))
-      .reduce((transactions, [key, transactionDoc]) => ({
-        ...transactions,
-        [key]: Transaction.convertToModel(transactionDoc)
-      }), {})
+    return Transaction.bulkConvertToModel(documents)
   }
 
   async findByBudget(budgetId: string): Promise<ModelCollection['transaction']> {
@@ -52,7 +46,7 @@ class TransactionStorage implements ITransactionAPI {
   async bulkSave(models: ModelCollection['transaction']): Promise<ModelCollection['transaction']> {
     const documents = {
       ...await this.fetchFromStorage(),
-      ...Transaction.bulkConvertToDocument(models) // TODO:
+      ...Transaction.bulkConvertToDocument(models)
     }
 
     localStorage.setItem('transactions', JSON.stringify(documents))
