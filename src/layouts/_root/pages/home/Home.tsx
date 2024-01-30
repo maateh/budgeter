@@ -22,9 +22,10 @@ const Home = () => {
             <BudgetSummary />
           </section>
           <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-            {!_transactions.isLoading && _transactions.data ? (
+            {!_transactions.isLoading && _transactions.data && _budgets.data ? (
               <RecentTransactions
                 transactions={Object.values(_transactions.data)}
+                budgets={_budgets.data}
                 startingQuantity={7}
               />
             ) : (

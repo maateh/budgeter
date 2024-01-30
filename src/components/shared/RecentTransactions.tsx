@@ -6,6 +6,7 @@ import { ChevronRightCircle, Plus } from "lucide-react"
 // types
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
+import { ModelCollection } from "@/types"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -18,14 +19,17 @@ type RecentTransactionsProps = {
   transactions: Transaction[]
   startingQuantity?: number
   loadingQuantity?: number
-  budget?: Budget
-}
+} & (
+  | { budget: Budget; budgets?: never }
+  | { budgets: ModelCollection['budget']; budget?: never }
+)
 
 const RecentTransactions = ({
   transactions,
   startingQuantity = 5,
   loadingQuantity = 0,
-  budget
+  budget,
+  budgets
 }: RecentTransactionsProps) => {
   const [quantity, setQuantity] = useState(startingQuantity)
 
@@ -47,7 +51,10 @@ const RecentTransactions = ({
       <ul className="w-full px-2 grid gap-3">
         {transactions.slice(0, quantity).map(tr => (
           <li key={tr.id}>
-            <TransactionPreview transaction={tr} />
+            <TransactionPreview
+              transaction={tr}
+              budget={budget || budgets[tr.budgetId]}
+            />
           </li>
         ))}
       </ul>

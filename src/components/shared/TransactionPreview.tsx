@@ -1,36 +1,27 @@
 // icons
 import { Landmark, Minus, Plus } from "lucide-react"
 
-// context
-import useStorage from "@/layouts/_root/context/useStorage"
-
 // models
 import Budget from "@/models/Budget"
 import Transaction, { TransactionType } from "@/models/Transaction"
 
 type TransactionPreviewProps = {
   transaction: Transaction
-  budget?: Budget
+  budget: Budget
 }
 
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
-  const { budgets } = useStorage()
-
-  if (!budget) {
-    budget = budgets[transaction.budgetId]
-  }
-
   return (
     <div
       className="px-5 py-2 flex justify-between items-center rounded-full"
       style={{
-        backgroundColor: budget?.theme.background,
-        color: budget?.theme.foreground
+        backgroundColor: budget.theme.background,
+        color: budget.theme.foreground
       }}
     >
       <div className="font-heading font-medium text-lg icon-wrapper">
         <Landmark strokeWidth={1.5} />
-        <span>{budget ? budget.name: '-'}</span>
+        <span>{budget.name}</span>
       </div>
 
       <div className={`
