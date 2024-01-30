@@ -3,13 +3,14 @@ import { BudgetType } from "@/models/Budget"
 
 // components
 import RecentTransactions from "@/components/shared/RecentTransactions"
-import { BudgetSummary, BudgetList } from "./components"
+import BudgetSummary from "./components/BudgetSummary"
+import BudgetList from "./components/BudgetList"
 
-// context
-import useStorage from "../../context/useStorage"
+// hooks
+import { useDashboardQuery } from "./Home.hooks"
 
 const Home = () => {
-  const { budgets, transactions } = useStorage()
+  const [_budgets, _transactions] = useDashboardQuery()
 
   return (
     <div className="page-wrapper">
@@ -21,32 +22,42 @@ const Home = () => {
             <BudgetSummary />
           </section>
           <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-            <RecentTransactions
-              transactions={Object.values(transactions)}
-              startingQuantity={7}
-            />
+            {!_transactions.isLoading && _transactions.data ? (
+              <RecentTransactions
+                transactions={Object.values(_transactions.data)}
+                startingQuantity={7}
+              />
+            ) : (
+              <>Loading...</>
+            )}
           </section>
         </div>
 
         <div className="flex flex-col justify-between items-center gap-4 lg:flex-col xl:flex-row">
-          <section className="w-full mr-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
-            <BudgetList
-              budgets={
-                Object.values(budgets)
-                  .filter(b => b.type === BudgetType.INCOME)
-              }
-              type={BudgetType.INCOME}
-            />
-          </section>
-          <section className="w-full ml-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
-            <BudgetList
-              budgets={
-                Object.values(budgets)
-                  .filter(b => b.type === BudgetType.EXPENSE)
-              }
-              type={BudgetType.EXPENSE}
-            />
-          </section>
+          {!_budgets.isLoading && _budgets.data ? (
+            <>
+              <section className="w-full mr-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
+                <BudgetList
+                  budgets={
+                    Object.values(_budgets.data)
+                      .filter(b => b.type === BudgetType.INCOME)
+                  }
+                  type={BudgetType.INCOME}
+                />
+              </section>
+              <section className="w-full ml-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
+                <BudgetList
+                  budgets={
+                    Object.values(_budgets.data)
+                      .filter(b => b.type === BudgetType.EXPENSE)
+                  }
+                  type={BudgetType.EXPENSE}
+                />
+              </section>
+            </>
+          ) : (
+            <>Loading...</>
+          )}
         </div>
       </div>
     </div>

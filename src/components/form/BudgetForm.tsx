@@ -1,7 +1,11 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+
+// api
+import API from "@/api"
 
 // shadcn
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -15,13 +19,6 @@ import ColorPicker from "@/components/shared/ColorPicker"
 // models
 import Budget, { BudgetType } from "@/models/Budget"
 
-// storage
-import Storage from "@/storage"
-
-// context
-import useStorage from "@/layouts/_root/context/useStorage"
-import { setBudget } from "@/layouts/_root/context/actions"
-
 // validations
 import { BudgetValidation } from "@/lib/validation"
 
@@ -32,7 +29,16 @@ type BudgetFormProps = {
 }
 
 const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => {
-  const { dispatch } = useStorage()
+  const queryClient = useQueryClient()
+  const { mutateAsync: saveBudget } = useMutation({
+    mutationKey: ['saveBudget'],
+    mutationFn: (budget: Budget) => API.budget.save(budget),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['budgets']
+      })
+    }
+  })
 
   const form = useForm<z.infer<typeof BudgetValidation>>({
     resolver: zodResolver(BudgetValidation),
@@ -52,17 +58,22 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
   })
 
   async function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    values.balance.current = values.type === BudgetType.INCOME
-      ? 0 : values.balance.ceiling
+    if (values.type === BudgetType.EXPENSE) {
+      values.balance.current = values.balance.ceiling
+    }
 
-    const budget = await Storage.budget.save(values.id, values)
-    setBudget(dispatch, budget)
+    const budget = new Budget(values.id, values)
+    try {
+      await saveBudget(budget)
+
+      form.reset()
+      form.setValue("id", crypto.randomUUID())
+      cleanForm()
+    } catch (err) {
+      console.error(err)
+    }
 
     // TODO: add initial transactions
-
-    form.reset()
-    form.setValue("id", crypto.randomUUID())
-    cleanForm()
   }
 
   return (
