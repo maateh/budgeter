@@ -1,11 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
-// api
-import API from "@/api"
 
 // shadcn
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -22,27 +18,16 @@ import Transaction, { TransactionType } from "@/models/Transaction"
 // validations
 import { TransactionValidation } from "@/lib/validation"
 
+// hooks
+import { useLoadBudgetsQuery, useSaveTransactionMutation } from "./TransactionForm.hooks"
+
 type TransactionFormProps = {
   budgetId?: string
 }
 
 const TransactionForm = ({ budgetId }: TransactionFormProps) => {
-  const queryClient = useQueryClient()
-  const { data: budgets, isLoading } = useQuery({
-    queryKey: ['budgets'],
-    queryFn: () => API.budget.findAll()
-  })
-
-  const { mutateAsync: saveTransaction } = useMutation({
-    mutationFn: async (transaction: Transaction) => {
-      await API.budget.addTransactions(transaction.budgetId, [transaction])
-      return await API.transaction.save(transaction)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['budgets'] })
-      queryClient.invalidateQueries({ queryKey: ['transactions'] })
-    }
-  })
+  const { data: budgets, isLoading } = useLoadBudgetsQuery()
+  const { mutateAsync: saveTransaction } = useSaveTransactionMutation()
 
   const form = useForm<z.infer<typeof TransactionValidation>>({
     resolver: zodResolver(TransactionValidation),

@@ -2,7 +2,7 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // components
-import TransactionForm from "@/components/form/TransactionForm"
+import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 type AddTransactionsPopoverProps = {
   budgetId?: string

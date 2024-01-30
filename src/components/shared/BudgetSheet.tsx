@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 
 // components
-import BudgetForm from "@/components/form/BudgetForm"
+import BudgetForm from "@/components/form/budget/BudgetForm"
 
 // types
 import Budget from "@/models/Budget"

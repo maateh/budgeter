@@ -1,11 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
-// api
-import API from "@/api"
 
 // shadcn
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -22,6 +18,9 @@ import Budget, { BudgetType } from "@/models/Budget"
 // validations
 import { BudgetValidation } from "@/lib/validation"
 
+// hooks
+import { useSaveBudgetMutation } from "./BudgetForm.hooks"
+
 type BudgetFormProps = {
   type: "create" | "edit"
   budget?: Budget
@@ -29,16 +28,7 @@ type BudgetFormProps = {
 }
 
 const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => {
-  const queryClient = useQueryClient()
-  const { mutateAsync: saveBudget } = useMutation({
-    mutationKey: ['saveBudget'],
-    mutationFn: (budget: Budget) => API.budget.save(budget),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['budgets']
-      })
-    }
-  })
+  const { mutateAsync: saveBudget } = useSaveBudgetMutation()
 
   const form = useForm<z.infer<typeof BudgetValidation>>({
     resolver: zodResolver(BudgetValidation),
