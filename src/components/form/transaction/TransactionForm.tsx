@@ -13,24 +13,21 @@ import { Button } from "@/components/ui/button"
 import { Minus, Plus } from "lucide-react"
 
 // types
-import { TransactionType } from "@/models/Transaction"
-
-// storage
-import Storage from "@/storage"
-
-// context
-import useStorage from "@/layouts/_root/context/useStorage"
-import { setBudget, setTransaction } from "@/layouts/_root/context/actions"
+import Transaction, { TransactionType } from "@/models/Transaction"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
+
+// hooks
+import { useLoadBudgetsQuery, useSaveTransactionMutation } from "./TransactionForm.hooks"
 
 type TransactionFormProps = {
   budgetId?: string
 }
 
 const TransactionForm = ({ budgetId }: TransactionFormProps) => {
-  const { budgets, dispatch } = useStorage()
+  const { data: budgets, isLoading } = useLoadBudgetsQuery()
+  const { mutateAsync: saveTransaction } = useSaveTransactionMutation()
 
   const form = useForm<z.infer<typeof TransactionValidation>>({
     resolver: zodResolver(TransactionValidation),
@@ -44,16 +41,15 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   })
 
   async function onSubmit(values: z.infer<typeof TransactionValidation>) {
-    const transaction = await Storage.transaction.save(values.id, values)
-    const updatedBudget = await Storage.budget.addTransactions(
-      values.budgetId,
-      [transaction]
-    )
-    setBudget(dispatch, updatedBudget)
-    setTransaction(dispatch, transaction)
+    const transaction = new Transaction(values.id, values)
+    try {
+      await saveTransaction(transaction)
 
-    form.reset()
-    form.setValue("id", crypto.randomUUID())
+      form.reset()
+      form.setValue("id", crypto.randomUUID())
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -66,14 +62,18 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Select a Budget</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  disabled={!budgets || isLoading}
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Choose..." />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Object.values(budgets).map(b => (
+                    {budgets && Object.values(budgets).map(b => (
                       <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
                     ))}
                   </SelectContent>

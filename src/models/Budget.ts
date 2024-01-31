@@ -1,5 +1,8 @@
+// types
+import { BudgetDocument, DocumentCollection, ModelCollection } from "@/types"
+
 // models
-import Transaction, { TransactionType } from "./Transaction"
+import Transaction, { TransactionType } from "@/models/Transaction"
 
 export enum BudgetType {
   INCOME = 'income',
@@ -21,7 +24,7 @@ export type BudgetProps = {
   type: BudgetType
   balance: Balance
   theme: BudgetTheme
-  transactions?: {[key: string]: Transaction}
+  transactions?: ModelCollection['transaction']
 }
 
 class Budget {
@@ -29,7 +32,7 @@ class Budget {
   public type: BudgetType
   public balance: Balance
   public theme: BudgetTheme
-  public transactions: {[key: string]: Transaction}
+  public transactions: ModelCollection['transaction']
 
   constructor(readonly id: string, props: BudgetProps) {
     this.name = props.name
@@ -67,6 +70,44 @@ class Budget {
     this.balance.current += transaction.type === TransactionType.PLUS
       ? transaction.amount
       : -transaction.amount
+  }
+
+  static convertToModel(document: BudgetDocument, transactions: ModelCollection['transaction']): Budget {
+    return new Budget(document.id, { ...document, transactions })
+  }
+
+  static convertToDocument(model: Budget): BudgetDocument {
+    const transactionIds = Object.keys(model.transactions)
+    return {
+      id: model.id,
+      name: model.name,
+      type: model.type,
+      balance: model.balance,
+      theme: model.theme,
+      transactionIds
+    }
+  }
+
+  static bulkConvertToModel(
+    documents: DocumentCollection['budget'],
+    transactions: ModelCollection['transaction']
+  ): ModelCollection['budget'] {
+    return Object.entries(documents)
+      .reduce((models, [key, document]) => {
+        const budgetTransactions = Transaction.filterByBudget(key, transactions)
+        return {
+          ...models,
+          [key]: Budget.convertToModel(document, budgetTransactions)
+        } 
+      }, {})
+  }
+
+  static bulkConvertToDocument(models: ModelCollection['budget']): DocumentCollection['budget'] {
+    return Object.entries(models)
+      .reduce((documents, [key, model]) => ({
+        ...documents,
+        [key]: this.convertToDocument(model)
+      }), {})
   }
 }
 

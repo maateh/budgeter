@@ -5,8 +5,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import RootLayout from "./layouts/_root/RootLayout"
 import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "./layouts/_root/pages"
 
-import BudgetLoader from "./layouts/_root/pages/budgets/loader"
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -46,7 +44,6 @@ const router = createBrowserRouter([
       },
       {
         path: "/budgets/:id",
-        loader: BudgetLoader,
         element: (
           <Suspense fallback={<>Loading...</>}>
             <BudgetDetails />
