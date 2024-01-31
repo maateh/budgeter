@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 // icons
 import { ChevronRightCircle, Plus } from "lucide-react"
@@ -31,10 +32,15 @@ const RecentTransactions = ({
   budget,
   budgets
 }: RecentTransactionsProps) => {
+  const navigate = useNavigate()
   const [quantity, setQuantity] = useState(startingQuantity)
 
-  const handleSlice = () => {
-    setQuantity(prev => prev + loadingQuantity)
+  const handleViewMore = () => {
+    if (loadingQuantity > 0 && transactions.length > quantity) {
+      setQuantity(prev => prev + loadingQuantity)
+    } else {
+      navigate('/transactions')
+    }
   }
 
   return (
@@ -59,14 +65,14 @@ const RecentTransactions = ({
         ))}
       </ul>
 
-      {loadingQuantity > 0 && transactions.length > quantity && (
+      {transactions.length > quantity && (
         <div className="w-full mt-4 flex justify-center items-center">
           <Button
-            onClick={handleSlice}
+            onClick={handleViewMore}
             size="sm"
             className="flex items-center gap-x-1.5"
           >
-            <span>Load More</span>
+            <span>{loadingQuantity > 0 ? 'Load More' : 'View all'}</span>
             <ChevronRightCircle size={20} />
           </Button>
         </div>
