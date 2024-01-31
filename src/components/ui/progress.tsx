@@ -7,15 +7,14 @@ import { VariantProps, cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const progressVariants = cva(
-  "relative h-4 w-full overflow-hidden rounded-full",
+  "border border-border/90 relative h-4 w-full overflow-hidden rounded-full shadow-md",
   {
     variants: {
       variant: {
         default: "bg-primary-foreground hover:bg-primary-foreground/85",
-        income:
-          "bg-green-600 dark:bg-green-600 hover:bg-green-600/85 dark:hover:bg-green-500/85",
-        expense:
-          "bg-red-600 dark:bg-red-600 hover:bg-red-600/85 dark:hover:bg-red-500/85",
+        income: "bg-green-600 hover:bg-green-600/85 dark:bg-green-600/90 dark:hover:bg-green-600/95",
+        expense: "bg-rose-700/85 hover:bg-rose-700/90",
+        negative: "opacity-65 bg-red-500/80 hover:bg-red-500/85 dark:bg-red-400/80 dark:hover:bg-red-400/85",
       },
     },
     defaultVariants: {
@@ -40,7 +39,7 @@ const Progress = React.forwardRef<
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-neutral-400 transition-all"
+      className="h-full w-full flex-1 bg-stone-400/85 transition-all"
       style={{ transform: `translateX(${(value || 0) / (maxValue || 100) * 100}%)` }}
     />
   </ProgressPrimitive.Root>
