@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 // icons
-import { BadgePlus, Landmark, Wallet } from "lucide-react"
+import { ArrowUpToLine, BadgePlus, BookMinus, BookPlus, Landmark, Wallet } from "lucide-react"
 
 // shadcn
 import { Separator } from "@/components/ui/separator"
@@ -13,7 +13,7 @@ import TransactionBadge from "@/components/shared/TransactionBadge"
 import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 
 // types
-import Budget from "@/models/Budget"
+import Budget, { BudgetType } from "@/models/Budget"
 
 type BudgetPreviewProps = {
   budget: Budget
@@ -27,39 +27,66 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   }
 
   return (
-    <div className="hover:drop-shadow-lg rounded-[1.65rem] bg-primary-foreground/10">
+    <div className="rounded-[1.65rem] bg-primary-foreground/10 hover:drop-shadow-lg">
       <div
         onClick={handleNavigate}
         style={{
           backgroundColor: budget.theme.background,
           color: budget.theme.foreground
         }}
-        className="flex flex-col gap-2 px-4 py-3 rounded-t-3xl cursor-pointer shadow-2xl border-2 border-b-0 border-foreground/20">
+        className="px-4 py-3 flex items-center justify-between gap-x-4 rounded-t-3xl cursor-pointer shadow-2xl border-2 border-b-0 border-foreground/20">
         <div className="text-xl font-heading icon-wrapper justify-end">
-          <p className="font-medium">{budget.name}</p>
           <Landmark strokeWidth={1.5} />
+          <p className="font-medium">{budget.name}</p>
         </div>
-        <div className="icon-wrapper">
-          <Wallet strokeWidth={1.5} />
-          <span className="text-2xl font-heading font-bold p-0">${budget.balance.current}</span>
-        </div>
+        <Badge
+          className="p-2.5 rounded-full"
+          style={{ color: budget.theme.background }}
+        >
+          {budget.type === BudgetType.INCOME ? (
+            <BookPlus size={20} strokeWidth={2.5} />
+          ) : (
+            <BookMinus size={20} strokeWidth={2.5} />
+          )}
+        </Badge>
       </div>
 
       <Separator className="py-[1px] bg-neutral-700 dark:bg-neutral-200" />
 
       <div className="px-4 py-3 rounded-b-3xl bg-card/75 shadow-2xl border-2 border-t-0 border-card">
-        <p className="mt-1 flex flex-end font-semibold">
-          Budget ceiling: ${budget.balance.ceiling}
-        </p>
+        <div className="flex flex-wrap justify-between gap-2 small-caps">
+          <Badge
+            size="sm"
+            variant={budget.balance.current > 0 ? 'income' : 'loss'}
+            className="flex-1 w-full icon-wrapper justify-center"
+          >
+            <Wallet size={18} />
+            <p className="flex justify-between items-center gap-x-2.5">
+              Balance
+              <span className="pl-2 font-heading border-primary/80 border-l-2">${budget.balance.current}</span>
+            </p>
+          </Badge>
+          <Badge
+            size="sm"
+            variant="outline"
+            className="flex-1 w-full icon-wrapper justify-center"
+          >
+            <ArrowUpToLine size={18} />
+            <p className="flex justify-between items-center gap-x-2.5">
+              Ceiling
+              <span className="pl-2 font-heading border-border/70 border-l-2">${budget.balance.ceiling}</span>
+            </p>
+          </Badge>
+        </div>
 
         <Progress
           value={budget.balance.current}
           maxValue={budget.balance.ceiling}
-          variant={budget.type}
-          className="mt-1 mb-2"
+          variant={budget.balance.current > 0 ? budget.type : 'negative'}
+          className="my-3"
         />
 
-        <ul className="my-1 flex flex-wrap justify-start gap-x-2 gap-y-1">
+        <ul className="flex flex-wrap justify-start gap-x-2 gap-y-1">
           <li>
             <AddTransactionsPopover budgetId={budget.id}>
               <Badge variant="outline" className="cursor-pointer flex gap-x-1">
@@ -86,7 +113,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           </li>
         </ul>
 
-        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2">
+        <div className="mt-4 flex justify-end flex-wrap gap-x-4 gap-y-2">
           <Badge variant="income">Income: ${budget.income}</Badge>
           <Badge variant="loss">Loss: -${budget.loss}</Badge>
         </div>
