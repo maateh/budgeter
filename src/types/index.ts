@@ -13,6 +13,7 @@ export type BudgetDocument = {
 
 export type TransactionDocument = {
   id: string
+  label: string
   budgetId: string
   type: TransactionType
   amount: number

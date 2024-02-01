@@ -8,19 +8,22 @@ export enum TransactionType {
 
 export type TransactionProps = {
   budgetId: string
+  label: string
   type: TransactionType
   amount: number
   date: Date
 }
 
 class Transaction {
-  public budgetId
-  public type
-  public amount
-  public date
+  public budgetId: string
+  public label: string
+  public type: TransactionType
+  public amount: number
+  public date: Date
 
   constructor(readonly id: string, props: TransactionProps) {
     this.budgetId = props.budgetId
+    this.label = props.label
     this.type = props.type
     this.amount = props.amount
     this.date = props.date
