@@ -1,22 +1,22 @@
 import { useNavigate } from "react-router-dom"
 
 // icons
-import { ArrowUpToLine, BookMinus, BookPlus, Pencil, Trash2, Wallet } from "lucide-react"
+import { ArrowUpToLine, Pencil, Trash2, Wallet } from "lucide-react"
 
 // shadcn
+import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 
 // components
 import TransactionList from "@/components/shared/RecentTransactions"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
+import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { BudgetType } from "@/models/Budget"
 
 const BudgetDetails = () => {
   const navigate = useNavigate()
@@ -116,17 +116,7 @@ const BudgetDetails = () => {
 
 
             <div className="flex items-center justify-between gap-x-4">
-              <Badge
-                variant={budget.type === BudgetType.INCOME ? 'income' : 'loss'}
-                className="p-2.5 rounded-full"
-              >
-                {budget.type === BudgetType.INCOME ? (
-                  <BookPlus size={20} strokeWidth={2.5} />
-                ) : (
-                  <BookMinus size={20} strokeWidth={2.5} />
-                )}
-              </Badge>
-              
+              <BudgetTypeBadge budget={budget} size="icon-md" />
               <Progress
                 value={budget.balance.current}
                 maxValue={budget.balance.ceiling}

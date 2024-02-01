@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 // icons
-import { ArrowUpToLine, BadgePlus, BookMinus, BookPlus, Landmark, Wallet } from "lucide-react"
+import { ArrowUpToLine, BadgePlus, Landmark, Wallet } from "lucide-react"
 
 // shadcn
 import { Separator } from "@/components/ui/separator"
@@ -9,11 +9,12 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
 // components
+import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
 import TransactionBadge from "@/components/shared/TransactionBadge"
 import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 
 // types
-import Budget, { BudgetType } from "@/models/Budget"
+import Budget from "@/models/Budget"
 
 type BudgetPreviewProps = {
   budget: Budget
@@ -39,16 +40,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           <Landmark strokeWidth={1.5} />
           <p className="font-medium">{budget.name}</p>
         </div>
-        <Badge
-          className="p-2.5 rounded-full"
-          style={{ color: budget.theme.background }}
-        >
-          {budget.type === BudgetType.INCOME ? (
-            <BookPlus size={20} strokeWidth={2.5} />
-          ) : (
-            <BookMinus size={20} strokeWidth={2.5} />
-          )}
-        </Badge>
+        <BudgetTypeBadge budget={budget} size="icon-sm" />
       </div>
 
       <Separator className="py-[1px] bg-neutral-700 dark:bg-neutral-200" />

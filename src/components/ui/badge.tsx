@@ -23,8 +23,11 @@ const badgeVariants = cva(
         default: "px-2.5 py-0.5 text-xs font-medium",
         sm: "px-3 py-1 text-sm",
         md: "px-4 py-1.5 text-sm font-semibold",
-        lg: "px-5 py-2 text-md font-semibold"
-      },
+        lg: "px-5 py-2 text-md font-semibold",
+        "icon-sm": "p-2",
+        "icon-md": "p-3",
+        "icon-lg": "p-3.5",
+      }
     },
     defaultVariants: {
       variant: "default",
