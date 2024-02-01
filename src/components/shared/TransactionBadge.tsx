@@ -10,7 +10,10 @@ type TransactionBadgeProps = {
 
 const TransactionBadge = ({ transaction }: TransactionBadgeProps) => {
   return (
-    <Badge variant={transaction.type === TransactionType.PLUS ? "positive" : "negative"}>
+    <Badge
+    size="xs"
+      variant={transaction.type === TransactionType.PLUS ? "positive" : "negative"}
+    >
       {transaction.type}${transaction.amount}
     </Badge>
   )

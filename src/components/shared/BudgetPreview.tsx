@@ -73,7 +73,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <ul className="flex flex-wrap justify-start gap-x-2 gap-y-1">
           <li>
             <AddTransactionsPopover budgetId={budget.id}>
-              <Badge variant="outline" className="cursor-pointer flex gap-x-1">
+              <Badge size="xs" variant="outline" className="cursor-pointer flex gap-x-1">
                 <BadgePlus size={16} />
                 <span>New</span>
               </Badge>
@@ -90,6 +90,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             <Badge
               onClick={handleNavigate}
               variant="outline"
+              size="xs"
               className="cursor-pointer"
             >
               View all
