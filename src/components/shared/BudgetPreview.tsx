@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 
 // components
 import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
+import InfoBadge from "@/components/shared/InfoBadge"
 import TransactionBadge from "@/components/shared/TransactionBadge"
 import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 
@@ -47,28 +48,19 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
       <div className="px-4 py-3 rounded-b-3xl bg-card/75 shadow-2xl border-2 border-t-0 border-card">
         <div className="flex flex-wrap justify-between gap-2 small-caps">
-          <Badge
+          <InfoBadge
+            label="Balance"
+            value={`$${budget.balance.current}`}
             size="sm"
             variant={budget.balance.current > 0 ? 'income' : 'loss'}
-            className="flex-1 w-full icon-wrapper justify-center"
-          >
-            <Wallet size={18} />
-            <p className="flex justify-between items-center gap-x-2.5">
-              Balance
-              <span className="pl-2 font-heading border-primary/80 border-l-2">${budget.balance.current}</span>
-            </p>
-          </Badge>
-          <Badge
+            icon={<Wallet size={18} />}
+          />
+          <InfoBadge
+            label="Ceiling"
+            value={`$${budget.balance.ceiling}`}
             size="sm"
-            variant="outline"
-            className="flex-1 w-full icon-wrapper justify-center"
-          >
-            <ArrowUpToLine size={18} />
-            <p className="flex justify-between items-center gap-x-2.5">
-              Ceiling
-              <span className="pl-2 font-heading border-border/70 border-l-2">${budget.balance.ceiling}</span>
-            </p>
-          </Badge>
+            icon={<ArrowUpToLine size={18} />}
+          />
         </div>
 
         <Progress
@@ -105,9 +97,19 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           </li>
         </ul>
 
-        <div className="mt-4 flex justify-end flex-wrap gap-x-4 gap-y-2">
-          <Badge variant="income">Income: ${budget.income}</Badge>
-          <Badge variant="loss">Loss: -${budget.loss}</Badge>
+        <div className="w-fit ml-auto mt-4 grid grid-cols-2 gap-x-2.5">
+          <InfoBadge
+            label="Income"
+            value={`$${budget.income}`}
+            size="xs"
+            variant="income"
+          />
+          <InfoBadge
+            label="Loss"
+            value={`$${budget.loss}`}
+            size="xs"
+            variant="loss"
+          />
         </div>
       </div>
     </div>

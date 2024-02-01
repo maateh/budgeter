@@ -20,8 +20,8 @@ const badgeVariants = cva(
           "border-2 border-red-700/75 bg-background/70 text-red-700/95 hover:bg-secondary/25 dark:border-red-500/65 dark:text-red-500/95"
       },
       size: {
-        default: "px-2.5 py-0.5 text-xs font-medium",
-        sm: "px-3 py-1 text-sm",
+        xs: "px-2.5 py-0.5 text-xs font-medium",
+        sm: "px-2.5 py-1 text-sm",
         md: "px-4 py-1.5 text-sm font-semibold",
         lg: "px-5 py-2 text-md font-semibold",
         "icon-sm": "p-2",
@@ -31,7 +31,7 @@ const badgeVariants = cva(
     },
     defaultVariants: {
       variant: "default",
-      size: "default"
+      size: "sm"
     },
   }
 )

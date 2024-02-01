@@ -6,7 +6,6 @@ import { ArrowUpToLine, Pencil, Trash2, Wallet } from "lucide-react"
 // shadcn
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 
 // components
@@ -17,6 +16,7 @@ import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
+import InfoBadge from "@/components/shared/InfoBadge"
 
 const BudgetDetails = () => {
   const navigate = useNavigate()
@@ -84,33 +84,34 @@ const BudgetDetails = () => {
           <div className="flex flex-col gap-y-2">
             <div className="flex flex-wrap justify-between gap-8">
               <div className="flex flex-col gap-x-4 gap-y-3 text-lg small-caps">
-                <Badge
+                <InfoBadge
+                  label="Current Balance"
+                  value={`$${budget.balance.current}`}
                   size="lg"
                   variant={budget.balance.current > 0 ? 'income' : 'loss'}
-                  className="w-fit icon-wrapper"
-                >
-                  <Wallet strokeWidth={2.25} />
-                  <p className="flex justify-between items-center gap-x-2.5">
-                    Current Balance
-                    <span className="pl-2.5 text-2xl font-heading border-primary/80 border-l-2">${budget.balance.current}</span>
-                  </p>
-                </Badge>
-                <Badge
-                  size="md"
-                  variant="outline"
-                  className="w-fit icon-wrapper"
-                >
-                  <ArrowUpToLine strokeWidth={2.25} />
-                  <p className="flex justify-between items-center gap-x-2.5">
-                    Budget Ceiling
-                    <span className="pl-2.5 text-xl font-heading border-border/70 border-l-2">${budget.balance.ceiling}</span>
-                  </p>
-                </Badge>
+                  icon={<Wallet strokeWidth={2.25} />}
+                />
+                <InfoBadge
+                  label="Ceiling"
+                  value={`$${budget.balance.ceiling}`}
+                  size="lg"
+                  icon={<ArrowUpToLine strokeWidth={2.25} />}
+                />
               </div>
 
-              <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2">
-                <Badge variant="income" size="lg">Total Income: ${budget.income}</Badge>
-                <Badge variant="loss" size="lg">Total Loss: -${budget.loss}</Badge>
+              <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2 truncate">
+                <InfoBadge
+                  label="Total Income"
+                  value={`$${budget.income}`}
+                  size="md"
+                  variant="income"
+                />
+                <InfoBadge
+                  label="Total Loss"
+                  value={`$${budget.loss}`}
+                  size="md"
+                  variant="loss"
+                />
               </div>
             </div>
 
