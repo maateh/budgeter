@@ -24,6 +24,7 @@ const badgeVariants = cva(
         sm: "px-2.5 py-1 text-sm",
         md: "px-4 py-1.5 text-sm font-semibold",
         lg: "px-5 py-2 text-md font-semibold",
+        "icon-xs": "p-1.5",
         "icon-sm": "p-2",
         "icon-md": "p-3",
         "icon-lg": "p-3.5",
