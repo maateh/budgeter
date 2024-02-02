@@ -34,6 +34,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
     defaultValues: {
       budgetId: budgetId,
       id: crypto.randomUUID(),
+      label: '',
       type: TransactionType.PLUS,
       amount: 0,
       date: new Date()
@@ -47,6 +48,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
 
       form.reset()
       form.setValue("id", crypto.randomUUID())
+      form.setValue("budgetId", transaction.budgetId)
     } catch (err) {
       console.error(err)
     }
@@ -83,6 +85,27 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
             )}
           />
         )}
+
+        <FormField
+          control={form.control}
+          name="label"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-heading text-md font-normal small-caps">
+                Label
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="e.g. Chocolate"
+                  className="h-9"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex items-center gap-x-2">
           <FormField

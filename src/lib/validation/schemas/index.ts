@@ -5,7 +5,9 @@ import { TransactionType } from "@/models/Transaction"
 
 export const budgetSchema = z.object({
   id: z.string().uuid(),
-  name: z.string().min(2, { message: 'Too short.' }).max(50, { message: 'Too long.' }),
+  name: z.string()
+    .min(2, { message: 'Too short.' })
+    .max(50, { message: 'Too long.' }),
   type: z.nativeEnum(BudgetType),
   balance: z.object({
     current: z.coerce.number().default(0),
@@ -23,6 +25,9 @@ export const budgetSchema = z.object({
 
 export const transactionSchema = z.object({
   id: z.string().uuid(),
+  label: z.string()
+    .min(2, { message: 'Too short.' })
+    .max(28, { message: 'Too long.' }),
   type: z.nativeEnum(TransactionType),
   amount: z.coerce.number().gt(0),
   date: z.date()
