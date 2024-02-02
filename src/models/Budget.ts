@@ -65,6 +65,16 @@ class Budget {
       this.updateCurrentBalance(t)
     })
   }
+  
+  undoTransactions(transactionIds: string[]) {
+    transactionIds.forEach(id => {
+      const transaction = this.transactions[id]
+      transaction.amount = transaction.amount * -1
+      
+      this.updateCurrentBalance(transaction)
+      delete this.transactions[id]
+    })
+  }
 
   private updateCurrentBalance(transaction: Transaction) {
     this.balance.current += transaction.type === TransactionType.PLUS

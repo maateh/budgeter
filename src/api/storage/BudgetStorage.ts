@@ -96,7 +96,7 @@ class BudgetStorage implements IBudgetAPI {
 
   async deleteTransactions(budgetId: string, transactionIds: string[]): Promise<Budget> {
     const budget = await this.find(budgetId)
-    transactionIds.forEach(id => delete budget.transactions[id])
+    budget.undoTransactions(transactionIds)
 
     return await this.save(budget)
   }

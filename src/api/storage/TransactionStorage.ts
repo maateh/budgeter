@@ -5,6 +5,9 @@ import Transaction from "@/models/Transaction"
 // interfaces
 import { ITransactionAPI } from "@/api/interfaces"
 
+// api
+import API from "@/api"
+
 class TransactionStorage implements ITransactionAPI {
   private static _instance: TransactionStorage
 
@@ -53,7 +56,6 @@ class TransactionStorage implements ITransactionAPI {
     return await this.findAll()
   }
 
-  // TODO: here it's switched to model from document
   async save(model: Transaction): Promise<Transaction> {
     const documents = await this.fetchFromStorage()
 
@@ -73,8 +75,11 @@ class TransactionStorage implements ITransactionAPI {
 
   async delete(id: string): Promise<boolean> {
     const documents = await this.fetchFromStorage()
-    delete documents[id]
+    const document = documents[id]
 
+    await API.budget.deleteTransactions(document.budgetId, [document.id])
+    delete documents[id]
+    
     localStorage.setItem('transactions', JSON.stringify(documents))
     return true
   }
