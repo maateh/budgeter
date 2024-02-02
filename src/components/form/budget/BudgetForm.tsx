@@ -48,7 +48,7 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
   })
 
   async function onSubmit(values: z.infer<typeof BudgetValidation>) {
-    if (values.type === BudgetType.EXPENSE) {
+    if (type === 'create' && values.type === BudgetType.EXPENSE) {
       values.balance.current = values.balance.ceiling
     }
 
@@ -100,7 +100,7 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
-                    defaultValue={BudgetType.INCOME}
+                    defaultValue={field.value}
                     onValueChange={field.onChange}
                     className="flex flex-wrap gap-x-6 gap-y-3"
                   >
@@ -108,13 +108,17 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
                       <FormControl>
                         <RadioGroupItem value={BudgetType.INCOME} />
                       </FormControl>
-                      <FormLabel className="text-md font-semibold cursor-pointer">{BudgetType.INCOME}</FormLabel>
+                      <FormLabel className="text-md font-semibold cursor-pointer">
+                        {BudgetType.INCOME}
+                      </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-2">
                       <FormControl>
                         <RadioGroupItem value={BudgetType.EXPENSE} />
                       </FormControl>
-                      <FormLabel className="text-md font-semibold cursor-pointer">{BudgetType.EXPENSE}</FormLabel>
+                      <FormLabel className="text-md font-semibold cursor-pointer">
+                        {BudgetType.EXPENSE}
+                      </FormLabel>
                     </FormItem>
                   </RadioGroup>
                 </FormControl>
