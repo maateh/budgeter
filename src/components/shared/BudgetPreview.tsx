@@ -73,7 +73,11 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <ul className="flex flex-wrap justify-start gap-x-2 gap-y-1">
           <li>
             <AddTransactionsPopover budgetId={budget.id}>
-              <Badge size="xs" variant="outline" className="cursor-pointer flex gap-x-1">
+              <Badge
+                size="xs"
+                variant="outline"
+                className="cursor-pointer gap-x-1"
+              >
                 <BadgePlus size={16} />
                 <span>New</span>
               </Badge>
@@ -82,7 +86,11 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
           {Object.values(budget.transactions).slice(0, 6).map(tr => (
             <li key={tr.id}>
-              <TransactionBadge transaction={tr} />
+              <TransactionBadge
+                transaction={tr}
+                size="xs"
+                iconSize={10}
+              />
             </li>
           ))}
           

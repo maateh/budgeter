@@ -1,5 +1,5 @@
 // icons
-import { Minus, Plus, XSquare } from "lucide-react"
+import { XSquare } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -10,10 +10,11 @@ import ConfirmSheet from "@/components/shared/ConfirmSheet"
 
 // models
 import Budget from "@/models/Budget"
-import Transaction, { TransactionType } from "@/models/Transaction"
+import Transaction from "@/models/Transaction"
 
 // hooks
 import { useDeleteTransactionMutation } from "./TransactionPreview.hooks"
+import TransactionBadge from "./TransactionBadge"
 
 type TransactionPreviewProps = {
   transaction: Transaction
@@ -54,17 +55,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-1 items-center">
-        <div className={`
-          px-2 py-0.5 font-heading text-xl font-bold flex items-center gap-x-1.5 rounded-full border-2 border-foreground/30
-          ${transaction.type === TransactionType.PLUS ? 'bg-green-500/90' : 'bg-red-500/90'}
-        `}>
-          {transaction.type === TransactionType.PLUS ? (
-            <Plus size={16} strokeWidth={8} />
-          ) : (
-            <Minus size={16} strokeWidth={8} />
-          )}
-          <span>${transaction.amount}</span>
-        </div>
+        <TransactionBadge transaction={transaction} />
         
         <ConfirmSheet
           title={`Delete "${transaction.label}" Transaction`}
