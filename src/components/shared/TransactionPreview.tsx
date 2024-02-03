@@ -45,7 +45,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       <div className="icon-wrapper">
         <BudgetTypeBadge budget={budget} size="icon-sm" iconSize={16} />
         <div className="flex flex-col font-medium">
-          <p className="text-lg leading-4 font-heading">{transaction.label}</p>
+          <p className="text-md leading-4 font-heading">{transaction.label}</p>
           <p className="text-xs">
             <span className="font-semibold tracking-wider">{budget.name} - </span>
             <span className="italic">

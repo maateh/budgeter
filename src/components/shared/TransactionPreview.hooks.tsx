@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
+// api
+import API from "@/api"
+
 // models
 import Transaction from "@/models/Transaction"
-import API from "@/api"
 
 export const useDeleteTransactionMutation = (transaction: Transaction) => {
   const queryClient = useQueryClient()
