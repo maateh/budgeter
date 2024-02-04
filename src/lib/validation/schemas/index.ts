@@ -24,16 +24,11 @@ export const budgetSchema = z.object({
 })
 
 export const transactionSchema = z.object({
-  // id: z.string().uuid(),
   label: z.string()
     .min(2, { message: 'Too short.' })
     .max(28, { message: 'Too long.' }),
   type: z.nativeEnum(TransactionType),
   amount: z.coerce.number().gt(0),
   processing: z.boolean(),
-  date: z.object({
-    crediting: z.date().optional(),
-    expected: z.date(),
-    creation: z.date()
-  })
+  expectedDate: z.date().optional()
 })

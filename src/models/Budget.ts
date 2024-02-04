@@ -62,7 +62,9 @@ class Budget {
         ...this.transactions
       }
 
-      this.updateCurrentBalance(t)
+      if (!t.processing) {
+        this.updateCurrentBalance(t)
+      }
     })
   }
   

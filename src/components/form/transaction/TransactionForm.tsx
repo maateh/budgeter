@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 import DateTimePicker from "@/components/shared/DateTimePicker"
 
 // types
-import Transaction, { TransactionType } from "@/models/Transaction"
+import Transaction, { TransactionDate, TransactionType } from "@/models/Transaction"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
@@ -39,20 +39,29 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
       budgetId: budgetId,
       label: '',
       type: TransactionType.PLUS,
-      amount: 0
+      amount: 0,
+      processing: false
     }
   })
 
   async function onSubmit(values: z.infer<typeof TransactionValidation>) {
-    values.date.creation = new Date()
+    const currentDate = new Date()
+    const date: TransactionDate = {
+      creation: currentDate,
+      expected: currentDate,
+      crediting: currentDate
+    }
 
-    if (!values.processing) {
-      values.date.crediting = values.date.creation
-      values.date.expected = values.date.creation
+    if (values.processing) {
+      date.crediting = undefined
+      date.expected = values.expectedDate!
     }
 
     const id = crypto.randomUUID()
-    const transaction = new Transaction(id, values)
+    const transaction = new Transaction(id, {
+      ...values,
+      date
+    })
     try {
       await saveTransaction(transaction)
 
@@ -197,13 +206,13 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
 
             <FormField
               control={form.control}
-              name="date.expected"
+              name="expectedDate"
               render={({ field }) => form.watch('processing') ? (
                 <FormItem>
                   <FormControl>
                     <DateTimePicker
-                      label="Expected Date"
-                      selected={field.value}
+                      label="Expected date..."
+                      selected={field.value!}
                       onSelect={field.onChange}
                     />
                   </FormControl>

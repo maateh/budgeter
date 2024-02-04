@@ -6,17 +6,19 @@ export enum TransactionType {
   MINUS = '-'
 }
 
+export type TransactionDate = {
+  crediting?: Date
+  expected: Date
+  creation: Date
+}
+
 export type TransactionProps = {
   budgetId: string
   label: string
   type: TransactionType
   amount: number
   processing: boolean
-  date: {
-    crediting?: Date
-    expected: Date
-    creation: Date
-  }
+  date: TransactionDate
 }
 
 class Transaction {
@@ -25,11 +27,7 @@ class Transaction {
   public type: TransactionType
   public amount: number
   public processing: boolean
-  public date: {
-    crediting?: Date
-    expected: Date
-    creation: Date
-  }
+  public date: TransactionDate
 
   constructor(readonly id: string, props: TransactionProps) {
     this.budgetId = props.budgetId
@@ -38,10 +36,6 @@ class Transaction {
     this.amount = props.amount
     this.processing = props.processing
     this.date = props.date
-  }
-
-  underProcess(): boolean {
-    return !!this.date.crediting
   }
 
   static convertToModel(document: TransactionDocument): Transaction {
@@ -66,9 +60,12 @@ class Transaction {
     }
   }
 
-  static bulkConvertToModel(documents: DocumentCollection['transaction']): ModelCollection['transaction'] {   
+  static bulkConvertToModel(
+    documents: DocumentCollection['transaction'],
+    predicate: (doc: TransactionDocument) => boolean
+  ): ModelCollection['transaction'] {   
     return Object.entries(documents)
-      .filter(doc => !!doc[1].date.crediting)
+      .filter(doc => predicate(doc[1]))
       .sort(doc => Date.parse(doc[1].date.crediting!))
       .reduce((models, [key, document]) => ({
         ...models,
