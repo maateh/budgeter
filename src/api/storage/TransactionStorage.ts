@@ -1,5 +1,5 @@
 // types
-import { DocumentCollection, ModelCollection } from "@/types"
+import { DocumentCollection, ModelCollection, TransactionDocument } from "@/types"
 import Transaction from "@/models/Transaction"
 
 // interfaces
@@ -25,13 +25,23 @@ class TransactionStorage implements ITransactionAPI {
     return JSON.parse(plainTransactions)
   }
 
-  async findAll(): Promise<ModelCollection['transaction']> {
+  async findAll(type?: 'processing' | 'processed'): Promise<ModelCollection['transaction']> {
     const documents = await this.fetchFromStorage()
-    return Transaction.bulkConvertToModel(documents)
+    let predicate = (doc: TransactionDocument) => !!doc
+
+    if (type === 'processing') {
+      predicate = (doc: TransactionDocument) => doc.processing
+    }
+
+    if (type === 'processed') {
+      predicate = (doc: TransactionDocument) => !doc.processing
+    }
+
+    return Transaction.bulkConvertToModel(documents, predicate)
   }
 
-  async findByBudget(budgetId: string): Promise<ModelCollection['transaction']> {
-    const models = await this.findAll()
+  async findByBudget(budgetId: string, type?: 'processing' | 'processed'): Promise<ModelCollection['transaction']> {
+    const models = await this.findAll(type)
     return Transaction.filterByBudget(budgetId, models)
   }
 

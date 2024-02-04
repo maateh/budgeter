@@ -13,10 +13,10 @@ import TransactionList from "@/components/shared/RecentTransactions"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
+import InfoBadge from "@/components/shared/InfoBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
-import InfoBadge from "@/components/shared/InfoBadge"
 
 const BudgetDetails = () => {
   const navigate = useNavigate()
@@ -130,7 +130,10 @@ const BudgetDetails = () => {
 
         <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
           <TransactionList
-            transactions={Object.values(budget.transactions)}
+            transactions={
+              Object.values(budget.transactions)
+                .filter(tr => !tr.processing)
+            }
             startingQuantity={6}
             loadingQuantity={4}
             budget={budget}
