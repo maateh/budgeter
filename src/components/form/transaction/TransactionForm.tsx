@@ -182,17 +182,17 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
           />
         </div>
 
-        <div className="space-y-0.5">
+        <div>
           <FormLabel className="font-heading text-md font-normal small-caps">
             Under Processing
           </FormLabel>
 
-          <div className="flex items-center gap-x-2">
+          <div className="h-max flex items-center justify-between gap-x-2">
             <FormField
               control={form.control}
               name="processing"
               render={({ field }) => (
-                <FormItem className="grid gap-y-1">
+                <FormItem className="flex items-center">
                   <FormControl>
                     <Switch
                       checked={field.value}
@@ -208,7 +208,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
               control={form.control}
               name="expectedDate"
               render={({ field }) => form.watch('processing') ? (
-                <FormItem>
+                <FormItem className="w-full flex items-center">
                   <FormControl>
                     <DateTimePicker
                       label="Expected date..."
