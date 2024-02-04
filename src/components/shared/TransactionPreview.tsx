@@ -50,7 +50,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
             <span className="font-semibold tracking-wider">{budget.name} - </span>
             <span className="italic">
               {formatDistance(
-                transaction.date, Date.now(), {
+                transaction.date.crediting || transaction.date.creation, Date.now(), {
                   addSuffix: true
                 }
               )}

@@ -84,15 +84,19 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             </AddTransactionsPopover>
           </li>
 
-          {Object.values(budget.transactions).slice(0, 6).map(tr => (
-            <li key={tr.id}>
-              <TransactionBadge
-                transaction={tr}
-                size="xs"
-                iconSize={10}
-              />
-            </li>
-          ))}
+          {Object.values(budget.transactions)
+            .filter(tr => !tr.processing)
+            .slice(0, 6)
+            .map(tr => (
+              <li key={tr.id}>
+                <TransactionBadge
+                  transaction={tr}
+                  size="xs"
+                  iconSize={10}
+                />
+              </li>
+            ))
+          }
           
           <li>
             <Badge

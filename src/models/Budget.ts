@@ -45,13 +45,13 @@ class Budget {
 
   get income(): number {
     return Object.values(this.transactions)
-      .filter(tr => tr.type === TransactionType.PLUS)
+      .filter(tr => !tr.processing && tr.type === TransactionType.PLUS)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
   get loss(): number {
     return Object.values(this.transactions)
-      .filter(tr => tr.type === TransactionType.MINUS)
+      .filter(tr => !tr.processing && tr.type === TransactionType.MINUS)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
