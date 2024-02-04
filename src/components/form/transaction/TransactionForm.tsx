@@ -3,14 +3,18 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
+// icons
+import { Minus, Plus } from "lucide-react"
+
 // shadcn
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 
-// icons
-import { Minus, Plus } from "lucide-react"
+// components
+import DateTimePicker from "@/components/shared/DateTimePicker"
 
 // types
 import Transaction, { TransactionType } from "@/models/Transaction"
@@ -33,21 +37,26 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
     resolver: zodResolver(TransactionValidation),
     defaultValues: {
       budgetId: budgetId,
-      id: crypto.randomUUID(),
       label: '',
       type: TransactionType.PLUS,
-      amount: 0,
-      date: new Date()
+      amount: 0
     }
   })
 
   async function onSubmit(values: z.infer<typeof TransactionValidation>) {
-    const transaction = new Transaction(values.id, values)
+    values.date.creation = new Date()
+
+    if (!values.processing) {
+      values.date.crediting = values.date.creation
+      values.date.expected = values.date.creation
+    }
+
+    const id = crypto.randomUUID()
+    const transaction = new Transaction(id, values)
     try {
       await saveTransaction(transaction)
 
       form.reset()
-      form.setValue("id", crypto.randomUUID())
       form.setValue("budgetId", transaction.budgetId)
     } catch (err) {
       console.error(err)
@@ -162,6 +171,47 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
               </FormItem>
             )}
           />
+        </div>
+
+        <div className="space-y-0.5">
+          <FormLabel className="font-heading text-md font-normal small-caps">
+            Under Processing
+          </FormLabel>
+
+          <div className="flex items-center gap-x-2">
+            <FormField
+              control={form.control}
+              name="processing"
+              render={({ field }) => (
+                <FormItem className="grid gap-y-1">
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="date.expected"
+              render={({ field }) => form.watch('processing') ? (
+                <FormItem>
+                  <FormControl>
+                    <DateTimePicker
+                      label="Expected Date"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              ) : <></>}
+            />
+          </div>
         </div>
 
         <Button type="submit" size="sm">Submit</Button>

@@ -17,7 +17,12 @@ export type TransactionDocument = {
   budgetId: string
   type: TransactionType
   amount: number
-  date: string
+  processing: boolean
+  date: {
+    crediting?: string
+    expected: string
+    creation: string
+  }
 }
 
 export type DocumentCollection = {
