@@ -46,7 +46,7 @@ class BudgetStorage implements IBudgetAPI {
 
     const budgetDoc = documents[id]
     if (!budgetDoc) {
-      throw Error('Budget not found with the specified ID.')
+      throw new Error('Budget not found with the specified ID.')
     }
 
     return Budget.convertToModel(budgetDoc, transactions)
@@ -89,14 +89,14 @@ class BudgetStorage implements IBudgetAPI {
 
   async addTransactions(budgetId: string, transactions: Transaction[]): Promise<Budget> {
     const budget = await this.find(budgetId)
-    budget.executeTransactions(transactions)
+    budget.addTransactions(transactions, true)
 
     return await this.save(budget)
   }
 
   async deleteTransactions(budgetId: string, transactionIds: string[]): Promise<Budget> {
     const budget = await this.find(budgetId)
-    budget.undoTransactions(transactionIds)
+    budget.removeTransactions(transactionIds, true)
 
     return await this.save(budget)
   }

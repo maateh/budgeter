@@ -1,5 +1,6 @@
 // types
 import { DocumentCollection, ModelCollection, TransactionDocument } from "@/types"
+import Budget from "@/models/Budget"
 
 export enum TransactionType {
   PLUS = '+',
@@ -38,6 +39,31 @@ class Transaction {
     this.date = props.date
   }
 
+  updateStatus(status: 'processed' | 'processing', budget: Budget) {
+    if (status === 'processed') {
+      budget.updateCurrentBalance(this)
+      
+      this.processing = false
+      this.date = {
+        ...this.date,
+        crediting: new Date()
+      }
+    }
+
+    if (status === 'processing') {
+      budget.updateCurrentBalance({
+        ...this,
+        amount: this.amount * -1
+      })
+
+      this.processing = true
+      this.date = {
+        ...this.date,
+        crediting: undefined
+      }
+    }
+  }
+
   static convertToModel(document: TransactionDocument): Transaction {
     return new Transaction(document.id, {
       ...document,
@@ -60,13 +86,15 @@ class Transaction {
     }
   }
 
-  static bulkConvertToModel(
-    documents: DocumentCollection['transaction'],
-    predicate: (doc: TransactionDocument) => boolean
-  ): ModelCollection['transaction'] {   
+  static bulkConvertToModel(documents: DocumentCollection['transaction'],
+    predicate: (doc: TransactionDocument) => boolean): ModelCollection['transaction'] {   
     return Object.entries(documents)
-      .filter(doc => predicate(doc[1]))
-      .sort(doc => Date.parse(doc[1].date.crediting!))
+      .filter(([, doc]) => predicate(doc))
+      .sort(([, a], [, b]) => (
+        Date.parse(a.date.crediting || a.date.creation) > Date.parse(b.date.crediting || b.date.creation) 
+          ? -1
+          : 1
+      ))
       .reduce((models, [key, document]) => ({
         ...models,
         [key]: this.convertToModel(document)

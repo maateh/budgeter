@@ -25,23 +25,23 @@ class TransactionStorage implements ITransactionAPI {
     return JSON.parse(plainTransactions)
   }
 
-  async findAll(type?: 'processing' | 'processed'): Promise<ModelCollection['transaction']> {
+  async findAll(status?: 'processing' | 'processed'): Promise<ModelCollection['transaction']> {
     const documents = await this.fetchFromStorage()
     let predicate = (doc: TransactionDocument) => !!doc
 
-    if (type === 'processing') {
+    if (status === 'processing') {
       predicate = (doc: TransactionDocument) => doc.processing
     }
 
-    if (type === 'processed') {
+    if (status === 'processed') {
       predicate = (doc: TransactionDocument) => !doc.processing
     }
 
     return Transaction.bulkConvertToModel(documents, predicate)
   }
 
-  async findByBudget(budgetId: string, type?: 'processing' | 'processed'): Promise<ModelCollection['transaction']> {
-    const models = await this.findAll(type)
+  async findByBudget(budgetId: string, status?: 'processing' | 'processed'): Promise<ModelCollection['transaction']> {
+    const models = await this.findAll(status)
     return Transaction.filterByBudget(budgetId, models)
   }
 

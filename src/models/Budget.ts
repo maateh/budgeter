@@ -55,15 +55,31 @@ class Budget {
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
-  executeTransactions(transactions: Transaction[]) {
-    transactions.forEach(t => {
+  addTransactions(transactions: Transaction[], execute: boolean = false) {
+    transactions.forEach(tr => {
       this.transactions = {
-        [t.id]: t,
+        [tr.id]: tr,
         ...this.transactions
       }
 
-      if (!t.processing) {
-        this.updateCurrentBalance(t)
+      if (execute) this.updateCurrentBalance(tr)
+    })
+  }
+
+  removeTransactions(transactionIds: string[], undo: boolean = false) {
+    transactionIds.forEach(id => {
+      const transaction = this.transactions[id]
+      transaction.amount = transaction.amount * -1
+
+      if (undo) this.updateCurrentBalance(transaction)
+      delete this.transactions[id]
+    })
+  }
+
+  executeTransactions(transactions: Transaction[]) {
+    transactions.forEach(tr => {
+      if (!tr.processing) {
+        this.updateCurrentBalance(tr)
       }
     })
   }
@@ -74,11 +90,10 @@ class Budget {
       transaction.amount = transaction.amount * -1
       
       this.updateCurrentBalance(transaction)
-      delete this.transactions[id]
     })
   }
 
-  private updateCurrentBalance(transaction: Transaction) {
+  updateCurrentBalance(transaction: Transaction) {
     this.balance.current += transaction.type === TransactionType.PLUS
       ? transaction.amount
       : -transaction.amount
