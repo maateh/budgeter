@@ -42,7 +42,8 @@ const sheetVariants = cva(
       },
       variant: {
         default: "bg-secondary/95 text-foreground",
-        confirm: "bg-primary/95 text-destructive md:max-w-screen-sm"
+        "confirm-accept": "bg-primary/95 text-green-700 dark:text-green-500 md:max-w-screen-sm",
+        "confirm-delete": "bg-primary/95 text-destructive md:max-w-screen-sm"
       }
     },
     defaultVariants: {
@@ -52,7 +53,7 @@ const sheetVariants = cva(
   }
 )
 
-interface SheetContentProps
+export interface SheetContentProps
   extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {}
 

@@ -1,17 +1,18 @@
 import { useState } from "react"
 
 // shadcn
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet"
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter, SheetContentProps } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 
 type ConfirmSheetProps = {
   title: string
   message: string
+  variant: SheetContentProps['variant']
   confirm: () => void
   children: React.JSX.Element
 }
 
-const ConfirmSheet = ({ title, message, confirm, children }: ConfirmSheetProps) => {
+const ConfirmSheet = ({ title, message, variant, confirm, children }: ConfirmSheetProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -20,7 +21,7 @@ const ConfirmSheet = ({ title, message, confirm, children }: ConfirmSheetProps) 
         {children}
       </SheetTrigger>
 
-      <SheetContent side="bottom" variant="confirm">
+      <SheetContent side="bottom" variant={variant}>
         <SheetHeader>
           <SheetTitle className="capitalize">{title}</SheetTitle>
         </SheetHeader>
