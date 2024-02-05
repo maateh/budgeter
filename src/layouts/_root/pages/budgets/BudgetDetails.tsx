@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 
 // components
-import TransactionList from "@/components/shared/RecentTransactions"
+import RecentTransactions from "@/components/shared/RecentTransactions"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
@@ -17,6 +17,7 @@ import InfoBadge from "@/components/shared/InfoBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
+import TransactionPreview from "@/components/shared/TransactionPreview"
 
 const BudgetDetails = () => {
   const navigate = useNavigate()
@@ -37,99 +38,121 @@ const BudgetDetails = () => {
       <h1 className="ml-6">Budget <span className="text-green-400">Details</span></h1>
       
       <div className="w-full flex flex-col justify-between gap-4 md:flex-row">
-        <section className="w-full h-fit layout-rounded bg-primary md:w-4/6 md:max-w-5xl">
-          <div className="flex justify-between items-center">
-            <h2
-              className="px-12 py-4 overline rounded-full"
-              style={{
-                backgroundColor: budget.theme.background,
-                color: budget.theme.foreground
-              }}
-            >
-              {budget.name}
+        <div className="w-full flex flex-col gap-4 md:w-4/6 md:max-w-4xl">
+          <section className="w-full h-fit layout-rounded bg-primary">
+            <div className="flex justify-between items-center">
+              <h2
+                className="px-12 py-4 overline rounded-full"
+                style={{
+                  backgroundColor: budget.theme.background,
+                  color: budget.theme.foreground
+                }}
+              >
+                {budget.name}
+              </h2>
+
+              <div className="flex justify-center items-center gap-x-4 gap-y">
+                <ConfirmSheet
+                  title={`Delete "${budget.name}" Budget`}
+                  message="Are you sure you want to delete this budget?"
+                  variant="confirm-delete"
+                  confirm={deleteConfirm}
+                >
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-x-1.5 "
+                  >
+                    <Trash2 size={18} />
+                    <span>Delete</span>
+                  </Button>
+                </ConfirmSheet>
+
+                <CreateBudgetSheet type="edit" budget={budget}>
+                  <Button
+                    variant="default"
+                    border="md"
+                    size="lg"
+                    className="flex items-center gap-x-2"
+                  >
+                    <Pencil size={18} />
+                    <span>Edit</span>
+                  </Button>
+                </CreateBudgetSheet>
+              </div>
+            </div>
+
+            <Separator className="mt-4 mb-8 bg-primary-foreground/15" />
+
+            <div className="flex flex-col gap-y-2">
+              <div className="flex flex-wrap justify-between gap-8">
+                <div className="flex flex-col gap-x-4 gap-y-3 text-lg small-caps">
+                  <InfoBadge
+                    label="Current Balance"
+                    value={`$${budget.balance.current}`}
+                    size="lg"
+                    variant={budget.balance.current > 0 ? 'income' : 'loss'}
+                    icon={<Wallet strokeWidth={2.25} />}
+                  />
+                  <InfoBadge
+                    label="Ceiling"
+                    value={`$${budget.balance.ceiling}`}
+                    size="lg"
+                    icon={<ArrowUpToLine strokeWidth={2.25} />}
+                  />
+                </div>
+
+                <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2 truncate">
+                  <InfoBadge
+                    label="Total Income"
+                    value={`$${budget.income}`}
+                    size="md"
+                    variant="income"
+                  />
+                  <InfoBadge
+                    label="Total Loss"
+                    value={`$${budget.loss}`}
+                    size="md"
+                    variant="loss"
+                  />
+                </div>
+              </div>
+
+
+              <div className="flex items-center justify-between gap-x-4">
+                <BudgetTypeBadge budget={budget} size="icon-md" />
+                <Progress
+                  value={budget.balance.current}
+                  maxValue={budget.balance.ceiling}
+                  variant={budget.balance.current > 0 ? budget.type : 'negative'}
+                  className="my-3.5 h-6"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="w-full h-fit layout-rounded bg-primary">
+            <h2 className="mb-5">
+              Transactions <span className="overline text-blue-500">Under Processing</span>
             </h2>
 
-            <div className="flex justify-center items-center gap-x-4 gap-y">
-              <ConfirmSheet
-                title={`Delete "${budget.name}" Budget`}
-                message="Are you sure you want to delete this budget?"
-                confirm={deleteConfirm}
-              >
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  className="flex items-center gap-x-1.5 "
-                >
-                  <Trash2 size={18} />
-                  <span>Delete</span>
-                </Button>
-              </ConfirmSheet>
-
-              <CreateBudgetSheet type="edit" budget={budget}>
-                <Button
-                  variant="default"
-                  border="md"
-                  size="lg"
-                  className="flex items-center gap-x-2"
-                >
-                  <Pencil size={18} />
-                  <span>Edit</span>
-                </Button>
-              </CreateBudgetSheet>
-            </div>
-          </div>
-
-          <Separator className="mt-4 mb-8 bg-primary-foreground/15" />
-
-          <div className="flex flex-col gap-y-2">
-            <div className="flex flex-wrap justify-between gap-8">
-              <div className="flex flex-col gap-x-4 gap-y-3 text-lg small-caps">
-                <InfoBadge
-                  label="Current Balance"
-                  value={`$${budget.balance.current}`}
-                  size="lg"
-                  variant={budget.balance.current > 0 ? 'income' : 'loss'}
-                  icon={<Wallet strokeWidth={2.25} />}
-                />
-                <InfoBadge
-                  label="Ceiling"
-                  value={`$${budget.balance.ceiling}`}
-                  size="lg"
-                  icon={<ArrowUpToLine strokeWidth={2.25} />}
-                />
-              </div>
-
-              <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2 truncate">
-                <InfoBadge
-                  label="Total Income"
-                  value={`$${budget.income}`}
-                  size="md"
-                  variant="income"
-                />
-                <InfoBadge
-                  label="Total Loss"
-                  value={`$${budget.loss}`}
-                  size="md"
-                  variant="loss"
-                />
-              </div>
-            </div>
-
-
-            <div className="flex items-center justify-between gap-x-4">
-              <BudgetTypeBadge budget={budget} size="icon-md" />
-              <Progress
-                value={budget.balance.current}
-                maxValue={budget.balance.ceiling}
-                variant={budget.balance.current > 0 ? budget.type : 'negative'}
-                className="my-3.5 h-6"
-              />
-            </div>
-          </div>
-        </section>
+            <ul className="w-full px-2 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
+              {Object.values(budget.transactions)
+                .filter(tr => tr.processing)
+                .map(tr => (
+                <li key={tr.id} className="flex-auto w-1/3 min-w-64 max-w-96">
+                  <TransactionPreview
+                    transaction={tr}
+                    budget={budget}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
 
         <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-          <TransactionList
+          <RecentTransactions
             transactions={
               Object.values(budget.transactions)
                 .filter(tr => !tr.processing)

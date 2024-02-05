@@ -1,7 +1,7 @@
 import { formatDistance } from "date-fns"
 
 // icons
-import { XSquare } from "lucide-react"
+import { BadgeCheck, XSquare } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button"
 // components
 import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
+import TransactionBadge from "@/components/shared/TransactionBadge"
 
 // models
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 // hooks
-import { useDeleteTransactionMutation } from "./TransactionPreview.hooks"
-import TransactionBadge from "./TransactionBadge"
+import { useDeleteTransactionMutation, useAcceptTransactionMutation } from "./TransactionPreview.hooks"
 
 type TransactionPreviewProps = {
   transaction: Transaction
@@ -24,11 +24,25 @@ type TransactionPreviewProps = {
 }
 
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
-  const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation(transaction)
+  const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation(
+    transaction.id,
+    budget.id
+  )
+  const { mutateAsync: acceptTransaction } = useAcceptTransactionMutation(transaction.id)
 
   const handleDelete = async () => {
     try {
-      await deleteTransaction(transaction)
+      await deleteTransaction(transaction.id)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const handleAccept = async () => {
+    transaction.updateStatus('processed', budget)
+
+    try {
+      await acceptTransaction({ transaction, budget })
     } catch (err) {
       console.error(err)
     }
@@ -61,16 +75,32 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
       <div className="flex gap-x-1 items-center">
         <TransactionBadge transaction={transaction} />
-        
-        <ConfirmSheet
-          title={`Delete "${transaction.label}" Transaction`}
-          message="Do you really want to delete this transaction?"
-          confirm={handleDelete}
-        >
-          <Button variant="ghost" size="icon-sm">
-            <XSquare size={16} />
-          </Button>
-        </ConfirmSheet>
+
+        <div className="flex items-center">
+          <ConfirmSheet
+            title={`Delete "${transaction.label}" Transaction`}
+            message="Do you really want to delete this transaction? This action cannot be undone."
+            variant="confirm-delete"
+            confirm={handleDelete}
+          >
+            <Button variant="ghost" size="icon-sm">
+              <XSquare size={16} />
+            </Button>
+          </ConfirmSheet>
+
+          {transaction.processing && (
+            <ConfirmSheet
+              title={`Confirm "${transaction.label}" transaction crediting`}
+              message="Has the transaction been credited? You can always withdraw this action."
+              variant="confirm-accept"
+              confirm={handleAccept}
+            >
+              <Button variant="ghost" size="icon-sm" className="-ml-1">
+                <BadgeCheck size={22} />
+              </Button>
+            </ConfirmSheet>
+          )}
+        </div>
       </div>
     </div>
   )
