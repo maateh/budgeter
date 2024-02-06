@@ -17,7 +17,7 @@ import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 // hooks
-import { useDeleteTransactionMutation, useAcceptTransactionMutation } from "./TransactionPreview.hooks"
+import { useDeleteTransactionMutation, useChangeTransactionStatusMutation } from "./TransactionPreview.hooks"
 
 type TransactionPreviewProps = {
   transaction: Transaction
@@ -29,7 +29,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
     transaction.id,
     budget.id
   )
-  const { mutateAsync: acceptTransaction } = useAcceptTransactionMutation(transaction.id)
+  const { mutateAsync: changeTransactionStatus } = useChangeTransactionStatusMutation(transaction.id)
 
   const handleDelete = async () => {
     try {
@@ -39,11 +39,14 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
     }
   }
 
-  const handleAccept = async () => {
-    transaction.updateStatus('processed', budget)
+  const handleChangeStatus = async () => {
+    transaction.updateStatus(
+      transaction.processing ? 'processed' : 'processing',
+      budget
+    )
 
     try {
-      await acceptTransaction({ transaction, budget })
+      await changeTransactionStatus({ transaction, budget })
     } catch (err) {
       console.error(err)
     }
@@ -61,7 +64,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
         <TransactionDetailsPopover
           transaction={transaction}
           budget={budget}
-          handleChangeStatus={handleAccept}
+          handleChangeStatus={handleChangeStatus}
           handleDelete={handleDelete}
         >
           <Badge size="icon-sm">
@@ -103,7 +106,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
               title={`Confirm "${transaction.label}" transaction crediting`}
               message="Has the transaction been credited? You can always withdraw this action."
               variant="confirm-positive"
-              confirm={handleAccept}
+              confirm={handleChangeStatus}
             >
               <Button variant="ghost" size="icon-sm" className="-ml-1">
                 <BadgeCheck size={22} />

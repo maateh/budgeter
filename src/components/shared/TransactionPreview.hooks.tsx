@@ -21,7 +21,7 @@ export const useDeleteTransactionMutation = (id: string, budgetId: string) => {
   })
 }
 
-export const useAcceptTransactionMutation = (id: string) => {
+export const useChangeTransactionStatusMutation = (id: string) => {
   const queryClient = useQueryClient()
 
   return useMutation({
