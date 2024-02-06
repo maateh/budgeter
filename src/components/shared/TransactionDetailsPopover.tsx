@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button"
 
 // components
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
-import BudgetTypeBadge from "./BudgetTypeBadge"
-import TransactionBadge from "./TransactionBadge"
+import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
+import TransactionBadge from "@/components/shared/TransactionBadge"
 
 type TransactionDetailsPopoverProps = {
   transaction: Transaction

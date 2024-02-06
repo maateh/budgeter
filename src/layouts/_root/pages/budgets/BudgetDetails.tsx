@@ -55,7 +55,7 @@ const BudgetDetails = () => {
                 <ConfirmSheet
                   title={`Delete "${budget.name}" Budget`}
                   message="Are you sure you want to delete this budget?"
-                  variant="confirm-delete"
+                  variant="confirm-negative"
                   confirm={deleteConfirm}
                 >
                   <Button

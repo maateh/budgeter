@@ -42,8 +42,8 @@ const sheetVariants = cva(
       },
       variant: {
         default: "bg-secondary/95 text-foreground",
-        "confirm-accept": "bg-primary/95 text-green-700 dark:text-green-500 md:max-w-screen-sm",
-        "confirm-delete": "bg-primary/95 text-destructive md:max-w-screen-sm"
+        "confirm-positive": "bg-primary/95 text-green-700 dark:text-green-500 md:max-w-screen-sm",
+        "confirm-negative": "bg-primary/95 text-destructive md:max-w-screen-sm"
       }
     },
     defaultVariants: {
