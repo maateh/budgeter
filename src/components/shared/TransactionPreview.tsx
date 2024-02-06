@@ -1,13 +1,14 @@
 import { formatDistance } from "date-fns"
 
 // icons
-import { BadgeCheck, XSquare } from "lucide-react"
+import { BadgeCheck, BadgeInfo, XSquare } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 
 // components
-import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
+import TransactionDetailsPopover from "@/components/shared/TransactionDetailsPopover"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 import TransactionBadge from "@/components/shared/TransactionBadge"
 
@@ -50,14 +51,23 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
   return (
     <div
-      className="pl-5 pr-1.5 py-2 flex justify-between items-center rounded-full"
+      className="pl-5 pr-1.5 py-2 flex justify-between items-center rounded-full hover:opacity-95"
       style={{
         backgroundColor: budget.theme.background,
         color: budget.theme.foreground
       }}
     >
       <div className="icon-wrapper">
-        <BudgetTypeBadge budget={budget} size="icon-sm" iconSize={16} />
+        <TransactionDetailsPopover
+          transaction={transaction}
+          budget={budget}
+          handleChangeStatus={handleAccept}
+          handleDelete={handleDelete}
+        >
+          <Badge size="icon-sm">
+            <BadgeInfo size={20} />
+          </Badge>
+        </TransactionDetailsPopover>
         <div className="flex flex-col font-medium">
           <p className="text-md leading-4 font-heading">{transaction.label}</p>
           <p className="text-xs">
@@ -80,7 +90,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
           <ConfirmSheet
             title={`Delete "${transaction.label}" Transaction`}
             message="Do you really want to delete this transaction? This action cannot be undone."
-            variant="confirm-delete"
+            variant="confirm-negative"
             confirm={handleDelete}
           >
             <Button variant="ghost" size="icon-sm">
@@ -92,7 +102,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
             <ConfirmSheet
               title={`Confirm "${transaction.label}" transaction crediting`}
               message="Has the transaction been credited? You can always withdraw this action."
-              variant="confirm-accept"
+              variant="confirm-positive"
               confirm={handleAccept}
             >
               <Button variant="ghost" size="icon-sm" className="-ml-1">
