@@ -71,7 +71,7 @@ class Budget {
       const transaction = this.transactions[id]
       transaction.amount = transaction.amount * -1
 
-      if (undo) this.updateCurrentBalance(transaction)
+      if (undo && !transaction.processing) this.updateCurrentBalance(transaction)
       delete this.transactions[id]
     })
   }
