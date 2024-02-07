@@ -41,7 +41,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
   const handleChangeStatus = async () => {
     transaction.updateStatus(
-      transaction.processing ? 'processed' : 'processing',
+      transaction.status === 'processing' ? 'processed' : 'processing',
       budget
     )
 
@@ -101,7 +101,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
             </Button>
           </ConfirmSheet>
 
-          {transaction.processing && (
+          {transaction.status === 'processing' && (
             <ConfirmSheet
               title={`Confirm "${transaction.label}" transaction crediting`}
               message="Has the transaction been credited? You can always withdraw this action."

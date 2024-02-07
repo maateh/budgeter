@@ -21,7 +21,7 @@ type TransactionListProps = {
   transactions: Transaction[]
   startingQuantity?: number
   loadingQuantity?: number
-  defaultStatus?: 'processing' | 'processed'
+  defaultStatus?: Transaction['status']
 } & (
   | { budget: Budget; budgets?: never }
   | { budgets: ModelCollection['budget']; budget?: never }
@@ -66,7 +66,7 @@ const TransactionList = ({
       </div>
 
       <ul className="w-full px-2 grid gap-3">
-        {transactions.filter(tr => status === 'processed' ? !tr.processing : tr.processing).slice(0, quantity).map(tr => (
+        {transactions.filter(tr => tr.status === status).slice(0, quantity).map(tr => (
           <li key={tr.id}>
             <TransactionPreview
               transaction={tr}

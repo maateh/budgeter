@@ -18,7 +18,7 @@ export type TransactionProps = {
   label: string
   type: TransactionType
   amount: number
-  processing: boolean
+  status: 'processed' | 'processing'
   date: TransactionDate
 }
 
@@ -27,7 +27,7 @@ class Transaction {
   public label: string
   public type: TransactionType
   public amount: number
-  public processing: boolean
+  public status: 'processed' | 'processing'
   public date: TransactionDate
 
   constructor(readonly id: string, props: TransactionProps) {
@@ -35,7 +35,7 @@ class Transaction {
     this.label = props.label
     this.type = props.type
     this.amount = props.amount
-    this.processing = props.processing
+    this.status = props.status
     this.date = props.date
   }
 
@@ -43,7 +43,7 @@ class Transaction {
     if (status === 'processed') {
       budget.updateCurrentBalance(this)
       
-      this.processing = false
+      this.status = 'processed'
       this.date = {
         ...this.date,
         crediting: new Date()
@@ -56,7 +56,7 @@ class Transaction {
         amount: this.amount * -1
       })
 
-      this.processing = true
+      this.status = 'processing'
       this.date = {
         ...this.date,
         crediting: undefined

@@ -45,13 +45,13 @@ class Budget {
 
   get income(): number {
     return Object.values(this.transactions)
-      .filter(tr => !tr.processing && tr.type === TransactionType.PLUS)
+      .filter(tr => tr.status === 'processed' && tr.type === TransactionType.PLUS)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
   get loss(): number {
     return Object.values(this.transactions)
-      .filter(tr => !tr.processing && tr.type === TransactionType.MINUS)
+      .filter(tr => tr.status === 'processed' && tr.type === TransactionType.MINUS)
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
@@ -62,7 +62,7 @@ class Budget {
         ...this.transactions
       }
 
-      if (execute) this.updateCurrentBalance(tr)
+      if (execute && tr.status === 'processed') this.updateCurrentBalance(tr)
     })
   }
 
@@ -71,14 +71,14 @@ class Budget {
       const transaction = this.transactions[id]
       transaction.amount = transaction.amount * -1
 
-      if (undo && !transaction.processing) this.updateCurrentBalance(transaction)
+      if (undo && transaction.status === 'processed') this.updateCurrentBalance(transaction)
       delete this.transactions[id]
     })
   }
 
   executeTransactions(transactions: Transaction[]) {
     transactions.forEach(tr => {
-      if (!tr.processing) {
+      if (tr.status === 'processed') {
         this.updateCurrentBalance(tr)
       }
     })

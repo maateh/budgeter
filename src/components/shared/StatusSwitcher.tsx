@@ -4,9 +4,12 @@ import { CheckCircle2, Loader } from "lucide-react"
 // shadcn
 import { Button } from "@/components/ui/button"
 
+// types
+import Transaction from "@/models/Transaction"
+
 type StatusSwitcherProps = {
-  status: "processing" | "processed"
-  setStatus: React.Dispatch<React.SetStateAction<"processing" | "processed">>
+  status: Transaction['status']
+  setStatus: React.Dispatch<React.SetStateAction<Transaction['status']>>
   customHandler?: () => void
 }
 

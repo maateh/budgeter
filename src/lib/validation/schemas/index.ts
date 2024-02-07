@@ -29,6 +29,6 @@ export const transactionSchema = z.object({
     .max(28, { message: 'Too long.' }),
   type: z.nativeEnum(TransactionType),
   amount: z.coerce.number().gt(0),
-  processing: z.boolean(),
+  status: z.string(),
   expectedDate: z.date().optional()
 })

@@ -40,7 +40,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
       label: '',
       type: TransactionType.PLUS,
       amount: 0,
-      processing: false
+      status: 'processed'
     }
   })
 
@@ -52,7 +52,8 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
       crediting: currentDate
     }
 
-    if (values.processing) {
+    const status = values.status as Transaction['status']
+    if (status === 'processing') {
       date.crediting = undefined
       date.expected = values.expectedDate!
     }
@@ -60,7 +61,8 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
     const id = crypto.randomUUID()
     const transaction = new Transaction(id, {
       ...values,
-      date
+      date,
+      status
     })
     try {
       await saveTransaction(transaction)
@@ -190,13 +192,17 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
           <div className="h-max flex items-center justify-between gap-x-2">
             <FormField
               control={form.control}
-              name="processing"
+              name="status"
               render={({ field }) => (
                 <FormItem className="flex items-center">
                   <FormControl>
                     <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                      checked={field.value as Transaction['status'] === 'processing'}
+                      onCheckedChange={() => field.onChange(
+                        field.value as Transaction['status'] === 'processing'
+                          ? 'processed'
+                          : 'processing'
+                      )}
                     />
                   </FormControl>
                   <FormMessage />
@@ -207,7 +213,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
             <FormField
               control={form.control}
               name="expectedDate"
-              render={({ field }) => form.watch('processing') ? (
+              render={({ field }) => form.watch('status') as Transaction['status'] === 'processing' ? (
                 <FormItem className="w-full flex items-center">
                   <FormControl>
                     <DateTimePicker

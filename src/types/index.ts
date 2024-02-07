@@ -17,7 +17,7 @@ export type TransactionDocument = {
   budgetId: string
   type: TransactionType
   amount: number
-  processing: boolean
+  status: 'processed' | 'processing'
   date: {
     crediting?: string
     expected: string
