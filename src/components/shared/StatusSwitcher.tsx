@@ -1,3 +1,4 @@
+import { forwardRef } from "react"
 // icons
 import { CheckCircle2, Loader } from "lucide-react"
 
@@ -9,12 +10,13 @@ import Transaction from "@/models/Transaction"
 
 type StatusSwitcherProps = {
   status: Transaction['status']
-  setStatus: React.Dispatch<React.SetStateAction<Transaction['status']>>
-  customHandler?: () => void
+  setStatus?: React.Dispatch<React.SetStateAction<Transaction['status']>>
 }
 
-const StatusSwitcher = ({ status, setStatus, customHandler }: StatusSwitcherProps) => {
-  const handleStatusChanger = () => {
+const StatusSwitcher = forwardRef<HTMLButtonElement, StatusSwitcherProps>(({ status, setStatus, ...props }, ref) => {
+  const handleStatusChange = () => {
+    if (!setStatus) return
+
     setStatus((prevStatus) => prevStatus === 'processed'
       ? 'processing'
       : 'processed')
@@ -22,10 +24,12 @@ const StatusSwitcher = ({ status, setStatus, customHandler }: StatusSwitcherProp
 
   return (
     <Button
-      onClick={customHandler || handleStatusChanger}
       variant="ghost" 
       size="icon-md"
       className="hover:bg-foreground/5"
+      onClick={handleStatusChange}
+      ref={ref}
+      {...props}
     >
       {status === 'processing' ? (
         <Loader
@@ -40,6 +44,6 @@ const StatusSwitcher = ({ status, setStatus, customHandler }: StatusSwitcherProp
       )}
     </Button>
   )
-}
+})
 
 export default StatusSwitcher

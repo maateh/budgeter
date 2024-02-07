@@ -85,7 +85,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           </li>
 
           {Object.values(budget.transactions)
-            .filter(tr => !tr.processing)
+            .filter(tr => tr.status === 'processed')
             .slice(0, 6)
             .map(tr => (
               <li key={tr.id}>

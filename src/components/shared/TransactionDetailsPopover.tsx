@@ -1,6 +1,6 @@
 import { format } from "date-fns"
 // icons
-import { CalendarCheck, CalendarClock, CalendarPlus, CheckCircle2, Loader, Receipt, Trash2 } from "lucide-react"
+import { CalendarCheck, CalendarClock, CalendarPlus, Receipt, Trash2 } from "lucide-react"
 
 // types
 import Budget from "@/models/Budget"
@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
 // components
+import StatusSwitcher from "@/components/shared/StatusSwitcher"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
 import TransactionBadge from "@/components/shared/TransactionBadge"
@@ -37,37 +38,20 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             <p className="text-lg font-heading">{transaction.label}</p>
           </div>
 
-          {transaction.status === 'processing' ? (
-            <ConfirmSheet
-              title={`Confirm "${transaction.label}" transaction crediting`}
-              message="Has the transaction been credited? You can always withdraw this action."
-              variant="confirm-positive"
-              confirm={handleChangeStatus}
-            >
-              <Button variant="ghost" size="icon-md">
-                <Loader
-                  size={26}
-                  strokeWidth={3}
-                  className="text-red-500"
-                />
-              </Button>
-            </ConfirmSheet>
-          ) : (
-            <ConfirmSheet
-              title={`Withdraw "${transaction.label}" transaction`}
-              message="Do you really want to withdraw this transaction?"
-              variant="confirm-negative"
-              confirm={handleChangeStatus}
-            >
-              <Button variant="ghost" size="icon-md">
-                <CheckCircle2
-                  size={26}
-                  strokeWidth={3}
-                  className="text-green-500"
-                />
-              </Button>
-            </ConfirmSheet>
-          )}
+          <ConfirmSheet
+            title={transaction.status === 'processed'
+                ? `Withdraw "${transaction.label}" transaction`
+                : `Confirm "${transaction.label}" transaction crediting`
+            }
+            message={transaction.status === 'processed'
+                ? 'Do you really want to withdraw this transaction?'
+                : 'Has the transaction been credited? You can always withdraw this action.'
+            }
+            variant={transaction.status === 'processed' ? 'confirm-negative': 'confirm-positive' }
+            confirm={handleChangeStatus}
+          >
+            <StatusSwitcher status={transaction.status} />
+          </ConfirmSheet>
         </div>
 
         <Separator className="mt-1.5 h-0.5 rounded-full bg-foreground/80" />
