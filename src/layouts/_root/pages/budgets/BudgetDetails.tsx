@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 
 // components
-import RecentTransactions from "@/components/shared/RecentTransactions"
+import TransactionList from "@/components/shared/TransactionList"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
@@ -17,7 +17,6 @@ import InfoBadge from "@/components/shared/InfoBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
-import TransactionPreview from "@/components/shared/TransactionPreview"
 
 const BudgetDetails = () => {
   const navigate = useNavigate()
@@ -143,7 +142,7 @@ const BudgetDetails = () => {
         </div>
 
         <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-          <RecentTransactions
+          <TransactionList
             transactions={Object.values(budget.transactions)}
             startingQuantity={6}
             loadingQuantity={4}

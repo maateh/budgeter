@@ -17,7 +17,7 @@ import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 import TransactionPreview from "@/components/shared/TransactionPreview"
 import StatusSwitcher from "@/components/shared/StatusSwitcher"
 
-type RecentTransactionsProps = {
+type TransactionListProps = {
   transactions: Transaction[]
   startingQuantity?: number
   loadingQuantity?: number
@@ -27,14 +27,14 @@ type RecentTransactionsProps = {
   | { budgets: ModelCollection['budget']; budget?: never }
 )
 
-const RecentTransactions = ({
+const TransactionList = ({
   transactions,
   startingQuantity = 5,
   loadingQuantity = 0,
   defaultStatus = 'processed',
   budget,
   budgets
-}: RecentTransactionsProps) => {
+}: TransactionListProps) => {
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState(startingQuantity)
   const [status, setStatus] = useState(defaultStatus)
@@ -92,4 +92,4 @@ const RecentTransactions = ({
   )
 }
 
-export default RecentTransactions
+export default TransactionList

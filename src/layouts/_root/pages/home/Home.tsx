@@ -2,7 +2,7 @@
 import { BudgetType } from "@/models/Budget"
 
 // components
-import RecentTransactions from "@/components/shared/RecentTransactions"
+import TransactionList from "@/components/shared/TransactionList"
 import BudgetSummary from "./components/BudgetSummary"
 import BudgetList from "./components/BudgetList"
 
@@ -23,7 +23,7 @@ const Home = () => {
           </section>
           <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
             {!_transactions.isLoading && _transactions.data && _budgets.data ? (
-              <RecentTransactions
+              <TransactionList
                 transactions={Object.values(_transactions.data)}
                 budgets={_budgets.data}
                 startingQuantity={7}
