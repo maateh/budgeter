@@ -31,7 +31,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
       <PopoverTrigger>
         {children}
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <div className="min-w-64 max-w-96 flex justify-between items-center gap-x-4">
           <div className="icon-wrapper">
             <Receipt size={24} strokeWidth={1.5} />

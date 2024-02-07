@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button"
 
 // types
 import Transaction from "@/models/Transaction"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 type StatusSwitcherProps = {
   status: Transaction['status']
   setStatus?: React.Dispatch<React.SetStateAction<Transaction['status']>>
+  tooltip?: string
 }
 
-const StatusSwitcher = forwardRef<HTMLButtonElement, StatusSwitcherProps>(({ status, setStatus, ...props }, ref) => {
+const StatusSwitcher = forwardRef<HTMLButtonElement, StatusSwitcherProps>(({ status, setStatus, tooltip, ...props }, ref) => {
   const handleStatusChange = () => {
     if (!setStatus) return
 
@@ -23,26 +25,39 @@ const StatusSwitcher = forwardRef<HTMLButtonElement, StatusSwitcherProps>(({ sta
   }
 
   return (
-    <Button
-      variant="ghost" 
-      size="icon-md"
-      className="hover:bg-foreground/5"
-      onClick={handleStatusChange}
-      ref={ref}
-      {...props}
-    >
-      {status === 'processing' ? (
-        <Loader
-          strokeWidth={3}
-          className="text-red-500"
-        />
-      ) : (
-        <CheckCircle2
-          strokeWidth={3}
-          className="text-green-600 dark:text-green-500"
-        />
-      )}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost" 
+            size="icon-md"
+            className="hover:bg-foreground/5"
+            onClick={handleStatusChange}
+            ref={ref}
+            {...props}
+          >
+            {status === 'processing' ? (
+              <Loader
+                strokeWidth={3}
+                className="text-red-500"
+              />
+            ) : (
+              <CheckCircle2
+                strokeWidth={3}
+                className="text-green-600 dark:text-green-500"
+              />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="font-heading font-medium tracking-wide">
+          {tooltip ? tooltip : status === 'processed' ? (
+            'Click to withdraw'
+          ) : (
+            'Click for crediting'
+          )}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 })
 

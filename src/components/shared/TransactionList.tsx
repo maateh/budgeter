@@ -51,7 +51,12 @@ const TransactionList = ({
     <>
       <div className="mb-5 flex justify-between items-center">
         <div className="flex items-center gap-x-1.5">
-          <StatusSwitcher status={status} setStatus={setStatus} />
+          <StatusSwitcher
+            status={status}
+            setStatus={setStatus}
+            tooltip="Switch between transaction status types"
+          />
+
           {status === 'processed' ? (
             <h2>Recent <span className="text-yellow-300 overline">Transactions</span></h2>
           ) : (
