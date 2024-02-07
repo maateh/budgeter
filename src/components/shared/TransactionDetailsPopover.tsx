@@ -37,7 +37,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             <p className="text-lg font-heading">{transaction.label}</p>
           </div>
 
-          {transaction.processing ? (
+          {transaction.status === 'processing' ? (
             <ConfirmSheet
               title={`Confirm "${transaction.label}" transaction crediting`}
               message="Has the transaction been credited? You can always withdraw this action."
@@ -73,7 +73,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
         <Separator className="mt-1.5 h-0.5 rounded-full bg-foreground/80" />
 
         <div className="mt-2.5 flex flex-col gap-y-0.5">
-          {!transaction.processing && transaction.date.crediting && (
+          {transaction.status === 'processed' && transaction.date.crediting && (
             <div className="w-full flex justify-between items-center">
               <p className="text-md font-semibold small-caps">Credited</p>
               <div className="icon-wrapper">
@@ -83,7 +83,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             </div>
           )}
 
-          {transaction.processing && (
+          {transaction.status === 'processing' && (
             <div className="w-full flex justify-between items-center">
               <p className="text-md font-semibold small-caps">Expected</p>
               <div className="icon-wrapper">
@@ -101,14 +101,14 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             </div>
           </div>
 
-          <div className="mt-5 flex justify-between items-center">
-            <div className="icon-wrapper">
+          <div className="mt-5 flex justify-between items-center gap-x-4">
+            <div className="max-w-64 icon-wrapper">
               <BudgetTypeBadge
                 budget={budget}
                 iconSize={14}
                 size="icon-sm"
               />
-              <p className="text-xl font-heading font-bold all-small-caps">{budget.name}</p>
+              <p className="text-xl font-heading font-semibold all-small-caps text-ellipsis">{budget.name}</p>
             </div>
 
             <div className="flex gap-x-3 items-center">
