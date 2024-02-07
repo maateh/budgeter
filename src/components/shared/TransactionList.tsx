@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 // components
 import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 import TransactionPreview from "@/components/shared/TransactionPreview"
-import StatusSwitcher from "@/components/shared/StatusSwitcher"
+import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 
 type TransactionListProps = {
   transactions: Transaction[]

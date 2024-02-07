@@ -12,8 +12,8 @@ import { Progress } from "@/components/ui/progress"
 import TransactionList from "@/components/shared/TransactionList"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
-import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
-import InfoBadge from "@/components/shared/InfoBadge"
+import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
+import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"

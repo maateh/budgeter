@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 
 // components
-import DateTimePicker from "@/components/shared/DateTimePicker"
+import DateTimePicker from "@/components/ui/custom/DateTimePicker"
 
 // types
 import Transaction, { TransactionDate, TransactionType } from "@/models/Transaction"

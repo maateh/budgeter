@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 
 // components
-import ColorPicker from "@/components/shared/ColorPicker"
+import ColorPicker from "@/components/ui/custom/ColorPicker"
 
 // models
 import Budget, { BudgetType } from "@/models/Budget"

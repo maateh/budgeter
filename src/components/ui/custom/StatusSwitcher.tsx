@@ -3,11 +3,11 @@ import { forwardRef } from "react"
 import { CheckCircle2, Loader } from "lucide-react"
 
 // shadcn
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 
 // types
 import Transaction from "@/models/Transaction"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 
 type StatusSwitcherProps = {
   status: Transaction['status']

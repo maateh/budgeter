@@ -9,10 +9,10 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
 // components
-import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
-import InfoBadge from "@/components/shared/InfoBadge"
-import TransactionBadge from "@/components/shared/TransactionBadge"
 import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
+import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
+import InfoBadge from "@/components/ui/custom/InfoBadge"
+import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 // types
 import Budget from "@/models/Budget"

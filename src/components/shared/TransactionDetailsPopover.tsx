@@ -1,4 +1,5 @@
 import { format } from "date-fns"
+
 // icons
 import { CalendarCheck, CalendarClock, CalendarPlus, Receipt, Trash2 } from "lucide-react"
 
@@ -12,10 +13,10 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
 // components
-import StatusSwitcher from "@/components/shared/StatusSwitcher"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
-import BudgetTypeBadge from "@/components/shared/BudgetTypeBadge"
-import TransactionBadge from "@/components/shared/TransactionBadge"
+import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
+import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
+import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 type TransactionDetailsPopoverProps = {
   transaction: Transaction

@@ -2,8 +2,8 @@ import { Suspense } from "react"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 
 // layouts
-import RootLayout from "./layouts/_root/RootLayout"
-import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "./layouts/_root/pages"
+import RootLayout from "@/layouts/_root/RootLayout"
+import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/layouts/_root/pages"
 
 const router = createBrowserRouter([
   {

@@ -1,8 +1,8 @@
-// shadcn
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-
 // react-colorful
 import { HexColorPicker } from 'react-colorful'
+
+// shadcn
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 type ColorPickerProps = {
   color: string;

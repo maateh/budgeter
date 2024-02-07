@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 // components
 import TransactionDetailsPopover from "@/components/shared/TransactionDetailsPopover"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
-import TransactionBadge from "@/components/shared/TransactionBadge"
+import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 // models
 import Budget from "@/models/Budget"
