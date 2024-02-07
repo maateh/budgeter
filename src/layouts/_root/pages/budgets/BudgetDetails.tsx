@@ -133,30 +133,18 @@ const BudgetDetails = () => {
 
           <section className="w-full h-fit layout-rounded bg-primary">
             <h2 className="mb-5">
-              Transactions <span className="overline text-blue-500">Under Processing</span>
+              Budget <span className="overline text-blue-500">Notes</span>
             </h2>
 
             <ul className="w-full px-2 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-              {Object.values(budget.transactions)
-                .filter(tr => tr.processing)
-                .map(tr => (
-                <li key={tr.id} className="flex-auto w-1/3 min-w-64 max-w-96">
-                  <TransactionPreview
-                    transaction={tr}
-                    budget={budget}
-                  />
-                </li>
-              ))}
+              {/* TODO: implement budget notes */}
             </ul>
           </section>
         </div>
 
         <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
           <RecentTransactions
-            transactions={
-              Object.values(budget.transactions)
-                .filter(tr => !tr.processing)
-            }
+            transactions={Object.values(budget.transactions)}
             startingQuantity={6}
             loadingQuantity={4}
             budget={budget}

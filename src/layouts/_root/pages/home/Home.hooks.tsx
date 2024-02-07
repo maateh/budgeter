@@ -12,7 +12,7 @@ export const useDashboardQuery = () => {
       },
       {
         queryKey: ['transaction', 'findAll'],
-        queryFn: () => API.transaction.findAll('processed')
+        queryFn: () => API.transaction.findAll()
       }
     ]
   })
