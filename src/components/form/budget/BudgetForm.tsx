@@ -19,7 +19,8 @@ import Budget, { BudgetType } from "@/models/Budget"
 import { BudgetValidation } from "@/lib/validation"
 
 // hooks
-import { useSaveBudgetMutation } from "./BudgetForm.hooks"
+import { useLoadCurrencies, useSaveBudgetMutation } from "./BudgetForm.hooks"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 type BudgetFormProps = {
   type: "create" | "edit"
@@ -28,6 +29,7 @@ type BudgetFormProps = {
 }
 
 const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => {
+  const { data: currencies, isLoading: currenciesIsLoading } = useLoadCurrencies()
   const { mutateAsync: saveBudget } = useSaveBudgetMutation()
 
   const form = useForm<z.infer<typeof BudgetValidation>>({
@@ -148,22 +150,33 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
               )}
             />
 
-            {/* TODO: react-select */}
             <FormField
               control={form.control}
               name="currency"
               render={({ field }) => (
-                <FormItem className="max-w-24 flex-1">
+                <FormItem className="max-w-48 flex-1">
                   <FormLabel className="font-heading text-xl small-caps">
                     Currency
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="e.g. $"
-                      {...field}
-                    />
-                  </FormControl>
+                    <Select
+                      disabled={!currencies || currenciesIsLoading}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {currencies && Object.entries(currencies).map(([key, currency]) => (
+                          <SelectItem key={key} value={key}>
+                            {currency} -
+                            <span className="italic"> {key}</span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   <FormMessage />
                 </FormItem>
               )}

@@ -7,11 +7,11 @@ import { useAPI } from "@/services/providers/APIContext.hooks"
 import Budget from "@/models/Budget"
 
 export const useLoadCurrencies = () => {
+  const { api } = useAPI()
+
   return useQuery({
     queryKey: ['currencies'],
-    queryFn: () => {
-      // TODO: get currencies
-    }
+    queryFn: api.currency.get
   })
 }
 
