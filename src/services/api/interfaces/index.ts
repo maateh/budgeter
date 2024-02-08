@@ -1,7 +1,11 @@
 // types
-import { ModelCollection } from "@/types"
+import { Currencies, ModelCollection } from "@/types"
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
+
+export interface ICurrencyAPI {
+  get(): Currencies
+}
 
 export interface IBudgetAPI {
   findAll(): Promise<ModelCollection['budget']>

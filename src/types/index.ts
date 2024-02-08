@@ -35,3 +35,7 @@ export type ModelCollection = {
   budget: {[key: string]: Budget},
   transaction: {[key: string]: Transaction}
 }
+
+export type Currencies = {
+  [key: string]: string
+}
