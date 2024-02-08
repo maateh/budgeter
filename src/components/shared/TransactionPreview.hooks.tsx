@@ -1,18 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
-import API from "@/api"
+import { useAPI } from "@/services/providers/APIContext.hooks"
 
 // models
 import Transaction from "@/models/Transaction"
 import Budget from "@/models/Budget"
 
 export const useDeleteTransactionMutation = (id: string, budgetId: string) => {
+  const { api } = useAPI()
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationKey: ['transaction', 'delete', id],
-    mutationFn: (id: string) => API.transaction.delete(id),
+    mutationFn: (id: string) => api.transaction.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budget', 'findAll'] })
       queryClient.invalidateQueries({ queryKey: ['budget', 'find', budgetId] })
@@ -22,6 +23,7 @@ export const useDeleteTransactionMutation = (id: string, budgetId: string) => {
 }
 
 export const useChangeTransactionStatusMutation = (id: string) => {
+  const { api } = useAPI()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -30,8 +32,8 @@ export const useChangeTransactionStatusMutation = (id: string) => {
       transaction: Transaction
       budget: Budget
     }) => {
-      API.budget.save(budget)
-      return API.transaction.save(transaction)
+      api.budget.save(budget)
+      return api.transaction.save(transaction)
     },
     onSuccess: ({ id, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['budget', 'findAll'] })

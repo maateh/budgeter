@@ -3,10 +3,10 @@ import { DocumentCollection, ModelCollection, TransactionDocument } from "@/type
 import Transaction from "@/models/Transaction"
 
 // interfaces
-import { ITransactionAPI } from "@/api/interfaces"
+import { ITransactionAPI } from "@/services/api/interfaces"
 
-// api
-import API from "@/api"
+// storage
+import BudgetStorage from "@/services/storage/BudgetStorage"
 
 class TransactionStorage implements ITransactionAPI {
   private static _instance: TransactionStorage
@@ -87,7 +87,7 @@ class TransactionStorage implements ITransactionAPI {
     const documents = await this.fetchFromStorage()
     const document = documents[id]
 
-    await API.budget.deleteTransactions(document.budgetId, [document.id])
+    await BudgetStorage.getInstance().deleteTransactions(document.budgetId, [document.id])
     delete documents[id]
     
     localStorage.setItem('transactions', JSON.stringify(documents))

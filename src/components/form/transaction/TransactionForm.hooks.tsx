@@ -1,25 +1,27 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 // api
-import API from "@/api"
+import { useAPI } from "@/services/providers/APIContext.hooks"
 
 // types
 import Transaction from "@/models/Transaction"
 
 export const useLoadBudgetsQuery = () => {
+  const { api } = useAPI()
   return useQuery({
     queryKey: ['budgets'],
-    queryFn: () => API.budget.findAll()
+    queryFn: () => api.budget.findAll()
   })
 }
 
 export const useSaveTransactionMutation = () => {  
+  const { api } = useAPI()
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (transaction: Transaction) => {
-      await API.budget.addTransactions(transaction.budgetId, [transaction])
-      return await API.transaction.save(transaction)
+      await api.budget.addTransactions(transaction.budgetId, [transaction])
+      return await api.transaction.save(transaction)
     },
     onSuccess: (transaction) => {
       queryClient.invalidateQueries({ queryKey: ['transaction', 'findAll'] })

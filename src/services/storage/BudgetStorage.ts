@@ -4,10 +4,10 @@ import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 // interfaces
-import { IBudgetAPI } from "@/api/interfaces"
+import { IBudgetAPI } from "@/services/api/interfaces"
 
-// api
-import API from "@/api"
+// storage
+import TransactionStorage from "@/services/storage/TransactionStorage"
 
 class BudgetStorage implements IBudgetAPI {
   private static _instance: BudgetStorage
@@ -28,7 +28,7 @@ class BudgetStorage implements IBudgetAPI {
 
   async findAll(): Promise<ModelCollection['budget']> {
     const documents = await this.fetchFromStorage()
-    const transactions = await API.transaction.findAll()
+    const transactions = await TransactionStorage.getInstance().findAll()
 
     return Object.entries(documents)
       .reduce((budgets, [key, budgetDoc]) => {
@@ -42,7 +42,7 @@ class BudgetStorage implements IBudgetAPI {
 
   async find(id: string): Promise<Budget> {
     const documents = await this.fetchFromStorage()
-    const transactions = await API.transaction.findByBudget(id)
+    const transactions = await TransactionStorage.getInstance().findByBudget(id)
 
     const budgetDoc = documents[id]
     if (!budgetDoc) {
