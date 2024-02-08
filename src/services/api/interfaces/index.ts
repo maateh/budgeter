@@ -4,7 +4,7 @@ import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 export interface ICurrencyAPI {
-  get(): Currencies
+  get(): Promise<Currencies>
 }
 
 export interface IBudgetAPI {

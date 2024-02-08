@@ -1,3 +1,5 @@
+import axios from "axios"
+
 // types
 import { Currencies } from "@/types"
 
@@ -5,6 +7,8 @@ import { Currencies } from "@/types"
 import { ICurrencyAPI } from "@/services/api/interfaces"
 
 class CurrencyAPI implements ICurrencyAPI {
+  private static URL = 'https://openexchangerates.org/api/currencies.json'
+
   private static _instance: CurrencyAPI
 
   private constructor() {}
@@ -16,14 +20,13 @@ class CurrencyAPI implements ICurrencyAPI {
     return this._instance
   }
 
-  get(): Currencies {
-    return {
-      curr_1: 'Currency 1',
-      curr_2: 'Currency 2',
-      curr_3: 'Currency 3',
-      curr_4: 'Currency 4',
-      curr_5: 'Currency 5'
-    }
+  async get(): Promise<Currencies> {
+    const { data } = await axios({
+      method: 'GET',
+      url: CurrencyAPI.URL
+    })
+
+    return data as Currencies
   }
 }
 
