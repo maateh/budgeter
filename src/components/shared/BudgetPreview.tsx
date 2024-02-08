@@ -16,6 +16,7 @@ import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 // types
 import Budget from "@/models/Budget"
+import { formatWithCurrency } from "@/utils"
 
 type BudgetPreviewProps = {
   budget: Budget
@@ -50,14 +51,14 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <div className="flex flex-wrap justify-between gap-2 small-caps">
           <InfoBadge
             label="Balance"
-            value={`$${budget.balance.current}`}
+            value={formatWithCurrency(budget.balance.current, budget.currency)}
             size="sm"
             variant={budget.balance.current > 0 ? 'income' : 'loss'}
             icon={<Wallet size={18} />}
           />
           <InfoBadge
             label="Ceiling"
-            value={`$${budget.balance.ceiling}`}
+            value={formatWithCurrency(budget.balance.ceiling, budget.currency)}
             size="sm"
             icon={<ArrowUpToLine size={18} />}
           />
@@ -91,6 +92,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               <li key={tr.id}>
                 <TransactionBadge
                   transaction={tr}
+                  currency={budget.currency}
                   size="xs"
                   iconSize={10}
                 />
@@ -113,13 +115,13 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <div className="w-fit ml-auto mt-4 grid grid-cols-2 gap-x-2.5">
           <InfoBadge
             label="Income"
-            value={`$${budget.income}`}
+            value={formatWithCurrency(budget.income, budget.currency)}
             size="xs"
             variant="income"
           />
           <InfoBadge
             label="Loss"
-            value={`$${budget.loss}`}
+            value={formatWithCurrency(budget.loss, budget.currency)}
             size="xs"
             variant="loss"
           />

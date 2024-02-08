@@ -7,6 +7,7 @@ export type BudgetDocument = {
   name: string
   type: BudgetType
   balance: Balance
+  currency: string
   theme: BudgetTheme
   transactionIds: string[]
 }

@@ -33,13 +33,13 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
   const form = useForm<z.infer<typeof BudgetValidation>>({
     resolver: zodResolver(BudgetValidation),
     defaultValues: {
-      id: budget?.id || crypto.randomUUID(),
       name: budget?.name || "",
       type: budget?.type || BudgetType.INCOME,
       balance: budget?.balance || {
         current: 0,
         ceiling: 0
       },
+      currency: '',
       theme: budget?.theme || {
         background: '#dedede',
         foreground: '#202020'
@@ -52,12 +52,12 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
       values.balance.current = values.balance.ceiling
     }
 
-    const budget = new Budget(values.id, values)
+    const id = budget?.id || crypto.randomUUID()
+    budget = new Budget(id, values)
     try {
       await saveBudget(budget)
 
       form.reset()
-      form.setValue("id", crypto.randomUUID())
       cleanForm()
     } catch (err) {
       console.error(err)
@@ -127,25 +127,48 @@ const BudgetForm = ({ type, budget, cleanForm = () => {} }: BudgetFormProps) => 
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="balance.ceiling"
-            render={({ field }) => (
-              <FormItem className="min-w-36 flex-1">
-                <FormLabel className="font-heading text-xl small-caps">
-                  Expected Ceiling
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="e.g. $200"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex-1 flex items-end gap-x-4">
+            <FormField
+              control={form.control}
+              name="balance.ceiling"
+              render={({ field }) => (
+                <FormItem className="sm:min-w-48 flex-1">
+                  <FormLabel className="font-heading text-xl small-caps">
+                    Expected Ceiling
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. $200"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* TODO: react-select */}
+            <FormField
+              control={form.control}
+              name="currency"
+              render={({ field }) => (
+                <FormItem className="max-w-24 flex-1">
+                  <FormLabel className="font-heading text-xl small-caps">
+                    Currency
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="e.g. $"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
 
         <div className="flex flex-col justify-center gap-y-2">

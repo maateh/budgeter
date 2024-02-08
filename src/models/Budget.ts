@@ -23,6 +23,7 @@ export type BudgetProps = {
   name: string
   type: BudgetType
   balance: Balance
+  currency: string
   theme: BudgetTheme
   transactions?: ModelCollection['transaction']
 }
@@ -31,6 +32,7 @@ class Budget {
   public name: string
   public type: BudgetType
   public balance: Balance
+  public currency: string
   public theme: BudgetTheme
   public transactions: ModelCollection['transaction']
 
@@ -38,8 +40,8 @@ class Budget {
     this.name = props.name
     this.type = props.type
     this.balance = props.balance
+    this.currency = props.currency
     this.theme = props.theme
-
     this.transactions = props.transactions ?? {}
   }
 
@@ -110,6 +112,7 @@ class Budget {
       name: model.name,
       type: model.type,
       balance: model.balance,
+      currency: model.currency,
       theme: model.theme,
       transactionIds
     }

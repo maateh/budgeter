@@ -7,13 +7,17 @@ import { Badge, BadgeProps } from "@/components/ui/badge"
 // models
 import Transaction, { TransactionType } from "@/models/Transaction"
 
+// utils
+import { formatWithCurrency } from "@/utils"
+
 type TransactionBadgeProps = {
   transaction: Transaction
+  currency: string
   size?: BadgeProps['size']
   iconSize?: number
 }
 
-const TransactionBadge = ({ transaction, size = 'md', iconSize = 16 }: TransactionBadgeProps) => {
+const TransactionBadge = ({ transaction, currency, size = 'md', iconSize = 16 }: TransactionBadgeProps) => {
   return (
     <Badge
       size={size}
@@ -25,7 +29,7 @@ const TransactionBadge = ({ transaction, size = 'md', iconSize = 16 }: Transacti
       ) : (
         <Minus size={iconSize} strokeWidth={7.5} />
       )}
-      <span>${transaction.amount}</span>
+      <span>{formatWithCurrency(transaction.amount, currency)}</span>
     </Badge>
   )
 }

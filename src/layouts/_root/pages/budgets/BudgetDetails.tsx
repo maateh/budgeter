@@ -18,6 +18,9 @@ import InfoBadge from "@/components/ui/custom/InfoBadge"
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
 
+// utils
+import { formatWithCurrency } from "@/utils"
+
 const BudgetDetails = () => {
   const navigate = useNavigate()
   const { data: budget, isLoading } = useLoadBudgetQuery()
@@ -88,14 +91,14 @@ const BudgetDetails = () => {
                 <div className="flex flex-col gap-x-4 gap-y-3 text-lg small-caps">
                   <InfoBadge
                     label="Current Balance"
-                    value={`$${budget.balance.current}`}
+                    value={formatWithCurrency(budget.balance.current, budget.currency)}
                     size="lg"
                     variant={budget.balance.current > 0 ? 'income' : 'loss'}
                     icon={<Wallet strokeWidth={2.25} />}
                   />
                   <InfoBadge
                     label="Ceiling"
-                    value={`$${budget.balance.ceiling}`}
+                    value={formatWithCurrency(budget.balance.ceiling, budget.currency)}
                     size="lg"
                     icon={<ArrowUpToLine strokeWidth={2.25} />}
                   />
@@ -104,13 +107,13 @@ const BudgetDetails = () => {
                 <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2 truncate">
                   <InfoBadge
                     label="Total Income"
-                    value={`$${budget.income}`}
+                    value={formatWithCurrency(budget.income, budget.currency)}
                     size="md"
                     variant="income"
                   />
                   <InfoBadge
                     label="Total Loss"
-                    value={`$${budget.loss}`}
+                    value={formatWithCurrency(budget.loss, budget.currency)}
                     size="md"
                     variant="loss"
                   />

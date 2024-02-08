@@ -4,7 +4,6 @@ import { BudgetType } from "@/models/Budget"
 import { TransactionType } from "@/models/Transaction"
 
 export const budgetSchema = z.object({
-  id: z.string().uuid(),
   name: z.string()
     .min(2, { message: 'Too short.' })
     .max(50, { message: 'Too long.' }),
@@ -13,6 +12,9 @@ export const budgetSchema = z.object({
     current: z.coerce.number().default(0),
     ceiling: z.coerce.number()
   }),
+  currency: z.string()
+    .min(1, { message: 'Too short.' })
+    .max(5, { message: 'Too long.' }),
   theme: z.object({
     background: z.string()
       .length(7, { message: 'Background value should be a valid HEX color. e.g. #f1f1f1' })

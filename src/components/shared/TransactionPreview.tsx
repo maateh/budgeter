@@ -54,7 +54,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
   return (
     <div
-      className="pl-5 pr-1.5 py-2 flex justify-between items-center rounded-full hover:opacity-95"
+      className="pl-5 pr-1.5 py-2 flex justify-between items-center gap-x-1.5 rounded-full hover:opacity-95"
       style={{
         backgroundColor: budget.theme.background,
         color: budget.theme.foreground
@@ -87,7 +87,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-1 items-center">
-        <TransactionBadge transaction={transaction} />
+        <TransactionBadge transaction={transaction} currency={budget.currency}  />
 
         <div className="flex items-center">
           <ConfirmSheet
