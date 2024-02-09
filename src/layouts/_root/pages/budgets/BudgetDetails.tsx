@@ -14,6 +14,7 @@ import InfoBadge from "@/components/ui/custom/InfoBadge"
 import TransactionList from "@/components/shared/TransactionList"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
+import BudgetNotes from "./components/BudgetNotes"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
@@ -134,13 +135,7 @@ const BudgetDetails = () => {
           </section>
 
           <section className="w-full h-fit layout-rounded bg-primary">
-            <h2 className="mb-5">
-              Budget <span className="overline text-blue-500">Notes</span>
-            </h2>
-
-            <ul className="w-full px-2 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-              {/* TODO: implement budget notes */}
-            </ul>
+            <BudgetNotes budget={budget} />
           </section>
         </div>
 
