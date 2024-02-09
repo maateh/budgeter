@@ -19,6 +19,16 @@ export type BudgetTheme = {
   foreground: string
 }
 
+export type BudgetNote = {
+  id: string
+  text: string
+  date: {
+    created: Date
+    edited?: Date
+    closed?: Date
+  }
+}
+
 export type BudgetProps = {
   name: string
   type: BudgetType
@@ -26,6 +36,7 @@ export type BudgetProps = {
   currency: string
   theme: BudgetTheme
   transactions?: ModelCollection['transaction']
+  notes?: {[key: string]: BudgetNote}
 }
 
 class Budget {
@@ -35,6 +46,7 @@ class Budget {
   public currency: string
   public theme: BudgetTheme
   public transactions: ModelCollection['transaction']
+  public notes: {[key: string]: BudgetNote}
 
   constructor(readonly id: string, props: BudgetProps) {
     this.name = props.name
@@ -43,6 +55,7 @@ class Budget {
     this.currency = props.currency
     this.theme = props.theme
     this.transactions = props.transactions ?? {}
+    this.notes = props.notes ?? {}
   }
 
   get income(): number {
@@ -114,6 +127,7 @@ class Budget {
       balance: model.balance,
       currency: model.currency,
       theme: model.theme,
+      notes: model.notes,
       transactionIds
     }
   }

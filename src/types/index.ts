@@ -1,5 +1,5 @@
 // models
-import Budget, { Balance, BudgetTheme, BudgetType } from "@/models/Budget"
+import Budget, { Balance, BudgetNote, BudgetTheme, BudgetType } from "@/models/Budget"
 import Transaction, { TransactionType } from "@/models/Transaction"
 
 export type BudgetDocument = {
@@ -9,6 +9,7 @@ export type BudgetDocument = {
   balance: Balance
   currency: string
   theme: BudgetTheme
+  notes: {[key: string]: BudgetNote}
   transactionIds: string[]
 }
 
