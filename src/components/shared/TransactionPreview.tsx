@@ -71,17 +71,16 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
             <BadgeInfo size={20} />
           </Badge>
         </TransactionDetailsPopover>
-        <div className="flex flex-col font-medium">
-          <p className="text-md leading-4 font-heading">{transaction.label}</p>
-          <p className="text-xs">
-            <span className="font-semibold tracking-wider">{budget.name} - </span>
-            <span className="italic">
-              {formatDistance(
-                transaction.date.crediting || transaction.date.creation, Date.now(), {
-                  addSuffix: true
-                }
-              )}
-            </span>
+
+        <div className="flex flex-col font-medium truncate">
+          <p className="mb-1 text-md font-heading border-b">{transaction.label}</p>
+          <p className="text-xs font-heading font-medium leading-3 tracking-wider">{budget.name}</p>
+          <p className="text-xs italic">
+            {formatDistance(
+              transaction.date.crediting || transaction.date.creation, Date.now(), {
+                addSuffix: true
+              }
+            )}
           </p>
         </div>
       </div>
