@@ -29,14 +29,14 @@ const Note = ({ budget, note }: NoteProps) => {
       className="my-1 px-7 pt-6 pb-3 flex flex-col gap-y-2 bg-foreground/15 border-xl border-b-2 border-r-4 hover:opacity-95"
       style={{
         borderColor: budget.theme.background,
-        opacity: note.date.closed ? 0.65 : 1
+        opacity: note.date.closed && 0.65
       }}
     >
       <p className="font-medium whitespace-pre-line">{note.text}</p>
 
       <Separator />
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-x-4">
         <div className="flex items-center gap-x-2">
           <Button
             variant="icon"
@@ -78,7 +78,7 @@ const Note = ({ budget, note }: NoteProps) => {
           {note.date.edited ? (
             <>
               <p>{format(note.date.edited, 'PPP')}</p>
-              <PenLine />
+              <PenLine size={18} strokeWidth={1.7} />
             </>
           ) : (
             <>
