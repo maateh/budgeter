@@ -1,7 +1,7 @@
 import { format } from "date-fns"
 
 // icons
-import { CalendarPlus, CheckCircle, PenLine, PenSquare, Undo2 } from "lucide-react"
+import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Undo2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -45,16 +45,16 @@ const Note = ({ budget, note }: NoteProps) => {
             onClick={handleClose}
           >
             {!note.date.closed ? (
-              <CheckCircle
-                size={16}
-                strokeWidth={2.5}
-                className="text-green-600 dark:text-green-400"
-              />
-            ) : (
               <Undo2
                 size={16}
                 strokeWidth={2.5}
                 className="text-orange-600 dark:text-orange-400"
+              />
+            ) : (
+              <CheckCircle
+                size={16}
+                strokeWidth={2.5}
+                className="text-green-600 dark:text-green-400"
               />
             )}
           </Button>
@@ -75,7 +75,12 @@ const Note = ({ budget, note }: NoteProps) => {
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">
-          {note.date.edited ? (
+          {note.date.closed ? (
+            <>
+              <p>{format(note.date.closed, 'PPP')}</p>
+              <CalendarCheck size={18} strokeWidth={1.7} />
+            </>
+          ) : note.date.edited ? (
             <>
               <p>{format(note.date.edited, 'PPP')}</p>
               <PenLine size={18} strokeWidth={1.7} />
