@@ -19,7 +19,7 @@ const InfoBadge = ({ label, value, variant = "outline", size, icon }: InfoBadgeP
       {icon}
       <p className="flex justify-between items-center gap-x-2 capitalize">
         {label}
-        <span className="pl-2 text-[120%] font-heading font-semibold border-border/70 border-l-2">{value}</span>
+        <span className="pl-2 text-[115%] font-heading font-semibold border-border/70 border-l-2">{value}</span>
       </p>
     </Badge>
   )

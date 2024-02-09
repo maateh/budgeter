@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 
 // components
+import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
+import InfoBadge from "@/components/ui/custom/InfoBadge"
 import TransactionList from "@/components/shared/TransactionList"
 import CreateBudgetSheet from "@/components/shared/BudgetSheet"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
-import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
-import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // hooks
 import { useLoadBudgetQuery, useDeleteBudgetMutation } from "./BudgetDetails.hooks"
@@ -99,7 +99,7 @@ const BudgetDetails = () => {
                   <InfoBadge
                     label="Ceiling"
                     value={formatWithCurrency(budget.balance.ceiling, budget.currency)}
-                    size="lg"
+                    size="md"
                     icon={<ArrowUpToLine strokeWidth={2.25} />}
                   />
                 </div>
@@ -108,13 +108,13 @@ const BudgetDetails = () => {
                   <InfoBadge
                     label="Total Income"
                     value={formatWithCurrency(budget.income, budget.currency)}
-                    size="md"
+                    size="sm"
                     variant="income"
                   />
                   <InfoBadge
                     label="Total Loss"
                     value={formatWithCurrency(budget.loss, budget.currency)}
-                    size="md"
+                    size="sm"
                     variant="loss"
                   />
                 </div>
