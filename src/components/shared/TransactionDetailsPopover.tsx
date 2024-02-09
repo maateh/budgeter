@@ -97,7 +97,11 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             </div>
 
             <div className="flex gap-x-3 items-center">
-              <TransactionBadge transaction={transaction} size="md" />
+              <TransactionBadge 
+                transaction={transaction} 
+                currency={budget.currency}
+                size="md"
+              />
               <ConfirmSheet
                 title={`Delete "${transaction.label}" Transaction`}
                 message="Do you really want to delete this transaction? This action cannot be undone."
