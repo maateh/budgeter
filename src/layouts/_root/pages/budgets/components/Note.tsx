@@ -7,6 +7,9 @@ import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Undo2 } f
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
+// hooks
+import { useChangeNoteStatusMutation } from "./Note.hooks"
+
 // types
 import Budget, { BudgetNote } from "@/models/Budget"
 
@@ -16,8 +19,20 @@ type NoteProps = {
 }
 
 const Note = ({ budget, note }: NoteProps) => {
-  const handleClose = () => {
-    // TODO: close note
+  const { mutateAsync: changeNoteStatus } = useChangeNoteStatusMutation(budget.id)
+
+  const handleClose = async () => {
+    try {
+      await changeNoteStatus({
+        budget,
+        noteId: note.id,
+        status: note.date.closed
+          ? 'open'
+          : 'closed'
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const handleEdit = () => {
@@ -44,7 +59,7 @@ const Note = ({ budget, note }: NoteProps) => {
             className="bg-primary border-4 border-primary/60"
             onClick={handleClose}
           >
-            {!note.date.closed ? (
+            {note.date.closed ? (
               <Undo2
                 size={16}
                 strokeWidth={2.5}

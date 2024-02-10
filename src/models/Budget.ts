@@ -122,6 +122,17 @@ class Budget {
     delete this.notes[id]
   }
 
+  changeNoteStatus(noteId: string, status: 'open' | 'closed') {
+    const date = this.notes[noteId].date
+
+    this.notes[noteId].date = {
+      ...date,
+      closed: status === 'open'
+        ? undefined
+        : new Date()
+    }
+  }
+
   static convertToModel(document: BudgetDocument, transactions: ModelCollection['transaction']): Budget {
     return new Budget(document.id, { ...document, transactions })
   }
