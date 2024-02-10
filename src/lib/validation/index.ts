@@ -1,8 +1,10 @@
 import * as z from "zod"
 
-import { budgetSchema, transactionSchema } from "@/lib/validation/schemas"
+import { budgetNoteSchema, budgetSchema, transactionSchema } from "@/lib/validation/schemas"
 
 export const BudgetValidation = budgetSchema
+
+export const BudgetNoteValidation = budgetNoteSchema
 
 export const TransactionValidation = transactionSchema.and(
   z.object({
