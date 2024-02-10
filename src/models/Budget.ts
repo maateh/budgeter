@@ -70,6 +70,12 @@ class Budget {
       .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
   }
 
+  updateCurrentBalance(transaction: Transaction) {
+    this.balance.current += transaction.type === TransactionType.PLUS
+      ? transaction.amount
+      : -transaction.amount
+  }
+
   addTransactions(transactions: Transaction[], execute: boolean = false) {
     transactions.forEach(tr => {
       this.transactions = {
@@ -108,10 +114,12 @@ class Budget {
     })
   }
 
-  updateCurrentBalance(transaction: Transaction) {
-    this.balance.current += transaction.type === TransactionType.PLUS
-      ? transaction.amount
-      : -transaction.amount
+  addNote(note: BudgetNote) {
+    this.notes[note.id] = note
+  }
+
+  removeNote(id: string) {
+    delete this.notes[id]
   }
 
   static convertToModel(document: BudgetDocument, transactions: ModelCollection['transaction']): Budget {
