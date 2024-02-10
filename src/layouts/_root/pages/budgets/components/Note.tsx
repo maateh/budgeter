@@ -1,14 +1,17 @@
 import { format } from "date-fns"
 
 // icons
-import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Undo2 } from "lucide-react"
+import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Trash2, Undo2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
+// components
+import ConfirmSheet from "@/components/shared/ConfirmSheet"
+
 // hooks
-import { useChangeNoteStatusMutation } from "./Note.hooks"
+import { useChangeNoteStatusMutation, useRemoveNoteMutation } from "./Note.hooks"
 
 // types
 import Budget, { BudgetNote } from "@/models/Budget"
@@ -20,6 +23,7 @@ type NoteProps = {
 
 const Note = ({ budget, note }: NoteProps) => {
   const { mutateAsync: changeNoteStatus } = useChangeNoteStatusMutation(budget.id)
+  const { mutateAsync: removeNote } = useRemoveNoteMutation(budget.id)
 
   const handleClose = async () => {
     try {
@@ -37,6 +41,14 @@ const Note = ({ budget, note }: NoteProps) => {
 
   const handleEdit = () => {
     // TODO: implement note editing mode
+  }
+
+  const handleRemove = async () => {
+    try {
+      await removeNote({ budget, noteId: note.id })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -87,6 +99,25 @@ const Note = ({ budget, note }: NoteProps) => {
               className="text-accent"
             />
           </Button>
+
+          <ConfirmSheet
+            title="Do you really want to remove this note?"
+            message={note.text}
+            variant="confirm-negative"
+            confirm={handleRemove}
+          >
+            <Button
+              variant="icon"
+              size="icon-sm"
+              className="bg-primary border-4 border-primary/60"
+            >
+              <Trash2
+                size={16}
+                strokeWidth={2.5}
+                className="text-destructive"
+              />
+            </Button>
+          </ConfirmSheet>
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">

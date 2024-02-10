@@ -27,3 +27,21 @@ export const useChangeNoteStatusMutation = (budgetId: string) => {
     }
   })
 }
+
+export const useRemoveNoteMutation = (budgetId: string) => {
+  const { api } = useAPI()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ['budget', 'save', budgetId],
+    mutationFn: async ({ budget, noteId }: { budget: Budget; noteId: string }) => {
+      budget.removeNote(noteId)
+      return await api.budget.save(budget)
+    },
+    onSuccess: ({ id }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['budget', 'find', id]
+      })
+    }
+  })
+}
