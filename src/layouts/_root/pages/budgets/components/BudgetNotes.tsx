@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 // icons
-import { MessageCirclePlus } from "lucide-react"
+import { MessageCirclePlus, Undo2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -31,8 +31,17 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
           className="border-md icon-wrapper"
           onClick={() => setEditingMode((mode) => !mode)}
         >
-          <MessageCirclePlus size={20} />
-          <span>Add a Note</span>
+          {editingMode ? (
+            <>
+              <Undo2 size={20} />
+              <span>Cancel</span>
+            </>
+          ) : (
+            <>
+              <MessageCirclePlus size={20} />
+              <span>Add a Note</span>
+            </>
+          )}
         </Button>
       </div>
 
@@ -40,6 +49,7 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
         <BudgetNoteForm
           budget={budget}
           cleanForm={() => setEditingMode(false)}
+          cancelAction={() => setEditingMode(false)}
         />
       )}
 
