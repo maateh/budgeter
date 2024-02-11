@@ -68,7 +68,7 @@ const Note = ({ budget, note }: NoteProps) => {
             cancelAction={() => setEditingMode(false)}
           />
         ) : (
-          <p className="whitespace-break-spaces truncate tracking-wide">
+          <p className="break-words whitespace-break-spaces tracking-wide">
             {note.text}
           </p>
         )}
