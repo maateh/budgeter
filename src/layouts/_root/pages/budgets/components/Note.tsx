@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { format } from "date-fns"
 
 // icons
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 // components
+import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
 import ConfirmSheet from "@/components/shared/ConfirmSheet"
 
 // hooks
@@ -25,6 +27,8 @@ const Note = ({ budget, note }: NoteProps) => {
   const { mutateAsync: changeNoteStatus } = useChangeNoteStatusMutation(budget.id)
   const { mutateAsync: removeNote } = useRemoveNoteMutation(budget.id)
 
+  const [editingMode, setEditingMode] = useState(false)
+
   const handleClose = async () => {
     try {
       await changeNoteStatus({
@@ -37,10 +41,6 @@ const Note = ({ budget, note }: NoteProps) => {
     } catch (err) {
       console.error(err)
     }
-  }
-
-  const handleEdit = () => {
-    // TODO: implement note editing mode
   }
 
   const handleRemove = async () => {
@@ -59,7 +59,20 @@ const Note = ({ budget, note }: NoteProps) => {
         opacity: note.date.closed && 0.65
       }}
     >
-      <p className="px-1.5 font-medium whitespace-break-spaces truncate">{note.text}</p>
+      <div className="h-max mx-2.5 font-medium">
+        {editingMode ? (
+          <BudgetNoteForm
+            budget={budget}
+            note={note}
+            cleanForm={() => setEditingMode(false)}
+            cancelAction={() => setEditingMode(false)}
+          />
+        ) : (
+          <p className="whitespace-break-spaces truncate tracking-wide">
+            {note.text}
+          </p>
+        )}
+      </div>
 
       <Separator />
 
@@ -90,7 +103,7 @@ const Note = ({ budget, note }: NoteProps) => {
             variant="icon"
             size="icon-sm"
             className="bg-primary border-4 border-primary/60"
-            onClick={handleEdit}
+            onClick={() => setEditingMode(prev => !prev)}
             disabled={!!note.date.closed}
           >
             <PenSquare

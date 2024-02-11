@@ -114,7 +114,7 @@ class Budget {
     })
   }
 
-  addNote(note: BudgetNote) {
+  saveNote(note: BudgetNote) {
     this.notes[note.id] = note
   }
 

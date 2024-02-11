@@ -6,14 +6,14 @@ import { useAPI } from "@/services/providers/APIContext.hooks"
 // types
 import Budget, { BudgetNote } from "@/models/Budget"
 
-export const useAddNoteMutation = (budgetId: string) => {
+export const useSaveNoteMutation = (budgetId: string) => {
   const { api } = useAPI()
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationKey: ['budget', 'save', budgetId],
     mutationFn: async ({ budget, note }: { budget: Budget; note: BudgetNote }) => {
-      budget.addNote(note)
+      budget.saveNote(note)
       return await api.budget.save(budget)
     },
     onSuccess: () => {

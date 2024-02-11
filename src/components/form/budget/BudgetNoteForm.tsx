@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
 // hooks
-import { useAddNoteMutation } from "./BudgetNoteForm.hooks"
+import { useSaveNoteMutation } from "./BudgetNoteForm.hooks"
 
 // types
 import Budget, { BudgetNote } from "@/models/Budget"
@@ -19,30 +19,34 @@ import { BudgetNoteValidation } from "@/lib/validation"
 
 type BudgetNoteFormProps = {
   budget: Budget
+  note?: BudgetNote
   cleanForm?: () => void
+  cancelAction?: () => void
 }
 
-const BudgetNoteForm = ({ budget, cleanForm = () => {} }: BudgetNoteFormProps) => {
-  const { mutateAsync: addNote } = useAddNoteMutation(budget.id)
+const BudgetNoteForm = ({ budget, note, cleanForm = () => {}, cancelAction = () => {} }: BudgetNoteFormProps) => {
+  const { mutateAsync: saveNote } = useSaveNoteMutation(budget.id)
 
   const form = useForm<z.infer<typeof BudgetNoteValidation>>({
     resolver: zodResolver(BudgetNoteValidation),
     defaultValues: {
-      text: ''
+      text: note?.text || ''
     }
   })
 
   async function onSubmit(values: z.infer<typeof BudgetNoteValidation>) {
-    const note: BudgetNote = {
-      id: crypto.randomUUID(),
+    note = {
+      id: note?.id || crypto.randomUUID(),
       date: {
-        created: new Date()
+        created: note?.date.created || new Date(),
+        edited: note ? new Date() : undefined,
+        ...note?.date
       },
       ...values,
     }
 
     try {
-      await addNote({ budget, note })
+      await saveNote({ budget, note })
 
       form.reset()
       cleanForm()
@@ -55,7 +59,7 @@ const BudgetNoteForm = ({ budget, cleanForm = () => {} }: BudgetNoteFormProps) =
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-3/4 mx-auto flex flex-col gap-1.5"
+        className="min-w-[75%] mx-auto flex flex-col gap-1.5"
       >
         <FormField
           control={form.control}
@@ -64,13 +68,6 @@ const BudgetNoteForm = ({ budget, cleanForm = () => {} }: BudgetNoteFormProps) =
             <FormItem className="flex flex-col gap-y-1.5">
               <div className="flex justify-between items-center gap-x-5">
                 <FormLabel className="text-md font-heading">Note Message</FormLabel>
-                <Button
-                  type="submit"
-                  variant="outline"
-                  size="sm"
-                >
-                  Add
-                </Button>
               </div>
               <FormControl>
                 <Textarea
@@ -82,6 +79,24 @@ const BudgetNoteForm = ({ budget, cleanForm = () => {} }: BudgetNoteFormProps) =
             </FormItem>
           )}
         />
+
+        <div className="my-0.5 flex gap-x-2 justify-end">
+          <Button
+            type="button"
+            size="sm"
+            variant="destructive"
+            onClick={cancelAction}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            size="sm"
+            className="border-md"
+          >
+            Save
+          </Button>
+        </div>
       </form>
     </Form>
   )
