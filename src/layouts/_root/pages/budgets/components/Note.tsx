@@ -59,7 +59,7 @@ const Note = ({ budget, note }: NoteProps) => {
         opacity: note.date.closed && 0.65
       }}
     >
-      <p className="font-medium whitespace-pre-line">{note.text}</p>
+      <p className="px-1.5 font-medium whitespace-break-spaces truncate">{note.text}</p>
 
       <Separator />
 
