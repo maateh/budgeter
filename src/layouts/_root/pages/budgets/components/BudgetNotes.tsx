@@ -63,6 +63,7 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
             notes={
               Object.values(budget.notes)
                 .filter(note => !note.date.closed)
+                .sort((n1, n2) => n1.date.created < n2.date.created ? 1 : -1)
             }
           />
         </div>
@@ -76,6 +77,7 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
             notes={
               Object.values(budget.notes)
                 .filter(note => note.date.closed)
+                .sort((n1, n2) => n1.date.closed! < n2.date.closed! ? 1 : -1)
             }
           />
         </div>
