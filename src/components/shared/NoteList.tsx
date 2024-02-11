@@ -2,7 +2,7 @@
 import Budget, { BudgetNote } from "@/models/Budget"
 
 // components
-import Note from "./Note"
+import Note from "@/components/shared/Note"
 
 type NoteList = {
   budget: Budget

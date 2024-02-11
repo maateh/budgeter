@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 
 // components
 import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
-import NoteList from "./NoteList"
+import NoteList from "@/components/shared/NoteList"
 
 // types
 import Budget from "@/models/Budget"
