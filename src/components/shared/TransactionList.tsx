@@ -13,9 +13,10 @@ import Transaction from "@/models/Transaction"
 import { Button } from "@/components/ui/button"
 
 // components
-import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 import TransactionPreview from "@/components/shared/TransactionPreview"
 import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
+import FormDialog from "@/components/shared/FormDialog"
+import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 type TransactionListProps = {
   transactions: Transaction[]
@@ -63,11 +64,14 @@ const TransactionList = ({
             <h2>Processing <span className="text-blue-500 overline">Transactions</span></h2>
           )}
         </div>
-        <AddTransactionsPopover budgetId={budget?.id}>
+        <FormDialog
+          title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
+          form={<TransactionForm budgetId={budget?.id} />}
+        >
           <Button variant="icon" size="icon">
             <Plus />
           </Button>
-        </AddTransactionsPopover>
+        </FormDialog>
       </div>
 
       <ul className="w-full px-2 grid gap-3">

@@ -9,13 +9,16 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
 // components
-import AddTransactionsPopover from "@/components/shared/AddTransactionsPopover"
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
+import FormDialog from "@/components/shared/FormDialog"
+import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 // types
 import Budget from "@/models/Budget"
+
+// utils
 import { formatWithCurrency } from "@/utils"
 
 type BudgetPreviewProps = {
@@ -73,7 +76,10 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
         <ul className="flex flex-wrap justify-start gap-x-2 gap-y-1">
           <li>
-            <AddTransactionsPopover budgetId={budget.id}>
+            <FormDialog
+              title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
+              form={<TransactionForm budgetId={budget.id} />}
+            >
               <Badge
                 size="xs"
                 variant="outline"
@@ -82,7 +88,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
                 <BadgePlus size={16} />
                 <span>New</span>
               </Badge>
-            </AddTransactionsPopover>
+            </FormDialog>
           </li>
 
           {Object.values(budget.transactions)
