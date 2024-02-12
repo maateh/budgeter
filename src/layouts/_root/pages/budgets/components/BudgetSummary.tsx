@@ -11,8 +11,9 @@ import { Separator } from '@/components/ui/separator'
 // components
 import BudgetTypeBadge from '@/components/ui/custom/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
-import BudgetSheet from '@/components/shared/BudgetSheet'
 import ConfirmSheet from '@/components/shared/ConfirmSheet'
+import FormDialog from '@/components/shared/FormDialog'
+import BudgetForm from '@/components/form/budget/BudgetForm'
 
 // hooks
 import { useDeleteBudgetMutation } from './BudgetSummary.hooks'
@@ -70,7 +71,10 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
             </Button>
           </ConfirmSheet>
 
-          <BudgetSheet type="edit" budget={budget}>
+          <FormDialog
+            title={<>Create <span className="text-green-400 overline">Budget</span></>}
+            form={<BudgetForm type="edit" budget={budget} />}
+          >
             <Button
               variant="default"
               border="md"
@@ -80,7 +84,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
               <Pencil size={18} />
               <span>Edit</span>
             </Button>
-          </BudgetSheet>
+          </FormDialog>
         </div>
       </div>
 

@@ -5,14 +5,18 @@ import { PackagePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import BudgetSheet from "@/components/shared/BudgetSheet"
+import FormDialog from "@/components/shared/FormDialog"
+import BudgetForm from "@/components/form/budget/BudgetForm"
 
 const BudgetSummary = () => {
   return (
     <>
       <div className="mb-5 flex justify-between">
         <h2>Budget <span className="text-green-600 overline">Summary</span></h2>
-        <BudgetSheet>
+        <FormDialog
+          title={<>Create <span className="text-green-400 overline">Budget</span></>}
+          form={<BudgetForm type="create" />}
+        >
           <Button
             border="md"
             size="lg"
@@ -21,7 +25,7 @@ const BudgetSummary = () => {
             <PackagePlus />
             <span>New Budget</span>
           </Button>
-        </BudgetSheet>
+        </FormDialog>
       </div>
     </>
   )
