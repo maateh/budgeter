@@ -2,12 +2,6 @@
 import { DocumentCollection, ModelCollection, TransactionDocument } from "@/types"
 import Budget from "@/models/Budget"
 
-// TODO: remove after form refactoring
-export enum TransactionType {
-  PLUS = '+',
-  MINUS = '-'
-}
-
 export type Payment = {
   type: '+' | '-',
   amount: number

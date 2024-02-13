@@ -1,7 +1,6 @@
 import * as z from "zod"
 
 import { BudgetType } from "@/models/Budget"
-import { TransactionType } from "@/models/Transaction"
 
 export const budgetSchema = z.object({
   name: z.string()
@@ -31,11 +30,18 @@ export const budgetNoteSchema = z.object({
 })
 
 export const transactionSchema = z.object({
+  budgetId: z.string().uuid(),
   label: z.string()
     .min(2, { message: 'Too short.' })
     .max(28, { message: 'Too long.' }),
-  type: z.nativeEnum(TransactionType),
-  amount: z.coerce.number().gt(0),
-  status: z.string(),
+  payment: z.object({
+    type: z.string()
+      .min(1)
+      .max(1)
+      .regex(/^(?:\+|-)$/),
+    amount: z.coerce.number().gt(0)
+  }),
+  status: z.string()
+    .regex(/^(processed|processing)$/),
   expectedDate: z.date().optional()
 })

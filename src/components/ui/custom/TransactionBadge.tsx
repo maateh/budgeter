@@ -5,7 +5,7 @@ import { Minus, Plus } from "lucide-react"
 import { Badge, BadgeProps } from "@/components/ui/badge"
 
 // models
-import Transaction, { TransactionType } from "@/models/Transaction"
+import Transaction from "@/models/Transaction"
 
 // utils
 import { formatWithCurrency } from "@/utils"
@@ -21,15 +21,15 @@ const TransactionBadge = ({ transaction, currency, size = 'md', iconSize = 16 }:
   return (
     <Badge
       size={size}
-      variant={transaction.type === TransactionType.PLUS ? 'positive' : 'negative'}
+      variant={transaction.payment.type === '+' ? 'positive' : 'negative'}
       className="font-heading font-bold gap-x-1.5"
     >
-      {transaction.type === TransactionType.PLUS ? (
+      {transaction.payment.type === '+' ? (
         <Plus size={iconSize} strokeWidth={7.5} />
       ) : (
         <Minus size={iconSize} strokeWidth={7.5} />
       )}
-      <span>{formatWithCurrency(transaction.amount, currency)}</span>
+      <span>{formatWithCurrency(transaction.payment.amount, currency)}</span>
     </Badge>
   )
 }

@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 import DateTimePicker from "@/components/ui/custom/DateTimePicker"
 
 // types
-import Transaction, { TransactionDate, TransactionType } from "@/models/Transaction"
+import Transaction, { TransactionDate } from "@/models/Transaction"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
@@ -38,8 +38,10 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
     defaultValues: {
       budgetId: budgetId,
       label: '',
-      type: TransactionType.PLUS,
-      amount: 0,
+      payment: {
+        type: '+',
+        amount: 0
+      },
       status: 'processed'
     }
   })
@@ -52,8 +54,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
       crediting: currentDate
     }
 
-    const status = values.status as Transaction['status']
-    if (status === 'processing') {
+    if (values.status === 'processing') {
       date.crediting = undefined
       date.expected = values.expectedDate!
     }
@@ -62,7 +63,8 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
     const transaction = new Transaction(id, {
       ...values,
       date,
-      status
+      payment: values.payment as Transaction['payment'],
+      status: values.status as Transaction['status']
     })
     try {
       await saveTransaction(transaction)
@@ -83,7 +85,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
             name="budgetId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Select a Budget</FormLabel>
+                <FormLabel className="font-heading font-normal normal-case">Select a Budget</FormLabel>
                 <Select
                   disabled={!budgets || isLoading}
                   onValueChange={field.onChange}
@@ -130,7 +132,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
         <div className="flex items-center gap-x-2">
           <FormField
             control={form.control}
-            name="type"
+            name="payment.type"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -141,19 +143,15 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
                       variant="icon"
                       size="icon"
                       border="icon"
-                      className={field.value === TransactionType.PLUS
+                      className={field.value === '+'
                         ? 'bg-green-500/50 hover:bg-green-500/60'
                         : 'bg-red-500/80 hover:bg-red-500/90'
                       }
                       onClick={() => {
-                        field.onChange(
-                          field.value === TransactionType.PLUS
-                            ? TransactionType.MINUS
-                            : TransactionType.PLUS
-                        )
+                        field.onChange(field.value === '+' ? '-' : '+')
                       }}
                     >
-                      {field.value === TransactionType.PLUS ? (
+                      {field.value === '+' ? (
                         <Plus size={16} />
                       ) : (
                         <Minus size={16} />
@@ -168,7 +166,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
 
           <FormField
             control={form.control}
-            name="amount"
+            name="payment.amount"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
