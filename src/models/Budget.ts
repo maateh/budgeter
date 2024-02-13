@@ -2,7 +2,7 @@
 import { BudgetDocument, DocumentCollection, ModelCollection } from "@/types"
 
 // models
-import Transaction, { TransactionType } from "@/models/Transaction"
+import Transaction from "@/models/Transaction"
 
 export enum BudgetType {
   INCOME = 'income',
@@ -60,20 +60,20 @@ class Budget {
 
   get income(): number {
     return Object.values(this.transactions)
-      .filter(tr => tr.status === 'processed' && tr.type === TransactionType.PLUS)
-      .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
+      .filter(tr => tr.status === 'processed' && tr.payment.type === '+')
+      .reduce((currentTotal, tr) => currentTotal + tr.payment.amount, 0)
   }
 
   get loss(): number {
     return Object.values(this.transactions)
-      .filter(tr => tr.status === 'processed' && tr.type === TransactionType.MINUS)
-      .reduce((currentTotal, tr) => currentTotal + tr.amount, 0)
+      .filter(tr => tr.status === 'processed' && tr.payment.type === '-')
+      .reduce((currentTotal, tr) => currentTotal + tr.payment.amount, 0)
   }
 
   updateCurrentBalance(transaction: Transaction) {
-    this.balance.current += transaction.type === TransactionType.PLUS
-      ? transaction.amount
-      : -transaction.amount
+    this.balance.current += transaction.payment.type === '+'
+      ? transaction.payment.amount
+      : -transaction.payment.amount
   }
 
   addTransactions(transactions: Transaction[], execute: boolean = false) {
@@ -90,7 +90,7 @@ class Budget {
   removeTransactions(transactionIds: string[], undo: boolean = false) {
     transactionIds.forEach(id => {
       const transaction = this.transactions[id]
-      transaction.amount = transaction.amount * -1
+      transaction.payment.amount = transaction.payment.amount * -1
 
       if (undo && transaction.status === 'processed') this.updateCurrentBalance(transaction)
       delete this.transactions[id]
@@ -108,7 +108,7 @@ class Budget {
   undoTransactions(transactionIds: string[]) {
     transactionIds.forEach(id => {
       const transaction = this.transactions[id]
-      transaction.amount = transaction.amount * -1
+      transaction.payment.amount = transaction.payment.amount * -1
       
       this.updateCurrentBalance(transaction)
     })

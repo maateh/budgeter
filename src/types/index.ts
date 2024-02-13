@@ -1,6 +1,6 @@
 // models
 import Budget, { Balance, BudgetNote, BudgetTheme, BudgetType } from "@/models/Budget"
-import Transaction, { TransactionType } from "@/models/Transaction"
+import Transaction, { Payment } from "@/models/Transaction"
 
 export type BudgetDocument = {
   id: string
@@ -17,8 +17,7 @@ export type TransactionDocument = {
   id: string
   label: string
   budgetId: string
-  type: TransactionType
-  amount: number
+  payment: Payment
   status: 'processed' | 'processing'
   date: {
     crediting?: string

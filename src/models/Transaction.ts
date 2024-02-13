@@ -2,9 +2,15 @@
 import { DocumentCollection, ModelCollection, TransactionDocument } from "@/types"
 import Budget from "@/models/Budget"
 
+// TODO: remove after form refactoring
 export enum TransactionType {
   PLUS = '+',
   MINUS = '-'
+}
+
+export type Payment = {
+  type: '+' | '-',
+  amount: number
 }
 
 export type TransactionDate = {
@@ -16,25 +22,24 @@ export type TransactionDate = {
 export type TransactionProps = {
   budgetId: string
   label: string
-  type: TransactionType
-  amount: number
+  payment: Payment
   status: 'processed' | 'processing'
   date: TransactionDate
 }
 
 class Transaction {
+  readonly type: 'normal' | 'transferring' | 'temporary'
   public budgetId: string
   public label: string
-  public type: TransactionType
-  public amount: number
+  public payment: Payment
   public status: 'processed' | 'processing'
   public date: TransactionDate
 
   constructor(readonly id: string, props: TransactionProps) {
+    this.type = 'normal'
     this.budgetId = props.budgetId
     this.label = props.label
-    this.type = props.type
-    this.amount = props.amount
+    this.payment = props.payment
     this.status = props.status
     this.date = props.date
   }
@@ -53,7 +58,9 @@ class Transaction {
     if (status === 'processing') {
       budget.updateCurrentBalance({
         ...this,
-        amount: this.amount * -1
+        payment: {
+          amount: this.payment.amount * -1
+        }
       })
 
       this.status = 'processing'
