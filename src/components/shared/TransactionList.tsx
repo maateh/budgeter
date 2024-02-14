@@ -66,7 +66,7 @@ const TransactionList = ({
         </div>
         <FormDialog
           title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-          form={<TransactionFormTabs budgetId={budget?.id} />}
+          formLayout={<TransactionFormTabs budgetId={budget?.id} />}
         >
           <Button variant="icon" size="icon">
             <Plus />

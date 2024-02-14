@@ -78,7 +78,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           <li>
             <FormDialog
               title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-              form={<TransactionFormTabs budgetId={budget.id} />}
+              formLayout={<TransactionFormTabs budgetId={budget.id} />}
             >
               <Badge
                 size="xs"

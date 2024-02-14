@@ -73,7 +73,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
 
           <FormDialog
             title={<>Create <span className="text-green-400 overline">Budget</span></>}
-            form={<BudgetForm type="edit" budget={budget} />}
+            formLayout={<BudgetForm type="edit" budget={budget} />}
           >
             <Button
               variant="default"

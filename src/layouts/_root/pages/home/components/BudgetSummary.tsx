@@ -15,7 +15,7 @@ const BudgetSummary = () => {
         <h2>Budget <span className="text-green-600 overline">Summary</span></h2>
         <FormDialog
           title={<>Create <span className="text-green-400 overline">Budget</span></>}
-          form={<BudgetForm type="create" />}
+          formLayout={<BudgetForm type="create" />}
         >
           <Button
             border="md"

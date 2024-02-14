@@ -6,11 +6,11 @@ import { Separator } from "@/components/ui/separator"
 
 type FormDialogProps = {
   title: React.JSX.Element
-  form: React.JSX.Element
+  formLayout: React.JSX.Element
   children: React.JSX.Element
 }
 
-const FormDialog = ({ title, form, children }: FormDialogProps) => {
+const FormDialog = ({ title, formLayout, children }: FormDialogProps) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -27,7 +27,7 @@ const FormDialog = ({ title, form, children }: FormDialogProps) => {
 
         <Separator />
 
-        {form}
+        {formLayout}
       </DialogContent>
     </Dialog>
   )
