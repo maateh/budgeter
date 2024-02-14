@@ -8,9 +8,9 @@ export type Payment = {
 }
 
 export type TransactionDate = {
-  crediting?: Date
+  created: Date
   expected: Date
-  creation: Date
+  credited?: Date
 }
 
 export type TransactionProps = {
@@ -22,7 +22,7 @@ export type TransactionProps = {
 }
 
 class Transaction {
-  readonly type: 'normal' | 'transferring' | 'temporary'
+  public type: 'default' | 'transferring' | 'temporary'
   public budgetId: string
   public label: string
   public payment: Payment
@@ -30,7 +30,7 @@ class Transaction {
   public date: TransactionDate
 
   constructor(readonly id: string, props: TransactionProps) {
-    this.type = 'normal'
+    this.type = 'default'
     this.budgetId = props.budgetId
     this.label = props.label
     this.payment = props.payment
@@ -45,7 +45,7 @@ class Transaction {
       this.status = 'processed'
       this.date = {
         ...this.date,
-        crediting: new Date()
+        credited: new Date()
       }
     }
 
@@ -60,7 +60,7 @@ class Transaction {
       this.status = 'processing'
       this.date = {
         ...this.date,
-        crediting: undefined
+        credited: undefined
       }
     }
   }
@@ -69,9 +69,9 @@ class Transaction {
     return new Transaction(document.id, {
       ...document,
       date: {
-        creation: new Date(document.date.creation),
-        crediting: document.date.crediting ? new Date(document.date.crediting) : undefined,
-        expected: new Date(document.date.expected)
+        created: new Date(document.date.created),
+        credited: document.date.credited ? new Date(document.date.credited) : undefined,
+        expected: new Date(document.date.expected),
       }
     })
   }
@@ -80,8 +80,8 @@ class Transaction {
     return {
       ...model,
       date: {
-        creation: model.date.creation.toString(),
-        crediting: model.date.crediting?.toString(),
+        created: model.date.created.toString(),
+        credited: model.date.credited?.toString(),
         expected: model.date.expected.toString()
       }
     }
@@ -92,7 +92,7 @@ class Transaction {
     return Object.entries(documents)
       .filter(([, doc]) => predicate(doc))
       .sort(([, a], [, b]) => (
-        Date.parse(a.date.crediting || a.date.creation) > Date.parse(b.date.crediting || b.date.creation) 
+        Date.parse(a.date.credited || a.date.created) > Date.parse(b.date.credited || b.date.created) 
           ? -1
           : 1
       ))

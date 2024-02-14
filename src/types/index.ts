@@ -15,14 +15,17 @@ export type BudgetDocument = {
 
 export type TransactionDocument = {
   id: string
-  label: string
   budgetId: string
+  targetBudgetId?: string
+  type: 'default' | 'transferring' | 'temporary'
+  label: string
   payment: Payment
   status: 'processed' | 'processing'
   date: {
-    crediting?: string
+    created: string
     expected: string
-    creation: string
+    credited?: string
+    expire?: string
   }
 }
 
