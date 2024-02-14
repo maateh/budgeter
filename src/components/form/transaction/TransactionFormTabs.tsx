@@ -7,6 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 // components
 import TransactionForm from "@/components/form/transaction/TransactionForm"
 
+// hooks
+import {
+  useTransactionSubmit,
+  useTransferringTransactionSubmit,
+  useTemporaryTransactionSubmit
+} from "@/components/form/transaction/hooks"
+
 type TransactionFormTabsProps = {
   budgetId?: string
 }
@@ -34,17 +41,27 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsList>
 
       <TabsContent value="default">
-        <TransactionForm budgetId={budgetId} />
+        <TransactionForm
+          type="default"
+          budgetId={budgetId}
+          useTransactionSubmit={useTransactionSubmit}
+        />
       </TabsContent>
 
       <TabsContent value="transferring">
-        {/* TODO: create custom form */}
-        {/* <TransactionForm budgetId={budgetId} /> */}
+        <TransactionForm
+          type="transferring"
+          budgetId={budgetId}
+          useTransactionSubmit={useTransferringTransactionSubmit}
+        />
       </TabsContent>
-
+      
       <TabsContent value="temporary">
-        {/* TODO: create custom form */}
-        {/* <TransactionForm budgetId={budgetId} /> */}
+        <TransactionForm
+          type="temporary"
+          budgetId={budgetId}
+          useTransactionSubmit={useTemporaryTransactionSubmit}
+        />
       </TabsContent>
     </Tabs>
   )

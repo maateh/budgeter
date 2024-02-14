@@ -11,6 +11,7 @@ export const useSaveTransactionMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
+    mutationKey: ['transaction', 'save'],
     mutationFn: async (transaction: Transaction) => {
       await api.budget.addTransactions(transaction.budgetId, [transaction])
       return await api.transaction.save(transaction)
