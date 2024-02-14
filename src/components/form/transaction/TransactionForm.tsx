@@ -1,14 +1,13 @@
 // shadcn
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 
 // components
+import BudgetSelector from "@/components/ui/custom/BudgetSelector"
 import DefaultFields from "./fields/DefaultFields"
 
 // hooks
 import { useTransactionForm } from "./TransactionForm.hooks"
-import { useLoadBudgetsQuery } from "./TransactionForm.queries"
 
 type TransactionFormProps = {
   budgetId?: string
@@ -16,7 +15,6 @@ type TransactionFormProps = {
 
 const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   const { form, onSubmit } = useTransactionForm(budgetId)
-  const { data: budgets, isLoading } = useLoadBudgetsQuery()
   
   return (
     <Form {...form}>
@@ -29,22 +27,12 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-heading font-normal normal-case">Select a Budget</FormLabel>
-              <Select
-                disabled={!budgets || isLoading}
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Choose..." />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {budgets && Object.values(budgets).map(b => (
-                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <BudgetSelector
+                  defaultValue={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
