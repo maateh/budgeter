@@ -77,7 +77,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
           <p className="text-xs font-heading font-medium leading-3 tracking-wider">{budget.name}</p>
           <p className="text-xs italic">
             {formatDistance(
-              transaction.date.crediting || transaction.date.creation, Date.now(), {
+              transaction.date.credited || transaction.date.created, Date.now(), {
                 addSuffix: true
               }
             )}

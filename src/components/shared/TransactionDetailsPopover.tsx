@@ -58,11 +58,11 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
         <Separator className="mt-1.5 h-0.5 rounded-full bg-foreground/80" />
 
         <div className="mt-2.5 flex flex-col gap-y-0.5">
-          {transaction.status === 'processed' && transaction.date.crediting && (
+          {transaction.status === 'processed' && transaction.date.credited && (
             <div className="w-full flex justify-between items-center">
               <p className="text-md font-semibold small-caps">Credited</p>
               <div className="icon-wrapper">
-                <p className="text-sm italic font-medium">{format(transaction.date.crediting, 'PPP')}</p>
+                <p className="text-sm italic font-medium">{format(transaction.date.credited, 'PPP')}</p>
                 <CalendarCheck size={18} strokeWidth={1.7} />
               </div>
             </div>
@@ -81,7 +81,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
           <div className="w-full flex justify-between items-center">
             <p className="text-md font-semibold small-caps">Created</p>
             <div className="icon-wrapper">
-              <p className="text-sm italic font-medium">{format(transaction.date.creation, 'PPP')}</p>
+              <p className="text-sm italic font-medium">{format(transaction.date.created, 'PPP')}</p>
               <CalendarPlus size={18} strokeWidth={1.7} />
             </div>
           </div>
