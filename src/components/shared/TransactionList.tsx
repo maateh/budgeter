@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button"
 import TransactionPreview from "@/components/shared/TransactionPreview"
 import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 import FormDialog from "@/components/shared/FormDialog"
-import TransactionForm from "@/components/form/transaction/TransactionForm"
+import TransactionFormTabs from "@/components/form/transaction/TransactionFormTabs"
 
 type TransactionListProps = {
   transactions: Transaction[]
@@ -66,7 +66,7 @@ const TransactionList = ({
         </div>
         <FormDialog
           title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-          form={<TransactionForm budgetId={budget?.id} />}
+          form={<TransactionFormTabs budgetId={budget?.id} />}
         >
           <Button variant="icon" size="icon">
             <Plus />

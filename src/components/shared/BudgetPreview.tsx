@@ -13,7 +13,7 @@ import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 import FormDialog from "@/components/shared/FormDialog"
-import TransactionForm from "@/components/form/transaction/TransactionForm"
+import TransactionFormTabs from "../form/transaction/TransactionFormTabs"
 
 // types
 import Budget from "@/models/Budget"
@@ -78,7 +78,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           <li>
             <FormDialog
               title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-              form={<TransactionForm budgetId={budget.id} />}
+              form={<TransactionFormTabs budgetId={budget.id} />}
             >
               <Badge
                 size="xs"
