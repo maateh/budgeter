@@ -8,14 +8,10 @@ export const BudgetNoteValidation = budgetNoteSchema
 
 export const TransactionValidation = transactionSchema
 
-export const TransferringTransactionValidation = transactionSchema.and(
-  z.object({
-    targetBudgetId: z.string().uuid()
-  })
-)
+export const TransferringTransactionValidation = transactionSchema.extend({
+  targetBudgetId: z.string().uuid()
+})
 
-export const TemporaryTransactionValidation = transactionSchema.and(
-  z.object({
-    expireDate: z.date()
-  })
-)
+export const TemporaryTransactionValidation = transactionSchema.extend({
+  expireDate: z.date()
+})
