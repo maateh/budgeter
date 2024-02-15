@@ -12,7 +12,7 @@ import TransactionForm from "@/components/form/transaction/TransactionForm"
 import { useTransactionSubmit, useTransferringTransactionSubmit, useTemporaryTransactionSubmit } from "@/components/form/transaction/hooks"
 
 // types
-import { FormFields } from "@/components/form/transaction/types"
+import { FieldValue } from "@/components/form/transaction/types"
 
 // validations
 import { TemporaryTransactionValidation, TransactionValidation, TransferringTransactionValidation } from "@/lib/validation"
@@ -47,7 +47,7 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsList>
 
       <TabsContent value="default">
-        <Form<FormFields['default'], typeof TransactionValidation>
+        <Form<FieldValue['default'], typeof TransactionValidation>
           type="create"
           validationSchema={TransactionValidation}
           defaultValues={defaultValues}
@@ -64,7 +64,7 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsContent>
 
       <TabsContent value="transferring">
-        <Form<FormFields['transferring'], typeof TransferringTransactionValidation>
+        <Form<FieldValue['transferring'], typeof TransferringTransactionValidation>
           type="create"
           validationSchema={TransferringTransactionValidation}
           defaultValues={defaultValues}
@@ -81,7 +81,7 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsContent>
       
       <TabsContent value="temporary">
-        <Form<FormFields['temporary'], typeof TemporaryTransactionValidation>
+        <Form<FieldValue['temporary'], typeof TemporaryTransactionValidation>
           type="create"
           validationSchema={TemporaryTransactionValidation}
           defaultValues={defaultValues}

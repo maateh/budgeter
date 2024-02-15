@@ -7,15 +7,15 @@ import { useSaveTransactionMutation } from "@/components/form/transaction/Transa
 import Transaction from "@/models/Transaction"
 
 // types
-import { FormFields } from "@/components/form/transaction/types"
+import { FieldValue } from "@/components/form/transaction/types"
 
 // utils
 import { parseDateValues } from "@/components/form/transaction/utils"
 
-const useTransactionSubmit = (form: UseFormReturn<FormFields['default']>) => {
+const useTransactionSubmit = (form: UseFormReturn<FieldValue['default']>) => {
   const { mutateAsync: saveTransaction, isPending } = useSaveTransactionMutation()
 
-  const onSubmit: SubmitHandler<FormFields['default']> = async (values) => {
+  const onSubmit: SubmitHandler<FieldValue['default']> = async (values) => {
     const id = crypto.randomUUID()
     const transaction = new Transaction(id, {
       ...values,

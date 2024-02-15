@@ -2,9 +2,9 @@
 import Transaction from "@/models/Transaction"
 
 // types
-import { FormFields } from "@/components/form/transaction/types"
+import { FieldValues } from "@/components/form/transaction/types"
 
-export function parseDateValues(values: FormFields['default' | 'transferring' | 'temporary']) {
+export function parseDateValues(values: FieldValues) {
   const currentDate = new Date()
   const date: Transaction['date'] = {
     created: currentDate,
@@ -12,9 +12,9 @@ export function parseDateValues(values: FormFields['default' | 'transferring' | 
     credited: currentDate
   }
 
-  if (values.status === 'processing') {
+  if (values.status === 'processing' && values.expectedDate) {
     date.credited = undefined
-    date.expected = values.expectedDate!
+    date.expected = values.expectedDate
   }
 
   return date

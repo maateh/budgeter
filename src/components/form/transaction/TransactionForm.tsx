@@ -1,4 +1,4 @@
-import { Control, UseFormReturn, useWatch } from "react-hook-form"
+import { Control, useWatch } from "react-hook-form"
 
 // icons
 import { Minus, Plus } from "lucide-react"
@@ -17,21 +17,19 @@ import DateTimePicker from "@/components/ui/custom/DateTimePicker"
 import Transaction from "@/models/Transaction"
 
 // types
-import { FormFields } from "@/components/form/transaction/types"
+import { TransactionForm, FieldValue } from "@/components/form/transaction/types"
 
 type TestTransactionFormProps = {
   type: Transaction['type']
   budgetId?: string
-  form: UseFormReturn<FormFields['default']> |
-    UseFormReturn<FormFields['transferring']> |
-    UseFormReturn<FormFields['temporary']>
+  form: TransactionForm
 }
 
 const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps) => {
   const { control } = form
 
   const status = useWatch({
-    control: control as Control<FormFields['default']>,
+    control: control as Control<FieldValue['default']>,
     name: 'status'
   })
 
@@ -40,7 +38,7 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
       <div className="w-full flex flex-wrap justify-around gap-x-8">
         {!budgetId && (
           <FormField
-            control={control as Control<FormFields['default']>}
+            control={control as Control<FieldValue['default']>}
             name="budgetId"
             render={({ field }) => (
               <FormItem className="w-1/2 flex-1">
@@ -59,7 +57,7 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
 
         {type === 'transferring' && (
           <FormField
-            control={control as Control<FormFields['transferring']>}
+            control={control as Control<FieldValue['transferring']>}
             name="targetBudgetId"
             render={({ field }) => (
               <FormItem className="w-1/2 flex-1">
@@ -80,7 +78,7 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
       </div>
 
       <FormField
-        control={control as Control<FormFields['default']>}
+        control={control as Control<FieldValue['default']>}
         name="label"
         render={({ field }) => (
           <FormItem>
@@ -102,7 +100,7 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
 
       <div className="flex items-center gap-x-2">
         <FormField
-          control={control as Control<FormFields['default']>}
+          control={control as Control<FieldValue['default']>}
           name="payment.type"
           render={({ field }) => (
             <FormItem>
@@ -136,7 +134,7 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
         />
 
         <FormField
-          control={control as Control<FormFields['default']>}
+          control={control as Control<FieldValue['default']>}
           name="payment.amount"
           render={({ field }) => (
             <FormItem>
@@ -160,7 +158,7 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
 
         <div className="h-max flex items-center justify-between gap-x-2">
           <FormField
-            control={control as Control<FormFields['default']>}
+            control={control as Control<FieldValue['default']>}
             name="status"
             render={({ field }) => (
               <FormItem className="flex items-center">
@@ -180,13 +178,13 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
           />
 
           <FormField
-            control={control as Control<FormFields['default']>}
+            control={control as Control<FieldValue['default']>}
             name="expectedDate"
             render={({ field }) => status as Transaction['status'] === 'processing' ? (
               <FormItem className="w-full">
                 <FormControl>
                   <DateTimePicker
-                    label="Expected date..."
+                    label="Select expected date..."
                     selected={field.value!}
                     onSelect={field.onChange}
                   />
@@ -200,14 +198,14 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
 
       {type === 'temporary' && (
         <FormField
-          control={control as Control<FormFields['temporary']>}
+          control={control as Control<FieldValue['temporary']>}
           name="expireDate"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Select Expiration Date</FormLabel>
+              <FormLabel>Expiration Date</FormLabel>
               <FormControl>
                 <DateTimePicker
-                  label="Expiration date..."
+                  label="Select expiration date..."
                   selected={field.value!}
                   onSelect={field.onChange}
                 />

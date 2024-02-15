@@ -8,15 +8,15 @@ import Transaction from "@/models/Transaction"
 import TemporaryTransaction from "@/models/TemporaryTransaction"
 
 // types
-import { FormFields } from "@/components/form/transaction/types"
+import { FieldValue } from "@/components/form/transaction/types"
 
 // utils
 import { parseDateValues } from "@/components/form/transaction/utils"
 
-const useTemporaryTransactionSubmit = (form: UseFormReturn<FormFields['temporary']>) => {
+const useTemporaryTransactionSubmit = (form: UseFormReturn<FieldValue['temporary']>) => {
   // const { mutateAsync: saveTransaction } = useSaveTransactionMutation()
 
-  const onSubmit: SubmitHandler<FormFields['temporary']> = async (values) => {
+  const onSubmit: SubmitHandler<FieldValue['temporary']> = async (values) => {
     const id = crypto.randomUUID()
     const transaction = new TemporaryTransaction(id, {
       ...values,

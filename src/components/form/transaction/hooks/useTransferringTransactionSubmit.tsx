@@ -7,15 +7,15 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form"
 import TransferringTransaction from "@/models/TransferringTransaction"
 
 // types
-import { FormFields } from "@/components/form/transaction/types"
+import { FieldValue } from "@/components/form/transaction/types"
 
 // utils
 import { parseDateValues } from "@/components/form/transaction/utils"
 
-const useTransferringTransactionSubmit = (form: UseFormReturn<FormFields['transferring']>) => {
+const useTransferringTransactionSubmit = (form: UseFormReturn<FieldValue['transferring']>) => {
   // const { mutateAsync: saveTransaction, isPending } = useSaveTransactionMutation()
 
-  const onSubmit: SubmitHandler<FormFields['transferring']> = async (values) => {
+  const onSubmit: SubmitHandler<FieldValue['transferring']> = async (values) => {
     const id = crypto.randomUUID()
     const transaction = new TransferringTransaction(id, {
       ...values,
