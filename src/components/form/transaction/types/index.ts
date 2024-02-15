@@ -16,7 +16,7 @@ export type FieldValues =
   FieldValue['transferring'] |
   FieldValue['temporary']
 
-export type TransactionForm = 
+export type TransactionFormReturn = 
   UseFormReturn<FieldValue['default']> |
   UseFormReturn<FieldValue['transferring']> |
   UseFormReturn<FieldValue['temporary']>

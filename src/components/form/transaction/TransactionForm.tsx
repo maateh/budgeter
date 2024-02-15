@@ -17,15 +17,15 @@ import DateTimePicker from "@/components/ui/custom/DateTimePicker"
 import Transaction from "@/models/Transaction"
 
 // types
-import { TransactionForm, FieldValue } from "@/components/form/transaction/types"
+import { TransactionFormReturn, FieldValue } from "@/components/form/transaction/types"
 
-type TestTransactionFormProps = {
+type TransactionFormProps = {
   type: Transaction['type']
   budgetId?: string
-  form: TransactionForm
+  form: TransactionFormReturn
 }
 
-const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps) => {
+const TransactionForm = ({ type, budgetId, form }: TransactionFormProps) => {
   const { control } = form
 
   const status = useWatch({
@@ -219,4 +219,4 @@ const TestTransactionForm = ({ type, budgetId, form }: TestTransactionFormProps)
   )
 }
 
-export default TestTransactionForm
+export default TransactionForm
