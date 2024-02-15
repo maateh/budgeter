@@ -9,7 +9,7 @@ import Form from "@/components/form/Form"
 import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 // hooks
-import { useTransactionSubmit, useTransferringTransactionSubmit, useTemporaryTransactionSubmit } from "@/components/form/transaction/hooks"
+import { useTransactionSubmit, useTransferringTransactionSubmit, useTemporaryTransactionSubmit, useDefaultValues } from "@/components/form/transaction/hooks"
 
 // types
 import { FieldValue } from "@/components/form/transaction/types"
@@ -17,14 +17,13 @@ import { FieldValue } from "@/components/form/transaction/types"
 // validations
 import { TemporaryTransactionValidation, TransactionValidation, TransferringTransactionValidation } from "@/lib/validation"
 
-// constants
-import { defaultValues } from "@/components/form/transaction/constants"
-
 type TransactionFormTabsProps = {
   budgetId?: string
 }
 
 const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
+  const { defaultValues } = useDefaultValues(budgetId)
+
   return (
     <Tabs defaultValue="default">
       <p className="mb-1.5 text-center text-lg font-heading font-medium">
