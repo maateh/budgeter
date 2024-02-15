@@ -13,7 +13,7 @@ import { FormFields } from "@/components/form/transaction/types"
 // utils
 import { parseDateValues } from "@/components/form/transaction/utils"
 
-const useTemporaryTransactionSubmit = (form: UseFormReturn) => {
+const useTemporaryTransactionSubmit = (form: UseFormReturn<FormFields['temporary']>) => {
   // const { mutateAsync: saveTransaction } = useSaveTransactionMutation()
 
   const onSubmit: SubmitHandler<FormFields['temporary']> = async (values) => {

@@ -5,6 +5,7 @@ import { AlarmClock, ArrowLeftRight, Receipt } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // components
+import Form from "@/components/form/Form"
 import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 // hooks
@@ -13,6 +14,9 @@ import {
   useTransferringTransactionSubmit,
   useTemporaryTransactionSubmit
 } from "@/components/form/transaction/hooks"
+
+// types
+import { FormFields } from "@/components/form/transaction/types"
 
 type TransactionFormTabsProps = {
   budgetId?: string
@@ -41,27 +45,48 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsList>
 
       <TabsContent value="default">
-        <TransactionForm
-          type="default"
-          budgetId={budgetId}
-          useTransactionSubmit={useTransactionSubmit}
-        />
+        <Form<FormFields['default']>
+          type="create"
+          useSubmit={useTransactionSubmit}
+        >
+          {(form) => (
+            <TransactionForm
+              type="default"
+              budgetId={budgetId}
+              form={form}
+            />
+          )}
+        </Form>
       </TabsContent>
 
       <TabsContent value="transferring">
-        <TransactionForm
-          type="transferring"
-          budgetId={budgetId}
-          useTransactionSubmit={useTransferringTransactionSubmit}
-        />
+        <Form<FormFields['transferring']>
+          type="create"
+          useSubmit={useTransferringTransactionSubmit}
+        >
+          {(form) => (
+            <TransactionForm
+              type="transferring"
+              budgetId={budgetId}
+              form={form}
+            />
+          )}
+        </Form>
       </TabsContent>
       
       <TabsContent value="temporary">
-        <TransactionForm
-          type="temporary"
-          budgetId={budgetId}
-          useTransactionSubmit={useTemporaryTransactionSubmit}
-        />
+        <Form<FormFields['temporary']>
+          type="create"
+          useSubmit={useTemporaryTransactionSubmit}
+        >
+          {(form) => (
+            <TransactionForm
+              type="temporary"
+              budgetId={budgetId}
+              form={form}
+            />
+          )}
+        </Form>
       </TabsContent>
     </Tabs>
   )

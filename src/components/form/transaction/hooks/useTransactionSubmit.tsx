@@ -12,7 +12,7 @@ import { FormFields } from "@/components/form/transaction/types"
 // utils
 import { parseDateValues } from "@/components/form/transaction/utils"
 
-const useTransactionSubmit = (form: UseFormReturn) => {
+const useTransactionSubmit = (form: UseFormReturn<FormFields['default']>) => {
   const { mutateAsync: saveTransaction, isPending } = useSaveTransactionMutation()
 
   const onSubmit: SubmitHandler<FormFields['default']> = async (values) => {
