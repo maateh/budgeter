@@ -17,6 +17,10 @@ import {
 
 // types
 import { FormFields } from "@/components/form/transaction/types"
+import { TemporaryTransactionValidation, TransactionValidation, TransferringTransactionValidation } from "@/lib/validation"
+
+// constants
+import { defaultValues } from "@/components/form/transaction/constants"
 
 type TransactionFormTabsProps = {
   budgetId?: string
@@ -45,8 +49,10 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsList>
 
       <TabsContent value="default">
-        <Form<FormFields['default']>
+        <Form<FormFields['default'], typeof TransactionValidation>
           type="create"
+          validationSchema={TransactionValidation}
+          defaultValues={defaultValues}
           useSubmit={useTransactionSubmit}
         >
           {(form) => (
@@ -60,8 +66,10 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsContent>
 
       <TabsContent value="transferring">
-        <Form<FormFields['transferring']>
+        <Form<FormFields['transferring'], typeof TransferringTransactionValidation>
           type="create"
+          validationSchema={TransferringTransactionValidation}
+          defaultValues={defaultValues}
           useSubmit={useTransferringTransactionSubmit}
         >
           {(form) => (
@@ -75,8 +83,10 @@ const TransactionFormTabs = ({ budgetId }: TransactionFormTabsProps) => {
       </TabsContent>
       
       <TabsContent value="temporary">
-        <Form<FormFields['temporary']>
+        <Form<FormFields['temporary'], typeof TemporaryTransactionValidation>
           type="create"
+          validationSchema={TemporaryTransactionValidation}
+          defaultValues={defaultValues}
           useSubmit={useTemporaryTransactionSubmit}
         >
           {(form) => (
