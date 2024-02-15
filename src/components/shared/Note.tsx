@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
-import ConfirmSheet from "@/components/shared/ConfirmSheet"
+import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 
 // hooks
 import { useChangeNoteStatusMutation, useRemoveNoteMutation } from "./Note.hooks"
@@ -113,7 +113,7 @@ const Note = ({ budget, note }: NoteProps) => {
             />
           </Button>
 
-          <ConfirmSheet
+          <ConfirmationDialog
             title="Do you really want to remove this note?"
             message={note.text}
             variant="confirm-negative"
@@ -130,7 +130,7 @@ const Note = ({ budget, note }: NoteProps) => {
                 className="text-destructive"
               />
             </Button>
-          </ConfirmSheet>
+          </ConfirmationDialog>
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">

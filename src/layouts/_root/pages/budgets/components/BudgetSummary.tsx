@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui/separator'
 // components
 import BudgetTypeBadge from '@/components/ui/custom/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
-import ConfirmSheet from '@/components/shared/ConfirmSheet'
+import ConfirmationDialog from '@/components/shared/ConfirmationDialog'
 import FormDialog from '@/components/shared/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
 
@@ -55,7 +55,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
         </h2>
 
         <div className="flex justify-center items-center gap-x-4 gap-y">
-          <ConfirmSheet
+          <ConfirmationDialog
             title={`Delete "${budget.name}" Budget`}
             message="Are you sure you want to delete this budget?"
             variant="confirm-negative"
@@ -69,7 +69,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
               <Trash2 size={18} />
               <span>Delete</span>
             </Button>
-          </ConfirmSheet>
+          </ConfirmationDialog>
 
           <FormDialog
             title={<>Create <span className="text-green-400 overline">Budget</span></>}

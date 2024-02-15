@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
 // components
-import ConfirmSheet from "@/components/shared/ConfirmSheet"
+import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
@@ -39,7 +39,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             <p className="text-lg font-heading">{transaction.label}</p>
           </div>
 
-          <ConfirmSheet
+          <ConfirmationDialog
             title={transaction.status === 'processed'
                 ? `Withdraw "${transaction.label}" transaction`
                 : `Confirm "${transaction.label}" transaction crediting`
@@ -52,7 +52,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             confirm={handleChangeStatus}
           >
             <StatusSwitcher status={transaction.status} />
-          </ConfirmSheet>
+          </ConfirmationDialog>
         </div>
 
         <Separator className="mt-1.5 h-0.5 rounded-full bg-foreground/80" />
@@ -102,7 +102,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
                 currency={budget.currency}
                 size="md"
               />
-              <ConfirmSheet
+              <ConfirmationDialog
                 title={`Delete "${transaction.label}" Transaction`}
                 message="Do you really want to delete this transaction? This action cannot be undone."
                 variant="confirm-negative"
@@ -111,7 +111,7 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
                 <Button variant="destructive" size="icon-sm">
                   <Trash2 size={16} strokeWidth={2.75} />
                 </Button>
-              </ConfirmSheet>
+              </ConfirmationDialog>
             </div>
           </div>
         </div>

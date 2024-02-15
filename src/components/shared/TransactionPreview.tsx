@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 
 // components
 import TransactionDetailsPopover from "@/components/shared/TransactionDetailsPopover"
-import ConfirmSheet from "@/components/shared/ConfirmSheet"
+import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 // models
@@ -89,7 +89,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
         <TransactionBadge transaction={transaction} currency={budget.currency}  />
 
         <div className="flex items-center">
-          <ConfirmSheet
+          <ConfirmationDialog
             title={`Delete "${transaction.label}" Transaction`}
             message="Do you really want to delete this transaction? This action cannot be undone."
             variant="confirm-negative"
@@ -98,10 +98,10 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
             <Button variant="ghost" size="icon-sm">
               <XSquare size={16} />
             </Button>
-          </ConfirmSheet>
+          </ConfirmationDialog>
 
           {transaction.status === 'processing' && (
-            <ConfirmSheet
+            <ConfirmationDialog
               title={`Confirm "${transaction.label}" transaction crediting`}
               message="Has the transaction been credited? You can always withdraw this action."
               variant="confirm-positive"
@@ -110,7 +110,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
               <Button variant="ghost" size="icon-sm" className="-ml-1">
                 <BadgeCheck size={22} />
               </Button>
-            </ConfirmSheet>
+            </ConfirmationDialog>
           )}
         </div>
       </div>
