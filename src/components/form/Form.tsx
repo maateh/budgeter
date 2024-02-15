@@ -33,6 +33,8 @@ function Form<FV extends FieldValues, Z extends ZodType<FV>>({ type, customButto
 
         {customButton || (
           <Button
+            className="mt-4 w-full min-w-28 capitalize sm:w-fit sm:ml-auto"
+            size="lg"
             type="submit"
             disabled={isPending}
           >
