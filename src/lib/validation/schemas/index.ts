@@ -8,7 +8,7 @@ export const budgetSchema = z.object({
     .max(50, { message: 'Too long.' }),
   type: z.nativeEnum(BudgetType),
   balance: z.object({
-    current: z.coerce.number().default(0),
+    current: z.coerce.number(),
     ceiling: z.coerce.number()
   }),
   currency: z.string()

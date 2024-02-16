@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
@@ -6,16 +6,7 @@ import { useAPI } from "@/services/providers/APIContext.hooks"
 // types
 import Budget from "@/models/Budget"
 
-export const useLoadCurrencies = () => {
-  const { api } = useAPI()
-
-  return useQuery({
-    queryKey: ['currencies'],
-    queryFn: api.currency.get
-  })
-}
-
-export const useSaveBudgetMutation = () => {
+const useSaveBudgetMutation = () => {
   const { api } = useAPI()
   const queryClient = useQueryClient()
 
@@ -28,3 +19,5 @@ export const useSaveBudgetMutation = () => {
     }
   })
 }
+
+export default useSaveBudgetMutation
