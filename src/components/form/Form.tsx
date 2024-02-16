@@ -1,4 +1,5 @@
 import { DefaultValues, FieldValues, SubmitHandler, UseFormReturn, useForm } from "react-hook-form"
+
 import { ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button"
 
 type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P = object> = {
   type: 'create' | 'edit',
-  customButton?: React.JSX.Element,
+  customButtonRequired?: boolean,
   defaultValues: DefaultValues<FV>,
   validationSchema: Z,
   useSubmit: (form: UseFormReturn<FV>, props: P) => {
@@ -19,7 +20,9 @@ type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P = object> = {
   children: (methods: UseFormReturn<FV>) => React.ReactNode
 }
 
-function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({ type, customButton, defaultValues, validationSchema, useSubmit, submitProps, children }: FormProps<FV, Z, P>) {
+function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({
+  type, customButtonRequired, defaultValues, validationSchema, useSubmit, submitProps, children
+}: FormProps<FV, Z, P>) {
   const form = useForm<FV>({
     resolver: zodResolver(validationSchema),
     defaultValues
@@ -32,7 +35,7 @@ function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({ type,
 
         {children(form)}
 
-        {customButton || (
+        {!customButtonRequired && (
           <Button
             className="mt-4 w-full min-w-28 capitalize sm:w-fit sm:ml-auto"
             size="lg"
