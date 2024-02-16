@@ -1,7 +1,7 @@
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
-import { useSaveTransactionMutation } from "@/components/form/transaction/TransactionForm.mutations"
+import { useSaveTransactionMutation } from "@/components/form/transaction/hooks"
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
 
 // models
@@ -13,15 +13,19 @@ import { FieldValue } from "@/components/form/transaction/types"
 // utils
 import { parseDateValues } from "@/components/form/transaction/utils"
 
-const useTransferringTransactionSubmit = (form: UseFormReturn<FieldValue['transferring']>) => {
+const useTemporaryTransactionSubmit = (form: UseFormReturn<FieldValue['temporary']>) => {
   const { mutateAsync: saveTransaction, isPending } = useSaveTransactionMutation()
   const { cleanForm } = useFormContext()
 
-  const onSubmit: SubmitHandler<FieldValue['transferring']> = async (values) => {
+  const onSubmit: SubmitHandler<FieldValue['temporary']> = async (values) => {
     const id = crypto.randomUUID()
-    const transaction = new Transaction(id, 'transferring', {
+    const transaction = new Transaction(id, 'temporary', {
       ...values,
-      date: parseDateValues(values),
+      expired: false,
+      date: {
+        ...parseDateValues(values),
+        expire: values.expireDate
+      },
       payment: values.payment as Transaction['payment'],
       status: values.status as Transaction['status']
     })
@@ -40,4 +44,4 @@ const useTransferringTransactionSubmit = (form: UseFormReturn<FieldValue['transf
   return { onSubmit, isPending }
 }
 
-export default useTransferringTransactionSubmit
+export default useTemporaryTransactionSubmit

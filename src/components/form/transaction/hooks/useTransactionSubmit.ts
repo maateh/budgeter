@@ -1,7 +1,7 @@
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
-import { useSaveTransactionMutation } from "@/components/form/transaction/TransactionForm.mutations"
+import { useSaveTransactionMutation } from "@/components/form/transaction/hooks"
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
 
 // models

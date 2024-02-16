@@ -6,7 +6,7 @@ import { useAPI } from "@/services/providers/APIContext.hooks"
 // types
 import Transaction from "@/models/Transaction"
 
-export const useSaveTransactionMutation = () => {  
+const useSaveTransactionMutation = () => {  
   const { api } = useAPI()
   const queryClient = useQueryClient()
 
@@ -25,3 +25,5 @@ export const useSaveTransactionMutation = () => {
     }
   })
 }
+
+export default useSaveTransactionMutation
