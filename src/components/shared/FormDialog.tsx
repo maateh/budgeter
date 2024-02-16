@@ -3,6 +3,7 @@ import { useState } from "react"
 // shadcn
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import FormProvider from "@/services/providers/form/FormProvider"
 
 type FormDialogProps = {
   title: React.JSX.Element
@@ -27,7 +28,9 @@ const FormDialog = ({ title, formLayout, children }: FormDialogProps) => {
 
         <Separator />
 
-        {formLayout}
+        <FormProvider cleanForm={() => setOpen(false)}>
+          {formLayout}
+        </FormProvider>
       </DialogContent>
     </Dialog>
   )
