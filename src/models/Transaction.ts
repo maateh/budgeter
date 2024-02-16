@@ -1,6 +1,10 @@
+// models
+import Budget from "@/models/Budget"
+
 // types
 import { DocumentCollection, ModelCollection, TransactionDocument } from "@/types"
-import Budget from "@/models/Budget"
+
+export type TransactionType = 'default' | 'transferring' | 'temporary'
 
 export type Payment = {
   type: '+' | '-',
@@ -11,30 +15,37 @@ export type TransactionDate = {
   created: Date
   expected: Date
   credited?: Date
+  expire?: Date
 }
 
 export type TransactionProps = {
+  status: 'processed' | 'processing' // TODO: rename statuses (processing -> expected)
+  expired?: boolean
   budgetId: string
+  targetBudgetId?: string
   label: string
   payment: Payment
-  status: 'processed' | 'processing'
   date: TransactionDate
 }
 
 class Transaction {
-  public type: 'default' | 'transferring' | 'temporary'
+  public type: TransactionType
+  public status: 'processed' | 'processing' // TODO: rename statuses (processing -> expected)
+  public expired?: boolean
   public budgetId: string
+  public targetBudgetId?: string
   public label: string
   public payment: Payment
-  public status: 'processed' | 'processing'
   public date: TransactionDate
 
-  constructor(readonly id: string, props: TransactionProps) {
-    this.type = 'default'
+  constructor(readonly id: string, type: TransactionType, props: TransactionProps) {
+    this.type = type
+    this.status = props.status
+    this.expired = props.expired
     this.budgetId = props.budgetId
+    this.targetBudgetId = props.targetBudgetId
     this.label = props.label
     this.payment = props.payment
-    this.status = props.status
     this.date = props.date
   }
 
@@ -66,7 +77,7 @@ class Transaction {
   }
 
   static convertToModel(document: TransactionDocument): Transaction {
-    return new Transaction(document.id, {
+    return new Transaction(document.id, document.type, {
       ...document,
       date: {
         created: new Date(document.date.created),

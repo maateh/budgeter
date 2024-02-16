@@ -19,7 +19,7 @@ const useTransactionSubmit = (form: UseFormReturn<FieldValue['default']>) => {
 
   const onSubmit: SubmitHandler<FieldValue['default']> = async (values) => {
     const id = crypto.randomUUID()
-    const transaction = new Transaction(id, {
+    const transaction = new Transaction(id, 'default', {
       ...values,
       date: parseDateValues(values),
       payment: values.payment as Transaction['payment'],
