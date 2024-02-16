@@ -1,14 +1,14 @@
 import { useState } from "react"
 
 // shadcn
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogContentProps, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
 type ConfirmationDialogProps = {
   title: string
   message: string
-  // variant: DialogContentProps['variant'] // TODO: create dialog variants
+  variant: DialogContentProps['variant']
   confirm: () => void
   children: React.JSX.Element
 }
@@ -22,8 +22,7 @@ const ConfirmationDialog = ({ title, message, variant, confirm, children }: Conf
         {children}
       </DialogTrigger>
 
-      {/* TODO: create dialog variants */}
-      <DialogContent /*variant={variant}*/>
+      <DialogContent variant={variant}>
         <DialogHeader>
           <DialogTitle className="text-xl capitalize">
             {title}
@@ -41,7 +40,11 @@ const ConfirmationDialog = ({ title, message, variant, confirm, children }: Conf
             Cancel
           </Button>
 
-          <Button variant="destructive" border="md" onClick={confirm}>
+          <Button
+            variant="destructive"
+            border="md"
+            onClick={confirm}
+          >
             Confirm
           </Button>
         </DialogFooter>
