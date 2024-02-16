@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button"
 import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
 import NoteList from "@/components/shared/NoteList"
 
+// context
+import FormProvider from "@/services/providers/form/FormProvider"
+
 // types
 import Budget from "@/models/Budget"
 
@@ -46,11 +49,12 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
       </div>
 
       {editingMode && (
-        <BudgetNoteForm
-          budget={budget}
-          cleanForm={() => setEditingMode(false)}
-          cancelAction={() => setEditingMode(false)}
-        />
+        <FormProvider cleanForm={() => setEditingMode(false)}>
+          <BudgetNoteForm
+            budget={budget}
+            cancelAction={() => setEditingMode(false)}
+          />
+        </FormProvider>
       )}
 
       <div className="flex flex-col gap-y-10">

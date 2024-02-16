@@ -15,6 +15,9 @@ import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 // hooks
 import { useChangeNoteStatusMutation, useRemoveNoteMutation } from "./Note.hooks"
 
+// context
+import FormProvider from "@/services/providers/form/FormProvider"
+
 // types
 import Budget, { BudgetNote } from "@/models/Budget"
 
@@ -61,12 +64,13 @@ const Note = ({ budget, note }: NoteProps) => {
     >
       <div className="h-max mx-2.5 font-medium">
         {editingMode ? (
-          <BudgetNoteForm
-            budget={budget}
-            note={note}
-            cleanForm={() => setEditingMode(false)}
-            cancelAction={() => setEditingMode(false)}
-          />
+          <FormProvider cleanForm={() => setEditingMode(false)}>
+            <BudgetNoteForm
+              budget={budget}
+              note={note}
+              cancelAction={() => setEditingMode(false)}
+            />
+          </FormProvider>
         ) : (
           <p className="break-words whitespace-break-spaces tracking-wide">
             {note.text}

@@ -6,7 +6,7 @@ import { useAPI } from "@/services/providers/APIContext.hooks"
 // types
 import Budget, { BudgetNote } from "@/models/Budget"
 
-export const useSaveNoteMutation = (budgetId: string) => {
+const useSaveNoteMutation = (budgetId: string) => {
   const { api } = useAPI()
   const queryClient = useQueryClient()
 
@@ -23,3 +23,5 @@ export const useSaveNoteMutation = (budgetId: string) => {
     }
   })
 }
+
+export default useSaveNoteMutation
