@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form as ShadcnForm } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 
-type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P> = {
+type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P = object> = {
   type: 'create' | 'edit',
   customButton?: React.JSX.Element,
   defaultValues: DefaultValues<FV>,
@@ -15,16 +15,16 @@ type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P> = {
     onSubmit: SubmitHandler<FV>
     isPending: boolean
   },
-  submitProps: P
+  submitProps?: P
   children: (methods: UseFormReturn<FV>) => React.ReactNode
 }
 
-function Form<FV extends FieldValues, Z extends ZodType<FV>, P>({ type, customButton, defaultValues, validationSchema, useSubmit, submitProps, children }: FormProps<FV, Z, P>) {
+function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({ type, customButton, defaultValues, validationSchema, useSubmit, submitProps, children }: FormProps<FV, Z, P>) {
   const form = useForm<FV>({
     resolver: zodResolver(validationSchema),
     defaultValues
   })
-  const { onSubmit, isPending } = useSubmit(form, submitProps)
+  const { onSubmit, isPending } = useSubmit(form, submitProps || {} as P)
   
   return (
     <ShadcnForm {...form}>
