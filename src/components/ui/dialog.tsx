@@ -36,9 +36,9 @@ const dialogVariants = cva(
     variants: {
       variant: {
         default: "bg-background/90 text-foreground border-t border-b sm:border",
-        "confirm-neutral": "bg-background/75 border-accent border-t-2 border-b-2 sm:border-2",
-        "confirm-positive": "bg-background/75 border-green-400 border-t-2 border-b-2 sm:border-2",
-        "confirm-negative": "bg-background/75 border-destructive border-t-2 border-b-2 sm:border-2",
+        "confirm-neutral": "bg-background/75 text-accent border-accent border-t-2 border-b-2 sm:border-2",
+        "confirm-positive": "bg-background/75 text-green-700 border-green-400 border-t-2 border-b-2 sm:border-2 dark:text-green-400",
+        "confirm-negative": "bg-background/75 text-destructive border-destructive border-t-2 border-b-2 sm:border-2",
       },
     },
     defaultVariants: {
