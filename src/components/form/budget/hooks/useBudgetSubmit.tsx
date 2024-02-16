@@ -8,10 +8,10 @@ import { useFormContext } from "@/services/providers/form/FormContext.hooks"
 import Budget, { BudgetType } from "@/models/Budget"
 
 // types
-import { FieldValues } from "@/components/form/budget/types"
+import { BudgetSubmitProps, FieldValues } from "@/components/form/budget/types"
 
 // TODO: pass custom props
-const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>) => {
+const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { type, budget }: BudgetSubmitProps) => {
   const { mutateAsync: saveBudget, isPending } = useSaveBudgetMutation()
   const { cleanForm } = useFormContext()
 

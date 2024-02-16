@@ -9,7 +9,7 @@ import { useBudgetSubmit } from "@/components/form/budget/hooks"
 import Budget, { BudgetType } from "@/models/Budget"
 
 // types
-import { FieldValues } from "@/components/form/budget/types"
+import { BudgetSubmitProps, FieldValues } from "@/components/form/budget/types"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
@@ -21,7 +21,7 @@ type BudgetFormProps = {
 
 const BudgetForm = ({ type, budget }: BudgetFormProps) => {
   return (
-    <Form<FieldValues['budget'], typeof BudgetValidation>
+    <Form<FieldValues['budget'], typeof BudgetValidation, BudgetSubmitProps>
       type={type}
       validationSchema={BudgetValidation}
       defaultValues={{
@@ -38,6 +38,7 @@ const BudgetForm = ({ type, budget }: BudgetFormProps) => {
         }
       }}
       useSubmit={useBudgetSubmit}
+      submitProps={{ type, budget }}
     >
       {(form) => (
         <BudgetFormFields form={form} />
