@@ -1,8 +1,8 @@
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
-import { useSaveBudgetMutation } from "@/components/form/budget/hooks"
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
+import { useSaveBudgetMutation } from "@/hooks/mutations"
 
 // models
 import Budget, { BudgetType } from "@/models/Budget"
@@ -10,9 +10,8 @@ import Budget, { BudgetType } from "@/models/Budget"
 // types
 import { BudgetSubmitProps, FieldValues } from "@/components/form/budget/types"
 
-// TODO: pass custom props
 const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { type, budget }: BudgetSubmitProps) => {
-  const { mutateAsync: saveBudget, isPending } = useSaveBudgetMutation()
+  const { mutateAsync: saveBudget, isPending } = useSaveBudgetMutation(budget?.id)
   const { cleanForm } = useFormContext()
 
   const onSubmit: SubmitHandler<FieldValues['budget']> = async (values) => {

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import ColorPicker from "@/components/ui/custom/ColorPicker"
 
 // hooks
-import { useLoadCurrencies } from "@/components/form/budget/hooks"
+import { useLoadCurrenciesQuery } from "@/hooks/queries"
 
 // models
 import { BudgetType } from "@/models/Budget"
@@ -27,7 +27,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
   const {
     data: currencies,
     isLoading: currenciesIsLoading
-  } = useLoadCurrencies()
+  } = useLoadCurrenciesQuery()
 
   return (
     <>

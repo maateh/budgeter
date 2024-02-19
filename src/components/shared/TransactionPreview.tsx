@@ -17,7 +17,7 @@ import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
 // hooks
-import { useDeleteTransactionMutation, useChangeTransactionStatusMutation } from "./TransactionPreview.hooks"
+import { useDeleteTransactionMutation, useSwitchTransactionStatusMutation } from "@/hooks/mutations"
 
 type TransactionPreviewProps = {
   transaction: Transaction
@@ -25,11 +25,11 @@ type TransactionPreviewProps = {
 }
 
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
+  const { mutateAsync: switchTransactionStatus } = useSwitchTransactionStatusMutation(transaction.id)
   const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation(
     transaction.id,
     budget.id
   )
-  const { mutateAsync: changeTransactionStatus } = useChangeTransactionStatusMutation(transaction.id)
 
   const handleDelete = async () => {
     try {
@@ -40,13 +40,8 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
   }
 
   const handleChangeStatus = async () => {
-    transaction.updateStatus(
-      transaction.status === 'processing' ? 'processed' : 'processing',
-      budget
-    )
-
     try {
-      await changeTransactionStatus({ transaction, budget })
+      await switchTransactionStatus({ transaction, budget })
     } catch (err) {
       console.error(err)
     }

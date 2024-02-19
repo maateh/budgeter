@@ -16,7 +16,7 @@ import FormDialog from '@/components/shared/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
 
 // hooks
-import { useDeleteBudgetMutation } from './BudgetSummary.hooks'
+import { useDeleteBudgetMutation } from '@/hooks/mutations'
 
 // types
 import Budget from '@/models/Budget'
@@ -30,11 +30,11 @@ type BudgetSummaryProps = {
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
   const navigate = useNavigate()
-  const { mutateAsync: deleteBudget } = useDeleteBudgetMutation()
+  const { mutateAsync: deleteBudget } = useDeleteBudgetMutation(budget.id)
 
   const deleteConfirm = async () => {
     try {
-      await deleteBudget(budget!) 
+      await deleteBudget(budget.id) 
       navigate('/')
     } catch (err) {
       console.error(err)

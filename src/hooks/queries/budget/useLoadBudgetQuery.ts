@@ -4,13 +4,16 @@ import { useQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
 
-export const useLoadBudgetQuery = () => {
-  const { api } = useAPI()
+const useLoadBudgetQuery = () => {
   const { id } = useParams()
+  const { api } = useAPI()
+  
   if (!id) throw new Error('Budget ID not defined!')
 
   return useQuery({
-    queryKey: ['budget', 'find', id],
-    queryFn: () => api.budget.find(id)
+    queryKey: ['budget', id],
+    queryFn: async () => await api.budget.find(id)
   })
 }
+
+export default useLoadBudgetQuery

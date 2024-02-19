@@ -2,7 +2,7 @@
 import { BudgetDocument, DocumentCollection, ModelCollection } from "@/types"
 
 // models
-import Transaction from "@/models/Transaction"
+import Transaction, { Payment } from "@/models/Transaction"
 
 export enum BudgetType {
   INCOME = 'income',
@@ -70,10 +70,10 @@ class Budget {
       .reduce((currentTotal, tr) => currentTotal + tr.payment.amount, 0)
   }
 
-  updateCurrentBalance(transaction: Transaction) {
-    this.balance.current += transaction.payment.type === '+'
-      ? transaction.payment.amount
-      : -transaction.payment.amount
+  updateCurrentBalance(payment: Payment) {
+    this.balance.current += payment.type === '+'
+      ? payment.amount
+      : -payment.amount
   }
 
   addTransactions(transactions: Transaction[], execute: boolean = false) {
@@ -83,7 +83,7 @@ class Budget {
         ...this.transactions
       }
 
-      if (execute && tr.status === 'processed') this.updateCurrentBalance(tr)
+      if (execute && tr.status === 'processed') this.updateCurrentBalance(tr.payment)
     })
   }
 
@@ -92,7 +92,7 @@ class Budget {
       const transaction = this.transactions[id]
       transaction.payment.amount = transaction.payment.amount * -1
 
-      if (undo && transaction.status === 'processed') this.updateCurrentBalance(transaction)
+      if (undo && transaction.status === 'processed') this.updateCurrentBalance(transaction.payment)
       delete this.transactions[id]
     })
   }
@@ -100,7 +100,7 @@ class Budget {
   executeTransactions(transactions: Transaction[]) {
     transactions.forEach(tr => {
       if (tr.status === 'processed') {
-        this.updateCurrentBalance(tr)
+        this.updateCurrentBalance(tr.payment)
       }
     })
   }
@@ -110,7 +110,7 @@ class Budget {
       const transaction = this.transactions[id]
       transaction.payment.amount = transaction.payment.amount * -1
       
-      this.updateCurrentBalance(transaction)
+      this.updateCurrentBalance(transaction.payment)
     })
   }
 

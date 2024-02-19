@@ -4,7 +4,7 @@ import BudgetSummary from "./components/BudgetSummary"
 import BudgetNotes from "./components/BudgetNotes"
 
 // hooks
-import { useLoadBudgetQuery } from "./BudgetDetails.hooks"
+import { useLoadBudgetQuery } from "@/hooks/queries"
 
 const BudgetDetails = () => {
   const { data: budget, isLoading } = useLoadBudgetQuery()

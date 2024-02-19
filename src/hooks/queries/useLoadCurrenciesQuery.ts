@@ -3,10 +3,13 @@ import { useQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
 
-export const useLoadBudgetsQuery = () => {
+const useLoadCurrenciesQuery = () => {
   const { api } = useAPI()
+
   return useQuery({
-    queryKey: ['budgets'],
-    queryFn: () => api.budget.findAll()
+    queryKey: ['currencies'],
+    queryFn: api.currency.get
   })
 }
+
+export default useLoadCurrenciesQuery

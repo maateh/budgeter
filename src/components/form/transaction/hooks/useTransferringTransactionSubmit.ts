@@ -1,8 +1,8 @@
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
-import { useSaveTransactionMutation } from "@/components/form/transaction/hooks"
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
+import { useSaveTransactionMutation } from "@/hooks/mutations"
 
 // models
 import Transaction from "@/models/Transaction"
@@ -14,7 +14,7 @@ import { FieldValue } from "@/components/form/transaction/types"
 import { parseDateValues } from "@/components/form/transaction/utils"
 
 const useTransferringTransactionSubmit = (form: UseFormReturn<FieldValue['transferring']>) => {
-  const { mutateAsync: saveTransaction, isPending } = useSaveTransactionMutation()
+  const { mutateAsync: createTransaction, isPending } = useSaveTransactionMutation()
   const { cleanForm } = useFormContext()
 
   const onSubmit: SubmitHandler<FieldValue['transferring']> = async (values) => {
@@ -27,8 +27,8 @@ const useTransferringTransactionSubmit = (form: UseFormReturn<FieldValue['transf
     })
     
     try {
-      // TODO: save TransferringTransactionForm
-      await saveTransaction(transaction)
+      // TODO: handle saving TransferringTransaction
+      await createTransaction(transaction)
 
       form.reset()
       cleanForm()
