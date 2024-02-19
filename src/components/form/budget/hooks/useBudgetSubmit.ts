@@ -2,7 +2,7 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
-import { useCreateBudgetMutation } from "@/hooks/mutations"
+import { useSaveBudgetMutation } from "@/hooks/mutations"
 
 // models
 import Budget, { BudgetType } from "@/models/Budget"
@@ -11,7 +11,7 @@ import Budget, { BudgetType } from "@/models/Budget"
 import { BudgetSubmitProps, FieldValues } from "@/components/form/budget/types"
 
 const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { type, budget }: BudgetSubmitProps) => {
-  const { mutateAsync: createBudget, isPending } = useCreateBudgetMutation()
+  const { mutateAsync: saveBudget, isPending } = useSaveBudgetMutation(budget?.id)
   const { cleanForm } = useFormContext()
 
   const onSubmit: SubmitHandler<FieldValues['budget']> = async (values) => {
@@ -23,7 +23,7 @@ const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { type, bud
     budget = new Budget(id, values)
 
     try {
-      await createBudget(budget)
+      await saveBudget(budget)
 
       form.reset()
       cleanForm()
