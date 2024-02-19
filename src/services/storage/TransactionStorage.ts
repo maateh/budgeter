@@ -81,7 +81,7 @@ class TransactionStorage implements ITransactionAPI {
     return model
   }
 
-  async bulkDelete(budgetId: string, ids: string[]): Promise<boolean> {
+  async bulkDelete(budgetId: string, ids: string[]): Promise<void> {
     const documents = await this.fetchFromStorage()
 
     ids.forEach(id => delete documents[id])
@@ -89,10 +89,9 @@ class TransactionStorage implements ITransactionAPI {
       .deleteTransactions(budgetId, ids)
     
     localStorage.setItem('transactions', JSON.stringify(documents))
-    return true // TODO: return deleted id || null
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<void> {
     const documents = await this.fetchFromStorage()
     const document = documents[id]
 
@@ -101,7 +100,6 @@ class TransactionStorage implements ITransactionAPI {
       .deleteTransactions(document.budgetId, [document.id])
     
     localStorage.setItem('transactions', JSON.stringify(documents))
-    return true // TODO: return deleted id || null
   }
 }
 

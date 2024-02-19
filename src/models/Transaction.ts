@@ -51,7 +51,7 @@ class Transaction {
 
   updateStatus(status: 'processed' | 'processing', budget: Budget) {
     if (status === 'processed') {
-      budget.updateCurrentBalance(this)
+      budget.updateCurrentBalance(this.payment)
       
       this.status = 'processed'
       this.date = {
@@ -62,10 +62,8 @@ class Transaction {
 
     if (status === 'processing') {
       budget.updateCurrentBalance({
-        ...this,
-        payment: {
-          amount: this.payment.amount * -1
-        }
+        ...this.payment,
+        amount: this.payment.amount * -1
       })
 
       this.status = 'processing'
