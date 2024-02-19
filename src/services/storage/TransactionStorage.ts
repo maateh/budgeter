@@ -81,12 +81,17 @@ class TransactionStorage implements ITransactionAPI {
     return model
   }
 
-  async bulkDelete(budgetId: string, ids: string[]): Promise<void> {
+  async bulkDelete(ids: string[], budgetId?: string): Promise<void> {
     const documents = await TransactionStorage.getInstance().fetchFromStorage()
 
     ids.forEach(id => delete documents[id])
-    await BudgetStorage.getInstance()
-      .deleteTransactions(budgetId, ids)
+
+    if (budgetId) {
+      await BudgetStorage.getInstance()
+        .deleteTransactions(budgetId, ids)
+    } else {
+      // TODO: remove transactions from budgets even if isn't any budget is specified
+    }
     
     localStorage.setItem('transactions', JSON.stringify(documents))
   }

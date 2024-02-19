@@ -73,18 +73,27 @@ class BudgetStorage implements IBudgetAPI {
 
   async bulkDelete(ids: string[]): Promise<void> {
     const documents = await BudgetStorage.getInstance().fetchFromStorage()
-    ids.forEach(id => delete documents[id])
+    
+    const transactionIds = ids.reduce((trIds: string[], budgetId) => {
+      trIds = [...trIds, ...documents[budgetId].transactionIds]
+      delete documents[budgetId]
 
-    // TODO: remove transactions
+      return trIds
+    }, [])
+
+    await TransactionStorage.getInstance()
+      .bulkDelete(transactionIds)
     
     localStorage.setItem('budgets', JSON.stringify(documents))
   }
 
   async delete(id: string): Promise<void> {
     const documents = await BudgetStorage.getInstance().fetchFromStorage()
-    delete documents[id]
+    const document = documents[id]
 
-    // TODO: remove transactions
+    delete documents[id]
+    await TransactionStorage.getInstance()
+      .bulkDelete(document.transactionIds)
 
     localStorage.setItem('budgets', JSON.stringify(documents))
   }

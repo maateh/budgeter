@@ -31,6 +31,6 @@ export interface ITransactionAPI {
   bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']>
   save(model: Transaction): Promise<Transaction>
   
-  bulkDelete(budgetId: string, ids: string[]): Promise<void>
+  bulkDelete(ids: string[], budgetId?: string): Promise<void>
   delete(id: string): Promise<void>
 }
