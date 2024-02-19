@@ -2,7 +2,7 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
-import { useUpdateBudgetMutation } from "@/hooks/mutations/budget"
+import { useUpdateBudgetMutation } from "@/hooks/mutations"
 
 // types
 import { BudgetNoteSubmitProps, FieldValues } from "@/components/form/budget/types"
