@@ -27,7 +27,7 @@ class BudgetStorage implements IBudgetAPI {
   }
 
   async findAll(): Promise<ModelCollection['budget']> {
-    const documents = await this.fetchFromStorage()
+    const documents = await BudgetStorage.getInstance().fetchFromStorage()
     const transactions = await TransactionStorage.getInstance().findAll()
 
     return Object.entries(documents)
@@ -41,7 +41,7 @@ class BudgetStorage implements IBudgetAPI {
   }
 
   async find(id: string): Promise<Budget> {
-    const documents = await this.fetchFromStorage()
+    const documents = await BudgetStorage.getInstance().fetchFromStorage()
     const transactions = await TransactionStorage.getInstance().findByBudget(id)
 
     const budgetDoc = documents[id]
@@ -54,16 +54,16 @@ class BudgetStorage implements IBudgetAPI {
 
   async bulkSave(models: ModelCollection['budget']): Promise<ModelCollection['budget']> {
     const documents = {
-      ...await this.fetchFromStorage(),
+      ...await BudgetStorage.getInstance().fetchFromStorage(),
       ...Budget.bulkConvertToDocument(models)
     }
 
     localStorage.setItem('budgets', JSON.stringify(documents))
-    return await this.findAll()
+    return await BudgetStorage.getInstance().findAll()
   }
 
   async save(model: Budget): Promise<Budget> {
-    const documents = await this.fetchFromStorage()
+    const documents = await BudgetStorage.getInstance().fetchFromStorage()
 
     documents[model.id] = Budget.convertToDocument(model)
     localStorage.setItem('budgets', JSON.stringify(documents))
@@ -72,7 +72,7 @@ class BudgetStorage implements IBudgetAPI {
   }
 
   async bulkDelete(ids: string[]): Promise<void> {
-    const documents = await this.fetchFromStorage()
+    const documents = await BudgetStorage.getInstance().fetchFromStorage()
     ids.forEach(id => delete documents[id])
 
     // TODO: remove transactions
@@ -81,7 +81,7 @@ class BudgetStorage implements IBudgetAPI {
   }
 
   async delete(id: string): Promise<void> {
-    const documents = await this.fetchFromStorage()
+    const documents = await BudgetStorage.getInstance().fetchFromStorage()
     delete documents[id]
 
     // TODO: remove transactions
@@ -90,17 +90,17 @@ class BudgetStorage implements IBudgetAPI {
   }
 
   async addTransactions(budgetId: string, transactions: Transaction[]): Promise<Budget> {
-    const budget = await this.find(budgetId)
+    const budget = await BudgetStorage.getInstance().find(budgetId)
     budget.addTransactions(transactions, true)
 
-    return await this.save(budget)
+    return await BudgetStorage.getInstance().save(budget)
   }
 
   async deleteTransactions(budgetId: string, transactionIds: string[]): Promise<Budget> {
-    const budget = await this.find(budgetId)
+    const budget = await BudgetStorage.getInstance().find(budgetId)
     budget.removeTransactions(transactionIds, true)
 
-    return await this.save(budget)
+    return await BudgetStorage.getInstance().save(budget)
   }
 }
 

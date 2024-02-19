@@ -26,7 +26,7 @@ class TransactionStorage implements ITransactionAPI {
   }
 
   async findAll(status?: Transaction['status']): Promise<ModelCollection['transaction']> {
-    const documents = await this.fetchFromStorage()
+    const documents = await TransactionStorage.getInstance().fetchFromStorage()
     let predicate = (doc: TransactionDocument) => !!doc
 
     if (status === 'processing') {
@@ -41,12 +41,12 @@ class TransactionStorage implements ITransactionAPI {
   }
 
   async findByBudget(budgetId: string, status?: Transaction['status']): Promise<ModelCollection['transaction']> {
-    const models = await this.findAll(status)
+    const models = await TransactionStorage.getInstance().findAll(status)
     return Transaction.filterByBudget(budgetId, models)
   }
 
   async find(id: string): Promise<Transaction> {
-    const documents = await this.fetchFromStorage()
+    const documents = await TransactionStorage.getInstance().fetchFromStorage()
     const transactionDoc = documents[id]
 
     if (!transactionDoc) {
@@ -58,7 +58,7 @@ class TransactionStorage implements ITransactionAPI {
 
   async bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']> {
     const documents = {
-      ...await this.fetchFromStorage(),
+      ...await TransactionStorage.getInstance().fetchFromStorage(),
       ...Transaction.bulkConvertToDocument(models)
     }
 
@@ -66,11 +66,11 @@ class TransactionStorage implements ITransactionAPI {
       .addTransactions(budgetId, Object.values(models))
 
     localStorage.setItem('transactions', JSON.stringify(documents))
-    return await this.findAll()
+    return await TransactionStorage.getInstance().findAll()
   }
 
   async save(model: Transaction): Promise<Transaction> {
-    const documents = await this.fetchFromStorage()
+    const documents = await TransactionStorage.getInstance().fetchFromStorage()
 
     await BudgetStorage.getInstance()
       .addTransactions(model.budgetId, [model])
@@ -82,7 +82,7 @@ class TransactionStorage implements ITransactionAPI {
   }
 
   async bulkDelete(budgetId: string, ids: string[]): Promise<void> {
-    const documents = await this.fetchFromStorage()
+    const documents = await TransactionStorage.getInstance().fetchFromStorage()
 
     ids.forEach(id => delete documents[id])
     await BudgetStorage.getInstance()
@@ -92,7 +92,7 @@ class TransactionStorage implements ITransactionAPI {
   }
 
   async delete(id: string): Promise<void> {
-    const documents = await this.fetchFromStorage()
+    const documents = await TransactionStorage.getInstance().fetchFromStorage()
     const document = documents[id]
 
     delete documents[id]
