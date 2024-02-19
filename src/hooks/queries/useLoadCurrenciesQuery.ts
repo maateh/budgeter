@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
 
-const useLoadCurrencies = () => {
+const useLoadCurrenciesQuery = () => {
   const { api } = useAPI()
 
   return useQuery({
@@ -12,4 +12,4 @@ const useLoadCurrencies = () => {
   })
 }
 
-export default useLoadCurrencies
+export default useLoadCurrenciesQuery
