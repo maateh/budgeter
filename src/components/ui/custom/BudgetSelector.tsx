@@ -2,7 +2,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // hooks
-import { useLoadBudgetsQuery } from "./BudgetSelector.hooks"
+import { useLoadBudgetsQuery } from "@/hooks/queries"
 
 type BudgetSelectorProps = {
   defaultValue: string
