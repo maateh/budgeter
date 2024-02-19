@@ -1,5 +1,7 @@
 // types
 import { Currencies, ModelCollection } from "@/types"
+
+// models
 import Budget from "@/models/Budget"
 import Transaction from "@/models/Transaction"
 
@@ -26,9 +28,9 @@ export interface ITransactionAPI {
   findByBudget(budgetId: string): Promise<ModelCollection['transaction']>
   find(id: string): Promise<Transaction>
   
-  bulkSave(models: ModelCollection['transaction']): Promise<ModelCollection['transaction']>
+  bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']>
   save(model: Transaction): Promise<Transaction>
   
-  bulkDelete(ids: string[]): Promise<boolean>
+  bulkDelete(budgetId: string, ids: string[]): Promise<boolean>
   delete(id: string): Promise<boolean>
 }

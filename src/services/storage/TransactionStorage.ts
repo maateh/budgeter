@@ -56,11 +56,14 @@ class TransactionStorage implements ITransactionAPI {
     return Transaction.convertToModel(transactionDoc)
   }
 
-  async bulkSave(models: ModelCollection['transaction']): Promise<ModelCollection['transaction']> {
+  async bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']> {
     const documents = {
       ...await this.fetchFromStorage(),
       ...Transaction.bulkConvertToDocument(models)
     }
+
+    await BudgetStorage.getInstance()
+      .addTransactions(budgetId, Object.values(models))
 
     localStorage.setItem('transactions', JSON.stringify(documents))
     return await this.findAll()
@@ -69,29 +72,36 @@ class TransactionStorage implements ITransactionAPI {
   async save(model: Transaction): Promise<Transaction> {
     const documents = await this.fetchFromStorage()
 
+    await BudgetStorage.getInstance()
+      .addTransactions(model.budgetId, [model])
+
     documents[model.id] = Transaction.convertToDocument(model)
     localStorage.setItem('transactions', JSON.stringify(documents))
 
     return model
   }
 
-  async bulkDelete(ids: string[]): Promise<boolean> {
+  async bulkDelete(budgetId: string, ids: string[]): Promise<boolean> {
     const documents = await this.fetchFromStorage()
+
     ids.forEach(id => delete documents[id])
+    await BudgetStorage.getInstance()
+      .deleteTransactions(budgetId, ids)
     
     localStorage.setItem('transactions', JSON.stringify(documents))
-    return true
+    return true // TODO: return deleted id || null
   }
 
   async delete(id: string): Promise<boolean> {
     const documents = await this.fetchFromStorage()
     const document = documents[id]
 
-    await BudgetStorage.getInstance().deleteTransactions(document.budgetId, [document.id])
     delete documents[id]
+    await BudgetStorage.getInstance()
+      .deleteTransactions(document.budgetId, [document.id])
     
     localStorage.setItem('transactions', JSON.stringify(documents))
-    return true
+    return true // TODO: return deleted id || null
   }
 }
 
