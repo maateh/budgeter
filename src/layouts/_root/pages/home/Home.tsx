@@ -7,10 +7,11 @@ import BudgetSummary from "./components/BudgetSummary"
 import BudgetList from "./components/BudgetList"
 
 // hooks
-import { useDashboardQuery } from "./Home.hooks"
+import { useLoadBudgetsQuery, useLoadTransactionsQuery } from "@/hooks/queries"
 
 const Home = () => {
-  const [_budgets, _transactions] = useDashboardQuery()
+  const { data: budgets, isLoading: budgetsIsLoading } = useLoadBudgetsQuery()
+  const { data: transactions, isLoading: transactionsIsLoading } = useLoadTransactionsQuery()
 
   return (
     <div className="page-wrapper">
@@ -22,10 +23,10 @@ const Home = () => {
             <BudgetSummary />
           </section>
           <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-            {!_transactions.isLoading && _transactions.data && _budgets.data ? (
+            {!transactionsIsLoading && transactions && budgets ? (
               <TransactionList
-                transactions={Object.values(_transactions.data)}
-                budgets={_budgets.data}
+                transactions={Object.values(transactions)}
+                budgets={budgets}
                 startingQuantity={7}
               />
             ) : (
@@ -35,12 +36,12 @@ const Home = () => {
         </div>
 
         <div className="flex flex-col justify-between items-center gap-4 lg:flex-col xl:flex-row">
-          {!_budgets.isLoading && _budgets.data ? (
+          {!budgetsIsLoading && budgets ? (
             <>
               <section className="w-full mr-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
                 <BudgetList
                   budgets={
-                    Object.values(_budgets.data)
+                    Object.values(budgets)
                       .filter(b => b.type === BudgetType.INCOME)
                   }
                   type={BudgetType.INCOME}
@@ -49,7 +50,7 @@ const Home = () => {
               <section className="w-full ml-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
                 <BudgetList
                   budgets={
-                    Object.values(_budgets.data)
+                    Object.values(budgets)
                       .filter(b => b.type === BudgetType.EXPENSE)
                   }
                   type={BudgetType.EXPENSE}
