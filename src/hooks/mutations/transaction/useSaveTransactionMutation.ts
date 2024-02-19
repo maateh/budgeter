@@ -10,12 +10,12 @@ const useSaveTransactionMutation = (transactionId?: string) => {
   return useMutation({
     mutationKey: ['saveTransaction', transactionId || 'create'],
     mutationFn: api.transaction.save,
-    onSuccess: (transaction) => {
+    onSuccess: ({ id, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
-      queryClient.invalidateQueries({ queryKey: ['transaction', transaction.id] })
+      queryClient.invalidateQueries({ queryKey: ['transaction', id] })
 
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
-      queryClient.invalidateQueries({ queryKey: ['budget', transaction.budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })
 }

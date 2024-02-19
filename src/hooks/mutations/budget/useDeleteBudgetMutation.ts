@@ -12,7 +12,7 @@ const useDeleteBudgetMutation = (budgetId: string) => {
     mutationFn: api.budget.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
-      // queryClient.invalidateQueries({ queryKey: ['budget', budget.id] })
+      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
       
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
     }
