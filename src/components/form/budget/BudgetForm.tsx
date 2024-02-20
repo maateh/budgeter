@@ -31,7 +31,7 @@ const BudgetForm = ({ type, budget }: BudgetFormProps) => {
           current: 0,
           ceiling: 0
         },
-        currency: '',
+        currency: budget?.currency || '',
         theme: budget?.theme || {
           background: '#dedede',
           foreground: '#202020'
