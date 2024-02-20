@@ -13,12 +13,12 @@ import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
 import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 
 // hooks
-import { useChangeNoteStatusMutation, useRemoveNoteMutation } from "./Note.hooks"
+import { useSaveBudgetMutation } from "@/hooks/mutations"
 
 // context
 import FormProvider from "@/services/providers/form/FormProvider"
 
-// types
+// models
 import Budget, { BudgetNote } from "@/models/Budget"
 
 type NoteProps = {
@@ -27,28 +27,27 @@ type NoteProps = {
 }
 
 const Note = ({ budget, note }: NoteProps) => {
-  const { mutateAsync: changeNoteStatus } = useChangeNoteStatusMutation(budget.id)
-  const { mutateAsync: removeNote } = useRemoveNoteMutation(budget.id)
-
+  const { mutateAsync: updateBudget } = useSaveBudgetMutation(budget.id)
   const [editingMode, setEditingMode] = useState(false)
 
   const handleClose = async () => {
+    budget.changeNoteStatus(
+      note.id,
+      note.date.closed ? 'open' : 'closed'
+    )
+
     try {
-      await changeNoteStatus({
-        budget,
-        noteId: note.id,
-        status: note.date.closed
-          ? 'open'
-          : 'closed'
-      })
+      await updateBudget(budget)
     } catch (err) {
       console.error(err)
     }
   }
 
   const handleRemove = async () => {
+    budget.removeNote(note.id)
+
     try {
-      await removeNote({ budget, noteId: note.id })
+      await updateBudget(budget)
     } catch (err) {
       console.error(err)
     }
