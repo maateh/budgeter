@@ -5,7 +5,7 @@ import { z } from "zod"
 import { INewBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { BudgetDocument, BudgetNoteDocument } from "@/services/api/types"
+import { Budget, BudgetNote } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
 
 // storage
@@ -16,7 +16,7 @@ import { BudgetNoteValidation, BudgetValidation } from "@/lib/validation"
 
 class BudgetStorageAPI implements INewBudgetAPI {
   private static _instance: BudgetStorageAPI
-  private storage: StorageHelper<BudgetDocument>
+  private storage: StorageHelper<Budget>
 
   private constructor() {
     this.storage = new StorageHelper()
@@ -29,16 +29,16 @@ class BudgetStorageAPI implements INewBudgetAPI {
     return BudgetStorageAPI._instance
   }
 
-  async get(id: UUID): Promise<BudgetDocument> {
+  async get(id: UUID): Promise<Budget> {
     return await this.storage.findById('budgets', id)
   }
 
-  async getAll(): Promise<StorageCollection<BudgetDocument>> {
+  async getAll(): Promise<StorageCollection<Budget>> {
     return await this.storage.find('budgets')
   }
 
-  async create(data: z.infer<typeof BudgetValidation>): Promise<BudgetDocument> {
-    const budget: BudgetDocument = {
+  async create(data: z.infer<typeof BudgetValidation>): Promise<Budget> {
+    const budget: Budget = {
       id: crypto.randomUUID(),
       notes: {},
       ...data
@@ -47,7 +47,7 @@ class BudgetStorageAPI implements INewBudgetAPI {
     return await this.storage.save('budgets', budget)
   }
 
-  async update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<BudgetDocument> {
+  async update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget> {
     const budget = {
       ...await this.storage.findById('budgets', id),
       ...data
@@ -60,7 +60,7 @@ class BudgetStorageAPI implements INewBudgetAPI {
     await this.storage.delete('budgets', id)
   }
   
-  async addNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNoteDocument> {
+  async addNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
     const budget = await this.storage.findById('budgets', budgetId)
 
     const noteId = crypto.randomUUID()
@@ -76,7 +76,7 @@ class BudgetStorageAPI implements INewBudgetAPI {
     return note
   }
 
-  async editNoteText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNoteDocument> {
+  async editNoteText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
     const budget = await this.storage.findById('budgets', budgetId)
     
     const note = budget.notes[noteId]
@@ -88,7 +88,7 @@ class BudgetStorageAPI implements INewBudgetAPI {
     return note
   }
 
-  async changeNoteStatus(budgetId: string, noteId: string, status: "open" | "closed"): Promise<BudgetNoteDocument> {
+  async changeNoteStatus(budgetId: string, noteId: string, status: "open" | "closed"): Promise<BudgetNote> {
     const budget = await this.storage.findById('budgets', budgetId)
 
     const note = budget.notes[noteId]

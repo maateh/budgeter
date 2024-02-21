@@ -2,17 +2,16 @@ import { UUID } from "crypto"
 import { ZodType, z } from "zod"
 
 // types
-import { BudgetDocument, BudgetNoteDocument } from "@/services/api/types"
+import { Budget, BudgetNote, Transaction } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
-import { Currencies, ModelCollection } from "@/types"
+import { Currencies, /*ModelCollection*/ } from "@/types"
 
 // validations
 import { BudgetNoteValidation } from "@/lib/validation"
 
 // models
-import Budget from "@/models/Budget"
-import Transaction from "@/models/Transaction"
-
+// import Budget from "@/models/Budget"
+// import Transaction from "@/models/Transaction"
 
 export interface ICurrencyAPI {
   get(): Promise<Currencies>
@@ -28,11 +27,11 @@ export interface IAPI<D> {
   delete(id: UUID): Promise<void>
 }
 
-export interface INewBudgetAPI extends IAPI<BudgetDocument> {
-  addNote(budgetId: UUID, text: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNoteDocument>
-  editNoteText(budgetId: UUID, noteId: UUID, text: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNoteDocument>
+export interface INewBudgetAPI extends IAPI<Budget> {
+  addNote(budgetId: UUID, text: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
+  editNoteText(budgetId: UUID, noteId: UUID, text: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
   removeNote(budgetId: UUID, noteId: UUID): Promise<void>
-  changeNoteStatus(budgetId: UUID, noteId: UUID, status: 'open' | 'closed'): Promise<BudgetNoteDocument>
+  changeNoteStatus(budgetId: UUID, noteId: UUID, status: 'open' | 'closed'): Promise<BudgetNote>
 }
 
 export interface INewTransactionAPI extends IAPI<Transaction> {
@@ -43,28 +42,28 @@ export interface INewTransactionAPI extends IAPI<Transaction> {
   changeStatus(id: UUID, status: 'processed' | 'processing'): Promise<Transaction>
 }
 
-export interface IBudgetAPI {
-  findAll(): Promise<ModelCollection['budget']>
-  find(id: string): Promise<Budget>
+// export interface IBudgetAPI {
+//   findAll(): Promise<ModelCollection['budget']>
+//   find(id: string): Promise<Budget>
 
-  bulkSave(models: ModelCollection['budget']): Promise<ModelCollection['budget']>
-  save(model: Budget): Promise<Budget>
+//   bulkSave(models: ModelCollection['budget']): Promise<ModelCollection['budget']>
+//   save(model: Budget): Promise<Budget>
 
-  bulkDelete(ids: string[]): Promise<void>
-  delete(id: string): Promise<void>
+//   bulkDelete(ids: string[]): Promise<void>
+//   delete(id: string): Promise<void>
 
-  addTransactions(budgetId: string, transactions: Transaction[]): Promise<Budget>
-  deleteTransactions(budgetId: string, transactionIds: string[]): Promise<Budget>
-}
+//   addTransactions(budgetId: string, transactions: Transaction[]): Promise<Budget>
+//   deleteTransactions(budgetId: string, transactionIds: string[]): Promise<Budget>
+// }
 
-export interface ITransactionAPI {
-  findAll(): Promise<ModelCollection['transaction']>
-  findByBudget(budgetId: string): Promise<ModelCollection['transaction']>
-  find(id: string): Promise<Transaction>
+// export interface ITransactionAPI {
+//   findAll(): Promise<ModelCollection['transaction']>
+//   findByBudget(budgetId: string): Promise<ModelCollection['transaction']>
+//   find(id: string): Promise<Transaction>
   
-  bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']>
-  save(model: Transaction): Promise<Transaction>
+//   bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']>
+//   save(model: Transaction): Promise<Transaction>
   
-  bulkDelete(ids: string[], budgetId?: string): Promise<void>
-  delete(id: string): Promise<void>
-}
+//   bulkDelete(ids: string[], budgetId?: string): Promise<void>
+//   delete(id: string): Promise<void>
+// }

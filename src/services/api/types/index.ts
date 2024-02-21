@@ -1,22 +1,24 @@
 import { UUID } from "crypto"
 
-export type BudgetDocument = {
+export type Budget = {
   id: UUID
   name: string
   type: 'income' | 'expense'
   balance: {
     current: number
     ceiling: number
+    // income: number // TODO: add later
+    // loss: number // TODO: add later
   }
   currency: string
   theme: {
     background: string
     foreground: string
   }
-  notes: {[key: string]: BudgetNoteDocument}
+  notes: {[key: string]: BudgetNote}
 }
 
-export type BudgetNoteDocument = {
+export type BudgetNote = {
   id: UUID
   text: string
   date: {
@@ -29,7 +31,7 @@ export type BudgetNoteDocument = {
 // TODO: Must be reworked to be able to handle
 // different types of transactions correctly.
 // But for now it's okay.
-export type TransactionDocument = {
+export type Transaction = {
   id: UUID
   type: 'default' | 'transferring' | 'temporary'
   status: 'processed' | 'processing'
