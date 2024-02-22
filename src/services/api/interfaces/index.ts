@@ -9,10 +9,6 @@ import { Currencies, /*ModelCollection*/ } from "@/types"
 // validations
 import { BudgetNoteValidation } from "@/lib/validation"
 
-// models
-// import Budget from "@/models/Budget"
-// import Transaction from "@/models/Transaction"
-
 export interface ICurrencyAPI {
   get(): Promise<Currencies>
 }
@@ -41,20 +37,6 @@ export interface INewTransactionAPI extends IAPI<Transaction> {
 
   changeStatus(id: UUID, status: 'processed' | 'processing'): Promise<Transaction>
 }
-
-// export interface IBudgetAPI {
-//   findAll(): Promise<ModelCollection['budget']>
-//   find(id: string): Promise<Budget>
-
-//   bulkSave(models: ModelCollection['budget']): Promise<ModelCollection['budget']>
-//   save(model: Budget): Promise<Budget>
-
-//   bulkDelete(ids: string[]): Promise<void>
-//   delete(id: string): Promise<void>
-
-//   addTransactions(budgetId: string, transactions: Transaction[]): Promise<Budget>
-//   deleteTransactions(budgetId: string, transactionIds: string[]): Promise<Budget>
-// }
 
 // export interface ITransactionAPI {
 //   findAll(): Promise<ModelCollection['transaction']>

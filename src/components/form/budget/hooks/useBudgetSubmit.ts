@@ -12,13 +12,6 @@ const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { budgetId 
   const { cleanForm } = useFormContext()
 
   const onSubmit: SubmitHandler<FieldValues['budget']> = async (values) => {
-    // if (type === 'create' && values.type === BudgetType.EXPENSE) {
-    //   values.balance.current = values.balance.ceiling
-    // }
-
-    // const id = budget?.id || crypto.randomUUID()
-    // budget = new Budget(id, values)
-
     try {
       await saveBudget(values)
 

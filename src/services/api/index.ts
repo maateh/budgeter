@@ -2,8 +2,7 @@
 import CurrencyAPI from '@/services/api/CurrencyAPI'
 
 // storage
-// import BudgetStorage from '@/services/storage/BudgetStorage'
-import BudgetStorageAPI from '../storage/BudgetStorageAPI'
+import BudgetStorageAPI from '@/services/storage/BudgetStorageAPI'
 import TransactionStorage from '@/services/storage/TransactionStorage'
 
 class API {

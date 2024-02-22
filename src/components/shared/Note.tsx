@@ -32,11 +32,6 @@ const Note = ({ budget, note }: NoteProps) => {
   const [editingMode, setEditingMode] = useState(false)
 
   const handleClose = async () => {
-    // budget.changeNoteStatus(
-    //   note.id,
-    //   note.date.closed ? 'open' : 'closed'
-    // )
-
     try {
       await changeNoteStatus({
         budgetId: budget.id,
@@ -49,8 +44,6 @@ const Note = ({ budget, note }: NoteProps) => {
   }
 
   const handleRemove = async () => {
-    // budget.removeNote(note.id)
-
     try {
       await removeNote({
         budgetId: budget.id,

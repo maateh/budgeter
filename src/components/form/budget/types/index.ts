@@ -10,14 +10,10 @@ export type FieldValues = {
 }
 
 export type BudgetSubmitProps = {
-  // type: 'create' | 'edit'
-  // budget?: Budget
   budgetId?: UUID
 }
 
 export type BudgetNoteSubmitProps = {
-  // budget: Budget
-  // note?: BudgetNote
   budgetId: UUID
   noteId?: UUID
 }
