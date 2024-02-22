@@ -33,11 +33,9 @@ export type BudgetNote = {
 // But for now it's okay.
 export type Transaction = {
   id: UUID
+  budgetId: UUID
   type: 'default' | 'transferring' | 'temporary'
-  status: 'processed' | 'processing'
-  expired?: boolean
-  budgetId: string
-  targetBudgetId?: string
+  status: 'processed' | 'processing' // TODO: rename
   label: string
   payment: {
     type: '+' | '-',
@@ -47,6 +45,16 @@ export type Transaction = {
     created: Date
     expected: Date
     credited?: Date
+  }
+}
+
+export type TransferringTransaction = Transaction & {
+  targetBudgetId?: string
+}
+
+export type TemporaryTransaction = Transaction & {
+  expired?: boolean
+  date: Transaction['date'] & {
     expire?: Date
   }
 }

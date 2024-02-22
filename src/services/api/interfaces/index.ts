@@ -33,9 +33,8 @@ export interface INewBudgetAPI extends IAPI<Budget> {
 export interface INewTransactionAPI extends IAPI<Transaction> {
   getByBudget(budgetId: UUID): Promise<StorageCollection<Transaction>>
   deleteByBudget(budgetId: UUID): Promise<void>
-  bulkDelete(ids: UUID[]): Promise<void>
 
-  changeStatus(id: UUID, status: 'processed' | 'processing'): Promise<Transaction>
+  changeStatus(id: UUID, status: Transaction['status']): Promise<Transaction>
 }
 
 // export interface ITransactionAPI {
