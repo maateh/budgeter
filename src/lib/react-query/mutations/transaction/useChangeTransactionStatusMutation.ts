@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAPI } from "@/services/providers/APIContext.hooks"
 import { Transaction } from "@/services/api/types"
 
-const useSwitchTransactionStatusMutation = (transactionId: UUID) => {
+const useChangeTransactionStatusMutation = (transactionId: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
@@ -27,4 +27,4 @@ const useSwitchTransactionStatusMutation = (transactionId: UUID) => {
   })
 }
 
-export default useSwitchTransactionStatusMutation
+export default useChangeTransactionStatusMutation
