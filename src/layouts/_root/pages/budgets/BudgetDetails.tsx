@@ -1,10 +1,10 @@
 // components
-import TransactionList from "@/components/shared/TransactionList"
+// import TransactionList from "@/components/shared/TransactionList"
 import BudgetSummary from "./components/BudgetSummary"
 import BudgetNotes from "./components/BudgetNotes"
 
 // hooks
-import { useLoadBudgetQuery } from "@/hooks/queries"
+import { useLoadBudgetQuery } from "@/lib/react-query/queries"
 
 const BudgetDetails = () => {
   const { data: budget, isLoading } = useLoadBudgetQuery()
@@ -25,12 +25,12 @@ const BudgetDetails = () => {
         </div>
 
         <section className="w-full h-fit min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-          <TransactionList
+          {/* <TransactionList
             transactions={Object.values(budget.transactions)}
             startingQuantity={6}
             loadingQuantity={4}
             budget={budget}
-          />
+          /> */}
         </section>
       </div>
     </div>

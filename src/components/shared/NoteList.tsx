@@ -1,5 +1,5 @@
 // types
-import Budget, { BudgetNote } from "@/models/Budget"
+import { Budget, BudgetNote } from "@/services/api/types"
 
 // components
 import Note from "@/components/shared/Note"

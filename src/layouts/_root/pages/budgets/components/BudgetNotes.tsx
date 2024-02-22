@@ -14,7 +14,7 @@ import NoteList from "@/components/shared/NoteList"
 import FormProvider from "@/services/providers/form/FormProvider"
 
 // types
-import Budget from "@/models/Budget"
+import { Budget } from "@/services/api/types"
 
 type BudgetNotesProps = {
   budget: Budget
@@ -51,7 +51,7 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
       {editingMode && (
         <FormProvider cleanForm={() => setEditingMode(false)}>
           <BudgetNoteForm
-            budget={budget}
+            budgetId={budget.id}
             cancelAction={() => setEditingMode(false)}
           />
         </FormProvider>

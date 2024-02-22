@@ -11,12 +11,12 @@ import { Badge } from "@/components/ui/badge"
 // components
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
-import TransactionBadge from "@/components/ui/custom/TransactionBadge"
+// import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 import FormDialog from "@/components/shared/FormDialog"
 import TransactionFormTabs from "../form/transaction/TransactionFormTabs"
 
 // types
-import Budget from "@/models/Budget"
+import { Budget } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
@@ -91,7 +91,8 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             </FormDialog>
           </li>
 
-          {Object.values(budget.transactions)
+          {/* TODO: get budget transactions */}
+          {/* {Object.values(budget.transactions)
             .filter(tr => tr.status === 'processed')
             .slice(0, 6)
             .map(tr => (
@@ -104,7 +105,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
                 />
               </li>
             ))
-          }
+          } */}
           
           <li>
             <Badge
@@ -119,7 +120,8 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         </ul>
 
         <div className="w-fit ml-auto mt-4 grid grid-cols-2 gap-x-2.5">
-          <InfoBadge
+          {/* TODO: add income & expense fields to budget */}
+          {/* <InfoBadge
             label="Income"
             value={formatWithCurrency(budget.income, budget.currency)}
             size="xs"
@@ -130,7 +132,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             value={formatWithCurrency(budget.loss, budget.currency)}
             size="xs"
             variant="loss"
-          />
+          /> */}
         </div>
       </div>
     </div>

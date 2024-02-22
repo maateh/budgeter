@@ -16,10 +16,10 @@ import FormDialog from '@/components/shared/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
 
 // hooks
-import { useDeleteBudgetMutation } from '@/hooks/mutations'
+import { useDeleteBudgetMutation } from '@/lib/react-query/mutations'
 
 // types
-import Budget from '@/models/Budget'
+import { Budget } from '@/services/api/types'
 
 // utils
 import { formatWithCurrency } from '@/utils'
@@ -109,7 +109,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           </div>
 
           <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2 truncate">
-            <InfoBadge
+            {/* <InfoBadge
               label="Total Income"
               value={formatWithCurrency(budget.income, budget.currency)}
               size="sm"
@@ -120,7 +120,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
               value={formatWithCurrency(budget.loss, budget.currency)}
               size="sm"
               variant="loss"
-            />
+            /> */}
           </div>
         </div>
 
