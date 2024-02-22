@@ -18,7 +18,8 @@ const useChangeNoteStatusMutation = (budgetId: UUID, noteId: UUID) => {
       return api.budget.changeNoteStatus(budgetId, noteId, status)
     },
     onSuccess: () => {
-      // TODO: add invalidations
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })
 }

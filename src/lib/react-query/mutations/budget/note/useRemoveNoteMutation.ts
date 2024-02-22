@@ -14,7 +14,8 @@ const useRemoveNoteMutation = (budgetId: UUID, noteId: UUID) => {
       return api.budget.removeNote(budgetId, noteId)
     },
     onSuccess: () => {
-      // TODO: add invalidations
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })
 }
