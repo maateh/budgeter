@@ -26,8 +26,7 @@ type TransactionPreviewProps = {
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
   const { mutateAsync: changeTransactionStatus } = useChangeTransactionStatusMutation(transaction.id)
   const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation(
-    transaction.id,
-    budget.id
+    transaction, budget.id
   )
 
   const handleDelete = async () => {
