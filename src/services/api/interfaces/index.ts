@@ -4,7 +4,7 @@ import { ZodType, z } from "zod"
 // types
 import { Budget, BudgetNote, Transaction } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
-import { Currencies, /*ModelCollection*/ } from "@/types"
+import { Currencies } from "@/services/api/types"
 
 // validations
 import { BudgetNoteValidation } from "@/lib/validation"
@@ -36,15 +36,3 @@ export interface INewTransactionAPI extends IAPI<Transaction> {
 
   changeStatus(id: UUID, status: Transaction['status']): Promise<Transaction>
 }
-
-// export interface ITransactionAPI {
-//   findAll(): Promise<ModelCollection['transaction']>
-//   findByBudget(budgetId: string): Promise<ModelCollection['transaction']>
-//   find(id: string): Promise<Transaction>
-  
-//   bulkSave(budgetId: string, models: ModelCollection['transaction']): Promise<ModelCollection['transaction']>
-//   save(model: Transaction): Promise<Transaction>
-  
-//   bulkDelete(ids: string[], budgetId?: string): Promise<void>
-//   delete(id: string): Promise<void>
-// }

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import ColorPicker from "@/components/ui/custom/ColorPicker"
 
 // hooks
-import { useLoadCurrenciesQuery } from "@/hooks/queries"
+import { useLoadCurrenciesQuery } from "@/lib/react-query/queries"
 
 // types
 import { FieldValues } from "@/components/form/budget/types"

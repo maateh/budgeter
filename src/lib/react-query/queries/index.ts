@@ -1,5 +1,5 @@
 // 3rd party API queries
-// export { default as useLoadCurrenciesQuery } from './useLoadCurrenciesQuery'
+export { default as useLoadCurrenciesQuery } from './currency/useLoadCurrenciesQuery'
 
 // budget
 export { default as useLoadBudgetsQuery } from './budget/useLoadBudgetsQuery'

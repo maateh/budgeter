@@ -1,5 +1,9 @@
 import { UUID } from "crypto"
 
+export type Currencies = {
+  [key: string]: string
+}
+
 export type Budget = {
   id: UUID
   name: string
