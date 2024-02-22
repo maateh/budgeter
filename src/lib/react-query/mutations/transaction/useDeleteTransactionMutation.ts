@@ -12,8 +12,9 @@ const useDeleteTransactionMutation = (transactionId: UUID, budgetId: UUID) => {
     mutationKey: ['deleteTransaction', transactionId],
     mutationFn: api.transaction.delete,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['transactions'] })
-      queryClient.invalidateQueries({ queryKey: ['transaction', transactionId] })
+      // FIXME: send back document after deletion
+      // queryClient.invalidateQueries({ queryKey: ['transactions', status] })
+      // queryClient.invalidateQueries({ queryKey: ['budget', budgetId, 'transactions', status] })
 
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
