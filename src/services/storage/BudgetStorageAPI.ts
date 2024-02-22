@@ -40,17 +40,19 @@ class BudgetStorageAPI implements INewBudgetAPI {
   async create(data: z.infer<typeof BudgetValidation>): Promise<Budget> {
     const budget: Budget = {
       id: crypto.randomUUID(),
+      ...data,
       notes: {},
-      ...data
+      type: data.type as Budget['type']
     }
 
     return await this.storage.save('budgets', budget)
   }
 
   async update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget> {
-    const budget = {
+    const budget: Budget = {
       ...await this.storage.findById('budgets', id),
-      ...data
+      ...data,
+      type: data.type as Budget['type']
     }
 
     return await this.storage.save('budgets', budget)

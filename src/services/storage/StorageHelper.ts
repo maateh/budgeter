@@ -1,10 +1,12 @@
+import { UUID } from "crypto"
+
 // interfaces
 import { IStorageHelper } from "@/services/storage/interfaces"
 
 // types
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
 
-class StorageHelper<T> implements IStorageHelper<T> {
+class StorageHelper<T extends { id: UUID }> implements IStorageHelper<T> {
   async fetchFromStorage(collection: StorageCollections): Promise<StorageCollection<T>> {
     const plainDocs = localStorage.getItem(collection) || '{}'
     return JSON.parse(plainDocs)
@@ -26,7 +28,8 @@ class StorageHelper<T> implements IStorageHelper<T> {
   async save(collection: StorageCollections, document: T): Promise<T> {
     const documents = await this.fetchFromStorage(collection)
     await this.saveToStorage(collection, {
-      ...documents, document
+      ...documents,
+      [document.id]: document
     })
 
     return document
