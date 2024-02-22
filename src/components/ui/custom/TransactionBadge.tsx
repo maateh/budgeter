@@ -4,8 +4,8 @@ import { Minus, Plus } from "lucide-react"
 // shadcn
 import { Badge, BadgeProps } from "@/components/ui/badge"
 
-// models
-import Transaction from "@/models/Transaction"
+// types
+import { Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
