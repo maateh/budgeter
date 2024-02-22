@@ -8,6 +8,6 @@ export { default as useChangeNoteStatusMutation } from './budget/note/useChangeN
 export { default as useRemoveNoteMutation } from './budget/note/useRemoveNoteMutation'
 
 // transaction
-// export { default as useSaveTransactionMutation } from './transaction/useSaveTransactionMutation'
+export { default as useCreateTransactionMutation } from './transaction/useCreateTransactionMutation'
 // export { default as useSwitchTransactionStatusMutation } from './transaction/useSwitchTransactionStatusMutation'
 // export { default as useDeleteTransactionMutation } from './transaction/useDeleteTransactionMutation'

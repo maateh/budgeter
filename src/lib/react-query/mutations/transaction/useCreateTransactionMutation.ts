@@ -3,13 +3,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
 
-const useSaveTransactionMutation = (transactionId?: string) => {
+const useCreateTransactionMutation = () => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
   return useMutation({
-    mutationKey: ['saveTransaction', transactionId || 'create'],
-    mutationFn: api.transaction.save,
+    mutationKey: ['createTransaction'],
+    mutationFn: api.transaction.create,
     onSuccess: ({ id, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['transaction', id] })
@@ -20,4 +20,4 @@ const useSaveTransactionMutation = (transactionId?: string) => {
   })
 }
 
-export default useSaveTransactionMutation
+export default useCreateTransactionMutation
