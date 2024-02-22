@@ -33,18 +33,33 @@ class TransactionStorageAPI implements INewTransactionAPI {
     return await this.storage.findById('transactions', id)
   }
 
-  async getByBudget(budgetId: UUID): Promise<StorageCollection<Transaction>> {
+  async getByBudget(budgetId: UUID, status?: Transaction['status']): Promise<StorageCollection<Transaction>> {
     const transactions = await this.storage.find('transactions')
+
     return Object.values(transactions)
-      .filter(tr => tr.budgetId === budgetId)
+      .filter(tr => status
+          ? tr.budgetId === budgetId && tr.status == status
+          : tr.budgetId === budgetId
+      )
       .reduce((transactions, tr) => ({
         ...transactions,
         [tr.id]: tr
       }), {})
   }
 
-  async getAll(): Promise<StorageCollection<Transaction>> {
-    return await this.storage.find('transactions')
+  async getAll(status?: Transaction['status']): Promise<StorageCollection<Transaction>> {
+    let transactions = await this.storage.find('transactions')
+
+    if (status) {
+      transactions = Object.values(transactions)
+        .filter(tr => tr.status === status)
+        .reduce((transactions, tr) => ({
+          ...transactions,
+          [tr.id]: tr
+        }), {})
+    }
+
+    return transactions
   }
 
   async create(data: z.infer<typeof TransactionValidation>): Promise<Transaction> {

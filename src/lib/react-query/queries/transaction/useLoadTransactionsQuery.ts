@@ -3,15 +3,15 @@ import { useQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
 
-// models
-import Transaction from "@/models/Transaction"
+// types
+import { Transaction } from "@/services/api/types"
 
 const useLoadTransactionsQuery = (status?: Transaction['status']) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['transactions'],
-    queryFn: async () => await api.transaction.findAll(status)
+    queryKey: ['transactions', status],
+    queryFn: async () => await api.transaction.getAll(status)
   })
 }
 
