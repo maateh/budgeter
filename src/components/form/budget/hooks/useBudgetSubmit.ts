@@ -2,28 +2,25 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
-import { useSaveBudgetMutation } from "@/hooks/mutations"
-
-// models
-import Budget, { BudgetType } from "@/models/Budget"
+import { useSaveBudgetMutation } from "@/lib/react-query/mutations"
 
 // types
 import { BudgetSubmitProps, FieldValues } from "@/components/form/budget/types"
 
-const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { type, budget }: BudgetSubmitProps) => {
-  const { mutateAsync: saveBudget, isPending } = useSaveBudgetMutation(budget?.id)
+const useBudgetSubmit = (form: UseFormReturn<FieldValues['budget']>, { budgetId }: BudgetSubmitProps) => {
+  const { mutateAsync: saveBudget, isPending } = useSaveBudgetMutation(budgetId)
   const { cleanForm } = useFormContext()
 
   const onSubmit: SubmitHandler<FieldValues['budget']> = async (values) => {
-    if (type === 'create' && values.type === BudgetType.EXPENSE) {
-      values.balance.current = values.balance.ceiling
-    }
+    // if (type === 'create' && values.type === BudgetType.EXPENSE) {
+    //   values.balance.current = values.balance.ceiling
+    // }
 
-    const id = budget?.id || crypto.randomUUID()
-    budget = new Budget(id, values)
+    // const id = budget?.id || crypto.randomUUID()
+    // budget = new Budget(id, values)
 
     try {
-      await saveBudget(budget)
+      await saveBudget(values)
 
       form.reset()
       cleanForm()

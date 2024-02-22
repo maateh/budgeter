@@ -1,3 +1,5 @@
+import { UUID } from "crypto"
+
 // components
 import Form from "@/components/form/Form"
 import BudgetNoteFormFields from "@/components/form/budget/BudgetNoteFormFields"
@@ -7,18 +9,18 @@ import { useBudgetNoteSubmit } from "@/components/form/budget/hooks"
 
 // types
 import { BudgetNoteSubmitProps, FieldValues } from "@/components/form/budget/types"
-import Budget, { BudgetNote } from "@/models/Budget"
+import { BudgetNote } from "@/services/api/types"
 
 // validation
 import { BudgetNoteValidation } from "@/lib/validation"
 
 type BudgetNoteFormProps = {
-  budget: Budget
+  budgetId: UUID
   note?: BudgetNote
   cancelAction?: () => void
 }
 
-const BudgetNoteForm = ({ budget, note, cancelAction = () => {} }: BudgetNoteFormProps) => {
+const BudgetNoteForm = ({ budgetId, note, cancelAction = () => {} }: BudgetNoteFormProps) => {
   return (
     <Form<FieldValues['note'], typeof BudgetNoteValidation, BudgetNoteSubmitProps>
       type="create"
@@ -27,7 +29,7 @@ const BudgetNoteForm = ({ budget, note, cancelAction = () => {} }: BudgetNoteFor
         text: note?.text || ''
       }}
       useSubmit={useBudgetNoteSubmit}
-      submitProps={{ budget, note }}
+      submitProps={{ budgetId, noteId: note?.id }}
       customButtonRequired
     >
       {(form) => (
