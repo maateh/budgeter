@@ -1,12 +1,11 @@
 import * as z from "zod"
 
-import { BudgetType } from "@/models/Budget"
-
 export const budgetSchema = z.object({
   name: z.string()
     .min(2, { message: 'Too short.' })
     .max(50, { message: 'Too long.' }),
-  type: z.nativeEnum(BudgetType),
+  type: z.string()
+    .regex(/^(income|expense)$/),
   balance: z.object({
     current: z.coerce.number(),
     ceiling: z.coerce.number()
