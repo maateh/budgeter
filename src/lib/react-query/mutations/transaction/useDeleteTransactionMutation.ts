@@ -1,9 +1,10 @@
+import { UUID } from "crypto"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
 
-const useDeleteTransactionMutation = (transactionId: string, budgetId: string) => {
+const useDeleteTransactionMutation = (transactionId: UUID, budgetId: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 

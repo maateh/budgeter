@@ -1,29 +1,21 @@
+import { UUID } from "crypto"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/APIContext.hooks"
+import { Transaction } from "@/services/api/types"
 
-// models
-import Transaction from "@/models/Transaction"
-import Budget from "@/models/Budget"
-
-const useSwitchTransactionStatusMutation = (transactionId: string) => {
+const useSwitchTransactionStatusMutation = (transactionId: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
   return useMutation({
     mutationKey: ['updateTransaction', transactionId, 'status'],
-    mutationFn: async ({ transaction, budget }: {
-      transaction: Transaction
-      budget: Budget
+    mutationFn: ({ id, status }: {
+      id: UUID
+      status: Transaction['status']
     }) => {
-      transaction.updateStatus(
-        transaction.status === 'processing' ? 'processed' : 'processing',
-        budget
-      )
-
-      await api.budget.save(budget)
-      return await api.transaction.save(transaction)
+      return api.transaction.changeStatus(id, status)
     },
     onSuccess: ({ id, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })

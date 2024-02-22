@@ -12,12 +12,11 @@ import TransactionDetailsPopover from "@/components/shared/TransactionDetailsPop
 import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
-// models
-import Budget from "@/models/Budget"
-import Transaction from "@/models/Transaction"
-
 // hooks
-import { useDeleteTransactionMutation, useSwitchTransactionStatusMutation } from "@/hooks/mutations"
+import { useChangeTransactionStatusMutation, useDeleteTransactionMutation } from "@/lib/react-query/mutations"
+
+// types
+import { Budget, Transaction } from "@/services/api/types"
 
 type TransactionPreviewProps = {
   transaction: Transaction
@@ -25,7 +24,7 @@ type TransactionPreviewProps = {
 }
 
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
-  const { mutateAsync: switchTransactionStatus } = useSwitchTransactionStatusMutation(transaction.id)
+  const { mutateAsync: changeTransactionStatus } = useChangeTransactionStatusMutation(transaction.id)
   const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation(
     transaction.id,
     budget.id
@@ -41,7 +40,10 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
   const handleChangeStatus = async () => {
     try {
-      await switchTransactionStatus({ transaction, budget })
+      await changeTransactionStatus({
+        id: transaction.id,
+        status: transaction.status === 'processed' ? 'processing' : 'processed'
+      })
     } catch (err) {
       console.error(err)
     }

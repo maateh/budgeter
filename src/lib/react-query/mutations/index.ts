@@ -9,5 +9,5 @@ export { default as useRemoveNoteMutation } from './budget/note/useRemoveNoteMut
 
 // transaction
 export { default as useCreateTransactionMutation } from './transaction/useCreateTransactionMutation'
-// export { default as useSwitchTransactionStatusMutation } from './transaction/useSwitchTransactionStatusMutation'
-// export { default as useDeleteTransactionMutation } from './transaction/useDeleteTransactionMutation'
+export { default as useChangeTransactionStatusMutation } from './transaction/useChangeTransactionStatusMutation'
+export { default as useDeleteTransactionMutation } from './transaction/useDeleteTransactionMutation'
