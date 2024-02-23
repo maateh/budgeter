@@ -13,6 +13,7 @@ import StorageHelper from "@/services/storage/StorageHelper"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
+import BudgetStorageAPI from "./BudgetStorageAPI"
 
 class TransactionStorageAPI implements INewTransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -62,7 +63,7 @@ class TransactionStorageAPI implements INewTransactionAPI {
     return transactions
   }
 
-  async create(data: z.infer<typeof TransactionValidation>): Promise<Transaction> {
+  async create(data: z.infer<typeof TransactionValidation>, executeOnBudget: boolean = true): Promise<Transaction> {
     const currentDate = new Date()
     const date: Transaction['date'] = {
       created: currentDate,
@@ -85,7 +86,10 @@ class TransactionStorageAPI implements INewTransactionAPI {
       date
     }
 
-    // TODO: execute payment changes on budget balance
+    if (executeOnBudget) {
+      await BudgetStorageAPI.getInstance()
+        .executePayments(transaction.budgetId, [transaction.payment])
+    }
 
     return await this.storage.save('transactions', transaction)
   }
@@ -95,18 +99,29 @@ class TransactionStorageAPI implements INewTransactionAPI {
     throw new Error("Method not implemented.")
   }
 
-  async delete(id: UUID): Promise<void> {
-    // TODO: execute payment changes on budget balance
+  async delete(id: UUID, undoOnBudget: boolean = true): Promise<void> {
+    const transaction = await this.storage.findById('transactions', id)
+
+    if (undoOnBudget) {
+      await BudgetStorageAPI.getInstance()
+        .undoPayments(transaction.budgetId, [transaction.payment])
+    }
+
     await this.storage.delete('transactions', id)
   }
 
-  async deleteByBudget(budgetId: UUID): Promise<void> {
+  async deleteByBudget(budgetId: UUID, undoOnBudget: boolean = true): Promise<void> {
     const transactions = await this.storage.find('transactions')
-    const ids = Object.values(transactions)
+    const budgetTransactions = Object.values(transactions)
       .filter(tr => tr.budgetId === budgetId)
-      .map(tr => tr.id)
 
-    // TODO: execute payment changes on budget balance
+    if (undoOnBudget) {
+      const payments = budgetTransactions.map(tr => tr.payment)
+      await BudgetStorageAPI.getInstance()
+        .undoPayments(budgetId, payments)
+    }
+      
+    const ids = budgetTransactions.map(tr => tr.id)
     await this.storage.bulkDelete('transactions', ids)
   }
 
@@ -114,7 +129,16 @@ class TransactionStorageAPI implements INewTransactionAPI {
     const transaction = await this.storage.findById('transactions', id)
     
     transaction.status = status
-    // TODO: execute payment changes on budget balance
+    
+    if (status === 'processed') {
+      await BudgetStorageAPI.getInstance()
+        .executePayments(transaction.budgetId, [transaction.payment])
+    }
+
+    if (status === 'processing') {
+      await BudgetStorageAPI.getInstance()
+        .undoPayments(transaction.budgetId, [transaction.payment])
+    }
 
     return await this.storage.save('transactions', transaction)
   }

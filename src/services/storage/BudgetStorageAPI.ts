@@ -5,7 +5,7 @@ import { z } from "zod"
 import { INewBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, BudgetNote } from "@/services/api/types"
+import { Budget, BudgetNote, Transaction } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
 
 // storage
@@ -108,6 +108,27 @@ class BudgetStorageAPI implements INewBudgetAPI {
 
     delete budget.notes[noteId]
     await this.storage.save('budgets', budget)
+  }
+
+  // helpers
+  async executePayments(budgetId: UUID, payments: Transaction['payment'][]) {
+    const budget = await this.storage.findById('budgets', budgetId)
+
+    payments.forEach((payment) => {
+      budget.balance.current += payment.type === '+'
+        ? payment.amount
+        : -payment.amount
+    })
+  }
+
+  async undoPayments(budgetId: UUID, payments: Transaction['payment'][]) {
+    const budget = await this.storage.findById('budgets', budgetId)
+
+    payments.forEach((payment) => {
+      budget.balance.current -= payment.type === '+'
+        ? payment.amount
+        : -payment.amount
+    })
   }
 }
 
