@@ -1,7 +1,7 @@
 import axios from "axios"
 
 // types
-import { Currencies } from "@/types"
+import { Currencies } from "@/services/api/types"
 
 // interfaces
 import { ICurrencyAPI } from "@/services/api/interfaces"

@@ -8,7 +8,7 @@ const useLoadBudgetsQuery = () => {
 
   return useQuery({
     queryKey: ['budgets'],
-    queryFn: api.budget.findAll
+    queryFn: api.budget.getAll
   })
 }
 

@@ -2,7 +2,7 @@
 import { BookMinus, BookPlus } from "lucide-react"
 
 // types
-import Budget, { BudgetType } from "@/models/Budget"
+import { Budget } from "@/services/api/types"
 
 // shadcn
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -26,13 +26,13 @@ const BudgetTypeBadge = ({ budget, size = 'icon-sm', iconSize = 20 }: BudgetType
             size={size}
             className={`
               bg-background/95 border-2 border-primary hover:bg-background/85
-              ${budget.type === BudgetType.INCOME
+              ${budget.type === 'income'
                 ? 'text-green-700/95 dark:text-green-500/95'
                 : 'text-rose-600/95'
               }
             `}
           >
-            {budget.type === BudgetType.INCOME ? (
+            {budget.type === 'income' ? (
               <BookPlus size={iconSize} strokeWidth={2.5} />
             ) : (
               <BookMinus size={iconSize} strokeWidth={2.5} />
@@ -41,7 +41,7 @@ const BudgetTypeBadge = ({ budget, size = 'icon-sm', iconSize = 20 }: BudgetType
         </TooltipTrigger>
         <TooltipContent
           className={`bg-primary
-            ${budget.type === BudgetType.INCOME
+            ${budget.type === 'income'
               ? 'text-green-700 dark:text-green-500'
               : 'text-rose-600 dark:text-rose-400'
             }

@@ -1,12 +1,12 @@
 // types
-import Budget, { BudgetType } from "@/models/Budget"
+import { Budget } from "@/services/api/types"
 
 // components
 import BudgetPreview from "@/components/shared/BudgetPreview"
 
 type BudgetListProps = {
   budgets: Budget[]
-  type: BudgetType
+  type: Budget['type']
 }
 
 const BudgetList = ({ budgets, type }: BudgetListProps) => {
@@ -14,7 +14,7 @@ const BudgetList = ({ budgets, type }: BudgetListProps) => {
     <>
       <h2 className="w-fit mb-5">
         <span className={`overline
-          ${type === BudgetType.INCOME
+          ${type === 'income'
             ? 'text-green-500' 
             : 'text-red-500'}
         `}>

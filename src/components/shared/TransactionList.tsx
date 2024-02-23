@@ -4,11 +4,6 @@ import { useNavigate } from "react-router-dom"
 // icons
 import { ChevronRightCircle, Plus } from "lucide-react"
 
-// types
-import { ModelCollection } from "@/types"
-import Budget from "@/models/Budget"
-import Transaction from "@/models/Transaction"
-
 // shadcn
 import { Button } from "@/components/ui/button"
 
@@ -18,6 +13,10 @@ import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 import FormDialog from "@/components/shared/FormDialog"
 import TransactionFormTabs from "@/components/form/transaction/TransactionFormTabs"
 
+// types
+import { Budget, Transaction } from "@/services/api/types"
+import { StorageCollection } from "@/services/storage/types"
+
 type TransactionListProps = {
   transactions: Transaction[]
   startingQuantity?: number
@@ -25,7 +24,7 @@ type TransactionListProps = {
   defaultStatus?: Transaction['status']
 } & (
   | { budget: Budget; budgets?: never }
-  | { budgets: ModelCollection['budget']; budget?: never }
+  | { budgets: StorageCollection<Budget>; budget?: never }
 )
 
 const TransactionList = ({

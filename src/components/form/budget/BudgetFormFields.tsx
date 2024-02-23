@@ -10,10 +10,7 @@ import { Input } from "@/components/ui/input"
 import ColorPicker from "@/components/ui/custom/ColorPicker"
 
 // hooks
-import { useLoadCurrenciesQuery } from "@/hooks/queries"
-
-// models
-import { BudgetType } from "@/models/Budget"
+import { useLoadCurrenciesQuery } from "@/lib/react-query/queries"
 
 // types
 import { FieldValues } from "@/components/form/budget/types"
@@ -68,18 +65,18 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
                 >
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
-                      <RadioGroupItem value={BudgetType.INCOME} />
+                      <RadioGroupItem value="income" />
                     </FormControl>
                     <FormLabel className="text-md font-semibold cursor-pointer">
-                      {BudgetType.INCOME}
+                      Income
                     </FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
-                      <RadioGroupItem value={BudgetType.EXPENSE} />
+                      <RadioGroupItem value="expense" />
                     </FormControl>
                     <FormLabel className="text-md font-semibold cursor-pointer">
-                      {BudgetType.EXPENSE}
+                      Expense
                     </FormLabel>
                   </FormItem>
                 </RadioGroup>

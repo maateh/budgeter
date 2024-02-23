@@ -1,7 +1,5 @@
+import { UUID } from "crypto"
 import { z } from "zod"
-
-// models
-import Budget, { BudgetNote } from "@/models/Budget"
 
 // validations
 import { BudgetNoteValidation, BudgetValidation } from "@/lib/validation"
@@ -12,11 +10,10 @@ export type FieldValues = {
 }
 
 export type BudgetSubmitProps = {
-  type: 'create' | 'edit'
-  budget?: Budget
+  budgetId?: UUID
 }
 
 export type BudgetNoteSubmitProps = {
-  budget: Budget
-  note?: BudgetNote
+  budgetId: UUID
+  noteId?: UUID
 }

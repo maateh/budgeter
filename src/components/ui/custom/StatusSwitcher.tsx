@@ -1,4 +1,5 @@
 import { forwardRef } from "react"
+
 // icons
 import { CheckCircle2, Loader } from "lucide-react"
 
@@ -7,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Button } from "@/components/ui/button"
 
 // types
-import Transaction from "@/models/Transaction"
+import { Transaction } from "@/services/api/types"
 
 type StatusSwitcherProps = {
   status: Transaction['status']

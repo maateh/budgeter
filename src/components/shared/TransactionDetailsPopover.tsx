@@ -3,10 +3,6 @@ import { format } from "date-fns"
 // icons
 import { CalendarCheck, CalendarClock, CalendarPlus, Receipt, Trash2 } from "lucide-react"
 
-// types
-import Budget from "@/models/Budget"
-import Transaction from "@/models/Transaction"
-
 // shadcn
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
@@ -17,6 +13,9 @@ import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
 import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
+
+// types
+import { Budget, Transaction } from "@/services/api/types"
 
 type TransactionDetailsPopoverProps = {
   transaction: Transaction

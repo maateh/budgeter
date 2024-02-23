@@ -5,11 +5,9 @@ import BudgetFormFields from "@/components/form/budget/BudgetFormFields"
 // hooks
 import { useBudgetSubmit } from "@/components/form/budget/hooks"
 
-// models
-import Budget, { BudgetType } from "@/models/Budget"
-
 // types
 import { BudgetSubmitProps, FieldValues } from "@/components/form/budget/types"
+import { Budget } from "@/services/api/types"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
@@ -25,8 +23,8 @@ const BudgetForm = ({ type, budget }: BudgetFormProps) => {
       type={type}
       validationSchema={BudgetValidation}
       defaultValues={{
-        name: budget?.name || "",
-        type: budget?.type || BudgetType.INCOME,
+        name: budget?.name || '',
+        type: budget?.type || 'income',
         balance: budget?.balance || {
           current: 0,
           ceiling: 0
@@ -38,7 +36,7 @@ const BudgetForm = ({ type, budget }: BudgetFormProps) => {
         }
       }}
       useSubmit={useBudgetSubmit}
-      submitProps={{ type, budget }}
+      submitProps={{ budgetId: budget?.id }}
     >
       {(form) => (
         <BudgetFormFields form={form} />
