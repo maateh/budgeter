@@ -5,7 +5,7 @@ import { PackagePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import FormDialog from "@/components/shared/FormDialog"
+import FormDialog from "@/components/ui/custom/FormDialog"
 import BudgetForm from "@/components/form/budget/BudgetForm"
 
 const BudgetSummary = () => {

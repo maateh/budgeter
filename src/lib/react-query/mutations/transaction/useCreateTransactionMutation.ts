@@ -1,7 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { z } from "zod"
 
 // api
-import { useAPI } from "@/services/providers/APIContext.hooks"
+import { useAPI } from "@/services/providers/api/APIContext.hooks"
+
+// validations
+import { TransactionValidation } from "@/lib/validation"
 
 const useCreateTransactionMutation = () => {
   const queryClient = useQueryClient()
@@ -9,7 +13,9 @@ const useCreateTransactionMutation = () => {
 
   return useMutation({
     mutationKey: ['createTransaction'],
-    mutationFn: api.transaction.create,
+    mutationFn: async (data: z.infer<typeof TransactionValidation>) => {
+      return await api.transaction.create(data)
+    },
     onSuccess: ({ budgetId, status }) => {
       queryClient.invalidateQueries({ queryKey: ['transactions', status] })
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId, 'transactions', status] })

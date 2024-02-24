@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
-import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
+import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 
 // hooks
 import { useChangeNoteStatusMutation, useRemoveNoteMutation } from "@/lib/react-query/mutations"

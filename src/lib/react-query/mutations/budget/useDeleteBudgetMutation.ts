@@ -2,7 +2,7 @@ import { UUID } from "crypto"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
-import { useAPI } from "@/services/providers/APIContext.hooks"
+import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 const useDeleteBudgetMutation = (budgetId: UUID) => {
   const queryClient = useQueryClient()
@@ -10,7 +10,7 @@ const useDeleteBudgetMutation = (budgetId: UUID) => {
 
   return useMutation({
     mutationKey: ['deleteBudget', budgetId],
-    mutationFn: api.budget.delete,
+    mutationFn: async (id: UUID) => await api.budget.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })

@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
 // components
-import TransactionDetailsPopover from "@/components/shared/TransactionDetailsPopover"
-import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
+import TransactionDetailsPopover from "@/components/shared/transaction/TransactionDetailsPopover"
+import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 // hooks

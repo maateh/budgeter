@@ -2,7 +2,7 @@ import { UUID } from "crypto"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
-import { useAPI } from "@/services/providers/APIContext.hooks"
+import { useAPI } from "@/services/providers/api/APIContext.hooks"
 import { Transaction } from "@/services/api/types"
 
 const useChangeTransactionStatusMutation = (transactionId: UUID) => {
@@ -11,11 +11,11 @@ const useChangeTransactionStatusMutation = (transactionId: UUID) => {
 
   return useMutation({
     mutationKey: ['updateTransaction', transactionId, 'status'],
-    mutationFn: ({ id, status }: {
+    mutationFn: async ({ id, status }: {
       id: UUID
       status: Transaction['status']
     }) => {
-      return api.transaction.changeStatus(id, status)
+      return await api.transaction.changeStatus(id, status)
     },
     onSuccess: ({ budgetId, status }) => {
       queryClient.invalidateQueries({ queryKey: ['transactions', status] })

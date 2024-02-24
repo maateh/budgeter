@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 // components
 import TabsSwitcher from "@/components/ui/custom/TabsSwitcher"
 import TransactionFormTabs from "@/components/form/transaction/TransactionFormTabs"
-import FormDialog from "@/components/shared/FormDialog"
+import FormDialog from "@/components/ui/custom/FormDialog"
 import TransactionList from "@/components/shared/transaction/TransactionList"
 
 // types

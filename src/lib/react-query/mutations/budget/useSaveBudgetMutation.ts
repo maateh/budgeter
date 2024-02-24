@@ -2,7 +2,7 @@ import { UUID } from "crypto"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
-import { useAPI } from "@/services/providers/APIContext.hooks"
+import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
 import { FieldValues } from "@/components/form/budget/types"
@@ -13,11 +13,11 @@ const useSaveBudgetMutation = (budgetId?: UUID) => {
 
   return useMutation({
     mutationKey: ['saveBudget', budgetId || 'create'],
-    mutationFn: (data: FieldValues['budget']) => {
+    mutationFn: async (data: FieldValues['budget']) => {
       if (budgetId) {
-        return api.budget.update(budgetId, data)
+        return await api.budget.update(budgetId, data)
       }
-      return api.budget.create(data)
+      return await api.budget.create(data)
     },
     onSuccess: (budget) => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] })

@@ -4,7 +4,7 @@ import { useState } from "react"
 import API from "@/services/api"
 
 // context
-import APIContext from "@/services/providers/APIContext"
+import APIContext from "@/services/providers/api/APIContext"
 
 type APIProviderProps = {
   type: 'storage' | 'remote'

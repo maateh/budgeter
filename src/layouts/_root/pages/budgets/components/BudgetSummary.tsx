@@ -11,8 +11,8 @@ import { Separator } from '@/components/ui/separator'
 // components
 import BudgetTypeBadge from '@/components/ui/custom/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
-import ConfirmationDialog from '@/components/shared/ConfirmationDialog'
-import FormDialog from '@/components/shared/FormDialog'
+import ConfirmationDialog from '@/components/ui/custom/ConfirmationDialog'
+import FormDialog from '@/components/ui/custom/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
 
 // hooks

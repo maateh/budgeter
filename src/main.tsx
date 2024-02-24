@@ -7,7 +7,7 @@ import App from './App.tsx'
 import './globals.css'
 
 import ThemeProvider from '@/components/theme/ThemeProvider.tsx'
-import APIProvider from '@/services/providers/APIProvider.tsx'
+import APIProvider from '@/services/providers/api/APIProvider.tsx'
 
 const queryClient = new QueryClient()
 

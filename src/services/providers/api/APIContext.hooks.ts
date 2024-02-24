@@ -1,7 +1,7 @@
 import { useContext } from "react"
 
 // context
-import APIContext from "@/services/providers/APIContext"
+import APIContext from "@/services/providers/api/APIContext"
 
 export const useAPI = () => {
   const context = useContext(APIContext)

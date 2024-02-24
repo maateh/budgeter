@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 // import TransactionBadge from "@/components/ui/custom/TransactionBadge"
-import FormDialog from "@/components/shared/FormDialog"
+import FormDialog from "@/components/ui/custom/FormDialog"
 import TransactionFormTabs from "../form/transaction/TransactionFormTabs"
 
 // types

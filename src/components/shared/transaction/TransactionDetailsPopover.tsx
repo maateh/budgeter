@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
 // components
-import ConfirmationDialog from "@/components/shared/ConfirmationDialog"
+import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"

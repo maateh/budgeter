@@ -2,7 +2,7 @@ import { UUID } from "crypto"
 import { useQuery } from "@tanstack/react-query"
 
 // api
-import { useAPI } from "@/services/providers/APIContext.hooks"
+import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
 import { Transaction } from "@/services/api/types"
