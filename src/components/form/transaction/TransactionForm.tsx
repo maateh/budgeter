@@ -13,11 +13,9 @@ import { Button } from "@/components/ui/button"
 import BudgetSelector from "@/components/ui/custom/BudgetSelector"
 import DateTimePicker from "@/components/ui/custom/DateTimePicker"
 
-// models
-import Transaction from "@/models/Transaction"
-
 // types
 import { TransactionFormReturn, FieldValue } from "@/components/form/transaction/types"
+import { Transaction } from "@/services/api/types"
 
 type TransactionFormProps = {
   type: Transaction['type']
@@ -42,7 +40,9 @@ const TransactionForm = ({ type, budgetId, form }: TransactionFormProps) => {
             name="budgetId"
             render={({ field }) => (
               <FormItem className="w-1/2 flex-1">
-                <FormLabel className="font-heading font-normal normal-case">Select a Budget</FormLabel>
+                <FormLabel className="font-heading font-normal normal-case">
+                  Select a Budget
+                </FormLabel>
                 <FormControl>
                   <BudgetSelector
                     defaultValue={field.value}
