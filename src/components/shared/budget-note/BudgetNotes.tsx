@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 
 // components
 import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
-import NoteList from "@/components/shared/NoteList"
+import NoteList from "@/components/shared/budget-note/NoteList"
 
 // context
 import FormProvider from "@/services/providers/form/FormProvider"
@@ -57,35 +57,21 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
         </FormProvider>
       )}
 
-      <div className="flex flex-col gap-y-10">
-        <div className="flex flex-col gap-y-3.5">
-          <h3 className="pl-2 border-l-2 border-green-800 dark:border-green-500">
-            <span className="text-green-700 dark:text-green-400">Open</span> Notes
-          </h3>
-          <NoteList
-            budget={budget}
-            notes={
-              Object.values(budget.notes)
-                .filter(note => !note.date.closed)
-                .sort((n1, n2) => n1.date.created < n2.date.created ? 1 : -1)
-            }
-          />
+        <div className="flex flex-col gap-y-10">
+          <div className="flex flex-col gap-y-3.5">
+            <h3 className="pl-2 border-l-2 border-green-800 dark:border-green-500">
+              <span className="text-green-700 dark:text-green-400">Open</span> Notes
+            </h3>
+            <NoteList budget={budget} status="open" />
+          </div>
+  
+          <div className="flex flex-col gap-y-3.5">
+            <h3 className="pl-2 border-l-2 border-red-700 dark:border-red-500">
+              <span className="text-red-600 dark:text-red-400">Closed</span> Notes
+            </h3>
+            <NoteList budget={budget} status="closed" />
+          </div>
         </div>
-
-        <div className="flex flex-col gap-y-3.5">
-          <h3 className="pl-2 border-l-2 border-red-700 dark:border-red-500">
-            <span className="text-red-600 dark:text-red-400">Closed</span> Notes
-          </h3>
-          <NoteList
-            budget={budget}
-            notes={
-              Object.values(budget.notes)
-                .filter(note => note.date.closed)
-                .sort((n1, n2) => n1.date.closed! < n2.date.closed! ? 1 : -1)
-            }
-          />
-        </div>
-      </div>
     </div>
   )
 }

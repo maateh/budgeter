@@ -1,13 +1,17 @@
+import { UUID } from "crypto"
+import { useParams } from "react-router-dom"
+
 // components
-// import TransactionList from "@/components/shared/TransactionList"
+import BudgetNotes from "@/components/shared/budget-note/BudgetNotes"
+import TransactionLayout from "@/components/shared/transaction/TransactionLayout"
 import BudgetSummary from "./components/BudgetSummary"
-import BudgetNotes from "./components/BudgetNotes"
 
 // hooks
-import { useLoadBudgetQuery } from "@/lib/react-query/queries"
+import { useGetBudget } from "@/lib/react-query/queries"
 
 const BudgetDetails = () => {
-  const { data: budget, isLoading } = useLoadBudgetQuery()
+  const { id } = useParams() as { id: UUID }
+  const { data: budget, isLoading } = useGetBudget(id)
 
   return !isLoading && budget ? (
     <div className="page-wrapper">
@@ -25,12 +29,7 @@ const BudgetDetails = () => {
         </div>
 
         <section className="w-full h-fit min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-          {/* <TransactionList
-            transactions={Object.values(budget.transactions)}
-            startingQuantity={6}
-            loadingQuantity={4}
-            budget={budget}
-          /> */}
+          {/* <TransactionLayout budgetId={budget.id} /> */}
         </section>
       </div>
     </div>

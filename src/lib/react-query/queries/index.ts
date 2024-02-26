@@ -6,6 +6,6 @@ export { default as useGetBudget } from './budget/useGetBudget'
 export { default as useGetBudgets } from './budget/useGetBudgets'
 
 // budget-note
-export { default as useGetNotes } from './buget-note/useGetNotes'
+export { default as useGetNotesbyStatus } from './buget-note/useGetNotesbyStatus'
 
 // transaction

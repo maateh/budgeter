@@ -29,9 +29,9 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return BudgetNoteStorageAPI._instance
   }
 
-  public async getByBudget(budgetId: UUID): Promise<BudgetNote[]> {
+  public async getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]> {
     return await this.storage
-      .find('notes', (note) => note.budgetId === budgetId)
+      .find('notes', (note) => note.budgetId === budgetId && note.status === status)
   }
 
   public async create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
@@ -49,7 +49,8 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
 
     return await this.storage.save('notes', {
       ...note,
-      text: data.text
+      text: data.text,
+      editedAt: new Date()
     })
   }
 
@@ -58,7 +59,8 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
 
     return await this.storage.save('notes', {
       ...note,
-      status
+      status,
+      closedAt: status === 'closed' ? new Date() : undefined
     })
   }
 

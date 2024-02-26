@@ -13,7 +13,7 @@ import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
 import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 
 // hooks
-import { useChangeNoteStatusMutation, useRemoveNoteMutation } from "@/lib/react-query/mutations"
+import { useDeleteNote, useUpdateNoteStatus } from "@/lib/react-query/mutations"
 
 // context
 import FormProvider from "@/services/providers/form/FormProvider"
@@ -27,16 +27,17 @@ type NoteProps = {
 }
 
 const Note = ({ budget, note }: NoteProps) => {
-  const { mutateAsync: changeNoteStatus } = useChangeNoteStatusMutation(budget.id, note.id)
-  const { mutateAsync: removeNote } = useRemoveNoteMutation(budget.id, note.id)
   const [editingMode, setEditingMode] = useState(false)
+
+  const { mutateAsync: updateNoteStatus } = useUpdateNoteStatus(budget.id, note.id)
+  const { mutateAsync: deleteNote } = useDeleteNote(budget.id, note.id)
 
   const handleClose = async () => {
     try {
-      await changeNoteStatus({
+      await updateNoteStatus({
         budgetId: budget.id,
         noteId: note.id,
-        status: note.date.closed ? 'open' : 'closed'
+        status: note.status === 'open' ? 'closed' : 'open'
       })
     } catch (err) {
       console.error(err)
@@ -45,7 +46,7 @@ const Note = ({ budget, note }: NoteProps) => {
 
   const handleRemove = async () => {
     try {
-      await removeNote({
+      await deleteNote({
         budgetId: budget.id,
         noteId: note.id
       })
@@ -59,7 +60,7 @@ const Note = ({ budget, note }: NoteProps) => {
       className="my-1 px-7 pt-6 pb-3 flex flex-col gap-y-2 bg-foreground/15 border-xl border-b-2 border-r-4 hover:opacity-95"
       style={{
         borderColor: budget.theme.background,
-        opacity: note.date.closed && 0.65
+        opacity: note.status === 'closed' ? 0.65 : 1
       }}
     >
       <div className="h-max mx-2.5 font-medium">
@@ -88,17 +89,17 @@ const Note = ({ budget, note }: NoteProps) => {
             className="bg-primary border-4 border-primary/60"
             onClick={handleClose}
           >
-            {note.date.closed ? (
-              <Undo2
-                size={16}
-                strokeWidth={2.5}
-                className="text-orange-600 dark:text-orange-400"
-              />
-            ) : (
+            {note.status === 'open' ? (
               <CheckCircle
                 size={16}
                 strokeWidth={2.5}
                 className="text-green-600 dark:text-green-400"
+              />
+            ) : (
+              <Undo2
+                size={16}
+                strokeWidth={2.5}
+                className="text-orange-600 dark:text-orange-400"
               />
             )}
           </Button>
@@ -108,7 +109,7 @@ const Note = ({ budget, note }: NoteProps) => {
             size="icon-sm"
             className="bg-primary border-4 border-primary/60"
             onClick={() => setEditingMode(prev => !prev)}
-            disabled={!!note.date.closed}
+            disabled={note.status === 'closed'}
           >
             <PenSquare
               size={16}
@@ -138,19 +139,19 @@ const Note = ({ budget, note }: NoteProps) => {
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">
-          {note.date.closed ? (
+          {note.closedAt ? (
             <>
-              <p>{format(note.date.closed, 'PPP')}</p>
+              <p>{format(note.closedAt, 'PPP')}</p>
               <CalendarCheck size={18} strokeWidth={1.7} />
             </>
-          ) : note.date.edited ? (
+          ) : note.editedAt ? (
             <>
-              <p>{format(note.date.edited, 'PPP')}</p>
+              <p>{format(note.editedAt, 'PPP')}</p>
               <PenLine size={18} strokeWidth={1.7} />
             </>
           ) : (
             <>
-              <p>{format(note.date.created, 'PPP')}</p>
+              <p>{format(note.createdAt, 'PPP')}</p>
               <CalendarPlus size={18} strokeWidth={1.7} />
             </>
           )}
