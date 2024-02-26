@@ -7,16 +7,21 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { BudgetFieldValues } from "@/components/form/budget/types"
 
-const useUpdateBudget = (budgetId: UUID) => {
+const useSaveBudget = (budgetId?: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
   return useMutation({
-    mutationKey: ['updateBudget', budgetId],
+    mutationKey: ['saveBudget', budgetId ? 'update' : 'create', budgetId],
     mutationFn: async ({ id, data }: {
-      id: UUID
+      id?: UUID
       data: BudgetFieldValues
-    }) => await api.budget.update(id, data),
+    }) => {
+      if (id) {
+        return await api.budget.update(id, data)
+      }
+      return await api.budget.create(data)
+    },
     onSuccess: ({ id }) => {
       queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
       queryClient.invalidateQueries({ queryKey: ['getBudget', id] })
@@ -24,4 +29,4 @@ const useUpdateBudget = (budgetId: UUID) => {
   })
 }
 
-export default useUpdateBudget
+export default useSaveBudget
