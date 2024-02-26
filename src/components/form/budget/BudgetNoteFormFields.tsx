@@ -6,10 +6,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
 // types
-import { FieldValues } from "@/components/form/budget/types"
+import { BudgetNoteFieldValues } from "@/components/form/budget/types"
 
 type BudgetNoteFormFieldsProps = {
-  form: UseFormReturn<FieldValues['note']>
+  form: UseFormReturn<BudgetNoteFieldValues>
   cancelAction: () => void
 }
 

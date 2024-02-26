@@ -8,7 +8,7 @@ import BudgetNoteFormFields from "@/components/form/budget/BudgetNoteFormFields"
 import { useBudgetNoteSubmit } from "@/components/form/budget/hooks"
 
 // types
-import { BudgetNoteSubmitProps, FieldValues } from "@/components/form/budget/types"
+import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/budget/types"
 import { BudgetNote } from "@/services/api/types"
 
 // validation
@@ -22,7 +22,7 @@ type BudgetNoteFormProps = {
 
 const BudgetNoteForm = ({ budgetId, note, cancelAction = () => {} }: BudgetNoteFormProps) => {
   return (
-    <Form<FieldValues['note'], typeof BudgetNoteValidation, BudgetNoteSubmitProps>
+    <Form<BudgetNoteFieldValues, typeof BudgetNoteValidation, BudgetNoteSubmitProps>
       type="create"
       validationSchema={BudgetNoteValidation}
       defaultValues={{

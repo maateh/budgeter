@@ -13,10 +13,10 @@ import ColorPicker from "@/components/ui/custom/ColorPicker"
 import { useLoadCurrenciesQuery } from "@/lib/react-query/queries"
 
 // types
-import { FieldValues } from "@/components/form/budget/types"
+import { BudgetFieldValues } from "@/components/form/budget/types"
 
 type BudgetFormFieldsProps = {
-  form: UseFormReturn<FieldValues['budget']>
+  form: UseFormReturn<BudgetFieldValues>
 }
 
 const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
@@ -109,7 +109,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
 
           <FormField
             control={control}
-            name="currency"
+            name="balance.currency"
             render={({ field }) => (
               <FormItem className="max-w-48 flex-1">
                 <FormLabel className="font-heading text-xl small-caps">

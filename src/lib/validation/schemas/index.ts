@@ -30,6 +30,8 @@ export const budgetNoteSchema = z.object({
 
 export const transactionSchema = z.object({
   budgetId: z.string().uuid(),
+  type: z.string()
+    .regex(/^(default|temporary)$/),
   name: z.string()
     .min(2, { message: 'Too short.' })
     .max(28, { message: 'Too long.' }),
