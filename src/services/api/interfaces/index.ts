@@ -17,12 +17,14 @@ export interface IBudgetAPI {
   create(data: z.infer<typeof BudgetValidation>): Promise<Budget>
   update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget>
   delete(id: UUID): Promise<Budget>
-  
-  getNotes(budgetId: UUID): Promise<BudgetNote[]>
-  createNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
-  updateNoteText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
-  updateNoteStatus(budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote>  
-  deleteNote(budgetId: UUID, noteId: UUID): Promise<BudgetNote>
+}
+
+export interface IBudgetNoteAPI {
+  getByBudget(budgetId: UUID): Promise<BudgetNote[]>
+  create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
+  updateText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
+  updateStatus(budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote>  
+  delete(budgetId: UUID, noteId: UUID): Promise<BudgetNote>
 }
 
 export interface ITransactionAPI {

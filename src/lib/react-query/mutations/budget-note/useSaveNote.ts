@@ -19,12 +19,12 @@ const useSaveNote = (budgetId: UUID, noteId?: UUID) => {
       data: BudgetNoteFieldValues
     }) => {
       if (noteId) {
-        return await api.budget.updateNoteText(budgetId, noteId, data)
+        return await api.budgetNote.updateText(budgetId, noteId, data)
       }
-      return await api.budget.createNote(budgetId, data)
+      return await api.budgetNote.create(budgetId, data)
     },
     onSuccess: ({ budgetId }) => {
-      queryClient.invalidateQueries({ queryKey: ['getNotes', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['getNotesByBudget', budgetId] })
     }
   })
 }

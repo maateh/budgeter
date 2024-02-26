@@ -13,9 +13,9 @@ const useDeleteNote = (budgetId: UUID, noteId: UUID) => {
     mutationFn: async ({ budgetId, noteId }: {
       budgetId: UUID
       noteId: UUID
-    }) => await api.budget.deleteNote(budgetId, noteId),
+    }) => await api.budgetNote.delete(budgetId, noteId),
     onSuccess: ({ budgetId }) => {
-      queryClient.invalidateQueries({ queryKey: ['getNotes', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['getNotesByBudget', budgetId] })
     }
   })
 }

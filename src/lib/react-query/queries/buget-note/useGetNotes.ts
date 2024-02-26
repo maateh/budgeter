@@ -8,8 +8,8 @@ const useGetNotes = (budgetId: UUID) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['getNotes', budgetId],
-    queryFn: async () => await api.budget.getNotes(budgetId),
+    queryKey: ['getNotesByBudget', budgetId],
+    queryFn: async () => await api.budgetNote.getByBudget(budgetId),
   })
 }
 

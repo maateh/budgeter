@@ -3,6 +3,7 @@ import CurrencyAPI from '@/services/api/CurrencyAPI'
 
 // storage
 import BudgetStorageAPI from '@/services/storage/BudgetStorageAPI'
+import BudgetNoteStorageAPI from '@/services/storage/BudgetNoteStorageAPI'
 import TransactionStorageAPI from '@/services/storage/TransactionStorageAPI'
 
 class API {
@@ -10,6 +11,7 @@ class API {
 
   public currency: CurrencyAPI
   public budget: BudgetStorageAPI
+  public budgetNote: BudgetNoteStorageAPI
   public transaction: TransactionStorageAPI
 
   private constructor(type: 'storage' | 'remote') {
@@ -17,10 +19,12 @@ class API {
 
     if (type === 'storage') {
       this.budget = BudgetStorageAPI.getInstance()
+      this.budgetNote = BudgetNoteStorageAPI.getInstance()
       this.transaction = TransactionStorageAPI.getInstance()
     } else {
       // TODO: create remote api
       this.budget = BudgetStorageAPI.getInstance()
+      this.budgetNote = BudgetNoteStorageAPI.getInstance()
       this.transaction = TransactionStorageAPI.getInstance()
     }
   }

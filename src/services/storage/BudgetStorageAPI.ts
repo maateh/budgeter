@@ -5,26 +5,21 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, BudgetNote, Transaction } from "@/services/api/types"
+import { Budget, Transaction } from "@/services/api/types"
 
 // validations
-import { BudgetNoteValidation, BudgetValidation } from "@/lib/validation"
+import { BudgetValidation } from "@/lib/validation"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
 
   private storage: StorageHelper<Budget>
-  private noteStorage: StorageHelper<BudgetNote>
-  private transactionStorageApi: TransactionStorageAPI
 
   private constructor() {
     this.storage = new StorageHelper()
-    this.noteStorage = new StorageHelper()
-    this.transactionStorageApi = TransactionStorageAPI.getInstance()
   }
 
   public static getInstance(): BudgetStorageAPI {
@@ -66,53 +61,15 @@ class BudgetStorageAPI implements IBudgetAPI {
     const budget = await this.storage.findById('budgets', id)
     await this.storage.delete('budgets', id)
 
-    const notes = await this.getNotes(id)
-    await this.noteStorage.bulkDelete('notes', notes.map(note => note.id))
+    // FIXME: remove notes
+    // const notes = await this.getNotes(id)
+    // await this.noteStorage.bulkDelete('notes', notes.map(note => note.id))
 
-    const transactions = await this.transactionStorageApi.getByBudget(id) // FIXME: make transaction type optional
-    await this.storage.bulkDelete('transactions', transactions.map(tr => tr.id))
+    // FIXME: remove transactions
+    // const transactions = await this.transactionStorageApi.getByBudget(id) // FIXME: make transaction type optional
+    // await this.storage.bulkDelete('transactions', transactions.map(tr => tr.id))
 
     return budget
-  }
-
-  public async getNotes(budgetId: UUID): Promise<BudgetNote[]> {
-    return await this.noteStorage
-      .find('notes', (note) => note.budgetId === budgetId)
-  }
-
-  public async createNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
-    return await this.noteStorage.save('notes', {
-      id: crypto.randomUUID(),
-      budgetId,
-      text: data.text,
-      status: 'open',
-      createdAt: new Date()
-    })
-  }
-
-  public async updateNoteText(_budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
-    const note = await this.noteStorage.findById('notes', noteId)
-
-    return await this.noteStorage.save('notes', {
-      ...note,
-      text: data.text
-    })
-  }
-
-  public async updateNoteStatus(_budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote> {
-    const note = await this.noteStorage.findById('notes', noteId)
-
-    return await this.noteStorage.save('notes', {
-      ...note,
-      status
-    })
-  }
-
-  public async deleteNote(_budgetId: UUID, noteId: UUID): Promise<BudgetNote> {
-    const note = await this.noteStorage.findById('notes', noteId)
-
-    await this.noteStorage.delete('notes', noteId)
-    return note
   }
 
   // helpers
