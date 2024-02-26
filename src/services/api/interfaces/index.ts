@@ -1,38 +1,35 @@
 import { UUID } from "crypto"
-import { ZodType, z } from "zod"
+import { z } from "zod"
 
 // types
-import { Budget, BudgetNote, Transaction } from "@/services/api/types"
-import { StorageCollection } from "@/services/storage/types"
-import { Currencies } from "@/services/api/types"
+import { Budget, BudgetNote, Currencies, Transaction } from "@/services/api/types"
 
 // validations
-import { BudgetNoteValidation } from "@/lib/validation"
+import { BudgetNoteValidation, BudgetValidation, TransactionValidation } from "@/lib/validation"
 
 export interface ICurrencyAPI {
   get(): Promise<Currencies>
 }
 
-export interface IAPI<D> {
-  get(id: UUID): Promise<D>
-  getAll(): Promise<StorageCollection<D>>
-
-  create<V extends ZodType>(data: z.infer<V>): Promise<D>
-  update<V extends ZodType>(id: UUID, data: z.infer<V>): Promise<D>
-
-  delete(id: UUID): Promise<void>
+export interface IBudgetAPI {
+  get(): Promise<Budget[]>
+  getById(id: UUID): Promise<Budget>
+  create(data: z.infer<typeof BudgetValidation>): Promise<Budget>
+  update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget>
+  delete(id: UUID): Promise<Budget>
+  
+  getNotes(budgetId: UUID): Promise<BudgetNote[]>
+  createNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
+  updateNoteText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
+  updateNoteStatus(budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote>  
+  deleteNote(budgetId: UUID, noteId: UUID): Promise<BudgetNote>
 }
 
-export interface INewBudgetAPI extends IAPI<Budget> {
-  addNote(budgetId: UUID, text: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
-  editNoteText(budgetId: UUID, noteId: UUID, text: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
-  removeNote(budgetId: UUID, noteId: UUID): Promise<void>
-  changeNoteStatus(budgetId: UUID, noteId: UUID, status: 'open' | 'closed'): Promise<BudgetNote>
-}
+export interface ITransactionAPI {
+  getByBudgets(type: Transaction['type']): Promise<Transaction[]>
+  getByBudget(budgetId: UUID, type: Transaction['type']): Promise<Transaction[]>
 
-export interface INewTransactionAPI extends IAPI<Transaction> {
-  getByBudget(budgetId: UUID): Promise<StorageCollection<Transaction>>
-  deleteByBudget(budgetId: UUID): Promise<void>
-
-  changeStatus(id: UUID, status: Transaction['status']): Promise<Transaction>
+  create(data: z.infer<typeof TransactionValidation>, executePayment: boolean): Promise<Transaction>
+  updateStatus(id: UUID, processed: boolean): Promise<Transaction>
+  delete(id: UUID, undoPayment: boolean): Promise<Transaction>
 }

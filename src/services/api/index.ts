@@ -3,7 +3,7 @@ import CurrencyAPI from '@/services/api/CurrencyAPI'
 
 // storage
 import BudgetStorageAPI from '@/services/storage/BudgetStorageAPI'
-import TransactionStorageAPI from '../storage/TransactionStorageAPI'
+import TransactionStorageAPI from '@/services/storage/TransactionStorageAPI'
 
 class API {
   private static _instance: API

@@ -7,12 +7,12 @@ export const budgetSchema = z.object({
   type: z.string()
     .regex(/^(income|expense)$/),
   balance: z.object({
+    currency: z.string()
+      .min(1, { message: 'Too short.' })
+      .max(5, { message: 'Too long.' }),
     current: z.coerce.number(),
     ceiling: z.coerce.number()
   }),
-  currency: z.string()
-    .min(1, { message: 'Too short.' })
-    .max(5, { message: 'Too long.' }),
   theme: z.object({
     background: z.string()
       .length(7, { message: 'Background value should be a valid HEX color. e.g. #f1f1f1' })
@@ -30,7 +30,7 @@ export const budgetNoteSchema = z.object({
 
 export const transactionSchema = z.object({
   budgetId: z.string().uuid(),
-  label: z.string()
+  name: z.string()
     .min(2, { message: 'Too short.' })
     .max(28, { message: 'Too long.' }),
   payment: z.object({
@@ -40,7 +40,6 @@ export const transactionSchema = z.object({
       .regex(/^(?:\+|-)$/),
     amount: z.coerce.number().gt(0)
   }),
-  status: z.string()
-    .regex(/^(processed|processing)$/),
-  expectedDate: z.date().optional()
+  processed: z.boolean(),
+  processedAt: z.date().optional()
 })

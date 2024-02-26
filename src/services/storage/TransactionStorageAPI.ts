@@ -2,145 +2,110 @@ import { UUID } from "crypto"
 import { z } from "zod"
 
 // interfaces
-import { INewTransactionAPI } from "@/services/api/interfaces"
+import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
 import { Transaction } from "@/services/api/types"
-import { StorageCollection } from "@/services/storage/types"
-
-// storage
-import StorageHelper from "@/services/storage/StorageHelper"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
-import BudgetStorageAPI from "./BudgetStorageAPI"
 
-class TransactionStorageAPI implements INewTransactionAPI {
+// storage
+import StorageHelper from "@/services/storage/StorageHelper"
+import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
+
+class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
+
   private storage: StorageHelper<Transaction>
+  private budgetStorageApi: BudgetStorageAPI
 
   private constructor() {
     this.storage = new StorageHelper()
+    this.budgetStorageApi = BudgetStorageAPI.getInstance()
   }
 
-  public static getInstance(): TransactionStorageAPI {
+  public static getInstance() {
     if (!TransactionStorageAPI._instance) {
       TransactionStorageAPI._instance = new TransactionStorageAPI()
     }
     return TransactionStorageAPI._instance
   }
 
-  async get(id: UUID): Promise<Transaction> {
-    return await this.storage.findById('transactions', id)
+  public async getByBudgets(type: Transaction['type']): Promise<Transaction[]> {
+    return await this.storage
+      .find('transactions', (tr) => tr.type === type)
   }
 
-  async getByBudget(budgetId: UUID, status?: Transaction['status']): Promise<StorageCollection<Transaction>> {
-    const transactions = await this.storage.find('transactions')
-
-    return Object.values(transactions)
-      .filter(tr => status
-          ? tr.budgetId === budgetId && tr.status == status
-          : tr.budgetId === budgetId
-      )
-      .reduce((transactions, tr) => ({
-        ...transactions,
-        [tr.id]: tr
-      }), {})
+  public async getByBudget(budgetId: UUID, type: Transaction['type']): Promise<Transaction[] >{
+    return await this.storage
+      .find('transactions',(tr) => tr.budgetId === budgetId && tr.type === type)
   }
 
-  async getAll(status?: Transaction['status']): Promise<StorageCollection<Transaction>> {
-    let transactions = await this.storage.find('transactions')
-
-    if (status) {
-      transactions = Object.values(transactions)
-        .filter(tr => tr.status === status)
-        .reduce((transactions, tr) => ({
-          ...transactions,
-          [tr.id]: tr
-        }), {})
-    }
-
-    return transactions
-  }
-
-  async create(data: z.infer<typeof TransactionValidation>, executeOnBudget: boolean = true): Promise<Transaction> {
-    const currentDate = new Date()
-    const date: Transaction['date'] = {
-      created: currentDate,
-      expected: currentDate,
-      credited: currentDate
-    }
-  
-    if (data.status as Transaction['status'] === 'processing' && data.expectedDate) {
-      date.credited = undefined
-      date.expected = data.expectedDate
-    }
-
-    const transaction: Transaction = {
+  public async create(data: z.infer<typeof TransactionValidation>, executePayment = true): Promise<Transaction> {
+    const transaction = await this.storage.save('transactions', {
       id: crypto.randomUUID(),
-      ...data,
       budgetId: data.budgetId as UUID,
-      type: 'default',
-      status: data.status as Transaction['status'],
+      type: 'default', // FIXME: send type through data
+      name: data.name,
       payment: data.payment as Transaction['payment'],
-      date
+      createdAt: new Date(),
+      processed: data.processed,
+      processedAt: data.processedAt
+    })
+
+    if (!executePayment) return transaction
+
+    if (transaction.type === 'default') {
+      await this.budgetStorageApi
+        .managePayments(transaction.budgetId, [transaction.payment], 'execute')
     }
 
-    if (executeOnBudget) {
-      await BudgetStorageAPI.getInstance()
-        .executePayments(transaction.budgetId, [transaction.payment])
+    if (transaction.type === 'temporary') {
+      // TODO: implement payment execution logic
+    }
+
+    return transaction
+  }
+
+  public async updateStatus(id: UUID, processed: boolean): Promise<Transaction> {
+    const transaction = await this.storage.findById('transactions', id)
+
+    transaction.processed = processed
+    transaction.processedAt = processed ? new Date() : undefined
+
+    if (transaction.type === 'default') {
+      await this.budgetStorageApi
+        .managePayments(
+          transaction.budgetId,
+          [transaction.payment],
+          processed ? 'execute' : 'undo'
+        )
+    }
+
+    if (transaction.type === 'temporary') {
+      // TODO: implement payment execution logic
     }
 
     return await this.storage.save('transactions', transaction)
   }
 
-  async update(_id: UUID, _data: z.infer<typeof TransactionValidation>): Promise<Transaction> {
-    // TODO: not sure if this is necessary
-    throw new Error("Method not implemented.")
-  }
-
-  async delete(id: UUID, undoOnBudget: boolean = true): Promise<void> {
+  public async delete(id: UUID, undoPayment = true): Promise<Transaction> {
     const transaction = await this.storage.findById('transactions', id)
-
-    if (undoOnBudget) {
-      await BudgetStorageAPI.getInstance()
-        .undoPayments(transaction.budgetId, [transaction.payment])
-    }
-
     await this.storage.delete('transactions', id)
-  }
 
-  async deleteByBudget(budgetId: UUID, undoOnBudget: boolean = true): Promise<void> {
-    const transactions = await this.storage.find('transactions')
-    const budgetTransactions = Object.values(transactions)
-      .filter(tr => tr.budgetId === budgetId)
+    if (!undoPayment) return transaction
 
-    if (undoOnBudget) {
-      const payments = budgetTransactions.map(tr => tr.payment)
-      await BudgetStorageAPI.getInstance()
-        .undoPayments(budgetId, payments)
-    }
-      
-    const ids = budgetTransactions.map(tr => tr.id)
-    await this.storage.bulkDelete('transactions', ids)
-  }
-
-  async changeStatus(id: UUID, status: Transaction['status']): Promise<Transaction> {
-    const transaction = await this.storage.findById('transactions', id)
-    
-    transaction.status = status
-    
-    if (status === 'processed') {
-      await BudgetStorageAPI.getInstance()
-        .executePayments(transaction.budgetId, [transaction.payment])
+    if (transaction.type === 'default') {
+      await this.budgetStorageApi
+        .managePayments(transaction.budgetId, [transaction.payment], 'undo')
     }
 
-    if (status === 'processing') {
-      await BudgetStorageAPI.getInstance()
-        .undoPayments(transaction.budgetId, [transaction.payment])
+    if (transaction.type === 'temporary') {
+      // TODO: implement payment execution logic
     }
 
-    return await this.storage.save('transactions', transaction)
+    return transaction
   }
 }
 

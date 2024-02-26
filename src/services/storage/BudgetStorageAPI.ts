@@ -2,24 +2,29 @@ import { UUID } from "crypto"
 import { z } from "zod"
 
 // interfaces
-import { INewBudgetAPI } from "@/services/api/interfaces"
+import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
 import { Budget, BudgetNote, Transaction } from "@/services/api/types"
-import { StorageCollection } from "@/services/storage/types"
-
-// storage
-import StorageHelper from "@/services/storage/StorageHelper"
 
 // validations
 import { BudgetNoteValidation, BudgetValidation } from "@/lib/validation"
 
-class BudgetStorageAPI implements INewBudgetAPI {
+// storage
+import StorageHelper from "@/services/storage/StorageHelper"
+import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
+
+class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
+
   private storage: StorageHelper<Budget>
+  private noteStorage: StorageHelper<BudgetNote>
+  private transactionStorageApi: TransactionStorageAPI
 
   private constructor() {
     this.storage = new StorageHelper()
+    this.noteStorage = new StorageHelper()
+    this.transactionStorageApi = TransactionStorageAPI.getInstance()
   }
 
   public static getInstance(): BudgetStorageAPI {
@@ -29,106 +34,102 @@ class BudgetStorageAPI implements INewBudgetAPI {
     return BudgetStorageAPI._instance
   }
 
-  async get(id: UUID): Promise<Budget> {
-    return await this.storage.findById('budgets', id)
-  }
-
-  async getAll(): Promise<StorageCollection<Budget>> {
+  public async get(): Promise<Budget[]> {
     return await this.storage.find('budgets')
   }
 
-  async create(data: z.infer<typeof BudgetValidation>): Promise<Budget> {
-    const budget: Budget = {
+  public async getById(id: UUID): Promise<Budget> {
+    return await this.storage.findById('budgets', id)
+  }
+
+  public async create(data: z.infer<typeof BudgetValidation>): Promise<Budget> {
+    return await this.storage.save('budgets', {
       id: crypto.randomUUID(),
-      ...data,
-      notes: {},
-      type: data.type as Budget['type']
-    }
-
-    return await this.storage.save('budgets', budget)
+      name: data.name,
+      type: data.type as Budget['type'],
+      balance: data.balance,
+      theme: data.theme
+    })
   }
 
-  async update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget> {
-    const budget: Budget = {
-      ...await this.storage.findById('budgets', id),
+  public async update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget> {
+    const budget = await this.storage.findById('budgets', id)
+
+    return await this.storage.save('budgets', {
+      ...budget,
       ...data,
       type: data.type as Budget['type']
-    }
-
-    return await this.storage.save('budgets', budget)
+    })
   }
 
-  async delete(id: UUID): Promise<void> {
+  public async delete(id: UUID): Promise<Budget> {
+    const budget = await this.storage.findById('budgets', id)
     await this.storage.delete('budgets', id)
+
+    const notes = await this.getNotes(id)
+    await this.noteStorage.bulkDelete('notes', notes.map(note => note.id))
+
+    const transactions = await this.transactionStorageApi.getByBudget(id) // FIXME: make transaction type optional
+    await this.storage.bulkDelete('transactions', transactions.map(tr => tr.id))
+
+    return budget
   }
-  
-  async addNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
-    const budget = await this.storage.findById('budgets', budgetId)
 
-    const noteId = crypto.randomUUID()
-    const note = {
-      id: noteId, text: data.text,
-      date: {
-        created: new Date()
-      }
-    }
+  public async getNotes(budgetId: UUID): Promise<BudgetNote[]> {
+    return await this.noteStorage
+      .find('notes', (note) => note.budgetId === budgetId)
+  }
 
-    budget.notes[noteId] = note
-    await this.storage.save('budgets', budget)
+  public async createNote(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
+    return await this.noteStorage.save('notes', {
+      id: crypto.randomUUID(),
+      budgetId,
+      text: data.text,
+      status: 'open',
+      createdAt: new Date()
+    })
+  }
+
+  public async updateNoteText(_budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
+    const note = await this.noteStorage.findById('notes', noteId)
+
+    return await this.noteStorage.save('notes', {
+      ...note,
+      text: data.text
+    })
+  }
+
+  public async updateNoteStatus(_budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote> {
+    const note = await this.noteStorage.findById('notes', noteId)
+
+    return await this.noteStorage.save('notes', {
+      ...note,
+      status
+    })
+  }
+
+  public async deleteNote(_budgetId: UUID, noteId: UUID): Promise<BudgetNote> {
+    const note = await this.noteStorage.findById('notes', noteId)
+
+    await this.noteStorage.delete('notes', noteId)
     return note
-  }
-
-  async editNoteText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
-    const budget = await this.storage.findById('budgets', budgetId)
-    
-    const note = budget.notes[noteId]
-    note.text = data.text
-    note.date.edited = new Date()
-
-    budget.notes[noteId] = note
-    await this.storage.save('budgets', budget)
-    return note
-  }
-
-  async changeNoteStatus(budgetId: string, noteId: string, status: "open" | "closed"): Promise<BudgetNote> {
-    const budget = await this.storage.findById('budgets', budgetId)
-
-    const note = budget.notes[noteId]
-    note.date.closed = status === 'open'
-      ? undefined
-      : new Date()
-
-    budget.notes[noteId] = note
-    await this.storage.save('budgets', budget)
-    return note
-  }
-
-  async removeNote(budgetId: string, noteId: string): Promise<void> {
-    const budget = await this.storage.findById('budgets', budgetId)
-
-    delete budget.notes[noteId]
-    await this.storage.save('budgets', budget)
   }
 
   // helpers
-  async executePayments(budgetId: UUID, payments: Transaction['payment'][]) {
+  async managePayments(budgetId: UUID, payments: Transaction['payment'][], action: 'execute' | 'undo') {
     const budget = await this.storage.findById('budgets', budgetId)
 
     payments.forEach((payment) => {
-      budget.balance.current += payment.type === '+'
+      const amountToAdd = payment.type === '+'
         ? payment.amount
         : -payment.amount
-    })
-  }
 
-  async undoPayments(budgetId: UUID, payments: Transaction['payment'][]) {
-    const budget = await this.storage.findById('budgets', budgetId)
-
-    payments.forEach((payment) => {
-      budget.balance.current -= payment.type === '+'
-        ? payment.amount
-        : -payment.amount
+      budget.balance.current += action === 'execute'
+        ? amountToAdd
+        : -amountToAdd
     })
+
+    await this.storage.save('budgets', budget)
   }
 }
 
