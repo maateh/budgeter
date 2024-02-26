@@ -2,18 +2,23 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
-import { useSaveNoteMutation } from "@/lib/react-query/mutations"
+import { useSaveNote } from "@/lib/react-query/mutations"
 
 // types
-import { BudgetNoteSubmitProps, FieldValues } from "@/components/form/budget/types"
+import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/budget/types"
 
-const useBudgetNoteSubmit = (form: UseFormReturn<FieldValues['note']>, { budgetId, noteId }: BudgetNoteSubmitProps) => {
-  const { mutateAsync: saveNote, isPending } = useSaveNoteMutation(budgetId, noteId)
+const useBudgetNoteSubmit = (form: UseFormReturn<BudgetNoteFieldValues>, { budgetId, noteId }: BudgetNoteSubmitProps) => {
   const { cleanForm } = useFormContext()
+  
+  const { mutateAsync: saveNote, isPending } = useSaveNote(budgetId, noteId)
 
-  const onSubmit: SubmitHandler<FieldValues['note']> = async (values) => { 
+  const onSubmit: SubmitHandler<BudgetNoteFieldValues> = async (values) => { 
     try {
-      await saveNote(values)
+      await saveNote({
+        budgetId,
+        noteId,
+        data: values
+      })
   
       form.reset()
       cleanForm()
