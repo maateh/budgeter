@@ -19,7 +19,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   private storage: StorageHelper<BudgetNote>
 
   private constructor() {
-    this.storage = new StorageHelper()
+    this.storage = new StorageHelper('notes')
   }
 
   public static getInstance(): BudgetNoteStorageAPI {
@@ -31,11 +31,11 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
 
   public async getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]> {
     return await this.storage
-      .find('notes', (note) => note.budgetId === budgetId && note.status === status)
+      .find((note) => note.budgetId === budgetId && note.status === status)
   }
 
   public async create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
-    return await this.storage.save('notes', {
+    return await this.storage.save({
       id: crypto.randomUUID(),
       budgetId,
       text: data.text,
@@ -45,9 +45,9 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   }
 
   public async updateText(_budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
-    const note = await this.storage.findById('notes', noteId)
+    const note = await this.storage.findById(noteId)
 
-    return await this.storage.save('notes', {
+    return await this.storage.save({
       ...note,
       text: data.text,
       editedAt: new Date()
@@ -55,9 +55,9 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   }
 
   public async updateStatus(_budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote> {
-    const note = await this.storage.findById('notes', noteId)
+    const note = await this.storage.findById(noteId)
 
-    return await this.storage.save('notes', {
+    return await this.storage.save({
       ...note,
       status,
       closedAt: status === 'closed' ? new Date() : undefined
@@ -65,9 +65,9 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   }
 
   public async delete(_budgetId: UUID, noteId: UUID): Promise<BudgetNote> {
-    const note = await this.storage.findById('notes', noteId)
+    const note = await this.storage.findById(noteId)
 
-    await this.storage.delete('notes', noteId)
+    await this.storage.delete(noteId)
     return note
   }
 }

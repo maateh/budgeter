@@ -21,7 +21,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   private budgetStorageApi: BudgetStorageAPI
 
   private constructor() {
-    this.storage = new StorageHelper()
+    this.storage = new StorageHelper('transactions')
     this.budgetStorageApi = BudgetStorageAPI.getInstance()
   }
 
@@ -34,19 +34,19 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async getByBudgets(type: Transaction['type']): Promise<Transaction[]> {
     return await this.storage
-      .find('transactions', (tr) => tr.type === type)
+      .find((tr) => tr.type === type)
   }
 
   public async getByBudget(budgetId: UUID, type: Transaction['type']): Promise<Transaction[] >{
     return await this.storage
-      .find('transactions',(tr) => tr.budgetId === budgetId && tr.type === type)
+      .find((tr) => tr.budgetId === budgetId && tr.type === type)
   }
 
   public async create(data: z.infer<typeof TransactionValidation>, executePayment = true): Promise<Transaction> {
-    const transaction = await this.storage.save('transactions', {
+    const transaction = await this.storage.save({
       id: crypto.randomUUID(),
       budgetId: data.budgetId as UUID,
-      type: 'default', // FIXME: send type through data
+      type: data.type as Transaction['type'],
       name: data.name,
       payment: data.payment as Transaction['payment'],
       createdAt: new Date(),
@@ -69,7 +69,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   public async updateStatus(id: UUID, processed: boolean): Promise<Transaction> {
-    const transaction = await this.storage.findById('transactions', id)
+    const transaction = await this.storage.findById(id)
 
     transaction.processed = processed
     transaction.processedAt = processed ? new Date() : undefined
@@ -87,12 +87,12 @@ class TransactionStorageAPI implements ITransactionAPI {
       // TODO: implement payment execution logic
     }
 
-    return await this.storage.save('transactions', transaction)
+    return await this.storage.save(transaction)
   }
 
   public async delete(id: UUID, undoPayment = true): Promise<Transaction> {
-    const transaction = await this.storage.findById('transactions', id)
-    await this.storage.delete('transactions', id)
+    const transaction = await this.storage.findById(id)
+    await this.storage.delete(id)
 
     if (!undoPayment) return transaction
 

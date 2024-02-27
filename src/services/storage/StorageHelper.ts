@@ -7,17 +7,23 @@ import { IStorageHelper } from "@/services/storage/interfaces"
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
 
 class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
-  async fetchFromStorage(collection: StorageCollections): Promise<StorageCollection<D>> {
-    const plainDocs = localStorage.getItem(collection) || '{}'
+  private collection: StorageCollections
+
+  public constructor(collection: StorageCollections) {
+    this.collection = collection
+  }
+
+  public async fetchFromStorage(): Promise<StorageCollection<D>> {
+    const plainDocs = localStorage.getItem(this.collection) || '{}'
     return JSON.parse(plainDocs)
   }
 
-  async saveToStorage(collection: StorageCollections, documents: StorageCollection<D>) {
-    localStorage.setItem(collection, JSON.stringify(documents))
+  public async saveToStorage(documents: StorageCollection<D>) {
+    localStorage.setItem(this.collection, JSON.stringify(documents))
   }
 
-  async find(collection: StorageCollections, filter?: (doc: D) => boolean): Promise<D[]> {
-    const collectionDocs = await this.fetchFromStorage(collection)
+  public async find(filter?: (doc: D) => boolean): Promise<D[]> {
+    const collectionDocs = await this.fetchFromStorage()
     const documents = Object.values(collectionDocs)
 
     if (!filter) {
@@ -27,14 +33,14 @@ class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
     return documents.filter(filter)
   }
 
-  async findById(collection: StorageCollections, id: UUID): Promise<D> {
-    const documents = await this.fetchFromStorage(collection)
+  public async findById(id: UUID): Promise<D> {
+    const documents = await this.fetchFromStorage()
     return documents[id]
   }
 
-  async save(collection: StorageCollections, document: D): Promise<D> {
-    const documents = await this.fetchFromStorage(collection)
-    await this.saveToStorage(collection, {
+  public async save(document: D): Promise<D> {
+    const documents = await this.fetchFromStorage()
+    await this.saveToStorage({
       ...documents,
       [document.id]: document
     })
@@ -42,23 +48,23 @@ class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
     return document
   }
 
-  async bulkSave(collection: StorageCollections, documents: StorageCollection<D>) {
-    await this.saveToStorage(collection, {
-      ...await this.fetchFromStorage(collection),
+  public async bulkSave(documents: StorageCollection<D>) {
+    await this.saveToStorage({
+      ...await this.fetchFromStorage(),
       ...documents, 
     })
   }
 
-  async delete(collection: StorageCollections, id: UUID) {
-    const documents = await this.fetchFromStorage(collection)
+  public async delete(id: UUID) {
+    const documents = await this.fetchFromStorage()
     delete documents[id]
-    await this.saveToStorage(collection, documents)
+    await this.saveToStorage(documents)
   }
 
-  async bulkDelete(collection: StorageCollections, ids: UUID[]) {
-    const documents = await this.fetchFromStorage(collection)
+  public async bulkDelete(ids: UUID[]) {
+    const documents = await this.fetchFromStorage()
     ids.forEach(id => delete documents[id])
-    await this.saveToStorage(collection, documents)
+    await this.saveToStorage(documents)
   }
 }
 

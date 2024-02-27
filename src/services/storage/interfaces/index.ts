@@ -1,17 +1,17 @@
 // types
 import { UUID } from "crypto"
-import { StorageCollection, StorageCollections } from "@/services/storage/types"
+import { StorageCollection } from "@/services/storage/types"
 
 export interface IStorageHelper<D> {
-  fetchFromStorage(collection: StorageCollections): Promise<StorageCollection<D>>
-  saveToStorage(collection: StorageCollections, documents: StorageCollection<D>): Promise<void>
+  fetchFromStorage(): Promise<StorageCollection<D>>
+  saveToStorage(documents: StorageCollection<D>): Promise<void>
 
-  find(collection: StorageCollections, filter?: (doc: D) => boolean): Promise<D[]>
-  findById(collection: StorageCollections, id: UUID): Promise<D>
+  find(filter?: (doc: D) => boolean): Promise<D[]>
+  findById(id: UUID): Promise<D>
 
-  save(collection: StorageCollections, document: D): Promise<D>
-  bulkSave(collection: StorageCollections, documents: StorageCollection<D>): Promise<void>
+  save(document: D): Promise<D>
+  bulkSave(documents: StorageCollection<D>): Promise<void>
 
-  delete(collection: StorageCollections, id: UUID): Promise<void>
-  bulkDelete(collection: StorageCollections, ids: UUID[]): Promise<void>
+  delete(id: UUID): Promise<void>
+  bulkDelete(ids: UUID[]): Promise<void>
 }

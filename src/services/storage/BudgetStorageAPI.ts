@@ -19,7 +19,7 @@ class BudgetStorageAPI implements IBudgetAPI {
   private storage: StorageHelper<Budget>
 
   private constructor() {
-    this.storage = new StorageHelper()
+    this.storage = new StorageHelper('budgets')
   }
 
   public static getInstance(): BudgetStorageAPI {
@@ -30,15 +30,15 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async get(): Promise<Budget[]> {
-    return await this.storage.find('budgets')
+    return await this.storage.find()
   }
 
   public async getById(id: UUID): Promise<Budget> {
-    return await this.storage.findById('budgets', id)
+    return await this.storage.findById(id)
   }
 
   public async create(data: z.infer<typeof BudgetValidation>): Promise<Budget> {
-    return await this.storage.save('budgets', {
+    return await this.storage.save({
       id: crypto.randomUUID(),
       name: data.name,
       type: data.type as Budget['type'],
@@ -48,9 +48,9 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget> {
-    const budget = await this.storage.findById('budgets', id)
+    const budget = await this.storage.findById(id)
 
-    return await this.storage.save('budgets', {
+    return await this.storage.save({
       ...budget,
       ...data,
       type: data.type as Budget['type']
@@ -58,8 +58,8 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async delete(id: UUID): Promise<Budget> {
-    const budget = await this.storage.findById('budgets', id)
-    await this.storage.delete('budgets', id)
+    const budget = await this.storage.findById(id)
+    await this.storage.delete(id)
 
     // FIXME: remove notes
     // const notes = await this.getNotes(id)
@@ -74,7 +74,7 @@ class BudgetStorageAPI implements IBudgetAPI {
 
   // helpers
   async managePayments(budgetId: UUID, payments: Transaction['payment'][], action: 'execute' | 'undo') {
-    const budget = await this.storage.findById('budgets', budgetId)
+    const budget = await this.storage.findById(budgetId)
 
     payments.forEach((payment) => {
       const amountToAdd = payment.type === '+'
@@ -86,7 +86,7 @@ class BudgetStorageAPI implements IBudgetAPI {
         : -amountToAdd
     })
 
-    await this.storage.save('budgets', budget)
+    await this.storage.save(budget)
   }
 }
 
