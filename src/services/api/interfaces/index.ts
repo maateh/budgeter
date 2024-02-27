@@ -28,8 +28,9 @@ export interface IBudgetNoteAPI {
 }
 
 export interface ITransactionAPI {
-  getByBudgets(type: Transaction['type']): Promise<Transaction[]>
-  getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[]>
+  getTransactionsWithBudgets(type: Transaction['type'], budgetId?: UUID): Promise<(Transaction & { budget: Budget })[]>
+  // getByBudgets(type: Transaction['type']): Promise<Transaction[]>
+  // getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[]>
 
   create(data: z.infer<typeof TransactionValidation>, executePayment: boolean): Promise<Transaction>
   updateStatus(id: UUID, processed: boolean): Promise<Transaction>

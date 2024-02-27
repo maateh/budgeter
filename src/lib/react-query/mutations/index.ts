@@ -9,3 +9,5 @@ export { default as useDeleteNote } from './budget-note/useDeleteNote'
 
 // transaction
 export { default as useCreateTransaction } from './transaction/useCreateTransaction'
+export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
+export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'

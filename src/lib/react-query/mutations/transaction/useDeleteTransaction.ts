@@ -1,18 +1,16 @@
+import { UUID } from "crypto"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-// types
-import { TransactionFieldValues } from "@/components/form/transaction/types"
-
-const useCreateTransaction = () => {
+const useDeleteTransaction = (transactionId: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
   return useMutation({
-    mutationKey: ['createTransaction'],
-    mutationFn: async (data: TransactionFieldValues) => await api.transaction.create(data),
+    mutationKey: ['deleteTransaction', transactionId],
+    mutationFn: async (id: UUID) => await api.transaction.delete(id),
     onSuccess: ({ type, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, budgetId] })
       queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, 'all'] })
@@ -20,4 +18,4 @@ const useCreateTransaction = () => {
   })
 }
 
-export default useCreateTransaction
+export default useDeleteTransaction

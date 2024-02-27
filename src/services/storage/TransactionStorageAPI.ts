@@ -5,7 +5,7 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { Budget, Transaction } from "@/services/api/types"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
@@ -32,15 +32,30 @@ class TransactionStorageAPI implements ITransactionAPI {
     return TransactionStorageAPI._instance
   }
 
-  public async getByBudgets(type: Transaction['type']): Promise<Transaction[]> {
-    return await this.storage
-      .find((tr) => tr.type === type)
+  public async getTransactionsWithBudgets(
+    type: Transaction['type'], budgetId?: UUID
+  ): Promise<(Transaction & { budget: Budget })[]> {
+    const transactions = await this.storage
+      .find((tr) => (!budgetId || tr.budgetId === budgetId) && tr.type === type)
+
+    const budgets = budgetId
+      ? [await this.budgetStorageApi.getById(budgetId)]
+      : await this.budgetStorageApi.get()
+
+    return transactions.reduce((trs, tr) => ([
+      ...trs,
+      { ...tr, budget: budgets.find(b => b.id === tr.budgetId)! }
+    ]), [] as (Transaction & { budget: Budget })[])
   }
 
-  public async getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[] >{
-    return await this.storage
-      .find((tr) => tr.budgetId === budgetId && tr.type === type)
-  }
+  // public async getByBudgets(type: Transaction['type']): Promise<Transaction[]> {
+  //   return await this.storage.find((tr) => tr.type === type)
+  // }
+
+  // public async getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[] >{
+  //   return await this.storage
+  //     .find((tr) => tr.budgetId === budgetId && tr.type === type)
+  // }
 
   public async create(data: z.infer<typeof TransactionValidation>, executePayment = true): Promise<Transaction> {
     const transaction = await this.storage.save({
