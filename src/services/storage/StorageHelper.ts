@@ -61,9 +61,13 @@ class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
     await this.saveToStorage(documents)
   }
 
-  public async bulkDelete(ids: UUID[]) {
+  public async bulkDelete(filter: (doc: D) => boolean) {
     const documents = await this.fetchFromStorage()
-    ids.forEach(id => delete documents[id])
+
+    Object.values(documents)
+      .filter(filter)
+      .forEach((doc) => delete documents[doc.id])
+
     await this.saveToStorage(documents)
   }
 }

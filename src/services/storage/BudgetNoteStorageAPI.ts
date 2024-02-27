@@ -70,6 +70,11 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     await this.storage.delete(noteId)
     return note
   }
+
+  // helpers
+  public getStorage() {
+    return this.storage
+  }
 }
 
 export default BudgetNoteStorageAPI

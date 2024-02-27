@@ -12,6 +12,8 @@ import { BudgetValidation } from "@/lib/validation"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
+import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
+import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
@@ -61,13 +63,11 @@ class BudgetStorageAPI implements IBudgetAPI {
     const budget = await this.storage.findById(id)
     await this.storage.delete(id)
 
-    // FIXME: remove notes
-    // const notes = await this.getNotes(id)
-    // await this.noteStorage.bulkDelete('notes', notes.map(note => note.id))
+    await BudgetNoteStorageAPI.getInstance().getStorage()
+      .bulkDelete((note) => note.budgetId === id)
 
-    // FIXME: remove transactions
-    // const transactions = await this.transactionStorageApi.getByBudget(id) // FIXME: make transaction type optional
-    // await this.storage.bulkDelete('transactions', transactions.map(tr => tr.id))
+    await TransactionStorageAPI.getInstance().getStorage()
+      .bulkDelete(tr => tr.budgetId === id)
 
     return budget
   }

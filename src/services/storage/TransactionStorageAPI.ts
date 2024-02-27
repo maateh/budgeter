@@ -37,7 +37,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       .find((tr) => tr.type === type)
   }
 
-  public async getByBudget(budgetId: UUID, type: Transaction['type']): Promise<Transaction[] >{
+  public async getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[] >{
     return await this.storage
       .find((tr) => tr.budgetId === budgetId && tr.type === type)
   }
@@ -106,6 +106,11 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     return transaction
+  }
+
+  // helpers
+  public getStorage() {
+    return this.storage
   }
 }
 
