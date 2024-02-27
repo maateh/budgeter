@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 
 // components
 import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
-import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
+// import StatusSwitcher from "@/components/ui/custom/StatusSwitcher"
 import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
@@ -25,6 +25,7 @@ type TransactionDetailsPopoverProps = {
   children: React.JSX.Element
 }
 
+// TODO: this component should be reworked
 const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, handleDelete, children }: TransactionDetailsPopoverProps) => {
   return (
     <Popover>
@@ -35,29 +36,30 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
         <div className="min-w-64 max-w-96 flex justify-between items-center gap-x-4">
           <div className="icon-wrapper">
             <Receipt size={24} strokeWidth={1.5} />
-            <p className="text-lg font-heading">{transaction.label}</p>
+            <p className="text-lg font-heading">{transaction.name}</p>
           </div>
 
           <ConfirmationDialog
-            title={transaction.status === 'processed'
-                ? `Withdraw "${transaction.label}" transaction`
-                : `Confirm "${transaction.label}" transaction crediting`
+            title={transaction.processed
+                ? `Withdraw "${transaction.name}" transaction`
+                : `Confirm "${transaction.name}" transaction crediting`
             }
-            message={transaction.status === 'processed'
+            message={transaction.processed
                 ? 'Do you really want to withdraw this transaction?'
                 : 'Has the transaction been credited? You can always withdraw this action.'
             }
-            variant={transaction.status === 'processed' ? 'confirm-negative': 'confirm-positive' }
+            variant={transaction.processed ? 'confirm-negative': 'confirm-positive' }
             confirm={handleChangeStatus}
           >
-            <StatusSwitcher status={transaction.status} />
+            {/* FIXME: StatusSwitcher is currently broken */}
+            {/* <StatusSwitcher status={transaction.status} /> */}
           </ConfirmationDialog>
         </div>
 
         <Separator className="mt-1.5 h-0.5 rounded-full bg-foreground/80" />
 
         <div className="mt-2.5 flex flex-col gap-y-0.5">
-          {transaction.status === 'processed' && transaction.date.credited && (
+          {/* {transaction.status === 'processed' && transaction.date.credited && (
             <div className="w-full flex justify-between items-center">
               <p className="text-md font-semibold small-caps">Credited</p>
               <div className="icon-wrapper">
@@ -75,12 +77,12 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
                 <CalendarClock size={18} strokeWidth={1.7} />
               </div>
             </div>
-          )}
+          )} */}
           
           <div className="w-full flex justify-between items-center">
             <p className="text-md font-semibold small-caps">Created</p>
             <div className="icon-wrapper">
-              <p className="text-sm italic font-medium">{format(transaction.date.created, 'PPP')}</p>
+              <p className="text-sm italic font-medium">{format(transaction.createdAt, 'PPP')}</p>
               <CalendarPlus size={18} strokeWidth={1.7} />
             </div>
           </div>
@@ -98,11 +100,11 @@ const TransactionDetailsPopover = ({ transaction, budget, handleChangeStatus, ha
             <div className="flex gap-x-3 items-center">
               <TransactionBadge 
                 transaction={transaction} 
-                currency={budget.currency}
+                currency={budget.balance.currency}
                 size="md"
               />
               <ConfirmationDialog
-                title={`Delete "${transaction.label}" Transaction`}
+                title={`Delete "${transaction.name}" Transaction`}
                 message="Do you really want to delete this transaction? This action cannot be undone."
                 variant="confirm-negative"
                 confirm={handleDelete}

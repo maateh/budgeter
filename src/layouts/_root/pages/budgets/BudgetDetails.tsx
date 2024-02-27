@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 
 // components
 import BudgetNotes from "@/components/shared/budget-note/BudgetNotes"
-import TransactionLayout from "@/components/shared/transaction/TransactionLayout"
+import Transactions from "@/components/shared/transaction/Transactions"
 import BudgetSummary from "./components/BudgetSummary"
 
 // hooks
@@ -29,7 +29,7 @@ const BudgetDetails = () => {
         </div>
 
         <section className="w-full h-fit min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-          {/* <TransactionLayout budgetId={budget.id} /> */}
+          <Transactions budgetId={budget.id} />
         </section>
       </div>
     </div>

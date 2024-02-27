@@ -13,7 +13,7 @@ import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 import TransactionBadge from "@/components/ui/custom/TransactionBadge"
 
 // hooks
-import { useChangeTransactionStatusMutation, useDeleteTransactionMutation } from "@/lib/react-query/mutations"
+import { useUpdateTransactionStatus, useDeleteTransaction } from "@/lib/react-query/mutations"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
@@ -23,26 +23,25 @@ type TransactionPreviewProps = {
   budget: Budget
 }
 
+// TODO: this component should be reworked
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
-  const { mutateAsync: changeTransactionStatus } = useChangeTransactionStatusMutation(transaction.id)
-  const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation(
-    transaction, budget.id
-  )
+  const { mutateAsync: updateTransactionStatus } = useUpdateTransactionStatus(transaction.id)
+  const { mutateAsync: deleteTransaction } = useDeleteTransaction(transaction.id)
 
-  const handleDelete = async () => {
+  const handleChangeStatus = async () => {
     try {
-      await deleteTransaction(transaction.id)
+      await updateTransactionStatus({
+        id: transaction.id,
+        processed: !transaction.processed
+      })
     } catch (err) {
       console.error(err)
     }
   }
 
-  const handleChangeStatus = async () => {
+  const handleDelete = async () => {
     try {
-      await changeTransactionStatus({
-        id: transaction.id,
-        status: transaction.status === 'processed' ? 'processing' : 'processed'
-      })
+      await deleteTransaction(transaction.id)
     } catch (err) {
       console.error(err)
     }
@@ -57,6 +56,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       }}
     >
       <div className="icon-wrapper">
+        {/* TODO: this component should be reworked */}
         <TransactionDetailsPopover
           transaction={transaction}
           budget={budget}
@@ -69,11 +69,11 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
         </TransactionDetailsPopover>
 
         <div className="flex flex-col font-medium truncate">
-          <p className="mb-1 text-md font-heading border-b">{transaction.label}</p>
+          <p className="mb-1 text-md font-heading border-b">{transaction.name}</p>
           <p className="text-xs font-heading font-medium leading-3 tracking-wider">{budget.name}</p>
           <p className="text-xs italic">
             {formatDistance(
-              transaction.date.credited || transaction.date.created, Date.now(), {
+              transaction.createdAt, Date.now(), {
                 addSuffix: true
               }
             )}
@@ -82,11 +82,11 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-1 items-center">
-        <TransactionBadge transaction={transaction} currency={budget.currency}  />
+        <TransactionBadge transaction={transaction} currency={budget.balance.currency}  />
 
         <div className="flex items-center">
           <ConfirmationDialog
-            title={`Delete "${transaction.label}" Transaction`}
+            title={`Delete "${transaction.name}" Transaction`}
             message="Do you really want to delete this transaction? This action cannot be undone."
             variant="confirm-negative"
             confirm={handleDelete}
@@ -96,9 +96,9 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
             </Button>
           </ConfirmationDialog>
 
-          {transaction.status === 'processing' && (
+          {!transaction.processed && (
             <ConfirmationDialog
-              title={`Confirm "${transaction.label}" transaction crediting`}
+              title={`Confirm "${transaction.name}" transaction crediting`}
               message="Has the transaction been credited? You can always withdraw this action."
               variant="confirm-positive"
               confirm={handleChangeStatus}
