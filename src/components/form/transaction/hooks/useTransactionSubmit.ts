@@ -2,16 +2,17 @@ import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
 import { useFormContext } from "@/services/providers/form/FormContext.hooks"
-import { useCreateTransactionMutation } from "@/lib/react-query/mutations"
+import { useCreateTransaction } from "@/lib/react-query/mutations"
 
 // types
-import { FieldValue } from "@/components/form/transaction/types"
+import { TransactionFieldValues } from "@/components/form/transaction/types"
 
-const useTransactionSubmit = (form: UseFormReturn<FieldValue['default']>) => {
-  const { mutateAsync: createTransaction, isPending } = useCreateTransactionMutation()
+const useTransactionSubmit = (form: UseFormReturn<TransactionFieldValues>) => {
   const { cleanForm } = useFormContext()
+  
+  const { mutateAsync: createTransaction, isPending } = useCreateTransaction()
 
-  const onSubmit: SubmitHandler<FieldValue['default']> = async (values) => {
+  const onSubmit: SubmitHandler<TransactionFieldValues> = async (values) => {
     try {
       await createTransaction(values)
 
