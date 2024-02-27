@@ -12,11 +12,11 @@ import { Separator } from '@/components/ui/separator'
 import BudgetTypeBadge from '@/components/ui/custom/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
 import ConfirmationDialog from '@/components/ui/custom/ConfirmationDialog'
-import FormDialog from '@/components/ui/custom/FormDialog'
+import FormDialog from '@/components/form/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
 
 // hooks
-import { useDeleteBudgetMutation } from '@/lib/react-query/mutations'
+import { useDeleteBudget } from '@/lib/react-query/mutations'
 
 // types
 import { Budget } from '@/services/api/types'
@@ -30,7 +30,8 @@ type BudgetSummaryProps = {
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
   const navigate = useNavigate()
-  const { mutateAsync: deleteBudget } = useDeleteBudgetMutation(budget.id)
+  
+  const { mutateAsync: deleteBudget } = useDeleteBudget(budget.id)
 
   const deleteConfirm = async () => {
     try {
@@ -72,7 +73,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           </ConfirmationDialog>
 
           <FormDialog
-            title={<>Create <span className="text-green-400 overline">Budget</span></>}
+            title={<>Edit <span className="text-green-400 overline">Budget</span></>}
             formLayout={<BudgetForm type="edit" budget={budget} />}
           >
             <Button
@@ -95,14 +96,14 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           <div className="flex flex-col gap-x-4 gap-y-3 text-lg small-caps">
             <InfoBadge
               label="Current Balance"
-              value={formatWithCurrency(budget.balance.current, budget.currency)}
+              value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
               size="lg"
               variant={budget.balance.current > 0 ? 'income' : 'loss'}
               icon={<Wallet strokeWidth={2.25} />}
             />
             <InfoBadge
               label="Ceiling"
-              value={formatWithCurrency(budget.balance.ceiling, budget.currency)}
+              value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
               size="md"
               icon={<ArrowUpToLine strokeWidth={2.25} />}
             />

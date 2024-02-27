@@ -2,13 +2,13 @@ import { UUID } from "crypto"
 
 // components
 import Form from "@/components/form/Form"
-import BudgetNoteFormFields from "@/components/form/budget/BudgetNoteFormFields"
+import BudgetNoteFormFields from "@/components/form/budget-note/BudgetNoteFormFields"
 
 // hooks
-import { useBudgetNoteSubmit } from "@/components/form/budget/hooks"
+import { useBudgetNoteSubmit } from "@/components/form/budget-note/hooks"
 
 // types
-import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/budget/types"
+import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 import { BudgetNote } from "@/services/api/types"
 
 // validation

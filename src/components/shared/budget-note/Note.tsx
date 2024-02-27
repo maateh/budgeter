@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 // components
-import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
+import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
 import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 
 // hooks

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
 // types
-import { BudgetNoteFieldValues } from "@/components/form/budget/types"
+import { BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 
 type BudgetNoteFormFieldsProps = {
   form: UseFormReturn<BudgetNoteFieldValues>

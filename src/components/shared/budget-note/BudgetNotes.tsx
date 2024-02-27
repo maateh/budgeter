@@ -7,7 +7,7 @@ import { MessageCirclePlus, Undo2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import BudgetNoteForm from "@/components/form/budget/BudgetNoteForm"
+import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
 import NoteList from "@/components/shared/budget-note/NoteList"
 
 // context

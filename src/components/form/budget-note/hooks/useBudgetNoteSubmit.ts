@@ -5,7 +5,7 @@ import { useFormContext } from "@/services/providers/form/FormContext.hooks"
 import { useSaveNote } from "@/lib/react-query/mutations"
 
 // types
-import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/budget/types"
+import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 
 const useBudgetNoteSubmit = (form: UseFormReturn<BudgetNoteFieldValues>, { budgetId, noteId }: BudgetNoteSubmitProps) => {
   const { cleanForm } = useFormContext()
