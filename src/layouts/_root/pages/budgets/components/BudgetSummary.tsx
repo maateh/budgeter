@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom'
-
 // icons
-import { ArrowUpToLine, Pencil, Trash2, Wallet } from 'lucide-react'
+import { ArrowUpToLine, Pencil, Wallet } from 'lucide-react'
 
 // shadcn
 import { Button } from '@/components/ui/button'
@@ -11,12 +9,9 @@ import { Separator } from '@/components/ui/separator'
 // components
 import BudgetTypeBadge from '@/components/ui/custom/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
-import ConfirmationDialog from '@/components/ui/custom/ConfirmationDialog'
 import FormDialog from '@/components/form/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
-
-// hooks
-import { useDeleteBudget } from '@/lib/react-query/mutations'
+import BudgetDeletion from '@/components/shared/budget/BudgetDeletion'
 
 // types
 import { Budget } from '@/services/api/types'
@@ -29,19 +24,6 @@ type BudgetSummaryProps = {
 }
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
-  const navigate = useNavigate()
-  
-  const { mutateAsync: deleteBudget } = useDeleteBudget(budget.id)
-
-  const deleteConfirm = async () => {
-    try {
-      await deleteBudget(budget.id) 
-      navigate('/')
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
   return (
     <>
       <div className="flex justify-between items-center">
@@ -56,21 +38,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
         </h2>
 
         <div className="flex justify-center items-center gap-x-4 gap-y">
-          <ConfirmationDialog
-            title={`Delete "${budget.name}" Budget`}
-            message="Are you sure you want to delete this budget?"
-            variant="confirm-negative"
-            confirm={deleteConfirm}
-          >
-            <Button
-              variant="destructive"
-              size="sm"
-              className="flex items-center gap-x-1.5 "
-            >
-              <Trash2 size={18} />
-              <span>Delete</span>
-            </Button>
-          </ConfirmationDialog>
+          <BudgetDeletion budget={budget} />
 
           <FormDialog
             title={<>Edit <span className="text-green-400 overline">Budget</span></>}

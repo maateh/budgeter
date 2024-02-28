@@ -2,7 +2,7 @@ import { useState } from "react"
 import { format } from "date-fns"
 
 // icons
-import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Trash2, Undo2 } from "lucide-react"
+import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Undo2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -10,10 +10,10 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
-import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
+import NoteDeletion from "@/components/shared/budget-note/NoteDeletion"
 
 // hooks
-import { useDeleteNote, useUpdateNoteStatus } from "@/lib/react-query/mutations"
+import { useUpdateNoteStatus } from "@/lib/react-query/mutations"
 
 // context
 import FormProvider from "@/services/providers/form/FormProvider"
@@ -30,7 +30,6 @@ const Note = ({ budget, note }: NoteProps) => {
   const [editingMode, setEditingMode] = useState(false)
 
   const { mutateAsync: updateNoteStatus } = useUpdateNoteStatus(budget.id, note.id)
-  const { mutateAsync: deleteNote } = useDeleteNote(budget.id, note.id)
 
   const handleClose = async () => {
     try {
@@ -38,17 +37,6 @@ const Note = ({ budget, note }: NoteProps) => {
         budgetId: budget.id,
         noteId: note.id,
         status: note.status === 'open' ? 'closed' : 'open'
-      })
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  const handleRemove = async () => {
-    try {
-      await deleteNote({
-        budgetId: budget.id,
-        noteId: note.id
       })
     } catch (err) {
       console.error(err)
@@ -118,24 +106,7 @@ const Note = ({ budget, note }: NoteProps) => {
             />
           </Button>
 
-          <ConfirmationDialog
-            title="Do you really want to remove this note?"
-            message={note.text}
-            variant="confirm-negative"
-            confirm={handleRemove}
-          >
-            <Button
-              variant="icon"
-              size="icon-sm"
-              className="bg-primary border-4 border-primary/60"
-            >
-              <Trash2
-                size={16}
-                strokeWidth={2.5}
-                className="text-destructive"
-              />
-            </Button>
-          </ConfirmationDialog>
+          <NoteDeletion note={note} budget={budget} />
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">

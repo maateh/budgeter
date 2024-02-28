@@ -1,55 +1,42 @@
 import { useState } from "react"
 
 // shadcn
-import { Dialog, DialogContent, DialogContentProps, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogContentProps, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
 
-type ConfirmationDialogProps = {
+type ConfirmationDialogProps = React.PropsWithChildren & {
   title: string
-  message: string
-  variant: DialogContentProps['variant']
-  confirm: () => void
-  children: React.JSX.Element
+  description: string
+  variant: AlertDialogContentProps['variant']
+  action: (event?: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 
-const ConfirmationDialog = ({ title, message, variant, confirm, children }: ConfirmationDialogProps) => {
+const ConfirmationDialog = ({ title, description, variant, action, children }: ConfirmationDialogProps) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
         {children}
-      </DialogTrigger>
-
-      <DialogContent variant={variant}>
-        <DialogHeader>
-          <DialogTitle className="text-xl capitalize">
-            {title}
-          </DialogTitle>
-        </DialogHeader>
-
-        <Separator />
-
-        <DialogDescription className="text-base font-semibold break-words whitespace-break-spaces overflow-clip">
-          {message}
-        </DialogDescription>
-
-        <DialogFooter className="flex flex-row flex-wrap justify-end items-center gap-x-4 gap-y-2">
-          <Button size="sm" onClick={() => setOpen(false)}>
+      </AlertDialogTrigger>
+      <AlertDialogContent variant={variant}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <Separator />
+          <AlertDialogDescription className="break-all whitespace-break-spaces overflow-clip">
+            {description}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => setOpen(false)}>
             Cancel
-          </Button>
-
-          <Button
-            variant="destructive"
-            border="md"
-            onClick={confirm}
-          >
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={action}>
             Confirm
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 
