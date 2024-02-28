@@ -14,6 +14,9 @@ const useDeleteTransaction = (transactionId: UUID) => {
     onSuccess: ({ type, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, budgetId] })
       queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, 'all'] })
+
+      queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
+      queryClient.invalidateQueries({ queryKey: ['getBudget', budgetId] })
     }
   })
 }

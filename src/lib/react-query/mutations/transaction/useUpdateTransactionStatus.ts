@@ -28,6 +28,9 @@ const useUpdateTransactionStatus = (transactionId: UUID) => {
       queryClient.invalidateQueries({
         queryKey: ['getTransactionsWithBudgets', 'temporary' as Transaction['type'], 'all']
       })
+
+      queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
+      queryClient.invalidateQueries({ queryKey: ['getBudget', budgetId] })
     }
   })
 }
