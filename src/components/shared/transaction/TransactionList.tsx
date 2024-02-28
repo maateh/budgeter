@@ -22,7 +22,7 @@ const TransactionList = ({ budgetId, type }: TransactionListProps) => {
   return (
     <>
       {!isLoading && transactions ? (
-        <ul>
+        <ul className="grid gap-y-2.5">
           {transactions.map((tr) => (
             <li key={tr.id}>
               <TransactionPreview budget={tr.budget} transaction={tr} />
