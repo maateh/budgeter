@@ -31,14 +31,11 @@ const DialogOverlay = React.forwardRef<
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const dialogVariants = cva(
-  "fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 py-5 px-4 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:px-8 sm:py-7 sm:min-w-[35%] sm:max-w-2xl sm:rounded-3xl",
+  "fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 py-5 px-4 border-t border-b shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:px-8 sm:py-7 sm:min-w-[35%] sm:max-w-2xl sm:rounded-3xl sm:border",
   {
     variants: {
       variant: {
-        default: "bg-background/90 text-foreground border-t border-b sm:border",
-        "confirm-neutral": "bg-background/75 text-accent border-accent border-t-2 border-b-2 sm:border-2",
-        "confirm-positive": "bg-background/75 text-green-700 border-green-400 border-t-2 border-b-2 sm:border-2 dark:text-green-400",
-        "confirm-negative": "bg-background/75 text-destructive border-destructive border-t-2 border-b-2 sm:border-2",
+        default: "bg-background/90 text-foreground",
       },
     },
     defaultVariants: {

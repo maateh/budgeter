@@ -5,25 +5,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-md font-heading ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap text-md font-medium font-heading ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "bg-primary-foreground text-primary hover:bg-primary-foreground/85",
-        destructive:
-          "bg-destructive text-destructive-foreground/90 font-semibold hover:bg-destructive/90",
-        outline: "border-2 border-border hover:bg-primary-foreground/5 hover:text-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "bg-destructive text-destructive-foreground/90 font-semibold hover:bg-destructive/90",
+        outline: "text-foreground border hover:bg-primary-foreground/5 hover:text-foreground/90",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-primary/15 hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        icon: "border-2 border-border bg-secondary text-foreground hover:bg-secondary/90"
+        icon: "border bg-secondary text-foreground hover:bg-secondary/90"
       },
       size: {
         default: "h-10 px-4 py-3 tracking-wide shadow-lg",
         sm: "h-9 px-3 text-sm shadow-md",
-        lg: "h-11 px-4 text-lg font-medium tracking-wide shadow-xl",
-        xl: "h-12 px-5 text-lg font-medium tracking-wide shadow-md",
+        lg: "h-11 px-4 text-lg tracking-wide shadow-xl",
+        xl: "h-12 px-5 text-lg tracking-wide shadow-md",
         icon: "p-1.5",
         "icon-sm": "w-8 h-8 p-1",
         "icon-md": "w-10 h-10 p-1",
