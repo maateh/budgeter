@@ -2,7 +2,7 @@ import { formatDistance } from "date-fns"
 
 // components
 import TransactionDetailsDialog from "@/components/shared/transaction/TransactionDetailsDialog"
-import TransactionStatusSwitcher from "@/components/shared/transaction/TransactionStatusSwitcher"
+import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
 import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
 import BudgetMarker from "@/components/shared/budget/BudgetMarker"
 
@@ -19,7 +19,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
     <TransactionDetailsDialog transaction={transaction} budget={budget}>
       <div className="pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer">
         <div className="flex items-center gap-x-1">
-          <TransactionStatusSwitcher transaction={transaction} />
+          <TransactionStatusSwitch transaction={transaction} />
 
           <div className="grid">
             <p className="text-md font-heading font-medium truncate">{transaction.name}</p>
