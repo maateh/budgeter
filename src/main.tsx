@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App.tsx'
 import './globals.css'
 
-import ThemeProvider from '@/components/theme/ThemeProvider.tsx'
+import ThemeProvider from '@/services/providers/theme/ThemeProvider.tsx'
 import APIProvider from '@/services/providers/api/APIProvider.tsx'
 
 const queryClient = new QueryClient()
