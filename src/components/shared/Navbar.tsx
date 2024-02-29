@@ -4,11 +4,11 @@ import { NavLink } from "react-router-dom"
 // icons
 import { Menu, PiggyBank } from "lucide-react"
 
+// components
+import ThemeSwitch from "@/components/theme/ThemeSwitch"
+
 // constants
 import { navLinks } from "@/constants"
-
-// components
-import ThemeSwitcher from "../theme/ThemeSwitcher"
 
 const Navbar = () => {
   const linksRef = useRef<HTMLUListElement>(null)
@@ -32,7 +32,7 @@ const Navbar = () => {
         </div>
 
         <ul ref={linksRef} className="w-full md:w-1/2 max-md:mt-2 md:mr-8 flex flex-col md:flex-row justify-center md:justify-end items-center gap-1 md:gap-4 max-md:[&.mobile-closed]:hidden mobile-closed">
-          {navLinks.map(link => (
+          {navLinks.map((link) => (
             <li key={link.label}>
               <NavLink
                 to={link.link}
@@ -45,8 +45,8 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <div className="absolute right-1.5 border-l-[1px] border-l-background/60">
-          <ThemeSwitcher />
+        <div className="absolute pl-1 right-1.5 border-l border-l-background/60 max-md:top-4">
+          <ThemeSwitch />
         </div>
       </nav>
     </header>
