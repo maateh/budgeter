@@ -1,8 +1,12 @@
-import { useState } from "react"
+import { Ref, useState } from "react"
 import { LucideIcon } from "lucide-react"
 
 // shadcn
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsListProps, TabsTrigger } from "@/components/ui/tabs"
+
+type CustomRef = {
+  ref?: Ref<HTMLDivElement>
+}
 
 type TabItem<T extends string> = {
   Icon?: LucideIcon
@@ -14,9 +18,9 @@ type TabsSwitcherProps<T extends string> = {
   label?: string
   defaultValue: T
   tabItems: TabItem<T>[]
-}
+} & TabsListProps & CustomRef
 
-const TabsSwitcher = <T extends string,>({ label, defaultValue, tabItems }: TabsSwitcherProps<T>) => {
+function TabsSwitcher <T extends string>({ label, defaultValue, tabItems, ...props }: TabsSwitcherProps<T>) {
   const [value, setValue] = useState(defaultValue)
 
   return (
@@ -27,7 +31,7 @@ const TabsSwitcher = <T extends string,>({ label, defaultValue, tabItems }: Tabs
         </p>
       )}
 
-      <TabsList>
+      <TabsList {...props}>
         {tabItems.map(({ value, Icon }) => (
           <TabsTrigger
             key={value}
@@ -41,7 +45,7 @@ const TabsSwitcher = <T extends string,>({ label, defaultValue, tabItems }: Tabs
         ))}
       </TabsList>
 
-      {tabItems.map(item => (
+      {tabItems.map((item) => (
         <TabsContent key={item.value} value={item.value}>
           {item.content}
         </TabsContent>

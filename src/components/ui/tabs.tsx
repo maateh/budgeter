@@ -7,9 +7,12 @@ import { cn } from "@/lib/utils"
 
 const Tabs = TabsPrimitive.Root
 
+export interface TabsListProps
+  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {}
+
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+  TabsListProps
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
