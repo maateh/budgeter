@@ -19,13 +19,14 @@ const DateTimePicker = ({ label = "Pick a date", selected, onSelect }: DateTimeP
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="w-full icon-wrapper">
-          {selected ? (
-            format(selected, 'PPP')
-          ) : (
+        <Button className="w-full icon-wrapper font-normal"
+          variant="outline"
+          size="sm"
+        >
+          <CalendarIcon size={18} />
+          {selected ? format(selected, 'yyyy. MM. dd. HH:mm') : (
             <span>{label}</span>
           )}
-          <CalendarIcon size={18} />
         </Button>
       </PopoverTrigger>
       <PopoverContent>

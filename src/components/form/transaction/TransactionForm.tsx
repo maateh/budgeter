@@ -16,20 +16,19 @@ import { TransactionValidation } from "@/lib/validation"
 
 type TransactionFormProps = {
   budgetId?: UUID
-  type: Transaction['type']
 }
 
-const TransactionForm = ({ budgetId, type }: TransactionFormProps) => {
+const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   return (
     <Form<TransactionFieldValues, typeof TransactionValidation>
       type="create"
       validationSchema={TransactionValidation}
       defaultValues={{
         budgetId: budgetId || '',
-        type,
+        type: 'default' as Transaction['type'],
         name: '',
         payment: {
-          type: '+',
+          type: '+' as Transaction['payment']['type'],
           amount: 0
         },
         processed: false

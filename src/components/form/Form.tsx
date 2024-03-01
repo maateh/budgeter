@@ -31,7 +31,7 @@ function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({
   
   return (
     <ShadcnForm {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-3.5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
 
         {children(form)}
 

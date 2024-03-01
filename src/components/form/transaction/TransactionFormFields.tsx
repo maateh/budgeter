@@ -1,7 +1,7 @@
 import { UseFormReturn, useWatch } from "react-hook-form"
 
 // icons
-import { Minus, Plus } from "lucide-react"
+import { AlarmClock, Minus, Plus, Receipt } from "lucide-react"
 
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -10,10 +10,12 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 
 // components
+import TabsSelector from "@/components/input/TabsSelector"
 import BudgetSelector from "@/components/input/BudgetSelector"
 import DateTimePicker from "@/components/input/DateTimePicker"
 
 // types
+import { Transaction } from "@/services/api/types"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
 
 type TransactionFormFieldsProps = {
@@ -31,16 +33,36 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
 
   return (
     <>
+      <FormField
+        control={control}
+        name="type"
+        render={({ field }) => (
+          <FormItem className="flex flex-col items-center gap-y-1.5 text-center">
+            <FormLabel className="text-lg small-caps">
+              Select the <span className="text-muted font-medium overline">type of transaction</span>
+            </FormLabel>
+            <FormControl>
+              <TabsSelector<Transaction['type']>
+                tabItems={[
+                  { value: 'default', Icon: Receipt },
+                  { value: 'temporary', Icon: AlarmClock }
+                ]}
+                setValue={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="w-full flex flex-wrap justify-around gap-x-8">
         {!budgetId && (
           <FormField
             control={control}
             name="budgetId"
             render={({ field }) => (
-              <FormItem className="w-1/2 flex-1">
-                <FormLabel className="font-heading font-normal normal-case">
-                  Select a Budget
-                </FormLabel>
+              <FormItem className="min-w-36 flex-1">
+                <FormLabel>Select a Budget</FormLabel>
                 <FormControl>
                   <BudgetSelector
                     defaultValue={field.value}
@@ -52,38 +74,38 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
             )}
           />
         )}
-      </div>
 
-      <FormField
-        control={control}
-        name="name"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="font-heading text-md font-normal small-caps">
-              Label
-            </FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                placeholder="e.g. Chocolate"
-                className="h-9"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <div className="flex items-center gap-x-2">
         <FormField
           control={control}
-          name="payment.type"
+          name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="min-w-52 flex-1">
+              <FormLabel>Transaction Name</FormLabel>
               <FormControl>
-                <>
-                  <Input type="hidden" {...field} />
+                <Input
+                  type="text"
+                  placeholder="e.g. Chocolate"
+                  className="h-9"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div>
+        <FormLabel>Payment</FormLabel>
+
+        <div className="flex items-center gap-x-2 5">
+          <FormField
+            control={control}
+            name="payment.type"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  {/* TODO: replace later with StatusSwitch */}
                   <Button
                     type="button"
                     variant="icon"
@@ -103,47 +125,6 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
                       <Minus size={16} />
                     )}
                   </Button>
-                </>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={control}
-          name="payment.amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="e.g. $8"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div>
-        <FormLabel className="font-heading text-md font-normal small-caps">
-          Under Processing
-        </FormLabel>
-
-        <div className="h-max flex items-center justify-between gap-x-2">
-          <FormField
-            control={control}
-            name="processed"
-            render={({ field }) => (
-              <FormItem className="flex items-center">
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,21 +133,57 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
 
           <FormField
             control={control}
-            name="processedAt"
-            render={({ field }) => processedField ? (
-              <FormItem className="w-full">
+            name="payment.amount"
+            render={({ field }) => (
+              <FormItem>
                 <FormControl>
-                  <DateTimePicker
-                    label="Select expected date..."
-                    selected={field.value!}
-                    onSelect={field.onChange}
+                  <Input
+                    type="number"
+                    placeholder="e.g. $8"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
-            ) : <></>}
+            )}
           />
         </div>
+      </div>
+
+      <div className="flex flex-col gap-y-1.5">
+        <FormField
+          control={control}
+          name="processed"
+          render={({ field }) => (
+            <FormItem className="flex items-center gap-x-2.5">
+              <FormLabel>Already Processed</FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="processedAt"
+          render={({ field }) => processedField ? (
+            <FormItem className="max-w-80">
+              <FormControl>
+                <DateTimePicker
+                  label="Select the processing date..."
+                  selected={field.value!}
+                  onSelect={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          ) : <></>}
+        />
       </div>
     </>
   )

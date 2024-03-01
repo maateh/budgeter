@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import TabsSwitcher from "@/components/ui/custom/TabsSwitcher"
 import TransactionList from "@/components/shared/transaction/TransactionList"
 import FormDialog from "@/components/form/FormDialog"
-import TransactionFormTabs from "@/components/form/transaction/TransactionFormTabs"
+import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 // types
 import { Transaction } from "@/services/api/types"
@@ -29,10 +29,10 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
 
         <FormDialog
           title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-          formLayout={<TransactionFormTabs budgetId={budgetId} />}
+          formLayout={<TransactionForm budgetId={budgetId} />}
         >
           <Button variant="icon" size="icon">
-            <Plus />
+            <Plus size={20} />
           </Button>
         </FormDialog>
       </div>
