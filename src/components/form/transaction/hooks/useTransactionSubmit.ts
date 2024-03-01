@@ -14,7 +14,7 @@ const useTransactionSubmit = (form: UseFormReturn<TransactionFieldValues>) => {
 
   const onSubmit: SubmitHandler<TransactionFieldValues> = async (values) => {
     try {
-      await createTransaction(values)
+      await createTransaction({ data: values })
 
       form.reset()
       cleanForm()

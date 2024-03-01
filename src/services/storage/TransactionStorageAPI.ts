@@ -71,13 +71,20 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     if (!executePayment) return transaction
 
-    if (transaction.type === 'default') {
-      await this.budgetStorageApi
-        .managePayments(transaction.budgetId, [transaction.payment], 'execute')
+    if (transaction.type === 'default' && transaction.processed) {
+      await this.budgetStorageApi.managePayments(
+        transaction.budgetId,
+        [transaction.payment],
+        'execute'
+      )
     }
 
-    if (transaction.type === 'temporary') {
-      // TODO: implement payment execution logic
+    if (transaction.type === 'temporary' && !transaction.processed) {
+      await this.budgetStorageApi.managePayments(
+        transaction.budgetId,
+        [transaction.payment],
+        'execute'
+      )
     }
 
     return transaction
@@ -90,16 +97,19 @@ class TransactionStorageAPI implements ITransactionAPI {
     transaction.processedAt = processed ? new Date() : undefined
 
     if (transaction.type === 'default') {
-      await this.budgetStorageApi
-        .managePayments(
-          transaction.budgetId,
-          [transaction.payment],
-          processed ? 'execute' : 'undo'
-        )
+      await this.budgetStorageApi.managePayments(
+        transaction.budgetId,
+        [transaction.payment],
+        processed ? 'execute' : 'undo'
+      )
     }
 
     if (transaction.type === 'temporary') {
-      // TODO: implement payment execution logic
+      await this.budgetStorageApi.managePayments(
+        transaction.budgetId,
+        [transaction.payment],
+        processed ? 'undo' : 'execute'
+      )
     }
 
     return await this.storage.save(transaction)
@@ -111,13 +121,27 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     if (!undoPayment) return transaction
 
-    if (transaction.type === 'default') {
-      await this.budgetStorageApi
-        .managePayments(transaction.budgetId, [transaction.payment], 'undo')
+    await this.budgetStorageApi.managePayments(
+      transaction.budgetId,
+      [transaction.payment],
+      transaction.type === 'default'
+        ? 'undo' : 'execute'
+    )
+
+    if (transaction.type === 'default' && transaction.processed) {
+      await this.budgetStorageApi.managePayments(
+        transaction.budgetId,
+        [transaction.payment],
+        'undo'
+      )
     }
 
-    if (transaction.type === 'temporary') {
-      // TODO: implement payment execution logic
+    if (transaction.type === 'temporary' && transaction.processed) {
+      await this.budgetStorageApi.managePayments(
+        transaction.budgetId,
+        [transaction.payment],
+        'execute'
+      )
     }
 
     return transaction

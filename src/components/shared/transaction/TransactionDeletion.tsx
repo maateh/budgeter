@@ -22,10 +22,7 @@ const TransactionDeletion = ({ transaction }: TransactionDeletionProps) => {
 
   const deleteConfirm = async () => {
     try {
-      await deleteTransaction({
-        id: transaction.id,
-        undoPayment: transaction.processed
-      }) 
+      await deleteTransaction({ id: transaction.id }) 
     } catch (err) {
       console.error(err)
     }
