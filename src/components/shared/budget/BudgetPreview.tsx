@@ -9,11 +9,11 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 
 // components
-import BudgetTypeBadge from "@/components/ui/custom/BudgetTypeBadge"
+import BudgetTypeBadge from "@/components/shared/budget/BudgetTypeBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 // import TransactionBadge from "@/components/ui/custom/TransactionBadge"
-import FormDialog from "@/components/ui/custom/FormDialog"
-import TransactionFormTabs from "../form/transaction/TransactionFormTabs"
+import FormDialog from "@/components/form/FormDialog"
+import TransactionFormTabs from "@/components/form/transaction/TransactionFormTabs"
 
 // types
 import { Budget } from "@/services/api/types"
@@ -54,14 +54,14 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <div className="flex flex-wrap justify-between gap-2 small-caps">
           <InfoBadge
             label="Balance"
-            value={formatWithCurrency(budget.balance.current, budget.currency)}
+            value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
             size="sm"
             variant={budget.balance.current > 0 ? 'income' : 'loss'}
             icon={<Wallet size={18} />}
           />
           <InfoBadge
             label="Ceiling"
-            value={formatWithCurrency(budget.balance.ceiling, budget.currency)}
+            value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
             size="sm"
             icon={<ArrowUpToLine size={18} />}
           />

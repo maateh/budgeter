@@ -16,6 +16,7 @@ type BudgetTypeBadeProps = {
   iconSize?: number
 }
 
+// TODO: create a BudgetDetailsBadge instead of this component
 const BudgetTypeBadge = ({ budget, size = 'icon-sm', iconSize = 20 }: BudgetTypeBadeProps) => {
   return (
     <TooltipProvider>

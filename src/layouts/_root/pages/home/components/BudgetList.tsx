@@ -2,7 +2,7 @@
 import { Budget } from "@/services/api/types"
 
 // components
-import BudgetPreview from "@/components/shared/BudgetPreview"
+import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 type BudgetListProps = {
   budgets: Budget[]

@@ -10,8 +10,8 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 
 // components
-import BudgetSelector from "@/components/ui/custom/BudgetSelector"
-import DateTimePicker from "@/components/ui/custom/DateTimePicker"
+import BudgetSelector from "@/components/input/BudgetSelector"
+import DateTimePicker from "@/components/input/DateTimePicker"
 
 // types
 import { TransactionFieldValues } from "@/components/form/transaction/types"
@@ -142,7 +142,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
                 <FormControl>
                   <Switch
                     checked={field.value}
-                    onCheckedChange={() => field.onChange(field.value)}
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

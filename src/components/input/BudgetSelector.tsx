@@ -2,7 +2,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // hooks
-import { useLoadBudgetsQuery } from "@/lib/react-query/queries"
+import { useGetBudgets } from "@/lib/react-query/queries"
 
 type BudgetSelectorProps = {
   defaultValue: string
@@ -10,7 +10,7 @@ type BudgetSelectorProps = {
 }
 
 const BudgetSelector = ({ defaultValue, onChange }: BudgetSelectorProps) => {
-  const { data: budgets, isLoading } = useLoadBudgetsQuery()
+  const { data: budgets, isLoading } = useGetBudgets()
 
   return (
     <Select
@@ -22,7 +22,7 @@ const BudgetSelector = ({ defaultValue, onChange }: BudgetSelectorProps) => {
         <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
-        {budgets && Object.values(budgets).map(b => (
+        {budgets && budgets.map(b => (
           <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
         ))}
       </SelectContent>

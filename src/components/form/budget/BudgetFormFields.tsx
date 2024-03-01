@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 
 // components
-import ColorPicker from "@/components/ui/custom/ColorPicker"
+import ColorPicker from "@/components/input/ColorPicker"
 
 // hooks
 import { useLoadCurrenciesQuery } from "@/lib/react-query/queries"

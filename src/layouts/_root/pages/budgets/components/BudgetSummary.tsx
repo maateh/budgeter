@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 
 // components
-import BudgetTypeBadge from '@/components/ui/custom/BudgetTypeBadge'
+import BudgetTypeBadge from '@/components/shared/budget/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
 import FormDialog from '@/components/form/FormDialog'
 import BudgetForm from '@/components/form/budget/BudgetForm'
