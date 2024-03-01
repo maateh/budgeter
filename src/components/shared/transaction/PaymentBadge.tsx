@@ -11,18 +11,24 @@ import { Transaction } from "@/services/api/types"
 import { formatWithCurrency } from "@/utils"
 
 type PaymentBadgeProps = {
-  payment: Transaction['payment']
+  transaction: Transaction
   currency: string
   size?: BadgeProps['size']
   iconSize?: number
 }
 
-const PaymentBadge = ({ payment, currency, size = 'sm', iconSize = 16 }: PaymentBadgeProps) => {
+const PaymentBadge = ({ transaction, currency, size = 'sm', iconSize = 16 }: PaymentBadgeProps) => {
+  const { payment } = transaction
+
+  const isNeutral = (transaction.type === 'default' && !transaction.processed)
+    || (transaction.type === 'borrow' && transaction.processed)
+
   return (
     <Badge
       size={size}
       className={`font-heading font-bold gap-x-1.5
-        ${payment.type === '-' ? 'text-destructive' : ''}
+        ${isNeutral ? 'text-muted-foreground'
+          : payment.type === '+' ? 'text-accent' : 'text-destructive'}
       `}
     >
       {payment.type === '+' ? (

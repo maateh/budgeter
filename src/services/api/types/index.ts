@@ -34,7 +34,7 @@ export type BudgetNote = {
 export type Transaction = {
   id: UUID
   budgetId: UUID
-  type: 'default' | 'temporary'
+  type: 'default' | 'borrow'
   name: string
   payment: {
     type: '+' | '-',

@@ -79,7 +79,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       )
     }
 
-    if (transaction.type === 'temporary' && !transaction.processed) {
+    if (transaction.type === 'borrow' && !transaction.processed) {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
         [transaction.payment],
@@ -104,7 +104,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       )
     }
 
-    if (transaction.type === 'temporary') {
+    if (transaction.type === 'borrow') {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
         [transaction.payment],
@@ -136,7 +136,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       )
     }
 
-    if (transaction.type === 'temporary' && transaction.processed) {
+    if (transaction.type === 'borrow' && transaction.processed) {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
         [transaction.payment],

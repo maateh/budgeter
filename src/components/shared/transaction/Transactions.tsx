@@ -1,7 +1,7 @@
 import { UUID } from "crypto"
 
 // icons
-import { Plus, AlarmClock, Receipt } from "lucide-react"
+import { Plus, Receipt, Handshake } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -46,9 +46,9 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
             content: <TransactionList budgetId={budgetId} type="default" />
           },
           {
-            value: 'temporary',
-            Icon: AlarmClock,
-            content: <TransactionList budgetId={budgetId} type="temporary" />
+            value: 'borrow',
+            Icon: Handshake,
+            content: <TransactionList budgetId={budgetId} type="borrow" />
           }
         ]}
       />

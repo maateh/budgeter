@@ -1,5 +1,5 @@
 // icons
-import { AlarmClock, Calendar, Receipt, Verified } from "lucide-react"
+import { Handshake, Calendar, Receipt, Verified } from "lucide-react"
 
 // shadcn
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -36,7 +36,7 @@ const TransactionDetailsDialog = ({ transaction, budget, children }: Transaction
             {transaction.type === 'default' ? (
               <Receipt size={26} strokeWidth={1.85} />
             ) : (
-              <AlarmClock size={26} strokeWidth={1.85} />
+              <Handshake size={26} strokeWidth={1.85} />
             )}
             <span className="tracking-wide">{transaction.name}</span>
           </DialogTitle>
@@ -92,7 +92,7 @@ const TransactionDetailsDialog = ({ transaction, budget, children }: Transaction
           <div className="flex items-center gap-x-2.5">
             <TransactionStatusSwitch transaction={transaction} />
             <PaymentBadge
-              payment={transaction.payment}
+              transaction={transaction}
               currency={budget.balance.currency}
               size="lg"
             />

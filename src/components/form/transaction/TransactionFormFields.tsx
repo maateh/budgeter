@@ -1,7 +1,7 @@
 import { UseFormReturn, useWatch } from "react-hook-form"
 
 // icons
-import { AlarmClock, Minus, Plus, Receipt } from "lucide-react"
+import { Handshake, Minus, Plus, Receipt } from "lucide-react"
 
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -26,6 +26,11 @@ type TransactionFormFieldsProps = {
 const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) => {
   const { control } = form
 
+  const typeField = useWatch({
+    control: control,
+    name: 'type'
+  })
+
   const processedField = useWatch({
     control: control,
     name: 'processed'
@@ -45,7 +50,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
               <TabsSelector<Transaction['type']>
                 tabItems={[
                   { value: 'default', Icon: Receipt },
-                  { value: 'temporary', Icon: AlarmClock }
+                  { value: 'borrow', Icon: Handshake }
                 ]}
                 setValue={field.onChange}
               />
@@ -96,7 +101,9 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
       </div>
 
       <div>
-        <FormLabel>Payment</FormLabel>
+        <FormLabel>
+          {typeField === 'default' ? 'Payment' : 'Borrowed Money'}
+        </FormLabel>
 
         <div className="flex items-center gap-x-2 5">
           <FormField
@@ -156,7 +163,9 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
           name="processed"
           render={({ field }) => (
             <FormItem className="flex items-center gap-x-2.5">
-              <FormLabel>Already Processed</FormLabel>
+              <FormLabel>
+                {typeField === 'default' ? 'Already Processed' : 'Already Paid Back'}
+              </FormLabel>
               <FormControl>
                 <Switch
                   checked={field.value}
