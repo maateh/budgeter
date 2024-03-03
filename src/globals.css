@@ -133,6 +133,23 @@
     @apply mx-5 my-4;
   }
 
+  /* TOGGLE */
+  .toggle {
+    @apply w-fit;
+  }
+  .toggle:not(.hover-toggle-mode) > span:first-of-type:not(.active) {
+    @apply hidden;
+  }
+  .toggle:not(.hover-toggle-mode) > span:last-of-type:not(.active) {
+    @apply hidden;
+  }
+  .toggle.hover-toggle-mode:hover > span:first-of-type {
+    @apply hidden;
+  }
+  .toggle.hover-toggle-mode:not(:hover) > span:last-of-type {
+    @apply hidden;
+  }
+
   /* ICONS */
   .icon-wrapper {
     @apply flex items-center gap-x-2;
