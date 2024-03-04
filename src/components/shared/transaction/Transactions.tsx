@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
-import TabsSwitcher from "@/components/ui/custom/TabsSwitcher"
+import TabsSwitch from "@/components/ui/custom/TabsSwitch"
 import TransactionList from "@/components/shared/transaction/TransactionList"
 import FormDialog from "@/components/form/FormDialog"
 import TransactionForm from "@/components/form/transaction/TransactionForm"
@@ -54,21 +54,20 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
         }}
       />
 
-      <TabsSwitcher<Transaction['type']>
-        defaultValue="default"  
+      <TabsSwitch<Transaction['type']>
         tabItems={[
-          {
-            value: 'default',
-            Icon: Receipt,
-            content: <TransactionList budgetId={budgetId} type="default" processed={processed} />
-          },
-          {
-            value: 'borrow',
-            Icon: Handshake,
-            content: <TransactionList budgetId={budgetId} type="borrow" processed={processed} />
-          }
+          { value: 'default', Icon: Receipt },
+          { value: 'borrow', Icon: Handshake }
         ]}
-      />
+      >
+        {(value) => (
+          <TransactionList
+            type={value}
+            processed={processed}
+            budgetId={budgetId}
+          />
+        )}
+      </TabsSwitch>
     </>
   )
 }

@@ -10,7 +10,7 @@ import { Switch, SwitchThumb } from "@/components/ui/switch"
 // import { Button } from "@/components/ui/button"
 
 // components
-import TabsSelector from "@/components/input/TabsSelector"
+import TabsSelect from "@/components/input/TabsSelect"
 import BudgetSelector from "@/components/input/BudgetSelector"
 import DateTimePicker from "@/components/input/DateTimePicker"
 
@@ -48,7 +48,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
               Select the <span className="text-muted font-medium overline">type of transaction</span>
             </FormLabel>
             <FormControl>
-              <TabsSelector<Transaction['type']>
+              <TabsSelect<Transaction['type']>
                 tabItems={[
                   { value: 'default', Icon: Receipt },
                   { value: 'borrow', Icon: Handshake }

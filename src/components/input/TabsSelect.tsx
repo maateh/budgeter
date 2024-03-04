@@ -1,22 +1,23 @@
 import { LucideIcon } from "lucide-react"
 
 // shadcn
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsListProps, TabsTrigger } from "@/components/ui/tabs"
 
-type TabItem<T extends string> = {
+export type TabItem<T extends string> = {
   Icon: LucideIcon
   value: T
 }
 
-type TabsSelectorProps<T extends string> = {
+type TabsSelectProps<T extends string> = {
   tabItems: TabItem<T>[]
   setValue: React.Dispatch<React.SetStateAction<T>>
-}
+  ref?: React.Ref<HTMLDivElement>
+} & TabsListProps
 
-function TabsSelector <T extends string>({ tabItems, setValue }: TabsSelectorProps<T>) {
+function TabsSelect<T extends string>({ tabItems, setValue, children, ref, ...props }: TabsSelectProps<T>) {
   return (
     <Tabs defaultValue={tabItems[0].value}>
-      <TabsList>
+      <TabsList {...props} ref={ref}>
         {tabItems.map(({ value, Icon }) => (
           <TabsTrigger className="icon-wrapper"
             key={value}
@@ -28,8 +29,10 @@ function TabsSelector <T extends string>({ tabItems, setValue }: TabsSelectorPro
           </TabsTrigger>
         ))}
       </TabsList>
+
+      {children}
     </Tabs>
   )
 }
 
-export default TabsSelector
+export default TabsSelect
