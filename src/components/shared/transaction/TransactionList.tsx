@@ -10,14 +10,15 @@ import { useGetTransactionsWithBudgets } from "@/lib/react-query/queries"
 import { Transaction } from "@/services/api/types"
 
 type TransactionListProps = {
-  budgetId?: UUID
   type: Transaction['type']
+  processed: Transaction['processed']
+  budgetId?: UUID
 }
 
-const TransactionList = ({ budgetId, type }: TransactionListProps) => {
+const TransactionList = ({ type, processed, budgetId }: TransactionListProps) => {
   // TODO: later it'll be required a pagination query
   // but for now it's okay for testing
-  const { data: transactions, isLoading } = useGetTransactionsWithBudgets(type, budgetId)
+  const { data: transactions, isLoading } = useGetTransactionsWithBudgets(type, processed, budgetId)
 
   return (
     <>

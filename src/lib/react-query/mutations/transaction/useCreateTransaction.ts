@@ -16,9 +16,9 @@ const useCreateTransaction = () => {
       data: TransactionFieldValues
       executePayment?: boolean
     }) => await api.transaction.create(data, executePayment),
-    onSuccess: ({ type, budgetId }) => {
-      queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, 'all'] })
+    onSuccess: ({ type, processed, budgetId }) => {
+      queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, processed, budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['getTransactionsWithBudgets', type, processed, 'all'] })
 
       queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
       queryClient.invalidateQueries({ queryKey: ['getBudget', budgetId] })

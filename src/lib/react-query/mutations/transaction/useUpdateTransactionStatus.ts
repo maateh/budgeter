@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
+
+// types
 import { Transaction } from "@/services/api/types"
 
 const useUpdateTransactionStatus = (transactionId: UUID) => {
@@ -15,18 +17,18 @@ const useUpdateTransactionStatus = (transactionId: UUID) => {
       id: UUID
       processed: boolean
     }) => await api.transaction.updateStatus(id, processed),
-    onSuccess: ({ budgetId }) => {
+    onSuccess: ({ processed, budgetId }) => {
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], budgetId]
+        queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], !processed, budgetId]
       })
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], 'all']
+        queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], !processed, 'all']
       })
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'borrow' as Transaction['type'], budgetId]
+        queryKey: ['getTransactionsWithBudgets', 'borrow' as Transaction['type'], !processed, budgetId]
       })
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'borrow' as Transaction['type'], 'all']
+        queryKey: ['getTransactionsWithBudgets', 'borrow' as Transaction['type'], !processed, 'all']
       })
 
       queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
