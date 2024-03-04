@@ -17,11 +17,7 @@ const BudgetSummary = () => {
           title={<>Create <span className="text-green-400 overline">Budget</span></>}
           formLayout={<BudgetForm type="create" />}
         >
-          <Button
-            border="md"
-            size="lg"
-            className="flex items-center gap-x-2"
-          >
+          <Button className="flex items-center gap-x-2" size="lg">
             <PackagePlus />
             <span>New Budget</span>
           </Button>

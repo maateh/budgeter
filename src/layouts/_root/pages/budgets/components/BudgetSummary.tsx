@@ -44,12 +44,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
             title={<>Edit <span className="text-green-400 overline">Budget</span></>}
             formLayout={<BudgetForm type="edit" budget={budget} />}
           >
-            <Button
-              variant="default"
-              border="md"
-              size="lg"
-              className="flex items-center gap-x-2"
-            >
+            <Button className="flex items-center gap-x-2" size="lg">
               <Pencil size={18} />
               <span>Edit</span>
             </Button>

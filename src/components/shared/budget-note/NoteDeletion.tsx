@@ -1,8 +1,5 @@
-// icons
-import { Trash2 } from "lucide-react"
-
 // shadcn
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 
 // components
 import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
@@ -16,9 +13,9 @@ import { Budget, BudgetNote } from "@/services/api/types"
 type NoteDeletionProps = {
   note: BudgetNote
   budget: Budget
-}
+} & React.HTMLAttributes<HTMLButtonElement> & ButtonProps
 
-const NoteDeletion = ({ note, budget }: NoteDeletionProps) => {
+const NoteDeletion = ({ note, budget, children, variant = 'icon', size = 'icon', ...props }: NoteDeletionProps) => {
   const { mutateAsync: deleteNote } = useDeleteNote(budget.id, note.id)
 
   const handleDelete = async () => {
@@ -39,16 +36,8 @@ const NoteDeletion = ({ note, budget }: NoteDeletionProps) => {
       variant="negative"
       action={handleDelete}
     >
-      <Button
-        variant="icon"
-        size="icon-sm"
-        className="bg-primary border-4 border-primary/60"
-      >
-        <Trash2
-          size={16}
-          strokeWidth={2.5}
-          className="text-destructive"
-        />
+      <Button variant={variant} size={size} {...props}>
+        {children}
       </Button>
     </ConfirmationDialog>
   )

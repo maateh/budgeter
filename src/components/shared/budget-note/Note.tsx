@@ -2,7 +2,7 @@ import { useState } from "react"
 import { format } from "date-fns"
 
 // icons
-import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Undo2 } from "lucide-react"
+import { CalendarCheck, CalendarPlus, CheckCircle, PenLine, PenSquare, Trash2, Undo2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -71,59 +71,62 @@ const Note = ({ budget, note }: NoteProps) => {
 
       <div className="flex justify-between items-center gap-x-4">
         <div className="flex items-center gap-x-2">
-          <Button
+          <Button className="bg-primary p-2 hover:bg-primary/75"
             variant="icon"
-            size="icon-sm"
-            className="bg-primary border-4 border-primary/60"
+            size="icon"
             onClick={handleClose}
           >
             {note.status === 'open' ? (
-              <CheckCircle
+              <CheckCircle className="text-green-600 dark:text-green-400"
                 size={16}
                 strokeWidth={2.5}
-                className="text-green-600 dark:text-green-400"
               />
             ) : (
-              <Undo2
+              <Undo2 className="text-orange-600 dark:text-orange-400"
                 size={16}
                 strokeWidth={2.5}
-                className="text-orange-600 dark:text-orange-400"
               />
             )}
           </Button>
           
-          <Button
+          <Button className="bg-primary p-2 hover:bg-primary/75"
             variant="icon"
-            size="icon-sm"
-            className="bg-primary border-4 border-primary/60"
+            size="icon"
             onClick={() => setEditingMode(prev => !prev)}
             disabled={note.status === 'closed'}
           >
-            <PenSquare
+            <PenSquare className="text-accent"
               size={16}
               strokeWidth={2.5}
-              className="text-accent"
             />
           </Button>
 
-          <NoteDeletion note={note} budget={budget} />
+          <NoteDeletion className="bg-primary p-2 hover:bg-primary/75"
+            note={note}
+            budget={budget}
+          >
+            <Trash2 className="text-destructive"
+              size={16}
+              strokeWidth={2.5}
+            />
+          </NoteDeletion>
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">
           {note.closedAt ? (
             <>
               <p>{format(note.closedAt, 'PPP')}</p>
-              <CalendarCheck size={18} strokeWidth={1.7} />
+              <CalendarCheck size={16} strokeWidth={1.7} />
             </>
           ) : note.editedAt ? (
             <>
               <p>{format(note.editedAt, 'PPP')}</p>
-              <PenLine size={18} strokeWidth={1.7} />
+              <PenLine size={16} strokeWidth={1.7} />
             </>
           ) : (
             <>
               <p>{format(note.createdAt, 'PPP')}</p>
-              <CalendarPlus size={18} strokeWidth={1.7} />
+              <CalendarPlus size={16} strokeWidth={1.7} />
             </>
           )}
         </div>
