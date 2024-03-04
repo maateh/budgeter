@@ -106,7 +106,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
           {typeField === 'default' ? 'Payment' : 'Borrowed Money'}
         </FormLabel>
 
-        <div className="flex items-center gap-x-2 5">
+        <div className="flex items-center gap-x-2.5">
           <FormField
             control={control}
             name="payment.type"
@@ -125,9 +125,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
                       "+": <Plus size={20} strokeWidth={4} />,
                       '-': <Minus size={20} strokeWidth={4} />
                     }}
-                    action={() => {
-                      field.onChange(field.value === '+' ? '-' : '+')
-                    }}
+                    action={() => field.onChange(field.value === '+' ? '-' : '+')}
                   />
                 </FormControl>
                 <FormMessage />
