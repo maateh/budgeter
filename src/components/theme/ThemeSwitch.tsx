@@ -2,26 +2,30 @@
 import { Moon, Sun } from "lucide-react"
 
 // components
-import StatusSwitch from "@/components/ui/custom/StatusSwitch"
+import StateToggle from "@/components/ui/custom/StateToggle"
 
 // hooks
 import { useTheme } from "@/services/providers/theme/ThemeContext.hooks"
+
+// types
+import { Theme } from "@/services/providers/theme/ThemeContext"
 
 const ThemeSwitch = () => {
   const { theme, switchTheme } = useTheme()
 
   return (
-    <StatusSwitch
+    <StateToggle<Theme, Theme>
       status={theme}
       icon={{
         light: <Sun size={18} />,
         dark: <Moon size={18} />
       }}
-      label={{
+      tooltip={{
         light: 'Switch to Dark mode',
         dark: 'Switch to Light mode'
       }}
-      handleSwitch={switchTheme}
+      action={switchTheme}
+      toggleOnHover
     />
   )
 }

@@ -1,5 +1,5 @@
 // icons
-import { Handshake, Calendar, Receipt, Verified } from "lucide-react"
+import { Handshake, Calendar, Receipt, CalendarCheck } from "lucide-react"
 
 // shadcn
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -74,7 +74,7 @@ const TransactionDetailsDialog = ({ transaction, budget, children }: Transaction
 
           {transaction.processedAt && (
             <div className="icon-wrapper">
-              <Verified size={20} strokeWidth={2.5} className="text-accent" />
+              <CalendarCheck size={20} strokeWidth={2.5} className="text-accent" />
               <p>
                 Processed at
                 <span className="px-1 text-foreground/35">»</span>

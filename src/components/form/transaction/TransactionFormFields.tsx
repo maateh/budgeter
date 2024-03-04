@@ -1,13 +1,13 @@
 import { UseFormReturn, useWatch } from "react-hook-form"
 
 // icons
-import { Handshake, Minus, Plus, Receipt } from "lucide-react"
+import { Handshake, Minus, Plus, Receipt, Verified, XCircle } from "lucide-react"
 
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
+import { Switch, SwitchThumb } from "@/components/ui/switch"
+// import { Button } from "@/components/ui/button"
 
 // components
 import TabsSelector from "@/components/input/TabsSelector"
@@ -17,6 +17,7 @@ import DateTimePicker from "@/components/input/DateTimePicker"
 // types
 import { Transaction } from "@/services/api/types"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
+import StateToggle from "@/components/ui/custom/StateToggle"
 
 type TransactionFormFieldsProps = {
   budgetId?: string
@@ -112,26 +113,22 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  {/* TODO: replace later with StatusSwitch */}
-                  <Button
+                  <StateToggle<Transaction['payment']['type'], Transaction['payment']['type']>
                     type="button"
-                    variant="icon"
-                    size="icon"
-                    border="icon"
-                    className={field.value === '+'
-                      ? 'bg-green-500/50 hover:bg-green-500/60'
-                      : 'bg-red-500/80 hover:bg-red-500/90'
-                    }
-                    onClick={() => {
+                    className={`rounded-xl
+                      ${field.value === '+'
+                        ? 'bg-green-500 hover:bg-green-500/90'
+                        : 'bg-red-500 hover:bg-red-500/90'}
+                    `}
+                    status={field.value as Transaction['payment']['type']}
+                    icon={{
+                      "+": <Plus size={20} strokeWidth={4} />,
+                      '-': <Minus size={20} strokeWidth={4} />
+                    }}
+                    action={() => {
                       field.onChange(field.value === '+' ? '-' : '+')
                     }}
-                  >
-                    {field.value === '+' ? (
-                      <Plus size={16} />
-                    ) : (
-                      <Minus size={16} />
-                    )}
-                  </Button>
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -170,6 +167,16 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  customThumb={
+                    <SwitchThumb
+                      checked={field.value}
+                      variant="custom"
+                      customIcon={{
+                        Checked: Verified,
+                        Unchecked: XCircle
+                      }}
+                    />
+                  }
                 />
               </FormControl>
               <FormMessage />

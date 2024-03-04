@@ -2,7 +2,7 @@
 import { BadgeCheck, XCircle } from "lucide-react"
 
 // components
-import StatusSwitch from "@/components/ui/custom/StatusSwitch"
+import StateToggle from "@/components/ui/custom/StateToggle"
 
 // hooks
 import { useUpdateTransactionStatus } from "@/lib/react-query/mutations"
@@ -33,7 +33,7 @@ const TransactionStatusSwitch = ({ transaction }: TransactionStatusSwitchProps) 
   }
 
   return (
-    <StatusSwitch
+    <StateToggle
       status={transaction.processed ? 'processed' : 'unprocessed'}
       icon={{
         processed: (
@@ -44,11 +44,12 @@ const TransactionStatusSwitch = ({ transaction }: TransactionStatusSwitchProps) 
         ),
         unprocessed: <XCircle className="text-destructive" size={20} strokeWidth={2.5} />
       }}
-      label={{
+      tooltip={{
         processed: 'Click to withdraw',
         unprocessed: 'Click for crediting'
       }}
-      handleSwitch={handleUpdateStatus}
+      action={handleUpdateStatus}
+      toggleOnHover
     />
   )
 }
