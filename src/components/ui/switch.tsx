@@ -9,12 +9,11 @@ import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip"
 
 const switchVariants = cva(
-  "peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+  "peer inline-flex shrink-0 cursor-pointer shadow-md items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "data-[state=checked]:bg-accent data-[state=unchecked]:bg-muted/75",
-        custom: ""
+        default: "data-[state=checked]:bg-accent data-[state=unchecked]:bg-muted/75"
       },
       size: {
         default: "h-6 w-10",
@@ -46,6 +45,7 @@ const Switch = React.forwardRef<
   const element = (
     <SwitchPrimitives.Root
       className={cn(switchVariants({ className, variant, size }))}
+      checked={checked}
       ref={ref}
       {...props}
     >
@@ -69,7 +69,7 @@ const Switch = React.forwardRef<
 Switch.displayName = SwitchPrimitives.Root.displayName
 
 const switchThumbVariants = cva(
-  "pointer-events-none block rounded-full shadow-lg ring-0 transition-transform",
+  "pointer-events-none block rounded-full shadow-md ring-0 transition-transform",
   {
     variants: {
       variant: {
