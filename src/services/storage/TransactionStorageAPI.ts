@@ -128,13 +128,6 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     if (!undoPayment) return transaction
 
-    await this.budgetStorageApi.managePayments(
-      transaction.budgetId,
-      [transaction.payment],
-      transaction.type === 'default'
-        ? 'undo' : 'execute'
-    )
-
     if (transaction.type === 'default' && transaction.processed) {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
@@ -143,11 +136,11 @@ class TransactionStorageAPI implements ITransactionAPI {
       )
     }
 
-    if (transaction.type === 'borrow' && transaction.processed) {
+    if (transaction.type === 'borrow' && !transaction.processed) {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
         [transaction.payment],
-        'execute'
+        'undo'
       )
     }
 
