@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 // icons
 import { Trash2 } from "lucide-react"
 
@@ -18,11 +20,14 @@ type TransactionDeletionProps = {
 }
 
 const TransactionDeletion = ({ transaction }: TransactionDeletionProps) => {
+  const navigate = useNavigate()
+
   const { mutateAsync: deleteTransaction } = useDeleteTransaction(transaction.id)
 
   const deleteConfirm = async () => {
     try {
-      await deleteTransaction({ id: transaction.id }) 
+      await deleteTransaction({ id: transaction.id })
+      navigate(-1)
     } catch (err) {
       console.error(err)
     }

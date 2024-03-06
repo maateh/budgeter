@@ -42,7 +42,7 @@ const BudgetForm = ({ type }: BudgetFormProps) => {
         }
       }}
       useSubmit={useBudgetSubmit}
-      submitProps={{ budgetId: budget?.id }}
+      submitProps={{ budgetId: budget?.id, type }}
     >
       {(form) => (
         <BudgetFormFields form={form} disabled={type === 'edit' && isLoading} />

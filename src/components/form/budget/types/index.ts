@@ -8,4 +8,5 @@ export type BudgetFieldValues = z.infer<typeof BudgetValidation>
 
 export type BudgetSubmitProps = {
   budgetId?: UUID
+  type: 'create' | 'edit'
 }
