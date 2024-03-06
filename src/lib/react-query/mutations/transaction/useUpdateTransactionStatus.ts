@@ -17,7 +17,8 @@ const useUpdateTransactionStatus = (transactionId: UUID) => {
       id: UUID
       processed: boolean
     }) => await api.transaction.updateStatus(id, processed),
-    onSuccess: ({ processed, budgetId }) => {
+    onSuccess: ({ id, processed, budgetId }) => {
+      queryClient.invalidateQueries({ queryKey: ['getTransactionWithBudget', id] })
       queryClient.invalidateQueries({
         queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], !processed, budgetId]
       })

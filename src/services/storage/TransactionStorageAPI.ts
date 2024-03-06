@@ -32,6 +32,13 @@ class TransactionStorageAPI implements ITransactionAPI {
     return TransactionStorageAPI._instance
   }
 
+  public async getTransactionWithBudget(id: UUID): Promise<Transaction & { budget: Budget }> {
+    const transaction = await this.storage.findById(id)
+    const budget = await this.budgetStorageApi.getById(transaction.budgetId)
+
+    return { ...transaction, budget }
+  }
+
   public async getTransactionsWithBudgets(filterBy: Partial<Transaction> = {}): Promise<(Transaction & { budget: Budget })[]> {
     const filter = (transaction: Transaction) => {
       return Object.keys(filterBy).every((key) => {

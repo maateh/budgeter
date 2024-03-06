@@ -28,6 +28,7 @@ export interface IBudgetNoteAPI {
 }
 
 export interface ITransactionAPI {
+  getTransactionWithBudget(transactionId: UUID): Promise<Transaction & { budget: Budget }>
   getTransactionsWithBudgets(filterBy: Partial<Transaction>): Promise<(Transaction & { budget: Budget })[]>
   // getByBudgets(type: Transaction['type']): Promise<Transaction[]>
   // getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[]>

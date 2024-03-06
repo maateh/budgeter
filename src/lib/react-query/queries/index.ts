@@ -9,4 +9,5 @@ export { default as useGetBudgets } from './budget/useGetBudgets'
 export { default as useGetNotesbyStatus } from './buget-note/useGetNotesbyStatus'
 
 // transaction
+export { default as useGetTransactionWithBudget } from './transaction/useGetTransactionWithBudget'
 export { default as useGetTransactionsWithBudgets } from './transaction/useGetTransactionsWithBudgets'
