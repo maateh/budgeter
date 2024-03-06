@@ -17,9 +17,10 @@ import { BudgetFieldValues } from "@/components/form/budget/types"
 
 type BudgetFormFieldsProps = {
   form: UseFormReturn<BudgetFieldValues>
+  disabled?: boolean
 }
 
-const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
+const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
   const { control } = form
   const {
     data: currencies,
@@ -31,6 +32,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
       <FormField
         control={control}
         name="name"
+        disabled={disabled}
         render={({ field }) => (
           <FormItem>
             <FormLabel className="font-heading text-xl small-caps">
@@ -52,6 +54,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
         <FormField
           control={control}
           name="type"
+          disabled={disabled}
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-heading text-xl small-caps">
@@ -90,6 +93,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
           <FormField
             control={control}
             name="balance.ceiling"
+            disabled={disabled}
             render={({ field }) => (
               <FormItem className="sm:min-w-48 flex-1">
                 <FormLabel className="font-heading text-xl small-caps">
@@ -110,6 +114,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
           <FormField
             control={control}
             name="balance.currency"
+            disabled={disabled}
             render={({ field }) => (
               <FormItem className="max-w-48 flex-1">
                 <FormLabel className="font-heading text-xl small-caps">
@@ -145,6 +150,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
         <FormField
           control={control}
           name="theme.background"
+          disabled={disabled}
           render={({ field }) => (
             <FormItem className="flex items-center gap-x-4">
               <FormLabel className="font-heading text-xl small-caps">
@@ -167,6 +173,7 @@ const BudgetFormFields = ({ form }: BudgetFormFieldsProps) => {
         <FormField
           control={control}
           name="theme.foreground"
+          disabled={disabled}
           render={({ field }) => (
             <FormItem className="flex items-center gap-x-4">
               <FormLabel className="font-heading text-xl small-caps">
