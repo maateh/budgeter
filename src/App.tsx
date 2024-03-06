@@ -5,7 +5,10 @@ import RootLayout from "@/layouts/_root/RootLayout"
 import { Home, Transactions, Wishlist,Splitter, BudgetDetails } from "@/layouts/_root/pages"
 
 // components
-import TransactionDetails from "@/components/shared/transaction/TransactionDetails"
+import BudgetCreateFormDialog from "@/components/form/budget/BudgetCreateFormDialog"
+import BudgetEditFormDialog from "./components/form/budget/BudgetEditFormDialog"
+import TransactionFormDialog from "./components/form/transaction/TransactionFormDialog"
+import TransactionDetailsDialog from "@/components/shared/transaction/TransactionDetailsDialog"
 
 const App = () => {
   const location = useLocation()
@@ -18,7 +21,9 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
-          <Route path="/budgets/:id" element={<BudgetDetails />} />
+          <Route path="/budgets/:id" element={<BudgetDetails />}>
+            <Route path="edit" element={<BudgetEditFormDialog />} />
+          </Route>
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/splitter" element={<Splitter />} />
@@ -29,7 +34,11 @@ const App = () => {
       {/* Additional components to be rendered on top of the actual page content */}
       {backgroundLocation && (
         <Routes>
-          <Route path="/transactions/:id" element={<TransactionDetails />} />
+          <Route path="/budgets/create" element={<BudgetCreateFormDialog />} />
+          <Route path="/transactions">
+            <Route path="create" element={<TransactionFormDialog />} />
+            <Route path=":id" element={<TransactionDetailsDialog />} />
+          </Route>
         </Routes>
       )}
     </>

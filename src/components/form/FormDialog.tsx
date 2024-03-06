@@ -1,24 +1,21 @@
-import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 // shadcn
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+
+// providers
 import FormProvider from "@/services/providers/form/FormProvider"
 
 type FormDialogProps = {
-  title: React.JSX.Element
-  formLayout: React.JSX.Element
-  children: React.JSX.Element
-}
+  title: React.ReactNode
+} & React.PropsWithChildren
 
-const FormDialog = ({ title, formLayout, children }: FormDialogProps) => {
-  const [open, setOpen] = useState(false)
+const FormDialog = ({ title, children }: FormDialogProps) => {
+  const navigate = useNavigate()
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+    <Dialog onOpenChange={() => navigate(-1)} defaultOpen>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-3xl">
@@ -28,8 +25,8 @@ const FormDialog = ({ title, formLayout, children }: FormDialogProps) => {
 
         <Separator />
 
-        <FormProvider cleanForm={() => setOpen(false)}>
-          {formLayout}
+        <FormProvider cleanForm={() => navigate(-1)}>
+          {children}
         </FormProvider>
       </DialogContent>
     </Dialog>

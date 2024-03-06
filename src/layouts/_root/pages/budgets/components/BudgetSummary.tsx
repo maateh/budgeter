@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+
 // icons
 import { ArrowUpToLine, Pencil, Wallet } from 'lucide-react'
 
@@ -9,8 +11,6 @@ import { Separator } from '@/components/ui/separator'
 // components
 import BudgetTypeBadge from '@/components/shared/budget/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
-import FormDialog from '@/components/form/FormDialog'
-import BudgetForm from '@/components/form/budget/BudgetForm'
 import BudgetDeletion from '@/components/shared/budget/BudgetDeletion'
 
 // types
@@ -24,6 +24,8 @@ type BudgetSummaryProps = {
 }
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
+  const navigate = useNavigate()
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -40,15 +42,13 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
         <div className="flex justify-center items-center gap-x-4 gap-y">
           <BudgetDeletion budget={budget} />
 
-          <FormDialog
-            title={<>Edit <span className="text-green-400 overline">Budget</span></>}
-            formLayout={<BudgetForm type="edit" budget={budget} />}
+          <Button className="flex items-center gap-x-2"
+            size="lg"
+            onClick={() => navigate('./edit')}
           >
-            <Button className="flex items-center gap-x-2" size="lg">
-              <Pencil size={18} />
-              <span>Edit</span>
-            </Button>
-          </FormDialog>
+            <Pencil size={18} />
+            <span>Edit</span>
+          </Button>
         </div>
       </div>
 

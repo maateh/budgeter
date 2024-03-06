@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 // icons
 import { ArrowUpToLine, BadgePlus, Landmark, Wallet } from "lucide-react"
@@ -11,8 +11,6 @@ import { Badge } from "@/components/ui/badge"
 // components
 import BudgetTypeBadge from "@/components/shared/budget/BudgetTypeBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
-import FormDialog from "@/components/form/FormDialog"
-import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 // types
 import { Budget } from "@/services/api/types"
@@ -26,15 +24,12 @@ type BudgetPreviewProps = {
 
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
-
-  const handleNavigate = () => {
-    navigate(`/budgets/${budget.id}`)
-  }
+  const location = useLocation()
 
   return (
     <div className="rounded-[1.65rem] bg-primary-foreground/10 hover:drop-shadow-lg">
       <div
-        onClick={handleNavigate}
+        onClick={() => navigate(`/budgets/${budget.id}`)}
         style={{
           backgroundColor: budget.theme.background,
           color: budget.theme.foreground
@@ -75,19 +70,16 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
         <ul className="flex flex-wrap justify-start gap-x-2 gap-y-1">
           <li>
-            <FormDialog
-              title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-              formLayout={<TransactionForm budgetId={budget.id} />}
+            <Badge className="cursor-pointer gap-x-1"
+              variant="outline"
+              size="xs"
+              onClick={() => navigate('/transactions/create', {
+                state: { background: location }
+              })}
             >
-              <Badge
-                size="xs"
-                variant="outline"
-                className="cursor-pointer gap-x-1"
-              >
-                <BadgePlus size={16} />
-                <span>New</span>
-              </Badge>
-            </FormDialog>
+              <BadgePlus size={16} />
+              <span>New</span>
+            </Badge>
           </li>
 
           {/* TODO: get budget transactions */}
@@ -108,7 +100,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           
           <li>
             <Badge
-              onClick={handleNavigate}
+              onClick={() => navigate(`/budgets/${budget.id}`)}
               variant="outline"
               size="xs"
               className="cursor-pointer"

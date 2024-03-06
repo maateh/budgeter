@@ -15,7 +15,7 @@ const BudgetMarker = ({ budget }: BudgetMarkerProps) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link to={`/budgets/${budget.id}`}
+          <Link to={`/budgets/${budget.id}`} onClick={(e) => e.stopPropagation()}
             className="size-3.5 rounded-md border-2 hover:size-4 hover:opacity-95 hover:cursor-pointer"
             style={{
               backgroundColor: budget.theme.background,

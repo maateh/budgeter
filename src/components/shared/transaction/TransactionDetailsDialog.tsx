@@ -22,7 +22,7 @@ import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
 // utils
 import { formatWithCurrency } from "@/utils"
 
-const TransactionDetails = () => {
+const TransactionDetailsDialog = () => {
   const { id } = useParams() as { id: UUID }
   const navigate = useNavigate()
 
@@ -106,4 +106,4 @@ const TransactionDetails = () => {
   ): <>Loading...</> // TODO: skeleton
 }
 
-export default TransactionDetails
+export default TransactionDetailsDialog

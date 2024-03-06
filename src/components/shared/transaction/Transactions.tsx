@@ -1,5 +1,6 @@
 import { UUID } from "crypto"
 import { useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 // icons
 import { Plus, Receipt, Handshake, Verified, XCircle } from "lucide-react"
@@ -11,8 +12,6 @@ import { Switch, SwitchThumb } from "@/components/ui/switch"
 // components
 import TabsSwitch from "@/components/ui/custom/TabsSwitch"
 import TransactionList from "@/components/shared/transaction/TransactionList"
-import FormDialog from "@/components/form/FormDialog"
-import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 // types
 import { Transaction } from "@/services/api/types"
@@ -24,6 +23,9 @@ type TransactionsProps = {
 const Transactions = ({ budgetId }: TransactionsProps) => {
   const [processed, setProcessed] = useState<Transaction['processed']>(true)
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
   return (
     <>
       <div className="mb-5 flex justify-between items-center">
@@ -31,14 +33,15 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
           Recent <span className="text-yellow-300 overline">Transactions</span>
         </h2>
         
-        <FormDialog
-          title={<>Add <span className="text-yellow-400 overline">Transaction</span></>}
-          formLayout={<TransactionForm budgetId={budgetId} />}
+        <Button
+          variant="icon"
+          size="icon"
+          onClick={() => navigate(`/transactions/create${budgetId ? `/${budgetId}` : ''}`, {
+            state: { background: location }
+          })}
         >
-          <Button variant="icon" size="icon">
-            <Plus size={20} />
-          </Button>
-        </FormDialog>
+          <Plus size={20} />
+        </Button>
       </div>
 
       <TabsSwitch<Transaction['type']>
