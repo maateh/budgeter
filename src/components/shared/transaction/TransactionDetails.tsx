@@ -1,8 +1,12 @@
+import { UUID } from "crypto"
+import { Outlet, useNavigate, useParams } from "react-router-dom"
+import { format } from "date-fns"
+
 // icons
 import { Handshake, Calendar, Receipt, CalendarCheck } from "lucide-react"
 
 // shadcn
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -12,24 +16,20 @@ import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
 import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
 import TransactionDeletion from "@/components/shared/transaction/TransactionDeletion"
 
-// types
-import { Budget, Transaction } from "@/services/api/types"
+// hooks
+import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
 
 // utils
-import { format } from "date-fns"
 import { formatWithCurrency } from "@/utils"
 
-type TransactionDetailsDialogProps = React.PropsWithChildren & {
-  transaction: Transaction
-  budget: Budget
-}
+const TransactionDetails = () => {
+  const { id } = useParams() as { id: UUID }
+  const navigate = useNavigate()
 
-const TransactionDetailsDialog = ({ transaction, budget, children }: TransactionDetailsDialogProps) => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+  const { data: transaction, isLoading } = useGetTransactionWithBudget(id)
+
+  return !isLoading && transaction ? (
+    <Dialog onOpenChange={() => navigate(-1)} defaultOpen>
       <DialogContent>
         <DialogHeader className="mx-1.5 flex flex-wrap flex-row justify-between items-center gap-4 max-sm:mt-5">
           <DialogTitle className="break-all icon-wrapper">
@@ -42,10 +42,10 @@ const TransactionDetailsDialog = ({ transaction, budget, children }: Transaction
           </DialogTitle>
 
           <InfoBadge className="flex-none w-fit px-5 py-2"
-            label={budget.name}
-            value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
-            icon={<BudgetMarker budget={budget} />}
-            style={{ borderColor: budget.theme.background }}
+            label={transaction.budget.name}
+            value={formatWithCurrency(transaction.budget.balance.current, transaction.budget.balance.currency)}
+            icon={<BudgetMarker budget={transaction.budget} />}
+            style={{ borderColor: transaction.budget.theme.background }}
           />
         </DialogHeader>
 
@@ -93,7 +93,7 @@ const TransactionDetailsDialog = ({ transaction, budget, children }: Transaction
             <TransactionStatusSwitch transaction={transaction} />
             <PaymentBadge
               transaction={transaction}
-              currency={budget.balance.currency}
+              currency={transaction.budget.balance.currency}
               size="lg"
             />
           </div>
@@ -101,8 +101,9 @@ const TransactionDetailsDialog = ({ transaction, budget, children }: Transaction
           <TransactionDeletion transaction={transaction} />
         </DialogFooter>
       </DialogContent>
+      <Outlet />
     </Dialog>
-  )
+  ): <>Loading...</> // TODO: skeleton
 }
 
-export default TransactionDetailsDialog
+export default TransactionDetails
