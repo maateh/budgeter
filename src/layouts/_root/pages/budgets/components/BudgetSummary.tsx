@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // icons
 import { ArrowUpToLine, Pencil, Wallet } from 'lucide-react'
@@ -25,6 +25,7 @@ type BudgetSummaryProps = {
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   return (
     <>
@@ -44,7 +45,9 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
 
           <Button className="flex items-center gap-x-2"
             size="lg"
-            onClick={() => navigate('./edit')}
+            onClick={() => navigate(`/budgets/edit/${budget.id}`, {
+              state: { background: location }
+            })}
           >
             <Pencil size={18} />
             <span>Edit</span>

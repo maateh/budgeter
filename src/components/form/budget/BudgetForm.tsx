@@ -1,23 +1,29 @@
+import { UUID } from "crypto"
+import { useParams } from "react-router-dom"
+
 // components
 import Form from "@/components/form/Form"
 import BudgetFormFields from "@/components/form/budget/BudgetFormFields"
 
 // hooks
+import { useGetBudget } from "@/lib/react-query/queries"
 import { useBudgetSubmit } from "@/components/form/budget/hooks"
 
 // types
 import { BudgetSubmitProps, BudgetFieldValues } from "@/components/form/budget/types"
-import { Budget } from "@/services/api/types"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
 
 type BudgetFormProps = {
   type: "create" | "edit"
-  budget?: Budget
 }
 
-const BudgetForm = ({ type, budget }: BudgetFormProps) => {
+const BudgetForm = ({ type }: BudgetFormProps) => {
+  const { id } = useParams() as { id: UUID }
+
+  const { data: budget, /*isLoading*/ } = useGetBudget(id)
+  
   return (
     <Form<BudgetFieldValues, typeof BudgetValidation, BudgetSubmitProps>
       type={type}

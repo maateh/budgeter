@@ -2,13 +2,10 @@ import { Route, Routes, useLocation } from "react-router-dom"
 
 // layouts
 import RootLayout from "@/layouts/_root/RootLayout"
-import { Home, Transactions, Wishlist,Splitter, BudgetDetails } from "@/layouts/_root/pages"
+import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/layouts/_root/pages"
 
-// components
-import BudgetCreateFormDialog from "@/components/form/budget/BudgetCreateFormDialog"
-import BudgetEditFormDialog from "./components/form/budget/BudgetEditFormDialog"
-import TransactionFormDialog from "./components/form/transaction/TransactionFormDialog"
-import TransactionDetailsDialog from "@/components/shared/transaction/TransactionDetailsDialog"
+import DialogLayout from "@/layouts/_dialog/DialogLayout"
+import { BudgetFormDialog, TransactionFormDialog, TransactionDetailsDialog } from "@/layouts/_dialog/dialogs"
 
 const App = () => {
   const location = useLocation()
@@ -21,9 +18,7 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
-          <Route path="/budgets/:id" element={<BudgetDetails />}>
-            <Route path="edit" element={<BudgetEditFormDialog />} />
-          </Route>
+          <Route path="/budgets/:id" element={<BudgetDetails />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/splitter" element={<Splitter />} />
@@ -34,10 +29,16 @@ const App = () => {
       {/* Additional components to be rendered on top of the actual page content */}
       {backgroundLocation && (
         <Routes>
-          <Route path="/budgets/create" element={<BudgetCreateFormDialog />} />
-          <Route path="/transactions">
-            <Route path="create" element={<TransactionFormDialog />} />
-            <Route path=":id" element={<TransactionDetailsDialog />} />
+          <Route path="/" element={<DialogLayout />}>
+            <Route path="/budgets">
+              <Route path="create" element={<BudgetFormDialog type="create" />} />
+              <Route path="edit/:id" element={<BudgetFormDialog type="edit" />} />
+            </Route>
+
+            <Route path="/transactions">
+              <Route path="create/:budgetId?" element={<TransactionFormDialog />} />
+              <Route path=":id" element={<TransactionDetailsDialog />} />
+            </Route>
           </Route>
         </Routes>
       )}
