@@ -10,6 +10,7 @@ const useGetBudget = (budgetId: UUID) => {
   return useQuery({
     queryKey: ['getBudget', budgetId],
     queryFn: async () => await api.budget.getById(budgetId),
+    enabled: !!budgetId
   })
 }
 

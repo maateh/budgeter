@@ -22,6 +22,7 @@ type BudgetFormFieldsProps = {
 
 const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
   const { control } = form
+  
   const {
     data: currencies,
     isLoading: currenciesIsLoading
@@ -114,14 +115,13 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
           <FormField
             control={control}
             name="balance.currency"
-            disabled={disabled}
+            disabled={!currencies || currenciesIsLoading}
             render={({ field }) => (
               <FormItem className="max-w-48 flex-1">
                 <FormLabel className="font-heading text-xl small-caps">
                   Currency
                 </FormLabel>
                   <Select
-                    disabled={!currencies || currenciesIsLoading}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
