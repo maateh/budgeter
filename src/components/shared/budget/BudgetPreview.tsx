@@ -73,7 +73,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             <Badge className="cursor-pointer gap-x-1"
               variant="outline"
               size="xs"
-              onClick={() => navigate('/transactions/create', {
+              onClick={() => navigate(`/transactions/create/${budget.id}`, {
                 state: { background: location }
               })}
             >

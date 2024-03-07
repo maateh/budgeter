@@ -1,12 +1,15 @@
 import { UseFormReturn } from "react-hook-form"
 
+// icons
+import { BookMinus, BookPlus } from "lucide-react"
+
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 
 // components
+import StateToggle from "@/components/ui/custom/StateToggle"
 import ColorPicker from "@/components/input/ColorPicker"
 
 // hooks
@@ -14,6 +17,7 @@ import { useLoadCurrenciesQuery } from "@/lib/react-query/queries"
 
 // types
 import { BudgetFieldValues } from "@/components/form/budget/types"
+import { Budget } from "@/services/api/types"
 
 type BudgetFormFieldsProps = {
   form: UseFormReturn<BudgetFieldValues>
@@ -30,140 +34,119 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
 
   return (
     <>
-      <FormField
-        control={control}
-        name="name"
-        disabled={disabled}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="font-heading text-xl small-caps">
-              Budget Name
-            </FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                placeholder="e.g. Food"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <div className="flex flex-wrap items-end gap-x-8 gap-y-4">
+      <div className="w-full flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
         <FormField
           control={control}
-          name="type"
+          name="name"
           disabled={disabled}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="font-heading text-xl small-caps">
-                Type
-              </FormLabel>
+            <FormItem className="min-w-56 flex-1">
+              <FormLabel>Budget Name</FormLabel>
               <FormControl>
-                <RadioGroup
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                  className="flex flex-wrap gap-x-6 gap-y-3"
-                >
-                  <FormItem className="flex items-center space-x-2">
-                    <FormControl>
-                      <RadioGroupItem value="income" />
-                    </FormControl>
-                    <FormLabel className="text-md font-semibold cursor-pointer">
-                      Income
-                    </FormLabel>
-                  </FormItem>
-                  <FormItem className="flex items-center space-x-2">
-                    <FormControl>
-                      <RadioGroupItem value="expense" />
-                    </FormControl>
-                    <FormLabel className="text-md font-semibold cursor-pointer">
-                      Expense
-                    </FormLabel>
-                  </FormItem>
-                </RadioGroup>
+                <Input
+                  type="text"
+                  placeholder="e.g. Cash"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex-1 flex items-end gap-x-4">
-          <FormField
-            control={control}
-            name="balance.ceiling"
-            disabled={disabled}
-            render={({ field }) => (
-              <FormItem className="sm:min-w-48 flex-1">
-                <FormLabel className="font-heading text-xl small-caps">
-                  Expected Ceiling
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="e.g. $200"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={control}
-            name="balance.currency"
-            disabled={!currencies || currenciesIsLoading}
-            render={({ field }) => (
-              <FormItem className="max-w-48 flex-1">
-                <FormLabel className="font-heading text-xl small-caps">
-                  Currency
-                </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {currencies && Object.entries(currencies).map(([key, currency]) => (
-                        <SelectItem key={key} value={key}>
-                          <span className="font-semibold mr-2 pr-2 border-r">{key}</span>
-                          <span className="font-medium">{currency}</span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={control}
+          name="balance.currency"
+          disabled={!currencies || currenciesIsLoading}
+          render={({ field }) => (
+            <FormItem className="min-w-36 flex-1">
+              <FormLabel>Currency</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose..." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {currencies && Object.entries(currencies).map(([key, currency]) => (
+                      <SelectItem key={key} value={key}>
+                        <span className="font-semibold mr-2 pr-2 border-r">{key}</span>
+                        <span className="font-medium">{currency}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
-      <div className="flex flex-col justify-center gap-y-2">
+      <div className="w-full flex gap-x-5">
+        <FormField
+          control={control}
+          name="type"
+          render={({ field }) => (
+            <FormItem className="flex flex-col gap-y-1">
+              <FormLabel>Type</FormLabel>
+              <FormControl>
+                <StateToggle<Budget['type'], Budget['type']>
+                  type="button"
+                  className={`rounded-xl p-1.5
+                    ${field.value === 'income'
+                      ? 'bg-blue-500 hover:bg-blue-500/90'
+                      : 'bg-red-500 hover:bg-red-500/90'}
+                  `}
+                  status={field.value as Budget['type']}
+                  icon={{
+                    income: <BookPlus size={22} strokeWidth={2.75} />,
+                    expense: <BookMinus size={22} strokeWidth={2.75} />
+                  }}
+                  tooltip={{ income: 'Income', expense: 'Expense' }}
+                  action={() => field.onChange(field.value === 'income' ? 'expense' : 'income')}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="balance.ceiling"
+          disabled={disabled}
+          render={({ field }) => (
+            <FormItem className="min-w-[38%]">
+              <FormLabel>Expected Ceiling</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="e.g. $200"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div className="flex flex-wrap justify-around gap-x-8 gap-y-4">
         <FormField
           control={control}
           name="theme.background"
           disabled={disabled}
           render={({ field }) => (
-            <FormItem className="flex items-center gap-x-4">
-              <FormLabel className="font-heading text-xl small-caps">
-                Custom Background Color
-              </FormLabel>
+            <FormItem className="flex items-center gap-x-2.5">
+              <FormLabel>Custom Background Color</FormLabel>
               <FormControl>
-                <>
-                  <Input type="hidden" {...field} />
-                  <ColorPicker
-                    color={field.value}
-                    onChange={field.onChange}
-                  />
-                </>
+                <ColorPicker
+                  color={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -175,19 +158,14 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
           name="theme.foreground"
           disabled={disabled}
           render={({ field }) => (
-            <FormItem className="flex items-center gap-x-4">
-              <FormLabel className="font-heading text-xl small-caps">
-                Custom Foreground Color
-              </FormLabel>
+            <FormItem className="flex items-center gap-x-2.5">
               <FormControl>
-                <>
-                  <Input type="hidden" {...field} />
-                  <ColorPicker
-                    color={field.value}
-                    onChange={field.onChange}
-                  />
-                </>
+                <ColorPicker
+                  color={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
+              <FormLabel>Custom Foreground Color</FormLabel>
               <FormMessage />
             </FormItem>
           )}

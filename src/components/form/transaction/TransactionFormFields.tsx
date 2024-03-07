@@ -61,7 +61,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
         )}
       />
 
-      <div className="w-full flex flex-wrap justify-around gap-x-8">
+      <div className="w-full flex flex-wrap justify-around gap-x-8 gap-y-5">
         {!budgetId && (
           <FormField
             control={control}
@@ -115,9 +115,9 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
                 <FormControl>
                   <StateToggle<Transaction['payment']['type'], Transaction['payment']['type']>
                     type="button"
-                    className={`rounded-xl
+                    className={`rounded-xl p-1.5
                       ${field.value === '+'
-                        ? 'bg-green-500 hover:bg-green-500/90'
+                        ? 'bg-accent hover:bg-accent/90'
                         : 'bg-red-500 hover:bg-red-500/90'}
                     `}
                     status={field.value as Transaction['payment']['type']}
@@ -137,7 +137,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
             control={control}
             name="payment.amount"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="min-w-[40%]">
                 <FormControl>
                   <Input
                     type="number"
