@@ -53,11 +53,14 @@ const Note = ({ budget, note }: NoteProps) => {
     >
       <div className="h-max mx-2.5 font-medium">
         {editingMode ? (
-          <FormProvider cleanForm={() => setEditingMode(false)}>
+          <FormProvider
+            cleanForm={() => setEditingMode(false)}
+            cancelAction={() => setEditingMode(false)}
+          >
             <BudgetNoteForm
+              type="edit"
               budgetId={budget.id}
               note={note}
-              cancelAction={() => setEditingMode(false)}
             />
           </FormProvider>
         ) : (

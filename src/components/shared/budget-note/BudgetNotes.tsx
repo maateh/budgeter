@@ -49,11 +49,11 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
       </div>
 
       {editingMode && (
-        <FormProvider cleanForm={() => setEditingMode(false)}>
-          <BudgetNoteForm
-            budgetId={budget.id}
-            cancelAction={() => setEditingMode(false)}
-          />
+        <FormProvider
+          cleanForm={() => setEditingMode(false)}
+          cancelAction={() => setEditingMode(false)}
+        >
+          <BudgetNoteForm type="create" budgetId={budget.id} />
         </FormProvider>
       )}
 

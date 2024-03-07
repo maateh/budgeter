@@ -1,17 +1,18 @@
-import { useState } from "react"
-
 // context
 import FormContext from "@/services/providers/form/FormContext"
 
-type FormProviderProps = React.PropsWithChildren & {
+type FormProviderProps = {
   cleanForm?: () => void
-}
+  cancelAction?: () => void
+} & React.PropsWithChildren
 
-const FormProvider = ({ cleanForm: defaultCleanForm = () => {}, children }: FormProviderProps) => {
-  const [cleanForm, setCleanForm] = useState(() => defaultCleanForm)
-
+const FormProvider = ({
+  cleanForm = () => {},
+  cancelAction = () => {},
+  children
+}: FormProviderProps) => {
   return (
-    <FormContext.Provider value={{ cleanForm, setCleanForm }}>
+    <FormContext.Provider value={{ cleanForm, cancelAction }}>
       {children}
     </FormContext.Provider>
   )

@@ -2,12 +2,12 @@ import { createContext } from "react"
 
 type FormContextType = {
   cleanForm: () => void,
-  setCleanForm: React.Dispatch<React.SetStateAction<() => void>>
+  cancelAction: () => void
 }
 
 const FormContext = createContext<FormContextType>({
-  cleanForm: () => () => {},
-  setCleanForm: () => {}
+  cleanForm: () => {},
+  cancelAction: () => {}
 })
 
 export default FormContext

@@ -14,16 +14,18 @@ import { BudgetNote } from "@/services/api/types"
 // validation
 import { BudgetNoteValidation } from "@/lib/validation"
 
-type BudgetNoteFormProps = {
-  budgetId: UUID
-  note?: BudgetNote
-  cancelAction?: () => void
-}
+type BudgetNoteFormProps = { budgetId: UUID } & ({
+  type: 'create'
+  note?: never
+} | {
+  type: 'edit'
+  note: BudgetNote
+})
 
-const BudgetNoteForm = ({ budgetId, note, cancelAction = () => {} }: BudgetNoteFormProps) => {
+const BudgetNoteForm = ({ budgetId, type, note }: BudgetNoteFormProps) => {
   return (
     <Form<BudgetNoteFieldValues, typeof BudgetNoteValidation, BudgetNoteSubmitProps>
-      type="create"
+      type={type}
       validationSchema={BudgetNoteValidation}
       defaultValues={{
         text: note?.text || ''
@@ -33,10 +35,7 @@ const BudgetNoteForm = ({ budgetId, note, cancelAction = () => {} }: BudgetNoteF
       customButtonRequired
     >
       {(form) => (
-        <BudgetNoteFormFields
-          form={form}
-          cancelAction={cancelAction}
-        />
+        <BudgetNoteFormFields form={form} />
       )}
     </Form>
   )

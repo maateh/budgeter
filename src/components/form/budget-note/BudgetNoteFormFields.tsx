@@ -5,16 +5,20 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
+// hooks
+import { useFormContext } from "@/services/providers/form/FormContext.hooks"
+
 // types
 import { BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 
 type BudgetNoteFormFieldsProps = {
   form: UseFormReturn<BudgetNoteFieldValues>
-  cancelAction: () => void
 }
 
-const BudgetNoteFormFields = ({ form, cancelAction }: BudgetNoteFormFieldsProps) => {
+const BudgetNoteFormFields = ({ form }: BudgetNoteFormFieldsProps) => {
   const { control } = form
+  
+  const { cancelAction } = useFormContext()
 
   return (
     <div className="min-w-[75%] mx-auto flex flex-col gap-1.5">
@@ -23,9 +27,7 @@ const BudgetNoteFormFields = ({ form, cancelAction }: BudgetNoteFormFieldsProps)
         name="text"
         render={({ field }) => (
           <FormItem className="flex flex-col gap-y-1.5">
-            <div className="flex justify-between items-center gap-x-5">
-              <FormLabel className="text-md font-heading">Note Message</FormLabel>
-            </div>
+            <FormLabel className="text-md">Note Message</FormLabel>
             <FormControl>
               <Textarea
                 placeholder="Type your note here."
@@ -37,17 +39,15 @@ const BudgetNoteFormFields = ({ form, cancelAction }: BudgetNoteFormFieldsProps)
         )}
       />
 
-      <div className="my-0.5 flex gap-x-3.5 justify-end">
-        <Button
-          type="button"
+      <div className="my-1 flex gap-x-3.5 justify-end">
+        <Button type="button"
           size="sm"
           variant="destructive"
           onClick={cancelAction}
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
+        <Button type="submit"
           size="sm"
           className="border-md"
         >
