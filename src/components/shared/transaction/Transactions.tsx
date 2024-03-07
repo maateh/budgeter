@@ -28,7 +28,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
 
   return (
     <>
-      <div className="mb-5 flex justify-between items-center">
+      <div className="mb-5 flex justify-between items-center gap-x-4">
         <h2 className="pl-2 border-l-4 rounded">
           Recent <span className="text-yellow-300 overline">Transactions</span>
         </h2>

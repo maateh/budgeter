@@ -110,9 +110,9 @@ const SwitchThumb = React.forwardRef<
   >
     {variant === 'custom' && customIcon && (
       checked ? (
-        <customIcon.Checked className="w-fit h-fit" strokeWidth={2.5} />
+        <customIcon.Checked className="w-[98.5%] h-[98.5%]" strokeWidth={2.5} />
       ) : (
-        <customIcon.Unchecked className="w-fit h-fit" strokeWidth={2.5} />
+        <customIcon.Unchecked className="w-[98.5%] h-[98.5%]" strokeWidth={2.5} />
       )
     )}
   </SwitchPrimitives.Thumb>
