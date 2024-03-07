@@ -13,8 +13,8 @@ const BudgetFormDialog = ({ type }: BudgetFormDialogProps) => {
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="text-3xl">
-          Create <span className="text-green-400 overline">Budget</span>
+        <DialogTitle className="text-3xl capitalize">
+          {type} <span className="text-green-400 overline">Budget</span>
         </DialogTitle>
       </DialogHeader>
 
