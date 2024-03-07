@@ -44,7 +44,11 @@ class BudgetStorageAPI implements IBudgetAPI {
       id: crypto.randomUUID(),
       name: data.name,
       type: data.type as Budget['type'],
-      balance: data.balance,
+      balance: {
+        ...data.balance,
+        income: 0,
+        loss: 0
+      },
       theme: data.theme
     })
   }
@@ -55,7 +59,8 @@ class BudgetStorageAPI implements IBudgetAPI {
     return await this.storage.save({
       ...budget,
       ...data,
-      type: data.type as Budget['type']
+      type: data.type as Budget['type'],
+      balance: { ...budget.balance, ...data.balance }
     })
   }
 
@@ -73,20 +78,42 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   // helpers
-  async managePayments(budgetId: UUID, payments: Transaction['payment'][], action: 'execute' | 'undo') {
+  public async managePayments(budgetId: UUID, payments: Transaction['payment'][], action: 'execute' | 'undo') {
     const budget = await this.storage.findById(budgetId)
 
     payments.forEach((payment) => {
-      const amountToAdd = payment.type === '+'
-        ? payment.amount
-        : -payment.amount
-
-      budget.balance.current += action === 'execute'
-        ? amountToAdd
-        : -amountToAdd
+      this.managePayment(budget, payment, action)
     })
 
     await this.storage.save(budget)
+  }
+
+/**
+ * Manages payments within a budget by updating the balance based on the given payment and action.
+ * If the action is 'execute', it applies the payment to the budget's balance. If the action is 'undo',
+ * it reverts the effect of the payment.
+ *
+ * @param {object} budget - The budget object containing a balance property.
+ * @param {object} payment - The payment object with type (either '+' for income or '-' for loss) and amount.
+ * @param {string} action - The action to be performed: 'execute' to apply the payment or 'undo' to revert it.
+ * @returns {void}
+ */
+  private managePayment(budget: Budget, payment: Transaction['payment'], action: 'execute' | 'undo'): void {
+    const { current, income, loss } = budget.balance
+    const { type, amount } = payment
+  
+    const update = action === 'execute' ? 1 : -1
+  
+    const currentDelta = type === '+' ? amount * update : -amount * update
+    const incomeDelta = type === '+' ? amount * update : 0
+    const lossDelta = type === '-' ? amount * update : 0
+  
+    budget.balance = {
+      ...budget.balance,
+      current: current + currentDelta,
+      income: income + incomeDelta,
+      loss: loss + lossDelta
+    }
   }
 }
 

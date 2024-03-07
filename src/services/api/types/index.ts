@@ -12,8 +12,8 @@ export type Budget = {
     currency: string
     current: number
     ceiling: number
-    // income: number // TODO: add later
-    // loss: number // TODO: add later
+    income: number
+    loss: number
   }
   theme: {
     background: string
