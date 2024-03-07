@@ -4,9 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-// types
-import { Transaction } from "@/services/api/types"
-
 const useUpdateTransactionStatus = (transactionId: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
@@ -17,19 +14,34 @@ const useUpdateTransactionStatus = (transactionId: UUID) => {
       id: UUID
       processed: boolean
     }) => await api.transaction.updateStatus(id, processed),
-    onSuccess: ({ id, processed, budgetId }) => {
+    onSuccess: ({ id, type, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['getTransactionWithBudget', id] })
+
+      // FIXME: this must be reworked
+      // https://github.com/maateh/budgeter/issues/19
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], !processed, budgetId]
+        queryKey: ['getTransactionsWithBudgets', type, true, budgetId]
       })
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'default' as Transaction['type'], !processed, 'all']
+        queryKey: ['getTransactionsWithBudgets', type, false, budgetId]
       })
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'borrow' as Transaction['type'], !processed, budgetId]
+        queryKey: ['getTransactionsWithBudgets', type, true, 'all']
       })
       queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', 'borrow' as Transaction['type'], !processed, 'all']
+        queryKey: ['getTransactionsWithBudgets', type, false, 'all']
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['getTransactionsWithBudgets', type, true, budgetId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['getTransactionsWithBudgets', type, false, budgetId]
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['getTransactionsWithBudgets', type, true, 'all']
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['getTransactionsWithBudgets', type, false, 'all']
       })
 
       queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
