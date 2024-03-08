@@ -1,11 +1,5 @@
 import { useNavigate } from "react-router-dom"
 
-// icons
-import { Trash2 } from "lucide-react"
-
-// shadcn
-import { Button } from "@/components/ui/button"
-
 // components
 import ConfirmationDialog from "@/components/ui/custom/ConfirmationDialog"
 
@@ -17,9 +11,9 @@ import { Budget } from "@/services/api/types"
 
 type BudgetDeletionProps = {
   budget: Budget
-}
+} & React.PropsWithChildren
 
-const BudgetDeletion = ({ budget }: BudgetDeletionProps) => {
+const BudgetDeletion = ({ budget, children }: BudgetDeletionProps) => {
   const navigate = useNavigate()
   
   const { mutateAsync: deleteBudget } = useDeleteBudget(budget.id)
@@ -40,14 +34,7 @@ const BudgetDeletion = ({ budget }: BudgetDeletionProps) => {
       variant="negative"
       action={deleteConfirm}
     >
-      <Button
-        variant="destructive"
-        size="sm"
-        className="flex items-center gap-x-1.5"
-      >
-        <Trash2 size={18} />
-        <span>Delete</span>
-      </Button>
+      {children}
     </ConfirmationDialog>
   )
 }

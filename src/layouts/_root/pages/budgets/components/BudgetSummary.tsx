@@ -1,17 +1,16 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-
 // icons
-import { ArrowUpToLine, Pencil, Wallet } from 'lucide-react'
+import { ArrowUpToLine, Wallet } from 'lucide-react'
 
 // shadcn
-import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 
 // components
+import BudgetMarker from '@/components/shared/budget/BudgetMarker'
 import BudgetTypeBadge from '@/components/shared/budget/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
-import BudgetDeletion from '@/components/shared/budget/BudgetDeletion'
+import BudgetActions from './BudgetActions'
 
 // types
 import { Budget } from '@/services/api/types'
@@ -24,85 +23,74 @@ type BudgetSummaryProps = {
 }
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
-  const navigate = useNavigate()
-  const location = useLocation()
-
   return (
-    <>
-      <div className="flex justify-between items-center">
-        <h2
-          className="px-12 py-4 overline rounded-full"
-          style={{
-            backgroundColor: budget.theme.background,
-            color: budget.theme.foreground
-          }}
-        >
-          {budget.name}
-        </h2>
-
-        <div className="flex justify-center items-center gap-x-4 gap-y">
-          <BudgetDeletion budget={budget} />
-
-          <Button className="flex items-center gap-x-2"
+    <div className="flex flex-col gap-y-3.5 mx-2 sm:mx-3.5">
+      <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
+        <div className="flex items-center gap-x-2">
+          <Badge className="py-3.5 gap-x-2.5 border-2"
             size="lg"
-            onClick={() => navigate(`/budgets/edit/${budget.id}`, {
-              state: { background: location }
-            })}
+            style={{ borderColor: budget.theme.foreground }}
           >
-            <Pencil size={18} />
-            <span>Edit</span>
-          </Button>
+            <BudgetMarker className="size-4" budget={budget} />
+            <h2 className="text-xl text-center sm:text-2xl">
+              {budget.name}
+            </h2>            
+          </Badge>
         </div>
+
+        <BudgetActions budget={budget} />
       </div>
 
-      <Separator className="mt-4 mb-6 bg-primary-foreground/15" />
+      <Separator className="w-11/12 mx-auto my-1.5" />
 
-      <div className="flex flex-col gap-y-2">
-        <div className="flex flex-wrap justify-between gap-8">
-          <div className="flex flex-col gap-x-4 gap-y-3 text-lg small-caps">
-            <InfoBadge
-              label="Current Balance"
-              value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
-              size="lg"
-              variant={budget.balance.current > 0 ? 'income' : 'loss'}
-              icon={<Wallet strokeWidth={2.25} />}
-            />
-            <InfoBadge
-              label="Ceiling"
-              value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
-              size="md"
-              icon={<ArrowUpToLine strokeWidth={2.25} />}
-            />
-          </div>
+      <div className="flex flex-wrap justify-around gap-x-6 gap-y-4 small-caps">
+        <InfoBadge className={`flex-1 max-w-72 min-w-40
+            ${budget.balance.current > 0
+              ? 'bg-green-700/10 hover:bg-green-700/15 text-green-700 border-green-700 dark:text-green-400 dark:border-green-400'
+              : 'text-destructive border-destructive'}
+          `}
+          size="lg"
+          label="Current Balance"
+          value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
+          icon={<Wallet strokeWidth={2.25} />}
+        />
 
-          <div className="ml-auto flex flex-wrap justify-end items-end gap-x-4 gap-y-2 truncate">
-            {/* <InfoBadge
-              label="Total Income"
-              value={formatWithCurrency(budget.income, budget.currency)}
-              size="sm"
-              variant="income"
-            />
-            <InfoBadge
-              label="Total Loss"
-              value={formatWithCurrency(budget.loss, budget.currency)}
-              size="sm"
-              variant="loss"
-            /> */}
-          </div>
-        </div>
-
-
-        <div className="flex items-center justify-between gap-x-4">
-          <BudgetTypeBadge budget={budget} size="icon-md" />
-          <Progress
-            value={budget.balance.current}
-            maxValue={budget.balance.ceiling}
-            variant={budget.balance.current > 0 ? budget.type : 'negative'}
-            className="my-3.5 h-6"
-          />
-        </div>
+        <InfoBadge className="flex-1 max-w-72 min-w-40"
+          label="Ceiling"
+          value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
+          icon={<ArrowUpToLine strokeWidth={2.25} />}
+        />
       </div>
-    </>
+
+      <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2">
+        <InfoBadge className="text-accent border-accent bg-background/65"
+          separatorProps={{ className: 'h-4' }}
+          size="sm"
+          orientation="vertical"
+          label="Income"
+          value={formatWithCurrency(budget.balance.income, budget.balance.currency)}
+        />
+        <InfoBadge className="text-destructive border-destructive bg-background/65"
+          separatorProps={{ className: 'h-4' }}
+          size="sm"
+          orientation="vertical"
+          label="Loss"
+          value={formatWithCurrency(budget.balance.loss, budget.balance.currency)}
+        />
+      </div>
+
+      <Separator className="w-11/12 mx-auto my-1.5" />
+
+      {/* TODO: this still needs to be redesigned */}
+      <div className="flex items-center justify-between gap-x-4">
+        <BudgetTypeBadge budget={budget} />
+        <Progress className="h-5"
+          value={budget.balance.current}
+          maxValue={budget.balance.ceiling}
+          variant={budget.balance.current > 0 ? budget.type : 'negative'}
+        />
+      </div>
+    </div>
   )
 }
 
