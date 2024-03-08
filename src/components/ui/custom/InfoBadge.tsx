@@ -2,29 +2,39 @@ import { forwardRef } from "react"
 
 // shadcn
 import { Badge, BadgeProps } from "@/components/ui/badge"
+import { Separator, SeparatorProps } from "@/components/ui/separator"
 
 // utils
 import { cn } from "@/lib/utils"
 
 type InfoBadgeProps = {
-  label: React.ReactNode
-  value: React.ReactNode
-  icon?: React.JSX.Element
+  value: string
+  label: string
+  icon?: React.ReactNode
+  orientation?: SeparatorProps['orientation']
+  separatorProps?: Omit<SeparatorProps, 'orientation'>
 } & BadgeProps
 
 const InfoBadge = forwardRef<HTMLDivElement, InfoBadgeProps>(({
-  label, value, icon, className, variant = "outline", size, ...props
+  value, label, icon, className, variant = "outline", orientation = "horizontal", separatorProps, ...props
 }, ref) => (
-  <Badge className={cn("flex-1 w-full icon-wrapper justify-center", className)}
+  <Badge className={cn("flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-center",
+      orientation === 'horizontal' && 'flex-col',
+      className
+    )}
     variant={variant}
-    size={size}
     ref={ref}
     {...props}
   >
-    {icon}
-    <p className="flex justify-between items-center gap-x-2 capitalize">
-      {label}
-      <span className="pl-2 text-[115%] font-heading font-semibold border-border/70 border-l-2">{value}</span>
+    <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-0.5">
+      {icon}
+      <p>{label}</p>
+    </div>
+
+    <Separator className="w-2/3 my-0.5" orientation={orientation} {...separatorProps} />
+
+    <p className="text-[115%] font-heading font-semibold text-clip break-all">
+      {value}
     </p>
   </Badge>
 ))
