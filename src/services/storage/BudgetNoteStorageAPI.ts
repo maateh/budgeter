@@ -5,21 +5,24 @@ import { z } from "zod"
 import { IBudgetNoteAPI } from "@/services/api/interfaces"
 
 // types
-import { BudgetNote } from "@/services/api/types"
+import { Budget, BudgetNote } from "@/services/api/types"
 
 // validations
 import { BudgetNoteValidation } from "@/lib/validation"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
+import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
 
 class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   private static _instance: BudgetNoteStorageAPI
 
   private storage: StorageHelper<BudgetNote>
+  private budgetStorageApi: BudgetStorageAPI
 
   private constructor() {
     this.storage = new StorageHelper('notes')
+    this.budgetStorageApi = BudgetStorageAPI.getInstance()
   }
 
   public static getInstance(): BudgetNoteStorageAPI {
@@ -27,6 +30,13 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
       BudgetNoteStorageAPI._instance = new BudgetNoteStorageAPI()
     }
     return BudgetNoteStorageAPI._instance
+  }
+
+  public async getNoteWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }> {
+    const note = await this.storage.findById(noteId)
+    const budget = await this.budgetStorageApi.getById(budgetId)
+
+    return { ...note, budget }
   }
 
   public async getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]> {

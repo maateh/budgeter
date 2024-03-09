@@ -5,14 +5,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
-import { BudgetNoteFieldValues } from "@/components/form/budget/types"
+import { BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 
 const useSaveNote = (budgetId: UUID, noteId?: UUID) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
   return useMutation({
-    mutationKey: ['saveNote', noteId ? 'create' : 'update', budgetId, noteId],
+    mutationKey: ['saveNote', noteId ? 'update' : 'create', budgetId, noteId],
     mutationFn: async ({ budgetId, noteId, data }: {
       budgetId: UUID
       noteId?: UUID
@@ -23,7 +23,8 @@ const useSaveNote = (budgetId: UUID, noteId?: UUID) => {
       }
       return await api.budgetNote.create(budgetId, data)
     },
-    onSuccess: ({ budgetId, status }) => {
+    onSuccess: ({ id, budgetId, status }) => {
+      queryClient.invalidateQueries({ queryKey: ['getNoteWithBudget', budgetId, id] })
       queryClient.invalidateQueries({ queryKey: ['getNotesByStatus', budgetId, status] })
     }
   })

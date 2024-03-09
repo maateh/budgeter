@@ -20,6 +20,7 @@ export interface IBudgetAPI {
 }
 
 export interface IBudgetNoteAPI {
+  getNoteWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }>
   getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]>
   create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
   updateText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>

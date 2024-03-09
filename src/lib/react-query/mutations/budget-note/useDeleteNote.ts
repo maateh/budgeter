@@ -14,7 +14,8 @@ const useDeleteNote = (budgetId: UUID, noteId: UUID) => {
       budgetId: UUID
       noteId: UUID
     }) => await api.budgetNote.delete(budgetId, noteId),
-    onSuccess: ({ budgetId, status }) => {
+    onSuccess: ({ id, budgetId, status }) => {
+      queryClient.invalidateQueries({ queryKey: ['getNoteWithBudget', budgetId, id] })
       queryClient.invalidateQueries({ queryKey: ['getNotesByStatus', budgetId, status] })
     }
   })
