@@ -13,7 +13,6 @@ const DeleteTransaction = () => {
   const { id } = useParams() as { id: UUID }
   const navigate = useNavigate()
 
-
   const { data: transaction, isLoading } = useGetTransactionWithBudget(id)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction(id)
 

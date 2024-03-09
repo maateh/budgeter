@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom"
+import { Location, Route, Routes, useLocation } from "react-router-dom"
 
 // layouts
 import RootLayout from "@/layouts/_root/RootLayout"
@@ -10,7 +10,7 @@ import { CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBud
 
 const App = () => {
   const location = useLocation()
-  const backgroundLocation = location.state?.background
+  const backgroundLocation = location.state?.background as Location
 
   // TODO: load pages with lazy loading
   return (

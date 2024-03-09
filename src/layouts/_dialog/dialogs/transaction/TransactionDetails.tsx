@@ -104,7 +104,8 @@ const TransactionDetails = () => {
           variant="destructive"
           size="sm"
           onClick={() => navigate(`/transactions/delete/${transaction.id}`, {
-            state: { background: location }
+            state: { background: location.state.background },
+            replace: true
           })}
         >
           <Trash2 size={18} />
@@ -112,7 +113,7 @@ const TransactionDetails = () => {
         </Button>
       </DialogFooter>
     </>
-  ): <>Loading...</> // TODO: skeleton
+  ) : <>Loading...</> // TODO: skeleton
 }
 
 export default TransactionDetails
