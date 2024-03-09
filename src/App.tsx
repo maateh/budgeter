@@ -5,7 +5,8 @@ import RootLayout from "@/layouts/_root/RootLayout"
 import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/layouts/_root/pages"
 
 import DialogLayout from "@/layouts/_dialog/DialogLayout"
-import { BudgetFormDialog, TransactionFormDialog, TransactionDetailsDialog } from "@/layouts/_dialog/dialogs"
+import AlertLayout from "@/layouts/_dialog/AlertLayout"
+import { CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/layouts/_dialog/dialogs"
 
 const App = () => {
   const location = useLocation()
@@ -31,13 +32,23 @@ const App = () => {
         <Routes>
           <Route path="/" element={<DialogLayout />}>
             <Route path="/budgets">
-              <Route path="create" element={<BudgetFormDialog type="create" />} />
-              <Route path="edit/:id" element={<BudgetFormDialog type="edit" />} />
+              <Route path="create" element={<SaveBudget type="create" />} />
+              <Route path="edit/:id" element={<SaveBudget type="edit" />} />
             </Route>
 
             <Route path="/transactions">
-              <Route path="create/:budgetId?" element={<TransactionFormDialog />} />
-              <Route path=":id" element={<TransactionDetailsDialog />} />
+              <Route path="create/:budgetId?" element={<CreateTransaction />} />
+              <Route path=":id" element={<TransactionDetails />} />
+            </Route>
+          </Route>
+
+          <Route path="/" element={<AlertLayout />}>
+            <Route path="/budgets">
+              <Route path="delete/:id" element={<DeleteBudget />} />
+              <Route path=":budgetId/notes/delete/:id" element={<DeleteNote />} />
+            </Route>
+            <Route path="/transactions">
+              <Route path="delete/:id" element={<DeleteTransaction />} />
             </Route>
           </Route>
         </Routes>

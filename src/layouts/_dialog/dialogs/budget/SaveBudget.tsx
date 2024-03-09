@@ -5,11 +5,11 @@ import { Separator } from "@/components/ui/separator"
 // components
 import BudgetForm from "@/components/form/budget/BudgetForm"
 
-type BudgetFormDialogProps = {
+type SaveBudgetProps = {
   type: 'create' | 'edit'
 }
 
-const BudgetFormDialog = ({ type }: BudgetFormDialogProps) => {
+const SaveBudget = ({ type }: SaveBudgetProps) => {
   return (
     <>
       <DialogHeader>
@@ -25,4 +25,4 @@ const BudgetFormDialog = ({ type }: BudgetFormDialogProps) => {
   )
 }
 
-export default BudgetFormDialog
+export default SaveBudget

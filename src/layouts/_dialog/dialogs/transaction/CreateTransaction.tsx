@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 // components
 import TransactionForm from "@/components/form/transaction/TransactionForm"
 
-const TransactionFormDialog = () => {
+const CreateTransaction = () => {
   const { budgetId } = useParams() as { budgetId?: UUID }
 
   return (
@@ -26,4 +26,4 @@ const TransactionFormDialog = () => {
   )
 }
 
-export default TransactionFormDialog
+export default CreateTransaction

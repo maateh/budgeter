@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { format } from "date-fns"
 
 // icons
@@ -10,7 +11,6 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
-import NoteDeletion from "@/components/shared/budget-note/NoteDeletion"
 
 // hooks
 import { useUpdateNoteStatus } from "@/lib/react-query/mutations"
@@ -27,6 +27,9 @@ type NoteProps = {
 }
 
 const Note = ({ budget, note }: NoteProps) => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [editingMode, setEditingMode] = useState(false)
 
   const { mutateAsync: updateNoteStatus } = useUpdateNoteStatus(budget.id, note.id)
@@ -104,15 +107,18 @@ const Note = ({ budget, note }: NoteProps) => {
             />
           </Button>
 
-          <NoteDeletion className="bg-primary p-2 hover:bg-primary/75"
-            note={note}
-            budget={budget}
+          <Button className="bg-primary p-2 hover:bg-primary/75"
+            variant="icon"
+            size="icon"
+            onClick={() => navigate(`/budgets/${budget.id}/notes/delete/${note.id}`, {
+              state: { background: location }
+            })}
           >
             <Trash2 className="text-destructive"
               size={16}
               strokeWidth={2.5}
             />
-          </NoteDeletion>
+          </Button>
         </div>
 
         <div className="font-heading all-small-caps icon-wrapper">

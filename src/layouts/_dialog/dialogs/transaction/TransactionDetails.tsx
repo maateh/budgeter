@@ -1,11 +1,12 @@
 import { UUID } from "crypto"
-import { useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { format } from "date-fns"
 
 // icons
-import { Handshake, Calendar, Receipt, CalendarCheck } from "lucide-react"
+import { Handshake, Calendar, Receipt, CalendarCheck, Trash2 } from "lucide-react"
 
 // shadcn
+import { Button } from "@/components/ui/button"
 import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
@@ -14,7 +15,6 @@ import InfoBadge from "@/components/ui/custom/InfoBadge"
 import BudgetMarker from "@/components/shared/budget/BudgetMarker"
 import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
 import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
-import TransactionDeletion from "@/components/shared/transaction/TransactionDeletion"
 
 // hooks
 import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
@@ -22,8 +22,10 @@ import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
 // utils
 import { formatWithCurrency } from "@/utils"
 
-const TransactionDetailsDialog = () => {
+const TransactionDetails = () => {
   const { id } = useParams() as { id: UUID }
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const { data: transaction, isLoading } = useGetTransactionWithBudget(id)
 
@@ -40,6 +42,8 @@ const TransactionDetailsDialog = () => {
         </DialogTitle>
 
         <InfoBadge className="flex-none w-fit px-5 py-2"
+          separatorProps={{ className: "h-5" }}
+          orientation="vertical"
           label={transaction.budget.name}
           value={formatWithCurrency(transaction.budget.balance.current, transaction.budget.balance.currency)}
           icon={<BudgetMarker budget={transaction.budget} />}
@@ -96,10 +100,19 @@ const TransactionDetailsDialog = () => {
           />
         </div>
 
-        <TransactionDeletion transaction={transaction} />
+        <Button className="ml-auto flex items-center gap-x-1.5"
+          variant="destructive"
+          size="sm"
+          onClick={() => navigate(`/transactions/delete/${transaction.id}`, {
+            state: { background: location }
+          })}
+        >
+          <Trash2 size={18} />
+          <span>Delete</span>
+        </Button>
       </DialogFooter>
     </>
   ): <>Loading...</> // TODO: skeleton
 }
 
-export default TransactionDetailsDialog
+export default TransactionDetails

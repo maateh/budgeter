@@ -6,9 +6,6 @@ import { Pencil, Trash2 } from "lucide-react"
 // shadcn
 import { Button } from "@/components/ui/button"
 
-// components
-import BudgetDeletion from "@/components/shared/budget/BudgetDeletion"
-
 // types
 import { Budget } from "@/services/api/types"
 
@@ -22,16 +19,16 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
 
   return (
     <div className="ml-auto flex flex-wrap-reverse items-center justify-end gap-y-2 gap-x-4">
-      {/* TODO: move delete action to dialog layout */}
-      <BudgetDeletion budget={budget}>
-        <Button className="w-fit flex items-center gap-x-1.5"
-          variant="destructive"
-          size="sm"
-        >
-          <Trash2 size={18} />
-          <span>Delete</span>
-        </Button>
-      </BudgetDeletion>
+      <Button className="w-fit flex items-center gap-x-1.5"
+        variant="destructive"
+        size="sm"
+        onClick={() => navigate(`/budgets/delete/${budget.id}`, {
+          state: { background: location }
+        })}
+      >
+        <Trash2 size={18} />
+        <span>Delete</span>
+      </Button>
 
       <Button className="icon-wrapper"
         size="lg"
