@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
-import BudgetMarker from "@/components/shared/budget/BudgetMarker"
+import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
 import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
 

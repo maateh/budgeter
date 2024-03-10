@@ -7,9 +7,9 @@ import { Separator, SeparatorProps } from "@/components/ui/separator"
 // utils
 import { cn } from "@/lib/utils"
 
-type InfoBadgeProps = {
+export type InfoBadgeProps = {
   value: string
-  label: string
+  label?: string
   icon?: React.ReactNode
   orientation?: SeparatorProps['orientation']
   separatorProps?: Omit<SeparatorProps, 'orientation'>
@@ -28,7 +28,7 @@ const InfoBadge = forwardRef<HTMLDivElement, InfoBadgeProps>(({
   >
     <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-0.5">
       {icon}
-      <p>{label}</p>
+      {label && <p>{label}</p>}
     </div>
 
     <Separator className="w-2/3 my-0.5" orientation={orientation} {...separatorProps} />

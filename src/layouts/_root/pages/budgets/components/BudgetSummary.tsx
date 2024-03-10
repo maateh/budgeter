@@ -1,13 +1,13 @@
 // icons
-import { ArrowUpToLine, Wallet } from 'lucide-react'
+import { ArrowUpToLine } from 'lucide-react'
 
 // shadcn
-import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 
 // components
-import BudgetMarker from '@/components/shared/budget/BudgetMarker'
+import BalanceBadge from '@/components/shared/budget/custom/BalanceBadge'
+import BudgetNameBadge from '@/components/shared/budget/custom/BudgetNameBadge'
 import BudgetTypeBadge from '@/components/shared/budget/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
 import BudgetActions from './BudgetActions'
@@ -26,15 +26,10 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
   return (
     <div className="flex flex-col gap-y-3.5 mx-2 sm:mx-3.5">
       <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
-        <Badge className="py-3.5 border-2 icon-wrapper"
+        <BudgetNameBadge className="py-3.5 text-xl sm:text-2xl"
           size="lg"
-          style={{ borderColor: budget.theme.foreground }}
-        >
-          <BudgetMarker className="size-4" budget={budget} />
-          <h2 className="text-xl text-center sm:text-2xl">
-            {budget.name}
-          </h2>            
-        </Badge>
+          budget={budget}
+        />
 
         <BudgetActions budget={budget} />
       </div>
@@ -42,15 +37,10 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
       <Separator className="w-11/12 mx-auto my-1.5" />
 
       <div className="flex flex-wrap justify-around gap-x-6 gap-y-4 small-caps">
-        <InfoBadge className={`flex-1 max-w-72 min-w-40
-            ${budget.balance.current > 0
-              ? 'bg-green-700/10 hover:bg-green-700/15 text-green-700 border-green-700 dark:text-green-400 dark:border-green-400'
-              : 'text-destructive border-destructive'}
-          `}
+        <BalanceBadge className="flex-1 max-w-72 min-w-40"
           size="lg"
-          label="Current Balance"
-          value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
-          icon={<Wallet strokeWidth={2.25} />}
+          balance={budget.balance}
+          showLabel
         />
 
         <InfoBadge className="flex-1 max-w-72 min-w-40"

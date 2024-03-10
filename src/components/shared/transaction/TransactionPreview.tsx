@@ -4,7 +4,7 @@ import { formatDistance } from "date-fns"
 // components
 import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
 import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
-import BudgetMarker from "@/components/shared/budget/BudgetMarker"
+import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
