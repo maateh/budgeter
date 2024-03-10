@@ -1,22 +1,28 @@
+// shadcn
+import { Separator } from "@/components/ui/separator"
+
 // components
+import Budgets from "@/components/shared/budget/Budgets"
 import Transactions from "@/components/shared/transaction/Transactions"
 import BudgetSummary from "./components/BudgetSummary"
 
 const Home = () => {
   return (
     <div className="page-wrapper">
-      <h1 className="ml-6">
+      <h1 className="ml-2">
         Budgeter <span className="text-accent">Dashboard</span>
       </h1>
 
       <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
-        <div className="flex-1 w-full min-w-64 flex flex-col gap-y-10 md:min-w-80 md:max-w-4xl">
-          <section className="w-full layout-rounded bg-primary">
+        <div className="flex-1 w-full min-w-64 flex flex-col gap-y-4 md:min-w-80 md:max-w-4xl">
+          <section className="w-full section-wrapper">
             <BudgetSummary />
           </section>
+
+          <Separator />
           
-          <section className="w-full">
-            {/* <Budgets /> TODO: implement */}
+          <section className="w-full section-wrapper">
+            <Budgets />
           </section>
         </div>
 

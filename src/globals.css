@@ -121,7 +121,7 @@
 
 @layer components {
   .layout-rounded {
-    @apply rounded-[2rem] px-6 py-5;
+    @apply rounded-[2rem] section-wrapper;
   }
 }
 
@@ -131,6 +131,9 @@
   }
   .page-wrapper {
     @apply mx-5 my-4;
+  }
+  .section-wrapper {
+    @apply h-fit px-6 py-5;
   }
 
   /* TOGGLE */
