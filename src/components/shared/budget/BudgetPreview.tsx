@@ -1,15 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom"
 
 // icons
-import { ArrowUpToLine, BadgePlus, Landmark, Wallet } from "lucide-react"
+import { BadgePlus } from "lucide-react"
 
 // shadcn
-import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 
 // components
-import BudgetTypeBadge from "@/components/shared/budget/BudgetTypeBadge"
+import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
+import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
@@ -27,104 +27,64 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const location = useLocation()
 
   return (
-    <div className="rounded-[1.65rem] bg-primary-foreground/10 hover:drop-shadow-lg">
-      <div
-        onClick={() => navigate(`/budgets/${budget.id}`)}
-        style={{
-          backgroundColor: budget.theme.background,
-          color: budget.theme.foreground
-        }}
-        className="px-4 py-3 flex items-center justify-between gap-x-4 rounded-t-3xl cursor-pointer shadow-2xl border-2 border-b-0 border-foreground/20">
-        <div className="text-xl font-heading icon-wrapper justify-end">
-          <Landmark strokeWidth={1.5} />
-          <p className="font-medium">{budget.name}</p>
-        </div>
-        <BudgetTypeBadge budget={budget} size="icon-sm" />
-      </div>
-
-      <Separator className="py-[1px] bg-neutral-700 dark:bg-neutral-200" />
-
-      <div className="px-4 py-3 rounded-b-3xl bg-card/75 shadow-2xl border-2 border-t-0 border-card">
-        <div className="flex flex-wrap justify-between gap-2 small-caps">
-          <InfoBadge
-            label="Balance"
-            value={formatWithCurrency(budget.balance.current, budget.balance.currency)}
-            size="sm"
-            variant={budget.balance.current > 0 ? 'income' : 'loss'}
-            icon={<Wallet size={18} />}
-          />
-          <InfoBadge
-            label="Ceiling"
-            value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
-            size="sm"
-            icon={<ArrowUpToLine size={18} />}
-          />
-        </div>
-
-        <Progress
-          value={budget.balance.current}
-          maxValue={budget.balance.ceiling}
-          variant={budget.balance.current > 0 ? budget.type : 'negative'}
-          className="my-3"
+    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/60">
+      <div className="w-full flex flex-wrap justify-between items-center gap-x-3.5 gap-y-2">
+        <BudgetNameBadge className="h-fit text-sm text-center sm:text-md"
+          budget={budget}
         />
 
-        <ul className="flex flex-wrap justify-start gap-x-2 gap-y-1">
-          <li>
-            <Badge className="cursor-pointer gap-x-1"
-              variant="outline"
-              size="xs"
-              onClick={() => navigate(`/transactions/create/${budget.id}`, {
-                state: { background: location }
-              })}
-            >
-              <BadgePlus size={16} />
-              <span>New</span>
-            </Badge>
-          </li>
+        <BalanceBadge className="min-w-32 ml-auto px-3"
+          separatorProps={{ className: "h-3" }}
+          orientation="vertical"
+          size="sm"
+          iconSize={18}
+          balance={budget.balance}
+        />
+      </div>
+      
+      <Separator className="mx-auto w-5/6" />
 
-          {/* TODO: get budget transactions */}
-          {/* {Object.values(budget.transactions)
-            .filter(tr => tr.status === 'processed')
-            .slice(0, 6)
-            .map(tr => (
-              <li key={tr.id}>
-                <TransactionBadge
-                  transaction={tr}
-                  currency={budget.currency}
-                  size="xs"
-                  iconSize={10}
-                />
-              </li>
-            ))
-          } */}
-          
-          <li>
-            <Badge
-              onClick={() => navigate(`/budgets/${budget.id}`)}
-              variant="outline"
-              size="xs"
-              className="cursor-pointer"
-            >
-              View all
-            </Badge>
-          </li>
-        </ul>
+      {/* TODO: get budget transactions */}
+      <ul className="flex flex-wrap items-end gap-x-2 gap-y-1">
+        <li><Badge className="text-sm cursor-pointer icon-wrapper"
+          variant="outline"
+          size="xs"
+          onClick={() => navigate(`/transactions/create/${budget.id}`, {
+            state: { background: location }
+          })}
+        >
+          <BadgePlus size={18} />
+          <span>New</span>
+        </Badge></li>
 
-        <div className="w-fit ml-auto mt-4 grid grid-cols-2 gap-x-2.5">
-          {/* TODO: add income & expense fields to budget */}
-          {/* <InfoBadge
-            label="Income"
-            value={formatWithCurrency(budget.income, budget.currency)}
-            size="xs"
-            variant="income"
-          />
-          <InfoBadge
-            label="Loss"
-            value={formatWithCurrency(budget.loss, budget.currency)}
-            size="xs"
-            variant="loss"
-          /> */}
-        </div>
+        {/* TODO: transactions required */}
+        <li>payments</li>
+
+        <li><Badge className="cursor-pointer"
+          onClick={() => navigate(`/budgets/${budget.id}`)}
+          variant="outline"
+          size="xs"
+        >
+          View all
+        </Badge></li>
+      </ul>
+
+      <div className="flex flex-wrap justify-end items-center gap-x-3.5 gap-y-2">
+        <InfoBadge className="px-2.5 text-accent border-accent bg-background/65"
+          separatorProps={{ className: 'h-3' }}
+          size="xs"
+          orientation="vertical"
+          label="Income"
+          value={formatWithCurrency(budget.balance.income, budget.balance.currency)}
+        />
+
+        <InfoBadge className="px-2.5 text-destructive border-destructive bg-background/65"
+          separatorProps={{ className: 'h-3' }}
+          size="xs"
+          orientation="vertical"
+          label="Loss"
+          value={formatWithCurrency(budget.balance.loss, budget.balance.currency)}
+        />
       </div>
     </div>
   )
