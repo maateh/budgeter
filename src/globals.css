@@ -121,7 +121,7 @@
 
 @layer components {
   .layout-rounded {
-    @apply rounded-[2.15rem] px-6 py-5;
+    @apply rounded-[2rem] px-6 py-5;
   }
 }
 

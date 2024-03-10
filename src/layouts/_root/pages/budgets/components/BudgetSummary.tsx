@@ -26,17 +26,15 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
   return (
     <div className="flex flex-col gap-y-3.5 mx-2 sm:mx-3.5">
       <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
-        <div className="flex items-center gap-x-2">
-          <Badge className="py-3.5 gap-x-2.5 border-2"
-            size="lg"
-            style={{ borderColor: budget.theme.foreground }}
-          >
-            <BudgetMarker className="size-4" budget={budget} />
-            <h2 className="text-xl text-center sm:text-2xl">
-              {budget.name}
-            </h2>            
-          </Badge>
-        </div>
+        <Badge className="py-3.5 border-2 icon-wrapper"
+          size="lg"
+          style={{ borderColor: budget.theme.foreground }}
+        >
+          <BudgetMarker className="size-4" budget={budget} />
+          <h2 className="text-xl text-center sm:text-2xl">
+            {budget.name}
+          </h2>            
+        </Badge>
 
         <BudgetActions budget={budget} />
       </div>

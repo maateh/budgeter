@@ -19,7 +19,7 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
 
   return (
     <div className="ml-auto flex flex-wrap-reverse items-center justify-end gap-y-2 gap-x-4">
-      <Button className="w-fit flex items-center gap-x-1.5"
+      <Button className="icon-wrapper"
         variant="destructive"
         size="sm"
         onClick={() => navigate(`/budgets/delete/${budget.id}`, {

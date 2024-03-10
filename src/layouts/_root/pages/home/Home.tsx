@@ -1,48 +1,28 @@
 // components
 import Transactions from "@/components/shared/transaction/Transactions"
 import BudgetSummary from "./components/BudgetSummary"
-import BudgetList from "./components/BudgetList"
-
-// hooks
-import { useGetBudgets } from "@/lib/react-query/queries"
 
 const Home = () => {
-  const { data: budgets, isLoading: budgetsIsLoading } = useGetBudgets()
-
   return (
     <div className="page-wrapper">
-      <h1 className="ml-6">Budgeter <span className="text-accent">Dashboard</span></h1>
+      <h1 className="ml-6">
+        Budgeter <span className="text-accent">Dashboard</span>
+      </h1>
 
-      <div className="grid gap-8">
-        <div className="w-full flex flex-col justify-between gap-4 md:flex-row">
-          <section className="w-full layout-rounded bg-primary md:w-4/6 md:max-w-4xl">
+      <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
+        <div className="flex-1 w-full min-w-64 flex flex-col gap-y-10 md:min-w-80 md:max-w-4xl">
+          <section className="w-full layout-rounded bg-primary">
             <BudgetSummary />
           </section>
-          <section className="w-full min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-            <Transactions />
+          
+          <section className="w-full">
+            {/* <Budgets /> TODO: implement */}
           </section>
         </div>
 
-        <div className="flex flex-col justify-between items-center gap-4 lg:flex-col xl:flex-row">
-          {!budgetsIsLoading && budgets ? (
-            <>
-              <section className="w-full mr-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
-                <BudgetList
-                  budgets={budgets.filter(b => b.type === 'income')}
-                  type="income"
-                />
-              </section>
-              <section className="w-full ml-auto layout-rounded bg-primary md:w-5/6 lg:max-w-5xl">
-                <BudgetList
-                  budgets={budgets.filter(b => b.type === 'expense')}
-                  type="expense"
-                />
-              </section>
-            </>
-          ) : (
-            <>Loading...</> // TODO: skeleton
-          )}
-        </div>
+        <section className="flex-1 w-full h-fit min-w-64 layout-rounded bg-primary md:w-1/3 md:max-w-lg">
+          <Transactions />
+        </section>
       </div>
     </div>
   )

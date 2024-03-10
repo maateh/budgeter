@@ -14,30 +14,30 @@ const BudgetDetails = () => {
 
   const { data: budget, isLoading } = useGetBudget(id)
 
-  return !isLoading && budget ? (
+  return (
     <div className="page-wrapper">
       <h1 className="ml-6">
         Budget <span className="text-green-600/85 dark:text-green-400">Details</span>
       </h1>
       
-      <div className="w-full flex flex-col justify-between gap-4 md:flex-row">
-        <div className="w-full flex flex-col gap-4 md:w-4/6 md:max-w-4xl">
-          <section className="w-full">
-            <BudgetSummary budget={budget} />
-          </section>
-
-          <section className="w-full h-fit layout-rounded bg-primary">
-            <BudgetNotes budget={budget} />
+      {!isLoading && budget ? (
+        <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
+          <div className="flex-1 w-full min-w-64 flex flex-col gap-y-10 md:min-w-80 md:max-w-4xl">
+            <section className="w-full">
+              <BudgetSummary budget={budget} />
+            </section>
+  
+            <section className="w-full h-fit layout-rounded bg-primary">
+              <BudgetNotes budget={budget} />
+            </section>
+          </div>
+  
+          <section className="flex-1 w-full h-fit min-w-64 layout-rounded bg-primary md:w-1/3 md:max-w-lg">
+            <Transactions budgetId={budget.id} />
           </section>
         </div>
-
-        <section className="w-full h-fit min-w-80 layout-rounded bg-primary md:w-2/6 md:max-w-lg">
-          <Transactions budgetId={budget.id} />
-        </section>
-      </div>
+      ) : <>Loading...</>} {/* // TODO: skeleton */}
     </div>
-  ) : (
-    <>Loading</> // TODO: skeleton
   )
 }
 
