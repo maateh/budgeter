@@ -24,7 +24,7 @@ type BudgetSummaryProps = {
 
 const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
   return (
-    <div className="flex flex-col gap-y-3.5 mx-2 sm:mx-3.5">
+    <div className="flex flex-col gap-y-3.5">
       <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
         <BudgetNameBadge className="py-3.5 text-xl sm:text-2xl"
           size="lg"
