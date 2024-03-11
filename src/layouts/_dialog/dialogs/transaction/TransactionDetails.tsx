@@ -13,8 +13,8 @@ import { Separator } from "@/components/ui/separator"
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
-import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
-import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
+import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
+import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 
 // hooks
 import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
@@ -54,7 +54,7 @@ const TransactionDetails = () => {
       <Separator />
 
       <div className="text-lg font-heading icon-wrapper justify-center">
-        <TransactionStatusSwitch transaction={transaction} />
+        <TransactionStatusToggle transaction={transaction} />
         {transaction.processed ? (
           <p>This transaction is <span className="text-accent overline">processed</span>.</p>
         ) : (
@@ -92,7 +92,7 @@ const TransactionDetails = () => {
 
       <DialogFooter className="flex flex-wrap flex-row justify-between items-center gap-4 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-x-2.5">
-          <TransactionStatusSwitch transaction={transaction} />
+          <TransactionStatusToggle transaction={transaction} />
           <PaymentBadge
             transaction={transaction}
             currency={transaction.budget.balance.currency}

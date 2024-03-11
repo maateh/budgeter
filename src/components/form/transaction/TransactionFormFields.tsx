@@ -7,17 +7,16 @@ import { Handshake, Minus, Plus, Receipt, Verified, XCircle } from "lucide-react
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Switch, SwitchThumb } from "@/components/ui/switch"
-// import { Button } from "@/components/ui/button"
 
 // components
 import TabsSelect from "@/components/input/TabsSelect"
 import BudgetSelector from "@/components/input/BudgetSelector"
 import DateTimePicker from "@/components/input/DateTimePicker"
+import StateToggle from "@/components/ui/custom/StateToggle"
 
 // types
-import { Transaction } from "@/services/api/types"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
-import StateToggle from "@/components/ui/custom/StateToggle"
+import { Transaction } from "@/services/api/types"
 
 type TransactionFormFieldsProps = {
   budgetId?: string

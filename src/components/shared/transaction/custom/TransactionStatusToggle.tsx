@@ -10,14 +10,14 @@ import { useUpdateTransactionStatus } from "@/lib/react-query/mutations"
 // types
 import { Transaction } from "@/services/api/types"
 
-type TransactionStatusSwitchProps = {
+type TransactionStatusToggleProps = {
   transaction: Transaction
 }
 
-const TransactionStatusSwitch = ({ transaction }: TransactionStatusSwitchProps) => {
+const TransactionStatusToggle = ({ transaction }: TransactionStatusToggleProps) => {
   const { mutateAsync: updateTransactionStatus } = useUpdateTransactionStatus(transaction.id)
 
-  const handleUpdateStatus = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const handleUpdateStatus = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
 
     try {
@@ -37,7 +37,7 @@ const TransactionStatusSwitch = ({ transaction }: TransactionStatusSwitchProps) 
       status={transaction.processed ? 'processed' : 'unprocessed'}
       icon={{
         processed: (
-          <BadgeCheck className="text-green-600 dark:text-green-500"
+          <BadgeCheck className="text-green-700 dark:text-green-400"
             size={20}
             strokeWidth={2.5}
           />
@@ -54,4 +54,4 @@ const TransactionStatusSwitch = ({ transaction }: TransactionStatusSwitchProps) 
   )
 }
 
-export default TransactionStatusSwitch
+export default TransactionStatusToggle

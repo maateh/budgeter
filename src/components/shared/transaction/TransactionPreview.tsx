@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { formatDistance } from "date-fns"
 
 // components
-import TransactionStatusSwitch from "@/components/shared/transaction/TransactionStatusSwitch"
-import PaymentBadge from "@/components/shared/transaction/PaymentBadge"
+import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
+import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
 // types
@@ -26,7 +26,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       })}
     >
       <div className="flex items-center gap-x-1">
-        <TransactionStatusSwitch transaction={transaction} />
+        <TransactionStatusToggle transaction={transaction} />
         <div className="grid">
           <p className="text-md font-heading font-medium truncate">{transaction.name}</p>
           <p className="text-xs max-sm:truncate sm:text-ellipsis">
@@ -40,7 +40,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-2 justify-between items-center">
-        <PaymentBadge transaction={transaction} currency={budget.balance.currency}  />
+        <PaymentBadge transaction={transaction} currency={budget.balance.currency} />
         <BudgetMarker budget={budget} />
       </div>
     </div>

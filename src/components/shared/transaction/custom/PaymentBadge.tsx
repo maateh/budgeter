@@ -1,3 +1,5 @@
+import { forwardRef } from "react"
+
 // icons
 import { Minus, Plus } from "lucide-react"
 
@@ -9,27 +11,29 @@ import { Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
+import { cn } from "@/lib/utils"
 
 type PaymentBadgeProps = {
   transaction: Transaction
   currency: string
-  size?: BadgeProps['size']
   iconSize?: number
-}
+} & BadgeProps
 
-const PaymentBadge = ({ transaction, currency, size = 'sm', iconSize = 16 }: PaymentBadgeProps) => {
-  const { payment } = transaction
+const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
+  transaction, currency, iconSize = 16, size = 'sm', className, ...props
+}, ref) => {
+  const { payment, type, processed } = transaction
 
-  const isNeutral = (transaction.type === 'default' && !transaction.processed)
-    || (transaction.type === 'borrow' && transaction.processed)
+  const isNeutral = (type === 'default' && !processed) ||
+                    (type === 'borrow' && processed)
 
   return (
-    <Badge
+    <Badge className={cn("font-heading font-bold gap-x-1.5",
+        isNeutral ? 'text-muted-foreground'
+          : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
       size={size}
-      className={`font-heading font-bold gap-x-1.5
-        ${isNeutral ? 'text-muted-foreground'
-          : payment.type === '+' ? 'text-accent' : 'text-destructive'}
-      `}
+      ref={ref}
+      {...props}
     >
       {payment.type === '+' ? (
         <Plus size={iconSize} strokeWidth={7.5} />
@@ -39,6 +43,6 @@ const PaymentBadge = ({ transaction, currency, size = 'sm', iconSize = 16 }: Pay
       <span>{formatWithCurrency(payment.amount, currency)}</span>
     </Badge>
   )
-}
+})
 
 export default PaymentBadge
