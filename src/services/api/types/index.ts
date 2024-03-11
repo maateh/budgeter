@@ -1,5 +1,20 @@
 import { UUID } from "crypto"
 
+// pagination
+export type Pagination<T> = {
+  data: T[]
+  offset: number
+  nextPageOffset: number | null
+  limit: number
+  total: number
+}
+
+export type PaginationParams = {
+  offset: number
+  limit: number
+}
+
+// data models
 export type Currencies = {
   [key: string]: string
 }

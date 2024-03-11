@@ -5,7 +5,7 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Budget, Transaction } from "@/services/api/types"
+import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
 
 // validations
 import { TransactionValidation } from "@/lib/validation"
@@ -39,7 +39,9 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { ...transaction, budget }
   }
 
-  public async getTransactionsWithBudgets(filterBy: Partial<Transaction> = {}): Promise<(Transaction & { budget: Budget })[]> {
+  public async getTransactionsWithBudgets(filterBy: Partial<Transaction> = {}, { offset, limit }: PaginationParams): Promise<
+    Pagination<Transaction & { budget: Budget }>
+  > {
     const filter = (transaction: Transaction) => {
       return Object.keys(filterBy).every((key) => {
         return filterBy[key as keyof Transaction] === transaction[key as keyof Transaction]
@@ -49,10 +51,16 @@ class TransactionStorageAPI implements ITransactionAPI {
     const transactions = await this.storage.find(filter)
     const budgets = await this.budgetStorageApi.get()
 
-    return transactions.reduce((trs, tr) => ([
-      ...trs,
-      { ...tr, budget: budgets.find(b => b.id === tr.budgetId)! }
-    ]), [] as (Transaction & { budget: Budget })[])
+    return {
+      offset, limit,
+      nextPageOffset: offset + limit < transactions.length ? offset + limit : null,
+      total: transactions.length,
+      data: transactions.slice(offset, offset + limit)
+        .reduce((trs, tr) => ([
+          ...trs,
+          { ...tr, budget: budgets.find(b => b.id === tr.budgetId)! }
+        ]), [] as (Transaction & { budget: Budget })[])
+    }
   }
 
   // public async getByBudgets(type: Transaction['type']): Promise<Transaction[]> {

@@ -2,7 +2,7 @@ import { UUID } from "crypto"
 import { z } from "zod"
 
 // types
-import { Budget, BudgetNote, Currencies, Transaction } from "@/services/api/types"
+import { Budget, BudgetNote, Currencies, Pagination, PaginationParams, Transaction } from "@/services/api/types"
 
 // validations
 import { BudgetNoteValidation, BudgetValidation, TransactionValidation } from "@/lib/validation"
@@ -30,7 +30,7 @@ export interface IBudgetNoteAPI {
 
 export interface ITransactionAPI {
   getTransactionWithBudget(transactionId: UUID): Promise<Transaction & { budget: Budget }>
-  getTransactionsWithBudgets(filterBy: Partial<Transaction>): Promise<(Transaction & { budget: Budget })[]>
+  getTransactionsWithBudgets(filterBy: Partial<Transaction>, params: PaginationParams): Promise<Pagination<Transaction & { budget: Budget }>>
   // getByBudgets(type: Transaction['type']): Promise<Transaction[]>
   // getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[]>
 
