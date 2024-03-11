@@ -25,10 +25,18 @@ type BudgetPreviewProps = {
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
   const location = useLocation()
+  
+  const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation()
+    navigate(`/transactions/create/${budget.id}`, {
+      state: { background: location }
+    })
+  }
 
   return (
-    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/60 border"
+    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/55 border cursor-pointer"
       style={{ borderColor: budget.theme }}
+      onClick={() => navigate(`/budgets/${budget.id}`)}
     >
       <div className="w-full flex flex-wrap justify-between items-center gap-x-3.5 gap-y-2">
         <BudgetNameBadge className="h-fit text-sm text-center sm:text-md"
@@ -51,9 +59,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <li><Badge className="text-sm cursor-pointer icon-wrapper"
           variant="outline"
           size="xs"
-          onClick={() => navigate(`/transactions/create/${budget.id}`, {
-            state: { background: location }
-          })}
+          onClick={handleTransactionNavigate}
         >
           <BadgePlus size={18} />
           <span>New</span>
@@ -63,7 +69,6 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         <li>payments</li>
 
         <li><Badge className="cursor-pointer"
-          onClick={() => navigate(`/budgets/${budget.id}`)}
           variant="outline"
           size="xs"
         >
