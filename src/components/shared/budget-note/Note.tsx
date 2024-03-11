@@ -50,7 +50,7 @@ const Note = ({ budget, note }: NoteProps) => {
     <div
       className="my-1 px-7 pt-6 pb-3 flex flex-col gap-y-2 bg-foreground/15 border-xl border-b-2 border-r-4 hover:opacity-95"
       style={{
-        borderColor: budget.theme.background,
+        borderColor: budget.theme,
         opacity: note.status === 'closed' ? 0.65 : 1
       }}
     >

@@ -13,14 +13,9 @@ export const budgetSchema = z.object({
     current: z.coerce.number(),
     ceiling: z.coerce.number()
   }),
-  theme: z.object({
-    background: z.string()
-      .length(7, { message: 'Background value should be a valid HEX color. e.g. #f1f1f1' })
-      .regex(/^#/),
-    foreground: z.string()
-    .length(7, { message: 'Foregound value should be a valid HEX color. e.g. #f1f1f1' })
-    .regex(/^#/),
-  })
+  theme: z.string()
+    .length(7, { message: 'Theme color should be a valid HEX color. e.g. #f1f1f1' })
+    .regex(/^#/)
 })
 
 export const budgetNoteSchema = z.object({

@@ -19,8 +19,7 @@ type BudgetNameBadgeProps = {
 const BudgetNameBadge = forwardRef<HTMLDivElement, BudgetNameBadgeProps>(({
   budget, className, ...props
 }, ref) => (
-  <Badge className={cn("w-fit border-2 icon-wrapper", className)}
-    style={{ borderColor: budget.theme.foreground }}
+  <Badge className={cn("w-fit border-2 border-secondary/60 icon-wrapper", className)}
     ref={ref}
     {...props}
   >

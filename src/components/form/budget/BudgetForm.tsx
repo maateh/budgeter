@@ -36,10 +36,7 @@ const BudgetForm = ({ type }: BudgetFormProps) => {
           current: 0,
           ceiling: 0
         },
-        theme: budget?.theme || {
-          background: '#dedede',
-          foreground: '#202020'
-        }
+        theme: budget?.theme || '#e58e58'
       }}
       useSubmit={useBudgetSubmit}
       submitProps={{ budgetId: budget?.id, type }}

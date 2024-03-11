@@ -47,7 +47,7 @@ const TransactionDetails = () => {
           label={transaction.budget.name}
           value={formatWithCurrency(transaction.budget.balance.current, transaction.budget.balance.currency)}
           icon={<BudgetMarker budget={transaction.budget} />}
-          style={{ borderColor: transaction.budget.theme.background }}
+          style={{ borderColor: transaction.budget.theme }}
         />
       </DialogHeader>
 

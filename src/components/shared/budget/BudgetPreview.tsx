@@ -27,7 +27,9 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const location = useLocation()
 
   return (
-    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/60">
+    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/60 border"
+      style={{ borderColor: budget.theme }}
+    >
       <div className="w-full flex flex-wrap justify-between items-center gap-x-3.5 gap-y-2">
         <BudgetNameBadge className="h-fit text-sm text-center sm:text-md"
           budget={budget}

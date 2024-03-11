@@ -134,43 +134,23 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
         />
       </div>
 
-      <div className="flex flex-wrap justify-around gap-x-8 gap-y-4">
-        <FormField
-          control={control}
-          name="theme.background"
-          disabled={disabled}
-          render={({ field }) => (
-            <FormItem className="flex items-center gap-x-2.5">
-              <FormLabel>Custom Background Color</FormLabel>
-              <FormControl>
-                <ColorPicker
-                  color={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={control}
-          name="theme.foreground"
-          disabled={disabled}
-          render={({ field }) => (
-            <FormItem className="flex items-center gap-x-2.5">
-              <FormControl>
-                <ColorPicker
-                  color={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormLabel>Custom Foreground Color</FormLabel>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      <FormField
+        control={control}
+        name="theme"
+        disabled={disabled}
+        render={({ field }) => (
+          <FormItem className="flex items-center gap-x-2.5">
+            <FormLabel>Custom Theme Color</FormLabel>
+            <FormControl>
+              <ColorPicker
+                color={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </>
   )
 }

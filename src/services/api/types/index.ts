@@ -15,10 +15,7 @@ export type Budget = {
     income: number
     loss: number
   }
-  theme: {
-    background: string
-    foreground: string
-  }
+  theme: string
 }
 
 export type BudgetNote = {
