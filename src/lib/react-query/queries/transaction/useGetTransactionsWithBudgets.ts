@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
+import { UUID } from "crypto"
+import { useInfiniteQuery } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
 import { Transaction } from "@/services/api/types"
-import { UUID } from "crypto"
 
 const useGetTransactionsWithBudgets = (
   type: Transaction['type'],
@@ -18,9 +18,13 @@ const useGetTransactionsWithBudgets = (
     ? { type, processed, budgetId }
     : { type, processed }
 
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ['getTransactionsWithBudgets', type, processed, budgetId || 'all'],
-    queryFn: async () => await api.transaction.getTransactionsWithBudgets(filterBy)
+    queryFn: async ({ pageParam: offset }) => {
+      return await api.transaction.getTransactionsWithBudgets(filterBy, { offset, limit: 5 })
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPageOffset
   })
 }
 
