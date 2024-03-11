@@ -27,12 +27,12 @@ const BudgetDetails = () => {
               <BudgetSummary budget={budget} />
             </section>
   
-            <section className="w-full h-fit layout-rounded bg-primary">
+            <section className="w-full h-fit bg-primary rounded-[2rem] section-wrapper">
               <BudgetNotes budget={budget} />
             </section>
           </div>
   
-          <section className="flex-1 w-full h-fit min-w-64 layout-rounded bg-primary md:w-1/3 md:max-w-lg">
+          <section className="flex-1 w-full h-fit min-w-64 bg-primary rounded-[2rem] section-wrapper md:w-1/3 md:max-w-lg">
             <Transactions budgetId={budget.id} />
           </section>
         </div>

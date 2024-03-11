@@ -15,7 +15,7 @@ const Navbar = () => {
 
   return (
     <header className="max-container py-4">
-      <nav className="mx-5 py-3 layout-rounded md:rounded-full bg-secondary relative flex flex-col md:flex-row items-start md:items-center md:justify-between">
+      <nav className="mx-5 px-6 py-3 relative flex flex-col bg-secondary rounded-[2rem] md:flex-row md:justify-between md:items-center">
         <div className="w-full flex justify-between items-center">
           <NavLink to="/" className="icon-wrapper !items-end">
             <PiggyBank size={40} strokeWidth={1} />
@@ -45,7 +45,7 @@ const Navbar = () => {
           ))}
         </ul>
 
-        <div className="absolute pl-1 right-1.5 border-l border-l-background/60 max-md:top-4">
+        <div className="absolute pl-1 right-1.5 border-l border-l-background/60 max-md:top-[1.175rem]">
           <ThemeSwitch />
         </div>
       </nav>

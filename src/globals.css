@@ -119,12 +119,6 @@
   }
 }
 
-@layer components {
-  .layout-rounded {
-    @apply rounded-[2rem] section-wrapper;
-  }
-}
-
 @layer utilities {
   .max-container {
     @apply w-full max-w-[1728px] my-0 mx-auto;
