@@ -41,7 +41,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
       <div className="flex gap-x-2 justify-between items-center">
         <PaymentBadge transaction={transaction} currency={budget.balance.currency} />
-        <BudgetMarker budget={budget} />
+        <BudgetMarker budget={budget} showTooltip />
       </div>
     </div>
   )
