@@ -6,3 +6,8 @@ export function formatWithCurrency(amount: number, currency: string) {
     currency
   }).format(amount)
 }
+
+export function customFilter<T>(filterBy: Partial<T>) {
+  return (entry: T) => Object.keys(filterBy)
+    .every((key) => filterBy[key as keyof T] === entry[key as keyof T])
+}

@@ -14,6 +14,9 @@ import { TransactionValidation } from "@/lib/validation"
 import StorageHelper from "@/services/storage/StorageHelper"
 import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
 
+// utils
+import { customFilter } from "@/utils"
+
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
 
@@ -42,11 +45,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async getTransactionsWithBudgets(filterBy: Partial<Transaction> = {}, { offset, limit }: PaginationParams): Promise<
     Pagination<Transaction & { budget: Budget }>
   > {
-    const filter = (transaction: Transaction) => {
-      return Object.keys(filterBy).every((key) => {
-        return filterBy[key as keyof Transaction] === transaction[key as keyof Transaction]
-      })
-    }
+    const filter = customFilter(filterBy)
 
     const transactions = await this.storage.find(filter)
     const budgets = await this.budgetStorageApi.get()
@@ -63,14 +62,15 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
   }
 
-  // public async getByBudgets(type: Transaction['type']): Promise<Transaction[]> {
-  //   return await this.storage.find((tr) => tr.type === type)
-  // }
+  public async getByBudgets(filterBy: Partial<Transaction> = {}): Promise<Record<UUID, Transaction[]>> {
+    const filter = customFilter(filterBy)
+    const transactions = await this.storage.find(filter)
 
-  // public async getByBudget(budgetId: UUID, type?: Transaction['type']): Promise<Transaction[] >{
-  //   return await this.storage
-  //     .find((tr) => tr.budgetId === budgetId && tr.type === type)
-  // }
+    return transactions.reduce((trsByBudgets, tr) => ({
+      ...trsByBudgets,
+      [tr.budgetId]: [...(trsByBudgets[tr.budgetId] || []), tr]
+    }), {} as Record<UUID, Transaction[]>)
+  }
 
   public async create(data: z.infer<typeof TransactionValidation>, executePayment = true): Promise<Transaction> {
     const transaction = await this.storage.save({

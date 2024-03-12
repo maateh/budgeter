@@ -5,7 +5,7 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, Transaction } from "@/services/api/types"
+import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
 
 // validations
 import { BudgetValidation } from "@/lib/validation"
@@ -14,6 +14,9 @@ import { BudgetValidation } from "@/lib/validation"
 import StorageHelper from "@/services/storage/StorageHelper"
 import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
 import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
+
+// utils
+import { customFilter } from "@/utils"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
@@ -33,6 +36,30 @@ class BudgetStorageAPI implements IBudgetAPI {
 
   public async get(): Promise<Budget[]> {
     return await this.storage.find()
+  }
+
+  public async getBudgetsWithTransactions(
+    transactionLimit: number,
+    filterBy: Partial<Budget>,
+    filterTransactionsBy: Partial<Transaction>,
+    { offset, limit }: PaginationParams
+  ): Promise<Pagination<Budget & { transactions: Transaction[] }>> {
+    const filter = customFilter(filterBy)
+
+    const budgets = await this.storage.find(filter)
+    const transactionsByBudgets = await TransactionStorageAPI.getInstance()
+      .getByBudgets(filterTransactionsBy)
+
+    return {
+      offset, limit,
+      nextPageOffset: offset + limit < budgets.length ? offset + limit : null,
+      total: budgets.length,
+      data: budgets.slice(offset, offset + limit)
+        .reduce((budgets, budget) => ([
+          ...budgets,
+          { ...budget, transactions: (transactionsByBudgets[budget.id] || []).slice(0, transactionLimit) }
+        ]), [] as (Budget & { transactions: Transaction[] })[])
+    }
   }
 
   public async getById(id: UUID): Promise<Budget> {
