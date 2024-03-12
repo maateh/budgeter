@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 
 // components
 import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
+import PaginationList from "@/components/ui/custom/PaginationList"
 
 // hooks
 import { useGetTransactionsWithBudgets } from "@/lib/react-query/queries"
@@ -44,13 +45,11 @@ const TransactionList = ({ type, processed, budgetId }: TransactionListProps) =>
 
   return !isLoading && data ? (
     <>
-      <ul className="grid gap-y-2.5">
-        {data.pages.map((page) => page.data.map((tr) => (
-          <li key={tr.id}>
-            <TransactionPreview budget={tr.budget} transaction={tr} />
-          </li>
-        )))}
-      </ul>
+      <PaginationList pages={data.pages}>
+        {(tr) => (
+          <TransactionPreview budget={tr.budget} transaction={tr} />
+        )}
+      </PaginationList>
 
       {hasNextPage && (
         <Button className="w-fit mx-auto px-4"
