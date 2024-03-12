@@ -4,6 +4,7 @@ export { default as useLoadCurrenciesQuery } from './currency/useLoadCurrenciesQ
 // budget
 export { default as useGetBudget } from './budget/useGetBudget'
 export { default as useGetBudgets } from './budget/useGetBudgets'
+export { default as useGetBudgetsWithTransactions } from './budget/useGetBudgetsWithTransactions'
 
 // budget-note
 export { default as useGetNoteWithBudget } from './buget-note/useGetNoteWithBudget'

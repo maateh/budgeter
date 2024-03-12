@@ -30,8 +30,7 @@ const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: Trans
   } = useGetTransactionsWithBudgets(type, processed, budgetId)
 
   const { lastPage, handlePagination } = useManualPagination({
-    data, fetchNextPage,
-    maxItemLimit,
+    data, fetchNextPage, maxItemLimit,
     actionAfterLimitExceeded: () => navigate('/transactions')
   })
 

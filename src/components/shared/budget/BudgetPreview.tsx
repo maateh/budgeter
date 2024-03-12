@@ -10,16 +10,17 @@ import { Separator } from "@/components/ui/separator"
 // components
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
+import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
-import { Budget } from "@/services/api/types"
+import { Budget, Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 
 type BudgetPreviewProps = {
-  budget: Budget
+  budget: Budget & { transactions: Transaction[] }
 }
 
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
@@ -55,7 +56,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       <Separator className="mx-auto w-5/6" />
 
       {/* TODO: get budget transactions */}
-      <ul className="flex flex-wrap items-end gap-x-2 gap-y-1">
+      <ul className="flex flex-wrap items-end gap-x-1 gap-y-1">
         <li><Badge className="text-sm cursor-pointer icon-wrapper"
           variant="outline"
           size="xs"
@@ -65,8 +66,16 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           <span>New</span>
         </Badge></li>
 
-        {/* TODO: transactions required */}
-        <li>payments</li>
+        {budget.transactions.map((tr) => (
+          <li key={tr.id}>
+            <PaymentBadge className="font-semibold"
+              size="xs"
+              transaction={tr}
+              currency={budget.balance.currency}
+              iconSize={10}
+            />
+          </li>
+        ))}
 
         <li><Badge className="cursor-pointer"
           variant="outline"
