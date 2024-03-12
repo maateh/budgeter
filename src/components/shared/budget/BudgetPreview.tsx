@@ -57,12 +57,12 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
       {/* TODO: get budget transactions */}
       <ul className="flex flex-wrap items-end gap-x-1 gap-y-1">
-        <li><Badge className="text-sm cursor-pointer icon-wrapper"
+        <li><Badge className="cursor-pointer icon-wrapper"
           variant="outline"
           size="xs"
           onClick={handleTransactionNavigate}
         >
-          <BadgePlus size={18} />
+          <BadgePlus size={16} />
           <span>New</span>
         </Badge></li>
 
