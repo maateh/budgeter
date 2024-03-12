@@ -1,5 +1,4 @@
 import { UUID } from "crypto"
-import { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 
 // shadcn
@@ -14,28 +13,28 @@ import { useGetTransactionsWithBudgets } from "@/lib/react-query/queries"
 // types
 import { Transaction } from "@/services/api/types"
 
+// utils
+import { getNextPageOffset } from "@/utils"
+
 type TransactionListProps = {
   type: Transaction['type']
   processed: Transaction['processed']
   budgetId?: UUID
 }
 
+const MAX_ITEM_LIMIT = 10
+
 const TransactionList = ({ type, processed, budgetId }: TransactionListProps) => {
   const navigate = useNavigate()
 
   const {
-    data, isLoading, isFetchingNextPage, fetchNextPage
+    data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
   } = useGetTransactionsWithBudgets(type, processed, budgetId)
 
-  const nextPageOffset = useMemo(() => {
-    if (!data) return
-
-    const lastIndex = data.pages.length - 1
-    return data!.pages[lastIndex].nextPageOffset
-  }, [data])
+  const nextPageOffset = getNextPageOffset(data)
 
   const handlePagination = () => {
-    if (nextPageOffset && nextPageOffset >= 10) {
+    if (nextPageOffset && nextPageOffset >= MAX_ITEM_LIMIT) {
       navigate('/transactions')
       return
     }
@@ -52,8 +51,8 @@ const TransactionList = ({ type, processed, budgetId }: TransactionListProps) =>
           </li>
         )))}
       </ul>
-      
-      {nextPageOffset && (
+
+      {hasNextPage && (
         <Button className="w-fit mx-auto px-4"
           variant="outline"
           size="sm"
@@ -61,7 +60,7 @@ const TransactionList = ({ type, processed, budgetId }: TransactionListProps) =>
           disabled={isLoading || isFetchingNextPage}
         >
           {isFetchingNextPage ? 'Loading...'
-            : nextPageOffset >= 10 ? 'View All' : 'Load More'}
+            : nextPageOffset && nextPageOffset >= MAX_ITEM_LIMIT ? 'View All' : 'Load More'}
         </Button>
       )}
     </>
