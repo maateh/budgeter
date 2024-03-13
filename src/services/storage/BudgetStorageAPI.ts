@@ -16,7 +16,7 @@ import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
 import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
 
 // utils
-import { customFilter, paginate } from "@/utils"
+import { paginate } from "@/utils"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
@@ -39,8 +39,7 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async get(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>> {
-    const filter = customFilter(filterBy || {})
-    const budgets = await this.storage.find(filter)
+    const budgets = await this.storage.find(filterBy)
 
     return paginate(budgets, params)
   }

@@ -22,15 +22,16 @@ class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
     localStorage.setItem(this.collection, JSON.stringify(documents))
   }
 
-  public async find(filter?: (doc: D) => boolean): Promise<D[]> {
+  public async find(filterBy?: Partial<D>): Promise<D[]> {
     const collectionDocs = await this.fetchFromStorage()
     const documents = Object.values(collectionDocs)
 
-    if (!filter) {
+    if (!filterBy) {
       return documents
     }
 
-    return documents.filter(filter)
+    return documents.filter((entry: D) => Object.keys(filterBy)
+      .every((key) => filterBy[key as keyof D] === entry[key as keyof D]))
   }
 
   public async findById(id: UUID): Promise<D> {

@@ -9,11 +9,6 @@ export function formatWithCurrency(amount: number, currency: string) {
   }).format(amount)
 }
 
-export function customFilter<T>(filterBy: Partial<T>) {
-  return (entry: T) => Object.keys(filterBy)
-    .every((key) => filterBy[key as keyof T] === entry[key as keyof T])
-}
-
 export function paginate<D>(data: D[], { offset, limit }: PaginationParams): Pagination<D> {
   return {
     offset,
