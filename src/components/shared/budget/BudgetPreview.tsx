@@ -13,6 +13,9 @@ import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
+// hooks
+import { useBudgetTransactions } from "@/lib/react-query/queries"
+
 // types
 import { Budget } from "@/services/api/types"
 
@@ -27,11 +30,10 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // TODO: add transaction query
-  // const { data: transactions, isLoading: transactionsIsLoading } = useGetTransactions({
-  //   isLimited: true,
-  //   filterBy: { budgetId: budget.id, processed: true }
-  // })
+  const { data: transactions, isLoading: transactionsIsLoading } = useBudgetTransactions(budget.id, {
+    params: { offset: 0, limit: 7 },
+    filterBy: { processed: true }
+  })
   
   const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
@@ -71,8 +73,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           <span>New</span>
         </Badge></li>
 
-        {/* TODO: add transaction query */}
-        {/* {!transactionsIsLoading && transactions ? transactions.pages.map((page) => page.data.map((tr) => (
+        {!transactionsIsLoading && transactions ? transactions.map((tr) => (
           <li key={tr.id}>
             <PaymentBadge className="font-semibold"
               size="xs"
@@ -81,8 +82,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               iconSize={10}
             />
           </li>
-        ))) : <>Loading...</>} */}
-        {/* TODO: skeleton */}
+        )) : <>Loading...</>} {/* TODO: skeleton */}
 
         <li><Badge className="cursor-pointer"
           variant="outline"
