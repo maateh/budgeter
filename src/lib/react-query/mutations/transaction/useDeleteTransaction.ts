@@ -16,9 +16,10 @@ const useDeleteTransaction = (transactionId: UUID) => {
     }) => await api.transaction.delete(id, undoPayment),
     onSuccess: ({ id ,type, processed, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
-      queryClient.invalidateQueries({ queryKey: ['transactionsWithBudgetsPagination', type, processed] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', type, processed] })
 
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })

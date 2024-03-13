@@ -4,7 +4,7 @@ export { default as useCurrencies } from './currency/useCurrencies'
 // budget
 export { default as useBudget } from './budget/useBudget'
 export { default as useBudgets } from './budget/useBudgets'
-export { default as useBudgetsPagination } from './budget/useBudgetsPagination'
+export { default as usePaginatedBudgets } from './budget/usePaginatedBudgets'
 
 // budget-note
 export { default as useNoteWithBudget } from './buget-note/useNoteWithBudget'
@@ -12,4 +12,5 @@ export { default as useNotesbyStatus } from './buget-note/useNotesbyStatus'
 
 // transaction
 export { default as useTransactionWithBudget } from './transaction/useTransactionWithBudget'
-export { default as useTransactionsWithBudgetsPagination } from './transaction/useTransactionsWithBudgetsPagination'
+export { default as useBudgetTransactions } from './transaction/useBudgetTransactions'
+export { default as usePaginatedTransactionsWithBudgets } from './transaction/usePaginatedTransactionsWithBudgets'

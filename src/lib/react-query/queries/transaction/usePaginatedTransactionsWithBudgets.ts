@@ -7,13 +7,13 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { Transaction } from "@/services/api/types"
 
-type TransactionsWithBudgetsProps = {
+type PaginatedTransactionsWithBudgetsQueryOptions = {
   type: Transaction['type']
   processed: Transaction['processed']
   budgetId?: UUID
 }
 
-const useTransactionsWithBudgetsPagination = ({ type, processed, budgetId }: TransactionsWithBudgetsProps) => {
+const usePaginatedTransactionsWithBudgets = ({ type, processed, budgetId }: PaginatedTransactionsWithBudgetsQueryOptions) => {
   const { api } = useAPI()
 
   const filterBy: Partial<Transaction> = budgetId
@@ -21,13 +21,13 @@ const useTransactionsWithBudgetsPagination = ({ type, processed, budgetId }: Tra
     : { type, processed }
 
   return useInfiniteQuery({
-    queryKey: ['transactionsWithBudgetsPagination', type, processed/*, budgetId || 'all'*/],
+    queryKey: ['paginatedTransactionsWithBudgets', type, processed],
     queryFn: async ({ pageParam: offset }) => {
-      return await api.transaction.getWithBudgets({ offset, limit: 5 }, filterBy)
+      return await api.transaction.getPaginatedWithBudgets({ offset, limit: 5 }, filterBy)
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage) => lastPage.nextPageOffset
   })
 }
 
-export default useTransactionsWithBudgetsPagination
+export default usePaginatedTransactionsWithBudgets

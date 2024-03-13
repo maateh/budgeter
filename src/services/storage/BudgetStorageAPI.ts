@@ -38,9 +38,13 @@ class BudgetStorageAPI implements IBudgetAPI {
     return await this.storage.findById(id)
   }
 
-  public async get(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>> {
+  public async get(params?: PaginationParams, filterBy?: Partial<Budget>): Promise<Budget[]> {
     const budgets = await this.storage.find(filterBy)
+    return budgets.slice(params?.offset, params?.limit)
+  }
 
+  public async getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>> {
+    const budgets = await this.storage.find(filterBy)
     return paginate(budgets, params)
   }
 

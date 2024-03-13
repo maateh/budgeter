@@ -42,12 +42,12 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { ...transaction, budget }
   }
 
-  public async get(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction>> {
+  public async get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]> {
     const transactions = await this.storage.find(filterBy)
-    return paginate(transactions, params)
+    return transactions.slice(params?.offset, params?.limit)
   }
 
-  public async getWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<
+  public async getPaginatedWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<
     Pagination<Transaction & { budget: Budget }>
   > {
     const transactions = await this.storage.find(filterBy)

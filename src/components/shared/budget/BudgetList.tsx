@@ -12,13 +12,13 @@ import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
 import { useScrollingPagination } from "@/components/pagination-list/hooks"
-import { useBudgetsPagination } from "@/lib/react-query/queries"
+import { usePaginatedBudgets } from "@/lib/react-query/queries"
 
 const BudgetList = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useBudgetsPagination()
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = usePaginatedBudgets()
 
   const { observerRef } = useScrollingPagination({ data, fetchNextPage })
 

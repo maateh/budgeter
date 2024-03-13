@@ -13,7 +13,8 @@ export interface ICurrencyAPI {
 
 export interface IBudgetAPI {
   getById(id: UUID): Promise<Budget>
-  get(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>>
+  get(params?: PaginationParams, filterBy?: Partial<Budget>): Promise<Budget[]>
+  getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>>
 
   create(data: z.infer<typeof BudgetValidation>): Promise<Budget>
   update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget>
@@ -32,8 +33,8 @@ export interface IBudgetNoteAPI {
 
 export interface ITransactionAPI {
   getByIdWithBudget(transactionId: UUID): Promise<Transaction & { budget: Budget }>
-  get(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction>>
-  getWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
+  get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]>
+  getPaginatedWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
 
   create(data: z.infer<typeof TransactionValidation>, executePayment: boolean): Promise<Transaction>
   updateStatus(id: UUID, processed: boolean): Promise<Transaction>

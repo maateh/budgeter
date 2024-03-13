@@ -17,9 +17,10 @@ const useCreateTransaction = () => {
       executePayment?: boolean
     }) => await api.transaction.create(data, executePayment),
     onSuccess: ({ type, processed, budgetId }) => {
-      queryClient.invalidateQueries({ queryKey: ['transactionsWithBudgetsPagination', type, processed] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', type, processed] })
 
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })

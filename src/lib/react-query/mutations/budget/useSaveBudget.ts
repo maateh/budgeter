@@ -24,6 +24,7 @@ const useSaveBudget = (budgetId?: UUID) => {
     },
     onSuccess: ({ id }) => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
       queryClient.invalidateQueries({ queryKey: ['budget', id] })
     }
   })
