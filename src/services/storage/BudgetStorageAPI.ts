@@ -39,7 +39,7 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async getBudgetsWithTransactions(
-    transactionLimit: number,
+    recentTransactionsLimit: number,
     filterBy: Partial<Budget>,
     filterTransactionsBy: Partial<Transaction>,
     { offset, limit }: PaginationParams
@@ -57,7 +57,11 @@ class BudgetStorageAPI implements IBudgetAPI {
       data: budgets.slice(offset, offset + limit)
         .reduce((budgets, budget) => ([
           ...budgets,
-          { ...budget, transactions: (transactionsByBudgets[budget.id] || []).slice(0, transactionLimit) }
+          {
+            ...budget,
+            transactions: (transactionsByBudgets[budget.id] || [])
+              .slice(0, recentTransactionsLimit)
+          }
         ]), [] as (Budget & { transactions: Transaction[] })[])
     }
   }

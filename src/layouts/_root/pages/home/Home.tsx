@@ -22,7 +22,7 @@ const Home = () => {
           <Separator />
           
           <section className="w-full section-wrapper">
-            <Budgets />
+            <Budgets maxItemLimit={4} />
           </section>
         </div>
 

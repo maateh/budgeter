@@ -68,7 +68,10 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     return transactions.reduce((trsByBudgets, tr) => ({
       ...trsByBudgets,
-      [tr.budgetId]: [...(trsByBudgets[tr.budgetId] || []), tr]
+      [tr.budgetId]: [
+        ...(trsByBudgets[tr.budgetId] || []),
+        tr
+      ]
     }), {} as Record<UUID, Transaction[]>)
   }
 

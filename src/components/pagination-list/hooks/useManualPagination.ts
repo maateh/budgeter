@@ -1,5 +1,5 @@
 // types
-import { PaginationProps } from "@/components/pagination/types"
+import { PaginationProps } from "@/components/pagination-list/types"
 
 type ManualPaginationProps<D> = {
   actionAfterLimitExceeded?: () => void
