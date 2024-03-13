@@ -12,30 +12,15 @@ import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
 import { useScrollingPagination } from "@/components/pagination-list/hooks"
-import { useGetBudgetsWithTransactions } from "@/lib/react-query/queries"
+import { useBudgetsPagination } from "@/lib/react-query/queries"
 
-export type BudgetListProps = {
-  maxItemLimit?: number
-  recentTransactionsLimit?: number
-  paginationLimit?: number
-}
-
-const BudgetList = ({
-  maxItemLimit,
-  recentTransactionsLimit = 7,
-  paginationLimit = 6
-}: BudgetListProps) => {
+const BudgetList = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { data, isLoading, isFetchingNextPage, fetchNextPage } = useGetBudgetsWithTransactions({
-    recentTransactionsLimit,
-    paginationLimit: maxItemLimit || paginationLimit
-  })
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useBudgetsPagination()
 
-  const { lastPage, observerRef } = useScrollingPagination({
-    data, fetchNextPage, maxItemLimit
-  })
+  const { observerRef } = useScrollingPagination({ data, fetchNextPage })
 
   return !isLoading && data ? (
     <>
@@ -49,7 +34,8 @@ const BudgetList = ({
       </PaginationList>
 
       <div className="flex justify-center">
-        {maxItemLimit && lastPage?.nextPageOffset && lastPage.nextPageOffset >= maxItemLimit && (
+        {/* TODO: move it another component */}
+        {/* {hasNextPage && (
           <Button className="w-fit my-3.5 px-4 font-normal icon-wrapper"
             variant="secondary"
             size="sm"
@@ -60,9 +46,9 @@ const BudgetList = ({
             <WalletCards size={20} />
             View All Budgets
           </Button>
-        )}
+        )} */}
 
-        {!maxItemLimit && lastPage?.nextPageOffset && (
+        {hasNextPage && (
           <div ref={observerRef}>
             {isFetchingNextPage && 'Loading...'} {/* TODO: skeleton */}
           </div>

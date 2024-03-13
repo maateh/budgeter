@@ -15,37 +15,11 @@ const useUpdateTransactionStatus = (transactionId: UUID) => {
       processed: boolean
     }) => await api.transaction.updateStatus(id, processed),
     onSuccess: ({ id, type, budgetId }) => {
-      queryClient.invalidateQueries({ queryKey: ['getTransactionWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['transactionsWithBudgetsPagination', type] })
 
-      // FIXME: this must be reworked
-      // https://github.com/maateh/budgeter/issues/19
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, true, budgetId]
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, false, budgetId]
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, true, 'all']
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, false, 'all']
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, true, budgetId]
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, false, budgetId]
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, true, 'all']
-      })
-      queryClient.invalidateQueries({
-        queryKey: ['getTransactionsWithBudgets', type, false, 'all']
-      })
-
-      queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
-      queryClient.invalidateQueries({ queryKey: ['getBudget', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })
 }

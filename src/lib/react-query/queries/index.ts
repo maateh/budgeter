@@ -1,15 +1,15 @@
 // 3rd party API queries
-export { default as useLoadCurrenciesQuery } from './currency/useLoadCurrenciesQuery'
+export { default as useCurrencies } from './currency/useCurrencies'
 
 // budget
-export { default as useGetBudget } from './budget/useGetBudget'
-export { default as useGetBudgets } from './budget/useGetBudgets'
-export { default as useGetBudgetsWithTransactions } from './budget/useGetBudgetsWithTransactions'
+export { default as useBudget } from './budget/useBudget'
+export { default as useBudgets } from './budget/useBudgets'
+export { default as useBudgetsPagination } from './budget/useBudgetsPagination'
 
 // budget-note
-export { default as useGetNoteWithBudget } from './buget-note/useGetNoteWithBudget'
-export { default as useGetNotesbyStatus } from './buget-note/useGetNotesbyStatus'
+export { default as useNoteWithBudget } from './buget-note/useNoteWithBudget'
+export { default as useNotesbyStatus } from './buget-note/useNotesbyStatus'
 
 // transaction
-export { default as useGetTransactionWithBudget } from './transaction/useGetTransactionWithBudget'
-export { default as useGetTransactionsWithBudgets } from './transaction/useGetTransactionsWithBudgets'
+export { default as useTransactionWithBudget } from './transaction/useTransactionWithBudget'
+export { default as useTransactionsWithBudgetsPagination } from './transaction/useTransactionsWithBudgetsPagination'

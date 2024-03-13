@@ -6,14 +6,14 @@ import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDe
 import { Separator } from "@/components/ui/separator"
 
 // hooks
-import { useGetBudget } from "@/lib/react-query/queries"
+import { useBudget } from "@/lib/react-query/queries"
 import { useDeleteBudget } from "@/lib/react-query/mutations"
 
 const DeleteBudget = () => {
   const { id } = useParams() as { id: UUID }
   const navigate = useNavigate()
 
-  const { data: budget, isLoading } = useGetBudget(id)
+  const { data: budget, isLoading } = useBudget(id)
   const { mutateAsync: deleteBudget } = useDeleteBudget(id)
 
   const deleteConfirm = async () => {

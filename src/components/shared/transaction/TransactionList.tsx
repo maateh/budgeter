@@ -10,7 +10,7 @@ import PaginationList from "@/components/pagination-list/PaginationList"
 
 // hooks
 import { useManualPagination } from "@/components/pagination-list/hooks"
-import { useGetTransactionsWithBudgets } from "@/lib/react-query/queries"
+import { useTransactionsWithBudgetsPagination } from "@/lib/react-query/queries"
 
 // types
 import { Transaction } from "@/services/api/types"
@@ -25,9 +25,9 @@ type TransactionListProps = {
 const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: TransactionListProps) => {
   const navigate = useNavigate()
 
-  const {
-    data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
-  } = useGetTransactionsWithBudgets(type, processed, budgetId)
+  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = useTransactionsWithBudgetsPagination({
+    type, processed, budgetId
+  })
 
   const { lastPage, handlePagination } = useManualPagination({
     data, fetchNextPage, maxItemLimit,

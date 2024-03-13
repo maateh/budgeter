@@ -7,12 +7,12 @@ import Transactions from "@/components/shared/transaction/Transactions"
 import BudgetSummary from "./components/BudgetSummary"
 
 // hooks
-import { useGetBudget } from "@/lib/react-query/queries"
+import { useBudget } from "@/lib/react-query/queries"
 
 const BudgetDetails = () => {
   const { id } = useParams() as { id: UUID }
 
-  const { data: budget, isLoading } = useGetBudget(id)
+  const { data: budget, isLoading } = useBudget(id)
 
   return (
     <div className="page-wrapper">

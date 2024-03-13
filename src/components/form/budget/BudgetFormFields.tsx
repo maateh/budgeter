@@ -13,7 +13,7 @@ import StateToggle from "@/components/ui/custom/StateToggle"
 import ColorPicker from "@/components/input/ColorPicker"
 
 // hooks
-import { useLoadCurrenciesQuery } from "@/lib/react-query/queries"
+import { useCurrencies } from "@/lib/react-query/queries"
 
 // types
 import { BudgetFieldValues } from "@/components/form/budget/types"
@@ -30,7 +30,7 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
   const {
     data: currencies,
     isLoading: currenciesIsLoading
-  } = useLoadCurrenciesQuery()
+  } = useCurrencies()
 
   return (
     <>

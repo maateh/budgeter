@@ -4,14 +4,14 @@ import { useQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-const useGetBudget = (budgetId: UUID) => {
+const useBudget = (budgetId: UUID) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['getBudget', budgetId],
+    queryKey: ['budget', budgetId],
     queryFn: async () => await api.budget.getById(budgetId),
     enabled: !!budgetId
   })
 }
 
-export default useGetBudget
+export default useBudget

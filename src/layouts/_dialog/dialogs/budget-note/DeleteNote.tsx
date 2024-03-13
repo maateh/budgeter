@@ -6,14 +6,14 @@ import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDe
 import { Separator } from "@/components/ui/separator"
 
 // hooks
-import { useGetNoteWithBudget } from "@/lib/react-query/queries"
+import { useNoteWithBudget } from "@/lib/react-query/queries"
 import { useDeleteNote } from "@/lib/react-query/mutations"
 
 const DeleteNote = () => {
   const { budgetId, id } = useParams() as { budgetId: UUID, id: UUID }
   const navigate = useNavigate()
 
-  const { data: note, isLoading } = useGetNoteWithBudget(budgetId, id)
+  const { data: note, isLoading } = useNoteWithBudget(budgetId, id)
   const { mutateAsync: deleteNote } = useDeleteNote(budgetId, id)
 
   const deleteConfirm = async () => {

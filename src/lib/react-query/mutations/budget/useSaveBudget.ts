@@ -23,8 +23,8 @@ const useSaveBudget = (budgetId?: UUID) => {
       return await api.budget.create(data)
     },
     onSuccess: ({ id }) => {
-      queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
-      queryClient.invalidateQueries({ queryKey: ['getBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', id] })
     }
   })
 }

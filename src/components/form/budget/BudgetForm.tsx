@@ -6,7 +6,7 @@ import Form from "@/components/form/Form"
 import BudgetFormFields from "@/components/form/budget/BudgetFormFields"
 
 // hooks
-import { useGetBudget } from "@/lib/react-query/queries"
+import { useBudget } from "@/lib/react-query/queries"
 import { useBudgetSubmit } from "@/components/form/budget/hooks"
 
 // types
@@ -22,7 +22,7 @@ type BudgetFormProps = {
 const BudgetForm = ({ type }: BudgetFormProps) => {
   const { id } = useParams() as { id: UUID }
 
-  const { data: budget, isLoading } = useGetBudget(id)
+  const { data: budget, isLoading } = useBudget(id)
   
   return (
     <Form<BudgetFieldValues, typeof BudgetValidation, BudgetSubmitProps>

@@ -12,8 +12,8 @@ const useDeleteBudget = (budgetId: UUID) => {
     mutationKey: ['deleteBudget', budgetId],
     mutationFn: async (id: UUID) => await api.budget.delete(id),
     onSuccess: ({ id }) => {
-      queryClient.invalidateQueries({ queryKey: ['getBudgets'] })
-      queryClient.invalidateQueries({ queryKey: ['getBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
+      queryClient.invalidateQueries({ queryKey: ['budget', id] })
     }
   })
 }

@@ -17,7 +17,7 @@ import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 
 // hooks
-import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
+import { useTransactionWithBudget } from "@/lib/react-query/queries"
 
 // utils
 import { formatWithCurrency } from "@/utils"
@@ -27,7 +27,7 @@ const TransactionDetails = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { data: transaction, isLoading } = useGetTransactionWithBudget(id)
+  const { data: transaction, isLoading } = useTransactionWithBudget(id)
 
   return !isLoading && transaction ? (
     <>

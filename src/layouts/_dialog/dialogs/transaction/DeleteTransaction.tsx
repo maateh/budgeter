@@ -6,14 +6,14 @@ import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDe
 import { Separator } from "@/components/ui/separator"
 
 // hooks
-import { useGetTransactionWithBudget } from "@/lib/react-query/queries"
+import { useTransactionWithBudget } from "@/lib/react-query/queries"
 import { useDeleteTransaction } from "@/lib/react-query/mutations"
 
 const DeleteTransaction = () => {
   const { id } = useParams() as { id: UUID }
   const navigate = useNavigate()
 
-  const { data: transaction, isLoading } = useGetTransactionWithBudget(id)
+  const { data: transaction, isLoading } = useTransactionWithBudget(id)
   const { mutateAsync: deleteTransaction } = useDeleteTransaction(id)
 
   const deleteConfirm = async () => {

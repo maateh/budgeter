@@ -14,18 +14,24 @@ import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
-import { Budget, Transaction } from "@/services/api/types"
+import { Budget } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 
 type BudgetPreviewProps = {
-  budget: Budget & { transactions: Transaction[] }
+  budget: Budget
 }
 
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
   const location = useLocation()
+
+  // TODO: add transaction query
+  // const { data: transactions, isLoading: transactionsIsLoading } = useGetTransactions({
+  //   isLimited: true,
+  //   filterBy: { budgetId: budget.id, processed: true }
+  // })
   
   const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
@@ -55,7 +61,6 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       
       <Separator className="mx-auto w-5/6" />
 
-      {/* TODO: get budget transactions */}
       <ul className="flex flex-wrap items-end gap-x-1 gap-y-1">
         <li><Badge className="cursor-pointer icon-wrapper"
           variant="outline"
@@ -66,7 +71,8 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           <span>New</span>
         </Badge></li>
 
-        {budget.transactions.map((tr) => (
+        {/* TODO: add transaction query */}
+        {/* {!transactionsIsLoading && transactions ? transactions.pages.map((page) => page.data.map((tr) => (
           <li key={tr.id}>
             <PaymentBadge className="font-semibold"
               size="xs"
@@ -75,7 +81,8 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               iconSize={10}
             />
           </li>
-        ))}
+        ))) : <>Loading...</>} */}
+        {/* TODO: skeleton */}
 
         <li><Badge className="cursor-pointer"
           variant="outline"
