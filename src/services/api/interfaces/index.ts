@@ -12,14 +12,8 @@ export interface ICurrencyAPI {
 }
 
 export interface IBudgetAPI {
-  get(): Promise<Budget[]>
-  getBudgetsWithTransactions(
-    transactionLimit: number,
-    filterBy: Partial<Budget>,
-    filterTransactionsBy: Partial<Transaction>,
-    params: PaginationParams
-  ): Promise<Pagination<Budget & { transactions: Transaction[] }>>
   getById(id: UUID): Promise<Budget>
+  get(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>>
 
   create(data: z.infer<typeof BudgetValidation>): Promise<Budget>
   update(id: UUID, data: z.infer<typeof BudgetValidation>): Promise<Budget>
@@ -27,8 +21,8 @@ export interface IBudgetAPI {
 }
 
 export interface IBudgetNoteAPI {
-  getNoteWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }>
-  getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]>
+  getNoteWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }> // TODO: rename -> getWithBudget
+  getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]> // TODO: add pagination
 
   create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
   updateText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
@@ -37,9 +31,9 @@ export interface IBudgetNoteAPI {
 }
 
 export interface ITransactionAPI {
-  getTransactionWithBudget(transactionId: UUID): Promise<Transaction & { budget: Budget }>
-  getTransactionsWithBudgets(filterBy: Partial<Transaction>, params: PaginationParams): Promise<Pagination<Transaction & { budget: Budget }>>
-  getByBudgets(filterBy: Partial<Transaction>): Promise<Record<UUID, Transaction[]>> // storage helper
+  getByIdWithBudget(transactionId: UUID): Promise<Transaction & { budget: Budget }>
+  get(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction>>
+  getWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
 
   create(data: z.infer<typeof TransactionValidation>, executePayment: boolean): Promise<Transaction>
   updateStatus(id: UUID, processed: boolean): Promise<Transaction>

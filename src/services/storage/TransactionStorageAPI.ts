@@ -15,7 +15,7 @@ import StorageHelper from "@/services/storage/StorageHelper"
 import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
 
 // utils
-import { customFilter } from "@/utils"
+import { customFilter, paginate } from "@/utils"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -35,44 +35,37 @@ class TransactionStorageAPI implements ITransactionAPI {
     return TransactionStorageAPI._instance
   }
 
-  public async getTransactionWithBudget(id: UUID): Promise<Transaction & { budget: Budget }> {
+  public async getByIdWithBudget(id: UUID): Promise<Transaction & { budget: Budget }> {
     const transaction = await this.storage.findById(id)
     const budget = await this.budgetStorageApi.getById(transaction.budgetId)
 
     return { ...transaction, budget }
   }
 
-  public async getTransactionsWithBudgets(filterBy: Partial<Transaction> = {}, { offset, limit }: PaginationParams): Promise<
-    Pagination<Transaction & { budget: Budget }>
-  > {
-    const filter = customFilter(filterBy)
-
+  public async get(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction>> {
+    const filter = customFilter(filterBy || {})
     const transactions = await this.storage.find(filter)
-    const budgets = await this.budgetStorageApi.get()
 
-    return {
-      offset, limit,
-      nextPageOffset: offset + limit < transactions.length ? offset + limit : null,
-      total: transactions.length,
-      data: transactions.slice(offset, offset + limit)
-        .reduce((trs, tr) => ([
-          ...trs,
-          { ...tr, budget: budgets.find(b => b.id === tr.budgetId)! }
-        ]), [] as (Transaction & { budget: Budget })[])
-    }
+    return paginate(transactions, params)
   }
 
-  public async getByBudgets(filterBy: Partial<Transaction> = {}): Promise<Record<UUID, Transaction[]>> {
-    const filter = customFilter(filterBy)
-    const transactions = await this.storage.find(filter)
+  public async getWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<
+    Pagination<Transaction & { budget: Budget }>
+  > {
+    const filter = customFilter(filterBy || {})
 
-    return transactions.reduce((trsByBudgets, tr) => ({
-      ...trsByBudgets,
-      [tr.budgetId]: [
-        ...(trsByBudgets[tr.budgetId] || []),
-        tr
-      ]
-    }), {} as Record<UUID, Transaction[]>)
+    const transactions = await this.storage.find(filter)
+    const budgets = await this.budgetStorageApi.getStorage().find()
+
+    const { data, ...paginationData } = paginate(transactions, params)
+
+    return {
+      ...paginationData,
+      data: data.reduce((trs, tr) => ([
+        ...trs,
+        { ...tr, budget: budgets.find(b => b.id === tr.budgetId)!}
+      ]), [] as (Transaction & { budget: Budget })[])
+    }
   }
 
   public async create(data: z.infer<typeof TransactionValidation>, executePayment = true): Promise<Transaction> {

@@ -16,7 +16,7 @@ import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
 import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
 
 // utils
-import { customFilter } from "@/utils"
+import { customFilter, paginate } from "@/utils"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
@@ -34,40 +34,15 @@ class BudgetStorageAPI implements IBudgetAPI {
     return BudgetStorageAPI._instance
   }
 
-  public async get(): Promise<Budget[]> {
-    return await this.storage.find()
-  }
-
-  public async getBudgetsWithTransactions(
-    recentTransactionsLimit: number,
-    filterBy: Partial<Budget>,
-    filterTransactionsBy: Partial<Transaction>,
-    { offset, limit }: PaginationParams
-  ): Promise<Pagination<Budget & { transactions: Transaction[] }>> {
-    const filter = customFilter(filterBy)
-
-    const budgets = await this.storage.find(filter)
-    const transactionsByBudgets = await TransactionStorageAPI.getInstance()
-      .getByBudgets(filterTransactionsBy)
-
-    return {
-      offset, limit,
-      nextPageOffset: offset + limit < budgets.length ? offset + limit : null,
-      total: budgets.length,
-      data: budgets.slice(offset, offset + limit)
-        .reduce((budgets, budget) => ([
-          ...budgets,
-          {
-            ...budget,
-            transactions: (transactionsByBudgets[budget.id] || [])
-              .slice(0, recentTransactionsLimit)
-          }
-        ]), [] as (Budget & { transactions: Transaction[] })[])
-    }
-  }
-
   public async getById(id: UUID): Promise<Budget> {
     return await this.storage.findById(id)
+  }
+
+  public async get(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>> {
+    const filter = customFilter(filterBy || {})
+    const budgets = await this.storage.find(filter)
+
+    return paginate(budgets, params)
   }
 
   public async create(data: z.infer<typeof BudgetValidation>): Promise<Budget> {
@@ -109,6 +84,10 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   // helpers
+  public getStorage() {
+    return this.storage
+  }
+
   public async managePayments(budgetId: UUID, payments: Transaction['payment'][], action: 'execute' | 'undo') {
     const budget = await this.storage.findById(budgetId)
 
