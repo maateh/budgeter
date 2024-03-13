@@ -3,6 +3,7 @@ import { PaginationProps } from "@/components/pagination-list/types"
 
 type ManualPaginationProps<D> = {
   actionAfterLimitExceeded?: () => void
+  maxItemLimit?: number
 } & PaginationProps<D>
 
 const useManualPagination = <D,>({

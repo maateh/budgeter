@@ -4,15 +4,14 @@ import { useInView } from "react-intersection-observer"
 // types
 import { PaginationProps } from "@/components/pagination-list/types"
 
-const useScrollingPagination = <D,>({ data, fetchNextPage, maxItemLimit }: PaginationProps<D>) => {
+const useScrollingPagination = <D,>({ data, fetchNextPage }: PaginationProps<D>) => {
   const { ref, inView } = useInView()
 
   const lastPage = data?.pages[data.pages.length - 1]
 
   useEffect(() => {
-    if (maxItemLimit && lastPage?.nextPageOffset && lastPage.nextPageOffset >= maxItemLimit) return
     if (inView) fetchNextPage()
-  }, [fetchNextPage, inView, lastPage, maxItemLimit])
+  }, [fetchNextPage, inView])
 
   return { lastPage, observerRef: ref }
 }

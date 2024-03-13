@@ -5,5 +5,4 @@ export type PaginationProps<D> = {
   data: InfiniteData<Pagination<D>, unknown> | undefined
   fetchNextPage: (options?: FetchNextPageOptions | undefined) =>
     Promise<InfiniteQueryObserverResult<InfiniteData<Pagination<D>, unknown>, Error>>
-  maxItemLimit?: number
 }
