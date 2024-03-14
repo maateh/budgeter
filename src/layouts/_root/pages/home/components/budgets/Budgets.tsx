@@ -7,7 +7,7 @@ import { PackagePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import BudgetList from "@/components/shared/budget/BudgetList"
+import BudgetList from "./BudgetList"
 
 const Budgets = () => {
   const navigate = useNavigate()
@@ -17,7 +17,7 @@ const Budgets = () => {
     <>
       <div className="mb-5 flex flex-wrap justify-between items-center gap-x-4 gap-y-2.5">
         <h2 className="pl-2 border-l-4 rounded">
-          Available <span className="text-blue-600 dark:text-blue-500 overline">Budgets</span>
+          Recent <span className="text-blue-600 dark:text-blue-500 overline">Budgets</span>
         </h2>
 
         <Button className="ml-auto bg-primary/40 icon-wrapper"
