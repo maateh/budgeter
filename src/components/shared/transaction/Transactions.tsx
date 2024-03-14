@@ -30,7 +30,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
     <>
       <div className="mb-5 flex justify-between items-center gap-x-4">
         <h2 className="pl-2 border-l-4 rounded">
-          Recent <span className="text-yellow-300 overline">Transactions</span>
+          Recent <span className="text-yellow-600 dark:text-yellow-300 overline">Transactions</span>
         </h2>
         
         <Button

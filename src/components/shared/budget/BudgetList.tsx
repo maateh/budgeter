@@ -29,7 +29,7 @@ const BudgetList = ({ disableScrolling }: BudgetListProps) => {
   return !isLoading && data ? (
     <>
       <PaginationList className="flex flex-row flex-wrap justify-around gap-x-6 gap-y-4"
-        itemProps={{ className: "flex-1 w-full sm:min-w-72 max-w-lg" }}
+        itemProps={{ className: "flex-1 w-full max-w-md sm:min-w-72 max-sm:min-w-56" }}
         pages={data.pages}
       >
         {(budget) => <BudgetPreview budget={budget} />}
@@ -40,16 +40,16 @@ const BudgetList = ({ disableScrolling }: BudgetListProps) => {
       </div>
 
       {disableScrolling && hasNextPage && (
-          <Button className="w-fit mx-auto my-4 px-4 font-normal icon-wrapper"
-            variant="secondary"
-            size="sm"
-            onClick={() => navigate('/budgets', {
-              state: { background: location }
-            })}
-          >
-            <WalletCards size={20} />
-            View All Budgets
-          </Button>
+        <Button className="w-fit mx-auto my-4 px-4 font-normal icon-wrapper"
+          variant="secondary"
+          size="sm"
+          onClick={() => navigate('/budgets', {
+            state: { background: location }
+          })}
+        >
+          <WalletCards size={20} />
+          View All Budgets
+        </Button>
       )}
     </>
   ) : <>Loading...</> // TODO: skeleton

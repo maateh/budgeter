@@ -1,6 +1,9 @@
 import { UUID } from "crypto"
 import { useNavigate } from "react-router-dom"
 
+// icons
+import { ChevronRightCircle } from "lucide-react"
+
 // shadcn
 import { Button } from "@/components/ui/button"
 
@@ -43,12 +46,13 @@ const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: Trans
       </PaginationList>
 
       {hasNextPage && (
-        <Button className="w-fit mx-auto px-4"
+        <Button className="w-fit mx-auto icon-wrapper"
           size="sm"
           onClick={handlePagination}
           disabled={isFetchingNextPage}
         >
           {isLimitExceeded ? 'View All' : 'Load More'}
+          <ChevronRightCircle size={18} />
         </Button>
       )}
     </>

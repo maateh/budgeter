@@ -64,18 +64,18 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       <Separator className="mx-auto w-5/6" />
 
       <ul className="mb-auto flex flex-wrap items-end gap-x-1 gap-y-1">
-        <li><Badge className="cursor-pointer icon-wrapper"
+        <li><Badge className="flex items-center gap-x-1 cursor-pointer"
           variant="outline"
           size="xs"
           onClick={handleTransactionNavigate}
         >
           <BadgePlus size={16} />
-          <span>New</span>
+          <span className="font-bold">New</span>
         </Badge></li>
 
         {!transactionsIsLoading && transactions ? transactions.map((tr) => (
           <li key={tr.id}>
-            <PaymentBadge className="font-semibold"
+            <PaymentBadge className="font-semibold dark:bg-secondary/80 border"
               size="xs"
               transaction={tr}
               currency={budget.balance.currency}
@@ -84,7 +84,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           </li>
         )) : <>Loading...</>} {/* TODO: skeleton */}
 
-        <li><Badge className="cursor-pointer"
+        <li><Badge className="font-semibold cursor-pointer"
           variant="outline"
           size="xs"
         >
