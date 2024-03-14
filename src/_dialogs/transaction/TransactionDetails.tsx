@@ -7,7 +7,7 @@ import { Handshake, Calendar, Receipt, CalendarCheck, Trash2 } from "lucide-reac
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -30,7 +30,7 @@ const TransactionDetails = () => {
   const { data: transaction, isLoading } = useTransactionWithBudget(id)
 
   return !isLoading && transaction ? (
-    <>
+    <DialogContent>
       <DialogHeader className="mx-1.5 flex flex-wrap flex-row justify-between items-center gap-4 max-sm:mt-5">
         <DialogTitle className="break-all icon-wrapper">
           {transaction.type === 'default' ? (
@@ -112,7 +112,7 @@ const TransactionDetails = () => {
           <span>Delete</span>
         </Button>
       </DialogFooter>
-    </>
+    </DialogContent>
   ) : <>Loading...</> // TODO: skeleton
 }
 

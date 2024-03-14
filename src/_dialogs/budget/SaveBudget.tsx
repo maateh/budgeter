@@ -1,5 +1,5 @@
 // shadcn
-import { DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -11,7 +11,7 @@ type SaveBudgetProps = {
 
 const SaveBudget = ({ type }: SaveBudgetProps) => {
   return (
-    <>
+    <DialogContent>
       <DialogHeader>
         <DialogTitle className="text-3xl capitalize">
           {type} <span className="text-green-400 overline">Budget</span>
@@ -21,7 +21,7 @@ const SaveBudget = ({ type }: SaveBudgetProps) => {
       <Separator />
 
       <BudgetForm type={type} />
-    </>
+    </DialogContent>
   )
 }
 
