@@ -51,53 +51,6 @@
   }
 }
 
-/* @layer base {
-  :root {
-    --background: 15 12% 89%;
-    --foreground: 0 2% 10%;
-    --card: 15 12% 89%;
-    --card-foreground: 0 2% 10%;
-    --popover: 15 12% 89%;
-    --popover-foreground: 0 2% 10%;
-    --primary: 0 1% 71%;
-    --primary-foreground: 0 2% 10%;
-    --secondary: 18 12% 62%;
-    --secondary-foreground: 0 2% 10%;
-    --muted: 12 10% 20%;
-    --muted-foreground: 20 5% 12%;
-    --accent: 20 90% 52%;
-    --accent-foreground: 0 2% 10%;
-    --destructive: 0 58% 51%;
-    --destructive-foreground: 0 2% 10%;
-    --border: 20 3% 40%;
-    --input: 0 3% 87%;
-    --ring: 20 90% 40%;
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 15 10% 8%;
-    --foreground: 0 9% 95%;
-    --card: 15 10% 8%;
-    --card-foreground: 0 9% 95%;
-    --popover: 15 10% 8%;
-    --popover-foreground: 0 9% 95%;
-    --primary: 12 5% 22%;
-    --primary-foreground: 0 9% 95%;
-    --secondary: 18 12% 33%;
-    --secondary-foreground: 0 9% 95%;
-    --muted: 12 10% 80%;
-    --muted-foreground: 0 9% 95%;
-    --accent: 20 90% 48%;
-    --accent-foreground: 15 10% 8%;
-    --destructive: 0 71% 57%;
-    --destructive-foreground: 0 10% 10%;
-    --border: 15 10% 60%;
-    --input: 0 1% 17%;
-    --ring: 20 90% 60%;
-  }
-} */
-
 @layer base {
   * {
     @apply border-border;
