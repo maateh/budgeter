@@ -1,12 +1,12 @@
 import { Location, Route, Routes, useLocation } from "react-router-dom"
 
 // layouts
-import RootLayout from "@/layouts/_root/RootLayout"
-import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/layouts/_root/pages"
+import RootLayout from "@/_root/RootLayout"
+import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/_root/pages"
 
-import DialogLayout from "@/layouts/_dialog/DialogLayout"
-import AlertLayout from "@/layouts/_dialog/AlertLayout"
-import { CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/layouts/_dialog/dialogs"
+import DialogLayout from "@/_dialogs/DialogLayout"
+import AlertLayout from "@/_dialogs/AlertLayout"
+import { CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
 
 const App = () => {
   const location = useLocation()
