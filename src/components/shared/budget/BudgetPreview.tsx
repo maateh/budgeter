@@ -63,7 +63,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       
       <Separator className="mx-auto w-5/6" />
 
-      <ul className="flex flex-wrap items-end gap-x-1 gap-y-1">
+      <ul className="mb-auto flex flex-wrap items-end gap-x-1 gap-y-1">
         <li><Badge className="cursor-pointer icon-wrapper"
           variant="outline"
           size="xs"
