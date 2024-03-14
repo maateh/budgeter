@@ -12,7 +12,7 @@ import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
 import { usePaginatedBudgets } from "@/lib/react-query/queries"
-import { useScrollingPagination } from "@/components/pagination-list/hooks"
+import { usePagination } from "@/components/pagination-list/hooks"
 
 type BudgetListProps = {
   disableScrolling?: boolean
@@ -24,7 +24,7 @@ const BudgetList = ({ disableScrolling }: BudgetListProps) => {
 
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = usePaginatedBudgets({ disableScrolling })
 
-  const { observerRef } = useScrollingPagination({ data, fetchNextPage, disableScrolling })
+  const { observerRef } = usePagination({ data, fetchNextPage, disableScrolling })
 
   return !isLoading && data ? (
     <>

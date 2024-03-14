@@ -1,2 +1,1 @@
-export { default as useManualPagination } from './useManualPagination'
-export { default as useScrollingPagination } from './useScrollingPagination'
+export { default as usePagination } from './usePagination'

@@ -12,7 +12,7 @@ import TransactionPreview from "@/components/shared/transaction/TransactionPrevi
 import PaginationList from "@/components/pagination-list/PaginationList"
 
 // hooks
-import { useManualPagination } from "@/components/pagination-list/hooks"
+import { usePagination } from "@/components/pagination-list/hooks"
 import { usePaginatedTransactionsWithBudgets } from "@/lib/react-query/queries"
 
 // types
@@ -32,7 +32,7 @@ const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: Trans
     type, processed, budgetId
   })
 
-  const { isLimitExceeded, handlePagination } = useManualPagination({
+  const { isLimitExceeded, manualPagination } = usePagination({
     data, fetchNextPage, maxItemLimit,
     actionAfterLimitExceeded: () => navigate('/transactions')
   })
@@ -48,7 +48,7 @@ const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: Trans
       {hasNextPage && (
         <Button className="w-fit mx-auto icon-wrapper"
           size="sm"
-          onClick={handlePagination}
+          onClick={manualPagination}
           disabled={isFetchingNextPage}
         >
           {isLimitExceeded ? 'View All' : 'Load More'}
