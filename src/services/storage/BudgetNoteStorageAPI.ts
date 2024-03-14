@@ -5,7 +5,7 @@ import { z } from "zod"
 import { IBudgetNoteAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, BudgetNote } from "@/services/api/types"
+import { Budget, BudgetNote, Pagination, PaginationParams } from "@/services/api/types"
 
 // validations
 import { BudgetNoteValidation } from "@/lib/validation"
@@ -13,6 +13,9 @@ import { BudgetNoteValidation } from "@/lib/validation"
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
 import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
+
+// utils
+import { paginate } from "@/utils"
 
 class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   private static _instance: BudgetNoteStorageAPI
@@ -32,16 +35,15 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return BudgetNoteStorageAPI._instance
   }
 
-  public async getNoteWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }> {
+  public async getByIdWithBudget(_: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }> {
     const note = await this.storage.findById(noteId)
-    const budget = await this.budgetStorageApi.getById(budgetId)
-
+    const budget = await this.budgetStorageApi.getById(note.budgetId)
     return { ...note, budget }
   }
 
-  public async getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]> {
-    return await this.storage
-      .find((note) => note.budgetId === budgetId && note.status === status)
+  public async getPaginated(params: PaginationParams, filterBy?: Partial<BudgetNote>): Promise<Pagination<BudgetNote>> {
+    const notes = await this.storage.find(filterBy)
+    return paginate(notes, params)
   }
 
   public async create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
@@ -54,7 +56,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async updateText(_budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
+  public async updateText(_: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     return await this.storage.save({
@@ -64,7 +66,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async updateStatus(_budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote> {
+  public async updateStatus(_: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     return await this.storage.save({
@@ -74,7 +76,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async delete(_budgetId: UUID, noteId: UUID): Promise<BudgetNote> {
+  public async delete(_: UUID, noteId: UUID): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     await this.storage.delete(noteId)

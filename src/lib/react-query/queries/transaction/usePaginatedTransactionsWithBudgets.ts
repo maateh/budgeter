@@ -1,31 +1,31 @@
-import { UUID } from "crypto"
 import { useInfiniteQuery } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { PaginationParams, Transaction } from "@/services/api/types"
 
 type PaginatedTransactionsWithBudgetsQueryOptions = {
-  type: Transaction['type']
-  processed: Transaction['processed']
-  budgetId?: UUID
+  params?: PaginationParams
+  filterBy?: Partial<Transaction>
 }
 
-const usePaginatedTransactionsWithBudgets = ({ type, processed, budgetId }: PaginatedTransactionsWithBudgetsQueryOptions) => {
+const usePaginatedTransactionsWithBudgets = (
+  type: Transaction['type'],
+  processed: Transaction['processed'],
+  { params, filterBy }: PaginatedTransactionsWithBudgetsQueryOptions = {}) => {
   const { api } = useAPI()
-
-  const filterBy: Partial<Transaction> = budgetId
-    ? { type, processed, budgetId }
-    : { type, processed }
 
   return useInfiniteQuery({
     queryKey: ['paginatedTransactionsWithBudgets', type, processed],
     queryFn: async ({ pageParam: offset }) => {
-      return await api.transaction.getPaginatedWithBudgets({ offset, limit: 5 }, filterBy)
+      return await api.transaction.getPaginatedWithBudgets({
+        limit: params?.limit || 5,
+        offset
+      }, { type, processed, ...filterBy })
     },
-    initialPageParam: 0,
+    initialPageParam: params?.offset || 0,
     getNextPageParam: (lastPage) => lastPage.nextPageOffset
   })
 }

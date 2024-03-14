@@ -1,3 +1,4 @@
+import { UUID } from "crypto"
 import { useQuery } from "@tanstack/react-query"
 
 // api
@@ -5,7 +6,6 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
 import { PaginationParams, Transaction } from "@/services/api/types"
-import { UUID } from "crypto"
 
 type TransactionsQueryOptions = {
   params?: PaginationParams

@@ -25,7 +25,7 @@ const useSaveNote = (budgetId: UUID, noteId?: UUID) => {
     },
     onSuccess: ({ id, budgetId, status }) => {
       queryClient.invalidateQueries({ queryKey: ['noteWithBudget', budgetId, id] })
-      queryClient.invalidateQueries({ queryKey: ['notesByStatus', budgetId, status] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedNotesByStatus', budgetId, status] })
     }
   })
 }

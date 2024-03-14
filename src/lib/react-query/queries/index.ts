@@ -8,7 +8,7 @@ export { default as usePaginatedBudgets } from './budget/usePaginatedBudgets'
 
 // budget-note
 export { default as useNoteWithBudget } from './buget-note/useNoteWithBudget'
-export { default as useNotesbyStatus } from './buget-note/useNotesbyStatus'
+export { default as usePaginatedNotesByStatus } from './buget-note/usePaginatedNotesByStatus'
 
 // transaction
 export { default as useTransactionWithBudget } from './transaction/useTransactionWithBudget'

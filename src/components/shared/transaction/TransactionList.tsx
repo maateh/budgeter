@@ -28,8 +28,10 @@ type TransactionListProps = {
 const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: TransactionListProps) => {
   const navigate = useNavigate()
 
-  const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = usePaginatedTransactionsWithBudgets({
-    type, processed, budgetId
+  const {
+    data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
+  } = usePaginatedTransactionsWithBudgets(type, processed, {
+    filterBy: (budgetId && { budgetId })
   })
 
   const { isLimitExceeded, manualPagination } = usePagination({

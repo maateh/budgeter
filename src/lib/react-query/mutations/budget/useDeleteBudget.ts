@@ -17,7 +17,7 @@ const useDeleteBudget = (budgetId: UUID) => {
       queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
 
       queryClient.invalidateQueries({ queryKey: ['noteWithBudget', budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['notesByStatus', id] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedNotesByStatus', id] })
 
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget'] })
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', id] })

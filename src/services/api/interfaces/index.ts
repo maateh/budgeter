@@ -22,12 +22,12 @@ export interface IBudgetAPI {
 }
 
 export interface IBudgetNoteAPI {
-  getNoteWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }> // TODO: rename -> getWithBudget
-  getByStatus(budgetId: UUID, status: BudgetNote['status']): Promise<BudgetNote[]> // TODO: add pagination
+  getByIdWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }>
+  getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<BudgetNote>>
 
   create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
   updateText(budgetId: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote>
-  updateStatus(budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote>  
+  updateStatus(budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote>
   delete(budgetId: UUID, noteId: UUID): Promise<BudgetNote>
 }
 

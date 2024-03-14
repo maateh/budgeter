@@ -6,12 +6,12 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { PaginationParams } from "@/services/api/types"
 
-type PaginatedBudgetsOptions = {
+type PaginatedBudgetsQueryOptions = {
   params?: PaginationParams
   disableScrolling?: boolean
 }
 
-const usePaginatedBudgets = ({ params, disableScrolling }: PaginatedBudgetsOptions) => {
+const usePaginatedBudgets = ({ params, disableScrolling }: PaginatedBudgetsQueryOptions = {}) => {
   const { api } = useAPI()
 
   return useInfiniteQuery({

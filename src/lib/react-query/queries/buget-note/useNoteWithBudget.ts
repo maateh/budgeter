@@ -9,7 +9,7 @@ const useNoteWithBudget = (budgetId: UUID, noteId: UUID) => {
 
   return useQuery({
     queryKey: ['noteWithBudget', budgetId, noteId],
-    queryFn: async () => await api.budgetNote.getNoteWithBudget(budgetId, noteId),
+    queryFn: async () => await api.budgetNote.getByIdWithBudget(budgetId, noteId),
   })
 }
 
