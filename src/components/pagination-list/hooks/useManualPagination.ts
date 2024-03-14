@@ -1,14 +1,14 @@
 // types
-import { PaginationProps } from "@/components/pagination-list/types"
+import { PaginationOptions } from "@/components/pagination-list/types"
 
-type ManualPaginationProps<D> = {
+type ManualPaginationOptions<D> = {
   maxItemLimit?: number
   actionAfterLimitExceeded?: () => void
-} & PaginationProps<D>
+} & PaginationOptions<D>
 
 const useManualPagination = <D,>({
   data, fetchNextPage, maxItemLimit, actionAfterLimitExceeded
-}: ManualPaginationProps<D>) => {
+}: ManualPaginationOptions<D>) => {
   const lastPage = data?.pages[data.pages.length - 1]
   const isLimitExceeded = !!maxItemLimit &&
     !!lastPage?.nextPageOffset && lastPage.nextPageOffset >= maxItemLimit

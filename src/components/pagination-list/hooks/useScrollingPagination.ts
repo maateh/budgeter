@@ -2,16 +2,20 @@ import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 
 // types
-import { PaginationProps } from "@/components/pagination-list/types"
+import { PaginationOptions } from "@/components/pagination-list/types"
 
-const useScrollingPagination = <D,>({ data, fetchNextPage }: PaginationProps<D>) => {
+type ScrollingPaginationOptions<D> = {
+  disableScrolling?: boolean
+} & PaginationOptions<D>
+
+const useScrollingPagination = <D,>({ data, fetchNextPage, disableScrolling }: ScrollingPaginationOptions<D>) => {
   const { ref, inView } = useInView()
 
   const lastPage = data?.pages[data.pages.length - 1]
 
   useEffect(() => {
-    if (inView) fetchNextPage()
-  }, [fetchNextPage, inView])
+    if (inView && !disableScrolling) fetchNextPage()
+  }, [fetchNextPage, inView, disableScrolling])
 
   return { lastPage, observerRef: ref }
 }

@@ -3,15 +3,26 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-const usePaginatedBudgets = () => {
+// types
+import { PaginationParams } from "@/services/api/types"
+
+type PaginatedBudgetsOptions = {
+  params?: PaginationParams
+  disableScrolling?: boolean
+}
+
+const usePaginatedBudgets = ({ params, disableScrolling }: PaginatedBudgetsOptions) => {
   const { api } = useAPI()
 
   return useInfiniteQuery({
-    queryKey: ['paginatedBudgets'],
+    queryKey: ['paginatedBudgets', disableScrolling],
     queryFn: async ({ pageParam: offset }) => {
-      return await api.budget.getPaginated({ offset, limit: 6 })
+      return await api.budget.getPaginated({
+        limit: params?.limit || 4,
+        offset
+      })
     },
-    initialPageParam: 0,
+    initialPageParam: params?.offset || 0,
     getNextPageParam: (lastPage) => lastPage.nextPageOffset
   })
 }

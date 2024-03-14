@@ -1,4 +1,5 @@
 // budget
+export { default as Budgets } from './budget/Budgets'
 export { default as SaveBudget } from './budget/SaveBudget'
 export { default as DeleteBudget } from './budget/DeleteBudget'
 

@@ -12,12 +12,19 @@ import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
 import { usePaginatedBudgets } from "@/lib/react-query/queries"
+import { useScrollingPagination } from "@/components/pagination-list/hooks"
 
-const BudgetList = () => {
+type BudgetListProps = {
+  disableScrolling?: boolean
+}
+
+const BudgetList = ({ disableScrolling }: BudgetListProps) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { data, isLoading, hasNextPage } = usePaginatedBudgets()
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = usePaginatedBudgets({ disableScrolling })
+
+  const { observerRef } = useScrollingPagination({ data, fetchNextPage, disableScrolling })
 
   return !isLoading && data ? (
     <>
@@ -28,9 +35,12 @@ const BudgetList = () => {
         {(budget) => <BudgetPreview budget={budget} />}
       </PaginationList>
 
-      {hasNextPage && (
-        <div className="flex justify-center">
-          <Button className="w-fit my-3.5 px-4 font-normal icon-wrapper"
+      <div ref={observerRef}>
+        {isFetchingNextPage && <>Loading...</>} {/* TODO: skeleton */}
+      </div>
+
+      {disableScrolling && hasNextPage && (
+          <Button className="w-fit mx-auto my-4 px-4 font-normal icon-wrapper"
             variant="secondary"
             size="sm"
             onClick={() => navigate('/budgets', {
@@ -40,7 +50,6 @@ const BudgetList = () => {
             <WalletCards size={20} />
             View All Budgets
           </Button>
-        </div>
       )}
     </>
   ) : <>Loading...</> // TODO: skeleton

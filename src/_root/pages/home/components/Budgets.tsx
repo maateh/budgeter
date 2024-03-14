@@ -7,7 +7,7 @@ import { PackagePlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import BudgetList from "./BudgetList"
+import BudgetList from "@/components/shared/budget/BudgetList"
 
 const Budgets = () => {
   const navigate = useNavigate()
@@ -32,7 +32,7 @@ const Budgets = () => {
         </Button>
       </div>
 
-      <BudgetList />
+      <BudgetList disableScrolling />
     </>
   )
 }

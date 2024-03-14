@@ -3,8 +3,8 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import Transactions from "@/components/shared/transaction/Transactions"
-import BudgetSummary from "./components/summary/BudgetSummary"
-import Budgets from "./components/budgets/Budgets"
+import BudgetSummary from "./components/BudgetSummary"
+import Budgets from "./components/Budgets"
 
 const Home = () => {
   return (
