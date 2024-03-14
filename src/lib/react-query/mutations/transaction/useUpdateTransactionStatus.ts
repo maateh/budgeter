@@ -16,10 +16,9 @@ const useUpdateTransactionStatus = (transactionId: UUID) => {
     }) => await api.transaction.updateStatus(id, processed),
     onSuccess: ({ id, type, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['budgetTransactions', budgetId] })
       queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', type] })
 
-      queryClient.invalidateQueries({ queryKey: ['budgets'] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
     }
   })
