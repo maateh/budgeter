@@ -24,7 +24,7 @@ const ThemeSwitch = () => {
         light: 'Switch to Dark mode',
         dark: 'Switch to Light mode'
       }}
-      action={switchTheme}
+      onClick={switchTheme}
       toggleOnHover
     />
   )

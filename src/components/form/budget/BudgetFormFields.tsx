@@ -106,7 +106,7 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
                     expense: <BookMinus size={22} strokeWidth={2.75} />
                   }}
                   tooltip={{ income: 'Income', expense: 'Expense' }}
-                  action={() => field.onChange(field.value === 'income' ? 'expense' : 'income')}
+                  onClick={() => field.onChange(field.value === 'income' ? 'expense' : 'income')}
                 />
               </FormControl>
               <FormMessage />

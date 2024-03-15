@@ -30,7 +30,7 @@ const TransactionDetails = () => {
   const { data: transaction, isLoading } = useTransactionWithBudget(id)
 
   return !isLoading && transaction ? (
-    <DialogContent>
+    <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
       <DialogHeader className="mx-1.5 flex flex-wrap flex-row justify-between items-center gap-4 max-sm:mt-5">
         <DialogTitle className="break-all icon-wrapper">
           {transaction.type === 'default' ? (
@@ -41,7 +41,7 @@ const TransactionDetails = () => {
           <span className="tracking-wide">{transaction.name}</span>
         </DialogTitle>
 
-        <InfoBadge className="flex-none w-fit px-5 py-2"
+        <InfoBadge className="ml-auto flex-none w-fit px-5 py-2"
           separatorProps={{ className: "h-5" }}
           orientation="vertical"
           label={transaction.budget.name}
@@ -53,7 +53,7 @@ const TransactionDetails = () => {
 
       <Separator />
 
-      <div className="text-lg font-heading icon-wrapper justify-center">
+      <div className="justify-center text-lg text-center font-heading icon-wrapper">
         <TransactionStatusToggle transaction={transaction} />
         {transaction.processed ? (
           <p>This transaction is <span className="text-accent overline">processed</span>.</p>
@@ -62,7 +62,7 @@ const TransactionDetails = () => {
         )}
       </div>
 
-      <div className="flex flex-col items-center gap-y-2 text-sm font-heading">
+      <div className="flex flex-col items-center gap-y-2 text-sm text-center font-heading">
         <div className="icon-wrapper">
           <Calendar size={18} strokeWidth={2.5} className="text-muted-foreground/80" />
           <p>

@@ -124,7 +124,7 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
                       "+": <Plus size={20} strokeWidth={4} />,
                       '-': <Minus size={20} strokeWidth={4} />
                     }}
-                    action={() => field.onChange(field.value === '+' ? '-' : '+')}
+                    onClick={() => field.onChange(field.value === '+' ? '-' : '+')}
                   />
                 </FormControl>
                 <FormMessage />

@@ -48,7 +48,7 @@ const TransactionStatusToggle = ({ transaction }: TransactionStatusToggleProps) 
         processed: 'Click to withdraw',
         unprocessed: 'Click for crediting'
       }}
-      action={handleUpdateStatus}
+      onClick={handleUpdateStatus}
       toggleOnHover
     />
   )
