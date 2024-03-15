@@ -7,7 +7,7 @@ const RootLayout = () => {
   return (
     <>
       <Navbar />
-      <main className="max-container">
+      <main className="px-2.5 max-container">
         <Outlet />
       </main>
     </>

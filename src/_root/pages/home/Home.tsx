@@ -1,4 +1,10 @@
+import { useLocation, useNavigate } from "react-router-dom"
+
+// icons
+import { History } from "lucide-react"
+
 // shadcn
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -7,11 +13,26 @@ import BudgetSummary from "./components/BudgetSummary"
 import Budgets from "./components/Budgets"
 
 const Home = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   return (
     <div className="page-wrapper">
-      <h1 className="ml-2">
-        Budgeter <span className="text-accent">Dashboard</span>
-      </h1>
+      <div className="flex flex-wrap-reverse items-center justify-between gap-x-12">
+        <h1>
+          Budgeter <span className="text-accent">Dashboard</span>
+        </h1>
+
+        <Button className="ml-auto icon-wrapper"
+          variant="outline"
+          onClick={() => navigate('/backups', {
+            state: { background: location }
+          })}
+        >
+          <History />
+          Manage Backups
+        </Button>
+      </div>
 
       <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
         <div className="flex-1 w-full min-w-64 flex flex-col gap-y-4 md:min-w-80 md:max-w-4xl">
@@ -26,7 +47,7 @@ const Home = () => {
           </section>
         </div>
 
-        <section className="flex-1 w-full h-fit min-w-64 bg-primary rounded-[2rem] section-wrapper md:w-1/3 md:max-w-lg">
+        <section className="flex-1 w-full min-w-64 md:w-1/3 md:max-w-lg">
           <Transactions />
         </section>
       </div>

@@ -6,7 +6,7 @@ import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/_root/p
 
 import DialogLayout from "@/_dialogs/DialogLayout"
 import AlertLayout from "@/_dialogs/AlertLayout"
-import { Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
+import { BackupManager, Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
 
 const App = () => {
   const location = useLocation()
@@ -41,6 +41,8 @@ const App = () => {
               <Route path="create/:budgetId?" element={<CreateTransaction />} />
               <Route path=":id" element={<TransactionDetails />} />
             </Route>
+
+            <Route path="/backups" element={<BackupManager />} />
           </Route>
 
           <Route path="/" element={<AlertLayout />}>

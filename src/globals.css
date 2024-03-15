@@ -59,7 +59,7 @@
     @apply bg-background text-foreground font-body font-normal min-h-screen;
   }
   h1 {
-    @apply text-4xl font-heading font-bold small-caps mt-8 mb-4;
+    @apply text-4xl font-heading font-bold small-caps mt-2 mb-3.5;
   }
   h2 {
     @apply text-2xl font-heading font-medium capitalize;
@@ -80,7 +80,7 @@
     @apply mx-5 my-4;
   }
   .section-wrapper {
-    @apply h-fit px-6 py-5;
+    @apply h-fit px-1 py-5 sm:px-3;
   }
 
   /* TOGGLE */
@@ -106,6 +106,9 @@
   }
 
   /* CUSTOM BORDERS */
+  .indent-border {
+    @apply pl-2 border-l-4 rounded;
+  }
   .border-sm {
     @apply rounded-sm rounded-tl-[18px] rounded-br-[12px];
   }

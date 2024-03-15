@@ -16,11 +16,11 @@ const Budgets = () => {
   return (
     <>
       <div className="mb-5 flex flex-wrap justify-between items-center gap-x-4 gap-y-2.5">
-        <h2 className="pl-2 border-l-4 rounded">
+        <h2 className="indent-border">
           Recent <span className="text-blue-600 dark:text-blue-500 overline">Budgets</span>
         </h2>
 
-        <Button className="ml-auto bg-primary/40 icon-wrapper"
+        <Button className="ml-auto icon-wrapper"
           variant="outline"
           size="lg"
           onClick={() => navigate('/budgets/create', {

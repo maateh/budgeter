@@ -29,7 +29,7 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
 
   return (
     <Badge className={cn("font-heading font-bold gap-x-1.5",
-        isNeutral ? 'text-muted-foreground'
+        isNeutral ? 'text-muted-foreground opacity-75'
           : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
       size={size}
       ref={ref}

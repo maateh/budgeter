@@ -10,3 +10,6 @@ export { default as DeleteNote } from './budget-note/DeleteNote'
 export { default as TransactionDetails } from './transaction/TransactionDetails'
 export { default as CreateTransaction } from './transaction/CreateTransaction'
 export { default as DeleteTransaction } from './transaction/DeleteTransaction'
+
+// backups
+export { default as BackupManager } from './backups/BackupManager'

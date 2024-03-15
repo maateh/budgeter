@@ -40,8 +40,7 @@ const BudgetList = ({ disableScrolling }: BudgetListProps) => {
       </div>
 
       {disableScrolling && hasNextPage && (
-        <Button className="w-fit mx-auto my-4 px-4 font-normal icon-wrapper"
-          variant="secondary"
+        <Button className="w-fit mx-auto my-4 px-4 icon-wrapper"
           size="sm"
           onClick={() => navigate('/budgets', {
             state: { background: location }

@@ -27,9 +27,9 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
   const location = useLocation()
 
   return (
-    <>
+    <div className="h-fit px-6 py-5 bg-primary rounded-[2rem]">
       <div className="mb-5 flex justify-between items-center gap-x-4">
-        <h2 className="pl-2 border-l-4 rounded">
+        <h2 className="indent-border">
           Recent <span className="text-yellow-600 dark:text-yellow-300 overline">Transactions</span>
         </h2>
         
@@ -81,7 +81,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
           </div>
         )}
       </TabsSwitch>
-    </>
+    </div>
   )
 }
 

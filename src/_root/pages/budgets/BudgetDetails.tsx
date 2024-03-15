@@ -1,5 +1,11 @@
 import { UUID } from "crypto"
-import { useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
+
+// icons
+import { History } from "lucide-react"
+
+// shadcn
+import { Button } from "@/components/ui/button"
 
 // components
 import BudgetNotes from "@/components/shared/budget-note/BudgetNotes"
@@ -11,14 +17,28 @@ import { useBudget } from "@/lib/react-query/queries"
 
 const BudgetDetails = () => {
   const { id } = useParams() as { id: UUID }
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const { data: budget, isLoading } = useBudget(id)
 
   return (
     <div className="page-wrapper">
-      <h1 className="ml-6">
-        Budget <span className="text-green-600/85 dark:text-green-400">Details</span>
-      </h1>
+      <div className="flex flex-wrap-reverse items-center justify-between gap-x-12">
+        <h1>
+          Budget <span className="text-green-600/85 dark:text-green-400">Details</span>
+        </h1>
+
+        <Button className="ml-auto icon-wrapper"
+          variant="outline"
+          onClick={() => navigate('/backups', {
+            state: { background: location }
+          })}
+        >
+          <History />
+          Manage Backups
+        </Button>
+      </div>
       
       {!isLoading && budget ? (
         <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
@@ -27,12 +47,12 @@ const BudgetDetails = () => {
               <BudgetSummary budget={budget} />
             </section>
   
-            <section className="w-full h-fit bg-primary rounded-[2rem] section-wrapper">
+            <section className="w-full bg-primary rounded-[2rem] section-wrapper">
               <BudgetNotes budget={budget} />
             </section>
           </div>
   
-          <section className="flex-1 w-full h-fit min-w-64 bg-primary rounded-[2rem] section-wrapper md:w-1/3 md:max-w-lg">
+          <section className="flex-1 w-full min-w-64 md:w-1/3 md:max-w-lg">
             <Transactions budgetId={budget.id} />
           </section>
         </div>

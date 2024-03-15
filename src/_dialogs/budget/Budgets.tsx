@@ -18,11 +18,11 @@ const Budgets = () => {
   return (
     <DialogContent className="sm:max-w-4xl">
       <DialogHeader className="mt-4 mx-2 flex flex-row flex-wrap justify-between items-center gap-x-4 gap-y-2.5 sm:mt-2">
-        <DialogTitle className="pl-2 border-l-4 rounded text-2xl">
+        <DialogTitle className="text-2xl indent-border">
           Your <span className="text-blue-600 dark:text-blue-500 overline">Budgets</span>
         </DialogTitle>
 
-        <Button className="ml-auto bg-primary/40 icon-wrapper"
+        <Button className="ml-auto icon-wrapper"
           variant="outline"
           size="lg"
           onClick={() => navigate('/budgets/create', {
