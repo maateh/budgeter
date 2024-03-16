@@ -1,5 +1,5 @@
 import { UUID } from "crypto"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 
 // icons
 import { History } from "lucide-react"
@@ -14,11 +14,11 @@ import BudgetSummary from "./components/BudgetSummary"
 
 // hooks
 import { useBudget } from "@/lib/react-query/queries"
+import { useDialog } from "@/hooks"
 
 const BudgetDetails = () => {
   const { id } = useParams() as { id: UUID }
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   const { data: budget, isLoading } = useBudget(id)
 
@@ -31,9 +31,7 @@ const BudgetDetails = () => {
 
         <Button className="ml-auto icon-wrapper"
           variant="outline"
-          onClick={() => navigate('/backups', {
-            state: { background: location }
-          })}
+          onClick={() => openDialog('/backups')}
         >
           <History />
           Manage Backups

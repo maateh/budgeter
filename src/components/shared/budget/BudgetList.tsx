@@ -1,5 +1,3 @@
-import { useLocation, useNavigate } from "react-router-dom"
-
 // icons
 import { WalletCards } from "lucide-react"
 
@@ -14,17 +12,23 @@ import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 import { usePaginatedBudgets } from "@/lib/react-query/queries"
 import { usePagination } from "@/components/pagination-list/hooks"
 
+// hooks
+import { useDialog } from "@/hooks"
+
 type BudgetListProps = {
   disableScrolling?: boolean
 }
 
 const BudgetList = ({ disableScrolling }: BudgetListProps) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
-  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = usePaginatedBudgets({ disableScrolling })
+  const {
+    data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage
+  } = usePaginatedBudgets({ disableScrolling })
 
-  const { observerRef } = usePagination({ data, fetchNextPage, disableScrolling })
+  const { observerRef } = usePagination({
+    data, fetchNextPage, disableScrolling
+  })
 
   return !isLoading && data ? (
     <>
@@ -42,9 +46,7 @@ const BudgetList = ({ disableScrolling }: BudgetListProps) => {
       {disableScrolling && hasNextPage && (
         <Button className="w-fit mx-auto my-4 px-4 icon-wrapper"
           size="sm"
-          onClick={() => navigate('/budgets', {
-            state: { background: location }
-          })}
+          onClick={() => openDialog('/budgets')}
         >
           <WalletCards size={20} />
           View All Budgets

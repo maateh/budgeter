@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
 import { format } from "date-fns"
 
 // icons
@@ -14,6 +13,7 @@ import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
 
 // hooks
 import { useUpdateNoteStatus } from "@/lib/react-query/mutations"
+import { useDialog } from "@/hooks"
 
 // context
 import FormProvider from "@/services/providers/form/FormProvider"
@@ -27,8 +27,7 @@ type NoteProps = {
 }
 
 const Note = ({ budget, note }: NoteProps) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   const [editingMode, setEditingMode] = useState(false)
 
@@ -110,9 +109,7 @@ const Note = ({ budget, note }: NoteProps) => {
           <Button className="bg-primary p-2 hover:bg-primary/75"
             variant="icon"
             size="icon"
-            onClick={() => navigate(`/budgets/${budget.id}/notes/delete/${note.id}`, {
-              state: { background: location }
-            })}
+            onClick={() => openDialog(`/budgets/${budget.id}/notes/delete/${note.id}`)}
           >
             <Trash2 className="text-destructive"
               size={16}

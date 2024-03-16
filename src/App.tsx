@@ -1,4 +1,4 @@
-import { Location, Route, Routes, useLocation } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 
 // layouts
 import RootLayout from "@/_root/RootLayout"
@@ -8,9 +8,11 @@ import DialogLayout from "@/_dialogs/DialogLayout"
 import AlertLayout from "@/_dialogs/AlertLayout"
 import { BackupManager, Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
 
+// hooks
+import { useDialog } from "@/hooks"
+
 const App = () => {
-  const location = useLocation()
-  const backgroundLocation = location.state?.background as Location
+  const { location, backgroundLocation } = useDialog()
 
   // TODO: load pages with lazy loading
   return (

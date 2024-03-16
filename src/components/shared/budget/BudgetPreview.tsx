@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 // icons
 import { BadgePlus } from "lucide-react"
@@ -16,6 +16,9 @@ import InfoBadge from "@/components/ui/custom/InfoBadge"
 // hooks
 import { useBudgetTransactions } from "@/lib/react-query/queries"
 
+// hooks
+import { useDialog } from "@/hooks"
+
 // types
 import { Budget } from "@/services/api/types"
 
@@ -28,7 +31,7 @@ type BudgetPreviewProps = {
 
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   const { data: transactions, isLoading: transactionsIsLoading } = useBudgetTransactions(budget.id, {
     params: { offset: 0, limit: 7 },
@@ -37,9 +40,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   
   const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
-    navigate(`/transactions/create/${budget.id}`, {
-      state: { background: location }
-    })
+    openDialog(`/transactions/create/${budget.id}`)
   }
 
   return (

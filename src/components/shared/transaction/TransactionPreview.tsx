@@ -1,10 +1,12 @@
-import { useLocation, useNavigate } from "react-router-dom"
 import { formatDistance } from "date-fns"
 
 // components
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
+
+// hooks
+import { useDialog } from "@/hooks"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
@@ -15,15 +17,12 @@ type TransactionPreviewProps = {
 }
 
 const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   return (
     <div
       className="pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer"
-      onClick={() => navigate(`/transactions/${transaction.id}`, {
-        state: { background: location } 
-      })}
+      onClick={() => openDialog(`/transactions/${transaction.id}`)}
     >
       <div className="flex items-center gap-x-1">
         <TransactionStatusToggle transaction={transaction} />

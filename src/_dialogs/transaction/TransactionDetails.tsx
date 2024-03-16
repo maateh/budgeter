@@ -1,5 +1,5 @@
 import { UUID } from "crypto"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { format } from "date-fns"
 
 // icons
@@ -18,14 +18,14 @@ import TransactionStatusToggle from "@/components/shared/transaction/custom/Tran
 
 // hooks
 import { useTransactionWithBudget } from "@/lib/react-query/queries"
+import { useDialog } from "@/hooks"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 
 const TransactionDetails = () => {
   const { id } = useParams() as { id: UUID }
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   const { data: transaction, isLoading } = useTransactionWithBudget(id)
 
@@ -103,10 +103,7 @@ const TransactionDetails = () => {
         <Button className="ml-auto flex items-center gap-x-1.5"
           variant="destructive"
           size="sm"
-          onClick={() => navigate(`/transactions/delete/${transaction.id}`, {
-            state: { background: location.state.background },
-            replace: true
-          })}
+          onClick={() => openDialog(`/transactions/delete/${transaction.id}`, { replace: true })}
         >
           <Trash2 size={18} />
           <span>Delete</span>

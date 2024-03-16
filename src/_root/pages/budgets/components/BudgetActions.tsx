@@ -1,5 +1,3 @@
-import { useLocation, useNavigate } from "react-router-dom"
-
 // icons
 import { Pencil, Trash2 } from "lucide-react"
 
@@ -9,22 +7,22 @@ import { Button } from "@/components/ui/button"
 // types
 import { Budget } from "@/services/api/types"
 
+// hooks
+import { useDialog } from "@/hooks"
+
 type BudgetActionsProps = {
   budget: Budget
 }
 
 const BudgetActions = ({ budget }: BudgetActionsProps) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   return (
     <div className="ml-auto flex flex-wrap-reverse items-center justify-end gap-y-2 gap-x-4">
       <Button className="icon-wrapper"
         variant="destructive"
         size="sm"
-        onClick={() => navigate(`/budgets/delete/${budget.id}`, {
-          state: { background: location }
-        })}
+        onClick={() => openDialog(`/budgets/delete/${budget.id}`)}
       >
         <Trash2 size={18} />
         <span>Delete</span>
@@ -32,9 +30,7 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
 
       <Button className="icon-wrapper"
         size="lg"
-        onClick={() => navigate(`/budgets/edit/${budget.id}`, {
-          state: { background: location }
-        })}
+        onClick={() => openDialog(`/budgets/edit/${budget.id}`)}
       >
         <Pencil size={18} />
         <span>Edit</span>

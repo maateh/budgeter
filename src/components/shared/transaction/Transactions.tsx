@@ -1,6 +1,5 @@
 import { UUID } from "crypto"
 import { useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
 
 // icons
 import { Plus, Receipt, Handshake, Verified, XCircle } from "lucide-react"
@@ -13,6 +12,9 @@ import { Switch, SwitchThumb } from "@/components/ui/switch"
 import TabsSwitch from "@/components/ui/custom/TabsSwitch"
 import TransactionList from "@/components/shared/transaction/TransactionList"
 
+// hooks
+import { useDialog } from "@/hooks"
+
 // types
 import { Transaction } from "@/services/api/types"
 
@@ -23,8 +25,7 @@ type TransactionsProps = {
 const Transactions = ({ budgetId }: TransactionsProps) => {
   const [processed, setProcessed] = useState<Transaction['processed']>(true)
 
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   return (
     <div className="h-fit px-6 py-5 bg-primary rounded-[2rem]">
@@ -36,9 +37,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
         <Button
           variant="icon"
           size="icon"
-          onClick={() => navigate(`/transactions/create${budgetId ? `/${budgetId}` : ''}`, {
-            state: { background: location }
-          })}
+          onClick={() => openDialog(`/transactions/create${budgetId ? `/${budgetId}` : ''}`)}
         >
           <Plus size={20} />
         </Button>

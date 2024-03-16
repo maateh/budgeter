@@ -1,5 +1,3 @@
-import { useLocation, useNavigate } from "react-router-dom"
-
 // icons
 import { PackagePlus } from "lucide-react"
 
@@ -9,9 +7,11 @@ import { Button } from "@/components/ui/button"
 // components
 import BudgetList from "@/components/shared/budget/BudgetList"
 
+// hooks
+import { useDialog } from "@/hooks"
+
 const Budgets = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { openDialog } = useDialog()
 
   return (
     <>
@@ -23,9 +23,7 @@ const Budgets = () => {
         <Button className="ml-auto icon-wrapper"
           variant="outline"
           size="lg"
-          onClick={() => navigate('/budgets/create', {
-            state: { background: location }
-          })}
+          onClick={() => openDialog('/budgets/create')}
         >
           <PackagePlus />
           <span>New Budget</span>
