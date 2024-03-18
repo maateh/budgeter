@@ -40,3 +40,8 @@ export interface ITransactionAPI {
   updateStatus(id: UUID, processed: boolean): Promise<Transaction>
   delete(id: UUID, undoPayment: boolean): Promise<Transaction>
 }
+
+export interface IBackupAPI {
+  create(budgetIds?: UUID[]): Promise<string>
+  restore(): Promise<unknown>
+}
