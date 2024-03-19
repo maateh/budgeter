@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { z } from "zod"
 
 // storage
@@ -35,7 +34,7 @@ class BackupHelper implements IBackupAPI {
     return this._instance
   }
 
-  public async create(budgetIds?: UUID[]): Promise<string> {
+  public async create(budgetIds?: string[]): Promise<string> {
     const data = await this.dataCollector(budgetIds)
     const file = this.generateFile(data, !!budgetIds)
     return URL.createObjectURL(file)
@@ -63,7 +62,7 @@ class BackupHelper implements IBackupAPI {
   }
 
   // helpers
-  private async dataCollector(budgetIds?: UUID[]): Promise<BackupData> {
+  private async dataCollector(budgetIds?: string[]): Promise<BackupData> {
     const budgets = await this.budgetStorageApi.getStorage().fetchFromStorage()
     const notes = await this.budgetNoteStorageApi.getStorage().fetchFromStorage()
     const transactions = await this.transactionStorageApi.getStorage().fetchFromStorage()

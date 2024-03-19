@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 
 // interfaces
 import { IStorageHelper } from "@/services/storage/interfaces"
@@ -6,7 +5,7 @@ import { IStorageHelper } from "@/services/storage/interfaces"
 // types
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
 
-class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
+class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
   private collection: StorageCollections
 
   public constructor(collection: StorageCollections) {
@@ -34,7 +33,7 @@ class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
       .every((key) => filterBy[key as keyof D] === entry[key as keyof D]))
   }
 
-  public async findById(id: UUID): Promise<D> {
+  public async findById(id: string): Promise<D> {
     const documents = await this.fetchFromStorage()
     return documents[id]
   }
@@ -56,7 +55,7 @@ class StorageHelper<D extends { id: UUID }> implements IStorageHelper<D> {
     })
   }
 
-  public async delete(id: UUID) {
+  public async delete(id: string) {
     const documents = await this.fetchFromStorage()
     delete documents[id]
     await this.saveToStorage(documents)

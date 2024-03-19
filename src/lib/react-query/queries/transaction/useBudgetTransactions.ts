@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useQuery } from "@tanstack/react-query"
 
 // api
@@ -12,7 +11,7 @@ type TransactionsQueryOptions = {
   filterBy?: Partial<Transaction>
 }
 
-const useBudgetTransactions = (budgetId: UUID, { params, filterBy }: TransactionsQueryOptions = {}) => {
+const useBudgetTransactions = (budgetId: string, { params, filterBy }: TransactionsQueryOptions = {}) => {
   const { api } = useAPI()
 
   return useQuery({

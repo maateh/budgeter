@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useParams } from "react-router-dom"
 
 // shadcn
@@ -9,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import TransactionForm from "@/components/form/transaction/TransactionForm"
 
 const CreateTransaction = () => {
-  const { budgetId } = useParams() as { budgetId?: UUID }
+  const { budgetId } = useParams() as { budgetId?: string }
 
   return (
     <DialogContent>

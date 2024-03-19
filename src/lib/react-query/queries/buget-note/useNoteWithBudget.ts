@@ -1,10 +1,9 @@
-import { UUID } from "crypto"
 import { useQuery } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-const useNoteWithBudget = (budgetId: UUID, noteId: UUID) => {
+const useNoteWithBudget = (budgetId: string, noteId: string) => {
   const { api } = useAPI()
 
   return useQuery({

@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useState } from "react"
 
 // icons
@@ -19,7 +18,7 @@ import { useDialog } from "@/hooks"
 import { Transaction } from "@/services/api/types"
 
 type TransactionsProps = {
-  budgetId?: UUID
+  budgetId?: string
 }
 
 const Transactions = ({ budgetId }: TransactionsProps) => {

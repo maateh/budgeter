@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { z } from "zod"
 
 // interfaces
@@ -35,7 +34,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return BudgetNoteStorageAPI._instance
   }
 
-  public async getByIdWithBudget(_: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }> {
+  public async getByIdWithBudget(_: string, noteId: string): Promise<BudgetNote & { budget: Budget }> {
     const note = await this.storage.findById(noteId)
     const budget = await this.budgetStorageApi.getById(note.budgetId)
     return { ...note, budget }
@@ -46,7 +45,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return paginate(notes, params)
   }
 
-  public async create(budgetId: UUID, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote> {
+  public async create(budgetId: string, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote> {
     return await this.storage.save({
       id: crypto.randomUUID(),
       budgetId,
@@ -56,7 +55,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async updateText(_: UUID, noteId: UUID, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote> {
+  public async updateText(_: string, noteId: string, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     return await this.storage.save({
@@ -66,7 +65,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async updateStatus(_: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote> {
+  public async updateStatus(_: string, noteId: string, status: BudgetNote['status']): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     return await this.storage.save({
@@ -76,7 +75,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async delete(_: UUID, noteId: UUID): Promise<BudgetNote> {
+  public async delete(_: string, noteId: string): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     await this.storage.delete(noteId)

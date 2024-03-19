@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useParams } from "react-router-dom"
 import { format } from "date-fns"
 
@@ -24,7 +23,7 @@ import { useDialog } from "@/hooks"
 import { formatWithCurrency } from "@/utils"
 
 const TransactionDetails = () => {
-  const { id } = useParams() as { id: UUID }
+  const { id } = useParams() as { id: string }
   const { openDialog } = useDialog()
 
   const { data: transaction, isLoading } = useTransactionWithBudget(id)

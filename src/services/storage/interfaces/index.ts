@@ -1,5 +1,4 @@
 // types
-import { UUID } from "crypto"
 import { StorageCollection } from "@/services/storage/types"
 
 export interface IStorageHelper<D> {
@@ -7,11 +6,11 @@ export interface IStorageHelper<D> {
   saveToStorage(documents: StorageCollection<D>): Promise<void>
 
   find(filterBy?: Partial<D>): Promise<D[]>
-  findById(id: UUID): Promise<D>
+  findById(id: string): Promise<D>
 
   save(document: D): Promise<D>
   bulkSave(documents: StorageCollection<D>): Promise<void>
 
-  delete(id: UUID): Promise<void>
+  delete(id: string): Promise<void>
   bulkDelete(filter: (doc: D) => boolean): Promise<void>
 }

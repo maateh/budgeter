@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { z } from "zod"
 
 // interfaces
@@ -35,7 +34,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     return TransactionStorageAPI._instance
   }
 
-  public async getByIdWithBudget(id: UUID): Promise<Transaction & { budget: Budget }> {
+  public async getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }> {
     const transaction = await this.storage.findById(id)
     const budget = await this.budgetStorageApi.getById(transaction.budgetId)
 
@@ -67,7 +66,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async create(data: z.infer<typeof transactionSchema>, executePayment = true): Promise<Transaction> {
     const transaction = await this.storage.save({
       id: crypto.randomUUID(),
-      budgetId: data.budgetId as UUID,
+      budgetId: data.budgetId,
       type: data.type as Transaction['type'],
       name: data.name,
       payment: data.payment as Transaction['payment'],
@@ -97,7 +96,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     return transaction
   }
 
-  public async updateStatus(id: UUID, processed: boolean): Promise<Transaction> {
+  public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
 
     transaction.processed = processed
@@ -122,7 +121,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     return await this.storage.save(transaction)
   }
 
-  public async delete(id: UUID, undoPayment = true): Promise<Transaction> {
+  public async delete(id: string, undoPayment = true): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
     await this.storage.delete(id)
 

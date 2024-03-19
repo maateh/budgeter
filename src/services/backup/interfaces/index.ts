@@ -1,7 +1,6 @@
-import { UUID } from "crypto"
 import { BackupData } from "@/services/backup/types"
 
 export interface IBackupHelper {
-  dataCollector(budgetIds?: UUID[]): Promise<BackupData>
+  dataCollector(budgetIds?: string[]): Promise<BackupData>
   generateFile(data: BackupData): File
 }

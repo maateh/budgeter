@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useNavigate, useParams } from "react-router-dom"
 
 // shadcn
@@ -10,7 +9,7 @@ import { useTransactionWithBudget } from "@/lib/react-query/queries"
 import { useDeleteTransaction } from "@/lib/react-query/mutations"
 
 const DeleteTransaction = () => {
-  const { id } = useParams() as { id: UUID }
+  const { id } = useParams() as { id: string }
   const navigate = useNavigate()
 
   const { data: transaction, isLoading } = useTransactionWithBudget(id)

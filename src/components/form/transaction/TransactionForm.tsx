@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 
 // components
 import Form from "@/components/form/Form"
@@ -15,7 +14,7 @@ import { TransactionFieldValues } from "@/components/form/transaction/types"
 import { transactionSchema } from "@/components/form/transaction/validations"
 
 type TransactionFormProps = {
-  budgetId?: UUID
+  budgetId?: string
 }
 
 const TransactionForm = ({ budgetId }: TransactionFormProps) => {

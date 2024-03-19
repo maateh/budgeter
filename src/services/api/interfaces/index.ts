@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { z } from "zod"
 
 // types
@@ -15,36 +14,36 @@ export interface ICurrencyAPI {
 }
 
 export interface IBudgetAPI {
-  getById(id: UUID): Promise<Budget>
+  getById(id: string): Promise<Budget>
   get(params?: PaginationParams, filterBy?: Partial<Budget>): Promise<Budget[]>
   getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>>
 
   create(data: z.infer<typeof budgetSchema>): Promise<Budget>
-  update(id: UUID, data: z.infer<typeof budgetSchema>): Promise<Budget>
-  delete(id: UUID): Promise<Budget>
+  update(id: string, data: z.infer<typeof budgetSchema>): Promise<Budget>
+  delete(id: string): Promise<Budget>
 }
 
 export interface IBudgetNoteAPI {
-  getByIdWithBudget(budgetId: UUID, noteId: UUID): Promise<BudgetNote & { budget: Budget }>
+  getByIdWithBudget(budgetId: string, noteId: string): Promise<BudgetNote & { budget: Budget }>
   getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<BudgetNote>>
 
-  create(budgetId: UUID, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote>
-  updateText(budgetId: UUID, noteId: UUID, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote>
-  updateStatus(budgetId: UUID, noteId: UUID, status: BudgetNote['status']): Promise<BudgetNote>
-  delete(budgetId: UUID, noteId: UUID): Promise<BudgetNote>
+  create(budgetId: string, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote>
+  updateText(budgetId: string, noteId: string, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote>
+  updateStatus(budgetId: string, noteId: string, status: BudgetNote['status']): Promise<BudgetNote>
+  delete(budgetId: string, noteId: string): Promise<BudgetNote>
 }
 
 export interface ITransactionAPI {
-  getByIdWithBudget(transactionId: UUID): Promise<Transaction & { budget: Budget }>
+  getByIdWithBudget(transactionId: string): Promise<Transaction & { budget: Budget }>
   get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]>
   getPaginatedWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
 
   create(data: z.infer<typeof transactionSchema>, executePayment: boolean): Promise<Transaction>
-  updateStatus(id: UUID, processed: boolean): Promise<Transaction>
-  delete(id: UUID, undoPayment: boolean): Promise<Transaction>
+  updateStatus(id: string, processed: boolean): Promise<Transaction>
+  delete(id: string, undoPayment: boolean): Promise<Transaction>
 }
 
 export interface IBackupAPI {
-  create(budgetIds?: UUID[]): Promise<string>
+  create(budgetIds?: string[]): Promise<string>
   restore(backupFile: z.infer<typeof backupFileSchema>): Promise<void>
 }

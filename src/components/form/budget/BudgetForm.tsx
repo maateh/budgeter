@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useParams } from "react-router-dom"
 
 // components
@@ -20,7 +19,7 @@ type BudgetFormProps = {
 }
 
 const BudgetForm = ({ type }: BudgetFormProps) => {
-  const { id } = useParams() as { id: UUID }
+  const { id } = useParams() as { id: string }
 
   const { data: budget, isLoading } = useBudget(id)
   

@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useNavigate, useParams } from "react-router-dom"
 
 // icons
@@ -16,7 +15,7 @@ import BudgetSummary from "./components/BudgetSummary"
 import { useBudget } from "@/lib/react-query/queries"
 
 const BudgetDetails = () => {
-  const { id } = useParams() as { id: UUID }
+  const { id } = useParams() as { id: string }
   const navigate = useNavigate()
 
   const { data: budget, isLoading } = useBudget(id)

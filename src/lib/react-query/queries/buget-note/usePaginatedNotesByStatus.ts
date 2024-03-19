@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useInfiniteQuery } from "@tanstack/react-query"
 
 // api
@@ -11,7 +10,7 @@ type PaginatedNotesByStatusQueryOptions = {
   params?: PaginationParams
 }
 
-const usePaginatedNotesByStatus = (budgetId: UUID, status: BudgetNote['status'], { params }: PaginatedNotesByStatusQueryOptions = {}) => {
+const usePaginatedNotesByStatus = (budgetId: string, status: BudgetNote['status'], { params }: PaginatedNotesByStatusQueryOptions = {}) => {
   const { api } = useAPI()
 
   return useInfiniteQuery({

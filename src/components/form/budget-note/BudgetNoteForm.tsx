@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 
 // components
 import Form from "@/components/form/Form"
@@ -14,7 +13,7 @@ import { BudgetNote } from "@/services/api/types"
 // validation
 import { budgetNoteSchema } from "@/components/form/budget-note/validations"
 
-type BudgetNoteFormProps = { budgetId: UUID } & ({
+type BudgetNoteFormProps = { budgetId: string } & ({
   type: 'create'
   note?: never
 } | {

@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useNavigate, useParams } from "react-router-dom"
 
 // shadcn
@@ -10,7 +9,7 @@ import { useNoteWithBudget } from "@/lib/react-query/queries"
 import { useDeleteNote } from "@/lib/react-query/mutations"
 
 const DeleteNote = () => {
-  const { budgetId, id } = useParams() as { budgetId: UUID, id: UUID }
+  const { budgetId, id } = useParams() as { budgetId: string, id: string }
   const navigate = useNavigate()
 
   const { data: note, isLoading } = useNoteWithBudget(budgetId, id)

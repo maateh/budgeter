@@ -1,10 +1,9 @@
-import { UUID } from "crypto"
 import { Budget, BudgetNote, Transaction } from "@/services/api/types"
 
 export type BackupData = {
-  budgets: Record<UUID, Budget>
-  transactions: Record<UUID, Transaction>
-  notes: Record<UUID, BudgetNote>
+  budgets: Record<string, Budget>
+  transactions: Record<string, Transaction>
+  notes: Record<string, BudgetNote>
 }
 
 export type BackupFormat = {

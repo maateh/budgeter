@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { z } from "zod"
 
 // interfaces
@@ -34,7 +33,7 @@ class BudgetStorageAPI implements IBudgetAPI {
     return BudgetStorageAPI._instance
   }
 
-  public async getById(id: UUID): Promise<Budget> {
+  public async getById(id: string): Promise<Budget> {
     return await this.storage.findById(id)
   }
 
@@ -62,7 +61,7 @@ class BudgetStorageAPI implements IBudgetAPI {
     })
   }
 
-  public async update(id: UUID, data: z.infer<typeof budgetSchema>): Promise<Budget> {
+  public async update(id: string, data: z.infer<typeof budgetSchema>): Promise<Budget> {
     const budget = await this.storage.findById(id)
 
     return await this.storage.save({
@@ -73,7 +72,7 @@ class BudgetStorageAPI implements IBudgetAPI {
     })
   }
 
-  public async delete(id: UUID): Promise<Budget> {
+  public async delete(id: string): Promise<Budget> {
     const budget = await this.storage.findById(id)
     await this.storage.delete(id)
 
@@ -91,7 +90,7 @@ class BudgetStorageAPI implements IBudgetAPI {
     return this.storage
   }
 
-  public async managePayments(budgetId: UUID, payments: Transaction['payment'][], action: 'execute' | 'undo') {
+  public async managePayments(budgetId: string, payments: Transaction['payment'][], action: 'execute' | 'undo') {
     const budget = await this.storage.findById(budgetId)
 
     payments.forEach((payment) => {

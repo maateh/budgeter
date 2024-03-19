@@ -1,4 +1,3 @@
-import { UUID } from "crypto"
 import { useNavigate } from "react-router-dom"
 
 // icons
@@ -21,7 +20,7 @@ import { Transaction } from "@/services/api/types"
 type TransactionListProps = {
   type: Transaction['type']
   processed: Transaction['processed']
-  budgetId?: UUID
+  budgetId?: string
   maxItemLimit?: number
 }
 
