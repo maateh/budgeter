@@ -11,8 +11,8 @@ import { useTransactionSubmit } from "@/components/form/transaction/hooks"
 import { Transaction } from "@/services/api/types"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
 
-// validation
-import { TransactionValidation } from "@/lib/validation"
+// validations
+import { transactionSchema } from "@/components/form/transaction/validations"
 
 type TransactionFormProps = {
   budgetId?: UUID
@@ -20,9 +20,9 @@ type TransactionFormProps = {
 
 const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   return (
-    <Form<TransactionFieldValues, typeof TransactionValidation>
+    <Form<TransactionFieldValues, typeof transactionSchema>
       type="create"
-      validationSchema={TransactionValidation}
+      validationSchema={transactionSchema}
       defaultValues={{
         budgetId: budgetId || '',
         type: 'default' as Transaction['type'],

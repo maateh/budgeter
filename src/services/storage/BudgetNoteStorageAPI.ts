@@ -8,7 +8,7 @@ import { IBudgetNoteAPI } from "@/services/api/interfaces"
 import { Budget, BudgetNote, Pagination, PaginationParams } from "@/services/api/types"
 
 // validations
-import { BudgetNoteValidation } from "@/lib/validation"
+import { budgetNoteSchema } from "@/components/form/budget-note/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -46,7 +46,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return paginate(notes, params)
   }
 
-  public async create(budgetId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
+  public async create(budgetId: UUID, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote> {
     return await this.storage.save({
       id: crypto.randomUUID(),
       budgetId,
@@ -56,7 +56,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     })
   }
 
-  public async updateText(_: UUID, noteId: UUID, data: z.infer<typeof BudgetNoteValidation>): Promise<BudgetNote> {
+  public async updateText(_: UUID, noteId: UUID, data: z.infer<typeof budgetNoteSchema>): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
     return await this.storage.save({

@@ -8,7 +8,7 @@ import { ITransactionAPI } from "@/services//api/interfaces"
 import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
 
 // validations
-import { TransactionValidation } from "@/lib/validation"
+import { transactionSchema } from "@/components/form/transaction/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -64,7 +64,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
   }
 
-  public async create(data: z.infer<typeof TransactionValidation>, executePayment = true): Promise<Transaction> {
+  public async create(data: z.infer<typeof transactionSchema>, executePayment = true): Promise<Transaction> {
     const transaction = await this.storage.save({
       id: crypto.randomUUID(),
       budgetId: data.budgetId as UUID,
