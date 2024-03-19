@@ -23,7 +23,6 @@ const RestoreBackupForm = () => {
     <Form<RestoreBackupFieldValues, typeof backupFileSchema>
       type="create"
       validationSchema={backupFileSchema}
-      defaultValues={{}} // TODO: make it optional
       useSubmit={useRestoreBackupSubmit}
       customButtonRequired
     >
@@ -36,7 +35,11 @@ const RestoreBackupForm = () => {
               <FormItem>
                 <FormLabel>Select a Backup File</FormLabel>
                 <FormControl>
-                  <FileInput setFileContent={field.onChange} />
+                  <FileInput
+                    setFileContent={(value) => {
+                      field.onChange(JSON.parse(value as string))
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P = object> = {
   type: 'create' | 'edit',
   customButtonRequired?: boolean,
-  defaultValues: DefaultValues<FV>,
+  defaultValues?: DefaultValues<FV>,
   validationSchema: Z,
   useSubmit: (form: UseFormReturn<FV>, props: P) => {
     onSubmit: SubmitHandler<FV>
