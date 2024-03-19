@@ -14,3 +14,4 @@ export { default as useDeleteTransaction } from './transaction/useDeleteTransact
 
 // backup
 export { default as useCreateBackup } from './backup/useCreateBackup'
+export { default as useRestoreBackup } from './backup/useRestoreBackup'

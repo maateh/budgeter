@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-const useBackup = () => {
+const useCreateBackup = () => {
   const { api } = useAPI()
 
   return useMutation({
@@ -12,4 +12,4 @@ const useBackup = () => {
   })
 }
 
-export default useBackup
+export default useCreateBackup

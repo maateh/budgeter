@@ -1,4 +1,5 @@
 import { UUID } from "crypto"
+import { z } from "zod"
 
 // storage
 import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
@@ -10,6 +11,9 @@ import { BackupData, BackupFormat } from "@/services/backup/types"
 
 // interfaces
 import { IBackupAPI } from "@/services/api/interfaces"
+
+// validations
+import { backupFileSchema } from "@/components/form/backup/validations"
 
 class BackupHelper implements IBackupAPI {
   public static _instance: BackupHelper
@@ -37,7 +41,26 @@ class BackupHelper implements IBackupAPI {
     return URL.createObjectURL(file)
   }
 
-  public async restore() {}
+  public async restore({ fileContent }: z.infer<typeof backupFileSchema>): Promise<void> {
+    const { data, complete } = fileContent
+
+    // WIP
+
+    if (complete) {
+      const { budgets, transactions, notes } = data
+
+      await this.budgetStorageApi.getStorage().saveToStorage(budgets)
+      await this.transactionStorageApi.getStorage().saveToStorage(transactions)
+      await this.budgetNoteStorageApi.getStorage().saveToStorage(notes)
+      return
+    }
+
+    // TODO: restore logic
+    // await this.budgetStorageApi.getStorage()
+    //   .bulkDelete((doc) => Object.keys(data.budgets).some((key) => key === doc.id))
+
+    // await this.budgetStorageApi.getStorage().saveToStorage
+  }
 
   // helpers
   private async dataCollector(budgetIds?: UUID[]): Promise<BackupData> {

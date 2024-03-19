@@ -1,5 +1,3 @@
-import { UUID } from "crypto"
-
 // pagination
 export type Pagination<T> = {
   data: T[]
@@ -20,7 +18,7 @@ export type Currencies = {
 }
 
 export type Budget = {
-  id: UUID
+  id: string
   name: string
   type: 'income' | 'expense'
   balance: {
@@ -34,8 +32,8 @@ export type Budget = {
 }
 
 export type BudgetNote = {
-  id: UUID
-  budgetId: UUID
+  id: string
+  budgetId: string
   text: string
   status: 'open' | 'closed'
   createdAt: Date
@@ -44,8 +42,8 @@ export type BudgetNote = {
 }
 
 export type Transaction = {
-  id: UUID
-  budgetId: UUID
+  id: string
+  budgetId: string
   type: 'default' | 'borrow'
   name: string
   payment: {

@@ -5,9 +5,10 @@ import { z } from "zod"
 import { Budget, BudgetNote, Currencies, Pagination, PaginationParams, Transaction } from "@/services/api/types"
 
 // validations
-import { budgetSchema } from "@/components/form/budget/validations"
+import { budgetSchema } from "@/components/form/budget/validation"
 import { budgetNoteSchema } from "@/components/form/budget-note/validations"
 import { transactionSchema } from "@/components/form/transaction/validations"
+import { backupFileSchema } from "@/components/form/backup/validations"
 
 export interface ICurrencyAPI {
   get(): Promise<Currencies>
@@ -45,5 +46,5 @@ export interface ITransactionAPI {
 
 export interface IBackupAPI {
   create(budgetIds?: UUID[]): Promise<string>
-  restore(): Promise<unknown>
+  restore(backupFile: z.infer<typeof backupFileSchema>): Promise<void>
 }
