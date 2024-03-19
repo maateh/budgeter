@@ -2,11 +2,11 @@ import { Route, Routes } from "react-router-dom"
 
 // layouts
 import RootLayout from "@/_root/RootLayout"
-import { Home, Transactions, Wishlist, Splitter, BudgetDetails } from "@/_root/pages"
+import { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } from "@/_root/pages"
 
 import DialogLayout from "@/_dialogs/DialogLayout"
 import AlertLayout from "@/_dialogs/AlertLayout"
-import { BackupManager, Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
+import { Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -25,6 +25,7 @@ const App = () => {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/splitter" element={<Splitter />} />
+          <Route path="/backup" element={<Backup />} />
           <Route path="*" element={<p>Page not found!</p>} />
         </Route>
       </Routes>
@@ -43,8 +44,6 @@ const App = () => {
               <Route path="create/:budgetId?" element={<CreateTransaction />} />
               <Route path=":id" element={<TransactionDetails />} />
             </Route>
-
-            <Route path="/backups" element={<BackupManager />} />
           </Route>
 
           <Route path="/" element={<AlertLayout />}>

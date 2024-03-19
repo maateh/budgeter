@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 // icons
 import { History } from "lucide-react"
 
@@ -10,11 +12,8 @@ import Transactions from "@/components/shared/transaction/Transactions"
 import BudgetSummary from "./components/BudgetSummary"
 import Budgets from "./components/Budgets"
 
-// hooks
-import { useDialog } from "@/hooks"
-
 const Home = () => {
-  const { openDialog } = useDialog()
+  const navigate = useNavigate()
 
   return (
     <div className="page-wrapper">
@@ -25,7 +24,7 @@ const Home = () => {
 
         <Button className="ml-auto icon-wrapper"
           variant="outline"
-          onClick={() => openDialog('/backups')}
+          onClick={() => navigate('/backup')}
         >
           <History />
           Manage Backups
