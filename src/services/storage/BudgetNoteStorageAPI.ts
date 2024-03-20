@@ -78,7 +78,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   public async delete(_: string, noteId: string): Promise<BudgetNote> {
     const note = await this.storage.findById(noteId)
 
-    await this.storage.delete(noteId)
+    await this.storage.deleteById(noteId)
     return note
   }
 

@@ -5,6 +5,9 @@ import { IStorageHelper } from "@/services/storage/interfaces"
 // types
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
 
+// utils
+import { filter } from "@/utils"
+
 class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
   private collection: StorageCollections
 
@@ -24,13 +27,7 @@ class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
   public async find(filterBy?: Partial<D>): Promise<D[]> {
     const collectionDocs = await this.fetchFromStorage()
     const documents = Object.values(collectionDocs)
-
-    if (!filterBy) {
-      return documents
-    }
-
-    return documents.filter((entry: D) => Object.keys(filterBy)
-      .every((key) => filterBy[key as keyof D] === entry[key as keyof D]))
+    return filter(documents, filterBy)
   }
 
   public async findById(id: string): Promise<D> {
@@ -55,20 +52,25 @@ class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
     })
   }
 
-  public async delete(id: string) {
+  public async deleteById(id: string) {
     const documents = await this.fetchFromStorage()
     delete documents[id]
     await this.saveToStorage(documents)
   }
 
-  public async bulkDelete(filter: (doc: D) => boolean) {
+  public async bulkDelete(filter?: (document: D) => boolean) {
     const documents = await this.fetchFromStorage()
 
     Object.values(documents)
-      .filter(filter)
+      .filter(filter || (() => true))
       .forEach((doc) => delete documents[doc.id])
 
     await this.saveToStorage(documents)
+  }
+
+  public async restore(documents: StorageCollection<D>, filter?: (document: D) => boolean): Promise<void> {
+    await this.bulkDelete(filter)
+    await this.bulkSave(documents)
   }
 }
 

@@ -14,6 +14,9 @@ import { IBackupAPI } from "@/services/api/interfaces"
 // validations
 import { backupFileSchema } from "@/components/form/backup/validations"
 
+// utils
+import { filterObject } from "@/utils"
+
 class BackupHelper implements IBackupAPI {
   public static _instance: BackupHelper
 
@@ -42,23 +45,29 @@ class BackupHelper implements IBackupAPI {
 
   public async restore({ fileContent }: z.infer<typeof backupFileSchema>): Promise<void> {
     const { data, complete } = fileContent
-
-    // WIP
+    const { budgets, transactions, notes } = data
 
     if (complete) {
-      const { budgets, transactions, notes } = data
-
       await this.budgetStorageApi.getStorage().saveToStorage(budgets)
       await this.transactionStorageApi.getStorage().saveToStorage(transactions)
       await this.budgetNoteStorageApi.getStorage().saveToStorage(notes)
       return
     }
 
-    // TODO: restore logic
-    // await this.budgetStorageApi.getStorage()
-    //   .bulkDelete((doc) => Object.keys(data.budgets).some((key) => key === doc.id))
+    await this.budgetStorageApi.getStorage()
+      .restore(budgets,
+        (budget) => Object.keys(budgets).some((key) => key === budget.id)
+      )
 
-    // await this.budgetStorageApi.getStorage().saveToStorage
+    await this.transactionStorageApi.getStorage()
+      .restore(transactions,
+        (tr) => Object.values(budgets).some((budget) => budget.id === tr.id)
+      )
+
+    await this.budgetNoteStorageApi.getStorage()
+      .restore(notes,
+        (note) => Object.values(budgets).some((budget) => budget.id === note.id)
+      )
   }
 
   // helpers
@@ -67,7 +76,13 @@ class BackupHelper implements IBackupAPI {
     const notes = await this.budgetNoteStorageApi.getStorage().fetchFromStorage()
     const transactions = await this.transactionStorageApi.getStorage().fetchFromStorage()
 
-    // TODO: filter by budgetIds
+    if (budgetIds) {
+      return {
+        budgets: filterObject(budgets, (budget) => budgetIds.includes(budget.id)),
+        transactions: filterObject(transactions, (tr) => budgetIds.includes(tr.budgetId)),
+        notes: filterObject(notes, (note) => budgetIds.includes(note.budgetId)),
+      }
+    }
 
     return { budgets, transactions, notes }
   }

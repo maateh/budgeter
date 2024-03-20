@@ -11,6 +11,8 @@ export interface IStorageHelper<D> {
   save(document: D): Promise<D>
   bulkSave(documents: StorageCollection<D>): Promise<void>
 
-  delete(id: string): Promise<void>
-  bulkDelete(filter: (doc: D) => boolean): Promise<void>
+  deleteById(id: string): Promise<void>
+  bulkDelete(filter?: (document: D) => boolean): Promise<void>
+
+  restore(documents: StorageCollection<D>, filter?: (document: D) => boolean): Promise<void>
 }

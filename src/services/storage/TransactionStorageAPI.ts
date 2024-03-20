@@ -123,7 +123,7 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async delete(id: string, undoPayment = true): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
-    await this.storage.delete(id)
+    await this.storage.deleteById(id)
 
     if (!undoPayment) return transaction
 
