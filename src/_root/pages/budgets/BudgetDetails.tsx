@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 
 // icons
-import { History } from "lucide-react"
+import { Archive } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -31,7 +31,7 @@ const BudgetDetails = () => {
           variant="outline"
           onClick={() => navigate('/backup')}
         >
-          <History />
+          <Archive />
           Manage Backups
         </Button>
       </div>

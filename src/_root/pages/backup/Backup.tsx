@@ -9,7 +9,7 @@ const Backup = () => {
   return (
     <div className="page-wrapper">
       <h1>
-        Backup <span className="text-destructive">Manager</span>
+        Backup <span className="text-teal-600 dark:text-teal-500">Manager</span>
       </h1>
 
       <Separator className="my-6" />

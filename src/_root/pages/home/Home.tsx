@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 // icons
-import { History } from "lucide-react"
+import { Archive } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,7 @@ const Home = () => {
           variant="outline"
           onClick={() => navigate('/backup')}
         >
-          <History />
+          <Archive />
           Manage Backups
         </Button>
       </div>

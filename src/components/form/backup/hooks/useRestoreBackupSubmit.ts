@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
@@ -7,6 +8,8 @@ import { useRestoreBackup } from "@/lib/react-query/mutations"
 import { RestoreBackupFieldValues } from "@/components/form/backup/types"
 
 const useRestoreBackupSubmit = (form: UseFormReturn<RestoreBackupFieldValues>) => {
+  const navigate = useNavigate()
+
   const { mutateAsync: restoreBackup, isPending } = useRestoreBackup()
 
   const onSubmit: SubmitHandler<RestoreBackupFieldValues> = async (values) => {
@@ -15,6 +18,9 @@ const useRestoreBackupSubmit = (form: UseFormReturn<RestoreBackupFieldValues>) =
       await restoreBackup(values)
 
       form.reset()
+      navigate('/')
+
+      // TODO: toast
     } catch (err) {
       console.error(err)
     }

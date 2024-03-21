@@ -27,12 +27,12 @@ const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) =
   const { control } = form
 
   const typeField = useWatch({
-    control: control,
+    control,
     name: 'type'
   })
-
+  
   const processedField = useWatch({
-    control: control,
+    control,
     name: 'processed'
   })
 

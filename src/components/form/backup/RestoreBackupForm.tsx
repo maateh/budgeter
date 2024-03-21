@@ -1,13 +1,6 @@
-// icons
-import { ArchiveRestore } from "lucide-react"
-
-// shadcn
-import { Button } from "@/components/ui/button"
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-
 // components
 import Form from "@/components/form/Form"
-import FileInput from "@/components/input/FileInput"
+import RestoreBackupFormFields from "@/components/form/backup/RestoreBackupFormFields"
 
 // hooks
 import { useRestoreBackupSubmit } from "@/components/form/backup/hooks"
@@ -26,32 +19,7 @@ const RestoreBackupForm = () => {
       useSubmit={useRestoreBackupSubmit}
       customButtonRequired
     >
-      {({ control }) => (
-        <>
-          <FormField
-            control={control}
-            name="fileContent"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select a Backup File</FormLabel>
-                <FormControl>
-                  <FileInput
-                    setFileContent={(value) => {
-                      field.onChange(JSON.parse(value as string))
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button className="w-fit mx-auto icon-wrapper">
-            <ArchiveRestore strokeWidth={2.5} />
-            Restore
-          </Button>
-        </>
-      )}
+      {(form) => <RestoreBackupFormFields form={form} />}
     </Form>
   )
 }
