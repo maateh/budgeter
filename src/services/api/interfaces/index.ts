@@ -2,9 +2,10 @@ import { z } from "zod"
 
 // types
 import { Budget, BudgetNote, Currencies, Pagination, PaginationParams, Transaction } from "@/services/api/types"
+import { BackupFileContent } from "@/services/backup/types"
 
 // validations
-import { budgetSchema } from "@/components/form/budget/validation"
+import { budgetSchema } from "@/components/form/budget/validations"
 import { budgetNoteSchema } from "@/components/form/budget-note/validations"
 import { transactionSchema } from "@/components/form/transaction/validations"
 import { backupFileSchema } from "@/components/form/backup/validations"
@@ -44,6 +45,6 @@ export interface ITransactionAPI {
 }
 
 export interface IBackupAPI {
-  create(budgetIds?: string[]): Promise<string>
+  create(budgetIds?: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }>
   restore(backupFile: z.infer<typeof backupFileSchema>): Promise<void>
 }

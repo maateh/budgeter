@@ -6,9 +6,12 @@ export type BackupData = {
   notes: Record<string, BudgetNote>
 }
 
-export type BackupFormat = {
+export type BackupInfo = {
   version: number
   backup_date: Date
   complete: boolean
+}
+
+export type BackupFileContent = BackupInfo & {
   data: BackupData
 }

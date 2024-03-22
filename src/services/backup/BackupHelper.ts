@@ -6,7 +6,7 @@ import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
 import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
 
 // types
-import { BackupData, BackupFormat } from "@/services/backup/types"
+import { BackupData, BackupFileContent } from "@/services/backup/types"
 
 // interfaces
 import { IBackupAPI } from "@/services/api/interfaces"
@@ -37,10 +37,15 @@ class BackupHelper implements IBackupAPI {
     return this._instance
   }
 
-  public async create(budgetIds?: string[]): Promise<string> {
-    const data = await this.dataCollector(budgetIds)
-    const file = this.generateFile(data, !!budgetIds)
-    return URL.createObjectURL(file)
+  public async create(budgetIds?: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }> {
+    const data = await this.collectData(budgetIds)
+    const fileContent = this.convertToFileContent(data, !!budgetIds)
+    const file = this.generateFile(fileContent)
+    
+    return {
+      downloadUrl: URL.createObjectURL(file),
+      fileContent
+    }
   }
 
   public async restore({ fileContent }: z.infer<typeof backupFileSchema>): Promise<void> {
@@ -71,7 +76,7 @@ class BackupHelper implements IBackupAPI {
   }
 
   // helpers
-  private async dataCollector(budgetIds?: string[]): Promise<BackupData> {
+  private async collectData(budgetIds?: string[]): Promise<BackupData> {
     const budgets = await this.budgetStorageApi.getStorage().fetchFromStorage()
     const notes = await this.budgetNoteStorageApi.getStorage().fetchFromStorage()
     const transactions = await this.transactionStorageApi.getStorage().fetchFromStorage()
@@ -87,14 +92,16 @@ class BackupHelper implements IBackupAPI {
     return { budgets, transactions, notes }
   }
 
-  private generateFile(data: BackupData, complete: boolean): File {
-    const backup: BackupFormat = {
+  private convertToFileContent(data: BackupData, complete: boolean): BackupFileContent {
+    return {
       version: 0.1,
       backup_date: new Date(),
       complete,
       data
     }
-    
+  }
+
+  private generateFile(backup: BackupFileContent): File {   
     return new File([JSON.stringify(backup)], 'backup.json', {
       type: 'application/json'
     })
