@@ -37,9 +37,9 @@ class BackupHelper implements IBackupAPI {
     return this._instance
   }
 
-  public async create(budgetIds?: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }> {
-    const data = await this.collectData(budgetIds)
-    const fileContent = this.convertToFileContent(data, !!budgetIds)
+  public async create(complete: boolean, budgetIds: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }> {
+    const data = await this.collectData(complete, budgetIds)
+    const fileContent = this.convertToFileContent(data, complete)
     const file = this.generateFile(fileContent)
     
     return {
@@ -76,20 +76,20 @@ class BackupHelper implements IBackupAPI {
   }
 
   // helpers
-  private async collectData(budgetIds?: string[]): Promise<BackupData> {
+  private async collectData(complete: boolean, budgetIds: string[]): Promise<BackupData> {
     const budgets = await this.budgetStorageApi.getStorage().fetchFromStorage()
     const notes = await this.budgetNoteStorageApi.getStorage().fetchFromStorage()
     const transactions = await this.transactionStorageApi.getStorage().fetchFromStorage()
 
-    if (budgetIds) {
-      return {
-        budgets: filterObject(budgets, (budget) => budgetIds.includes(budget.id)),
-        transactions: filterObject(transactions, (tr) => budgetIds.includes(tr.budgetId)),
-        notes: filterObject(notes, (note) => budgetIds.includes(note.budgetId)),
-      }
+    if (complete) {
+      return { budgets, transactions, notes }
     }
 
-    return { budgets, transactions, notes }
+    return {
+      budgets: filterObject(budgets, (budget) => budgetIds.includes(budget.id)),
+      transactions: filterObject(transactions, (tr) => budgetIds.includes(tr.budgetId)),
+      notes: filterObject(notes, (note) => budgetIds.includes(note.budgetId)),
+    }
   }
 
   private convertToFileContent(data: BackupData, complete: boolean): BackupFileContent {

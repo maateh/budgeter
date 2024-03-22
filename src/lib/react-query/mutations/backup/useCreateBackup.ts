@@ -8,7 +8,10 @@ const useCreateBackup = () => {
 
   return useMutation({
     mutationKey: ['createBackup'],
-    mutationFn: async () => api.backup.create()
+    mutationFn: async ({ complete, budgetIds }: {
+      complete: boolean
+      budgetIds: string[]
+    }) => api.backup.create(complete, budgetIds)
   })
 }
 

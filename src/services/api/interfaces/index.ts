@@ -45,6 +45,6 @@ export interface ITransactionAPI {
 }
 
 export interface IBackupAPI {
-  create(budgetIds?: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }>
+  create(complete: boolean, budgetIds: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }>
   restore(backupFile: z.infer<typeof backupFileSchema>): Promise<void>
 }

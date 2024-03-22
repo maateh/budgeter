@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Table as RTable } from "@tanstack/react-table"
 
 // icons
 import { PackageCheck, PackageOpen } from "lucide-react"
@@ -37,9 +37,13 @@ const BackupTable = () => {
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
   const { data: backup, isPending: isBackupPending, mutateAsync: createBackup } = useCreateBackup()
 
-  const handleCreate = async () => {
+  const handleCreate = async (table: RTable<Budget>) => {
+    const complete = table.getIsAllRowsSelected()
+    const budgetIds = table.getSelectedRowModel()
+      .rows.map(({ original }) => original.id)
+
     try {
-      await createBackup()
+      await createBackup({ complete, budgetIds })
     } catch (err) {
       console.error(err)
     }
@@ -52,7 +56,7 @@ const BackupTable = () => {
           <DataTablePagination table={table} />
 
           <Button className="w-fit mx-auto icon-wrapper md:ml-2"
-            onClick={handleCreate}
+            onClick={() => handleCreate(table)}
             disabled={isBackupPending || !!backup}
           >
             <PackageOpen />
