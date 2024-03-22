@@ -1,7 +1,7 @@
 import { ColumnDef, Table as RTable } from "@tanstack/react-table"
 
 // icons
-import { PackageCheck, PackageOpen } from "lucide-react"
+import { PackageCheck, PackageOpen, X } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -48,7 +48,12 @@ const columns: ColumnDef<Budget>[] = [
 
 const CreateBackup = () => {
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
-  const { data: backup, isPending: isBackupPending, mutateAsync: createBackup } = useCreateBackup()
+  const {
+    data: backup,
+    isPending: isBackupPending,
+    mutateAsync: createBackup,
+    reset: resetBackup
+  } = useCreateBackup()
 
   const handleCreate = async (table: RTable<Budget>) => {
     const complete = table.getIsAllRowsSelected()
@@ -68,17 +73,27 @@ const CreateBackup = () => {
         <div className="my-2 py-3 px-2 sticky bottom-1.5 space-y-2.5 bg-primary rounded-3xl">
           <DataTablePagination table={table} />
 
-          <Button className="w-fit mx-auto icon-wrapper md:ml-2"
-            onClick={() => handleCreate(table)}
-            disabled={
-              isBackupPending ||
-              !!backup ||
-              (!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected())
-            }
-          >
-            <PackageOpen />
-            Create a Backup
-          </Button>
+          <div className="mx-2 flex justify-between items-center">
+            <Button className="icon-wrapper"
+              onClick={() => handleCreate(table)}
+              disabled={
+                isBackupPending ||
+                !!backup ||
+                (!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected())
+              }
+            >
+              <PackageOpen />
+              Create a Backup
+            </Button>
+
+            <Button className={`cursor-pointer ${backup ? 'block' : 'hidden'}`}
+              size="icon"
+              variant="icon"
+              onClick={resetBackup}
+            >
+              <X size={16} />
+            </Button>
+          </div>
 
           {!isBackupPending ? backup && (
             <div className="mx-2">
