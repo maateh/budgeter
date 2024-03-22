@@ -7,6 +7,9 @@ import { PackageCheck, PackageOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DataTable, DataTablePagination, getSelectionColumn } from "@/components/ui/data-table"
 
+// components
+import BackupInfo from "@/components/shared/backup/BackupInfo"
+
 // hooks
 import { useBudgets } from "@/lib/react-query/queries"
 import { useCreateBackup } from "@/lib/react-query/mutations"
@@ -32,7 +35,7 @@ const columns: ColumnDef<Budget>[] = [
 
 const BackupTable = () => {
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
-  const { data: url, isPending: isBackupPending, mutateAsync: createBackup } = useCreateBackup()
+  const { data: backup, isPending: isBackupPending, mutateAsync: createBackup } = useCreateBackup()
 
   const handleCreate = async () => {
     try {
@@ -45,29 +48,32 @@ const BackupTable = () => {
   return !isBudgetsLoading && budgets && (
     <DataTable columns={columns} data={budgets}>
       {(table) => (
-        <>
-          <DataTablePagination table={table} showOnlyIfRequired />
+        <div className="my-2 py-3 px-2 sticky bottom-1.5 space-y-2.5 bg-primary rounded-3xl">
+          <DataTablePagination table={table} />
 
-          {/* TODO: implement footer with backup actions */}
-          {/* <Button className="w-fit icon-wrapper"
+          <Button className="w-fit mx-auto icon-wrapper md:ml-2"
             onClick={handleCreate}
+            disabled={isBackupPending || !!backup}
           >
             <PackageOpen />
             Create a Backup
           </Button>
 
-          {!isBackupPending ? url && (
-            <a className="w-fit px-3.5 py-1.5 rounded-full border-2 icon-wrapper"
-              href={url}
-              download
-            >
-              <PackageCheck />
-              Your Backup is ready to save
-            </a>
+          {!isBackupPending ? backup && (
+            <div className="mx-2">
+              <BackupInfo {...backup.fileContent} />
+              <a className="w-fit ml-auto px-3.5 py-1.5 font-medium font-heading bg-foreground text-background rounded-full icon-wrapper"
+                href={backup.downloadUrl}
+                download
+              >
+                <PackageCheck />
+                Your backup is ready to save
+              </a>
+            </div>
           ) : (
-            <>Loading...</> // TODO: skeleton
-          )} */}
-        </>
+            <>Generating the backup...</> // TODO: skeleton
+          )}
+        </div>
       )}
     </DataTable>
   )

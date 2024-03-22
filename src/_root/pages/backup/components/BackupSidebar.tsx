@@ -3,8 +3,8 @@ import RestoreBackupForm from "@/components/form/backup/RestoreBackupForm"
 
 const BackupSidebar = () => {
   return (
-    <div className="h-fit px-6 py-5 bg-secondary rounded-[2rem]">
-      <h2>
+    <div className="h-fit px-6 py-5 bg-primary rounded-[2rem]">
+      <h2 className="indent-border">
         <span className="text-destructive overline">Restore</span> Your Backup
       </h2>
 
