@@ -9,6 +9,8 @@ import { DataTable, DataTablePagination, getSelectionColumn } from "@/components
 
 // components
 import BackupInfo from "@/components/shared/backup/BackupInfo"
+import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
+import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 
 // hooks
 import { useBudgets } from "@/lib/react-query/queries"
@@ -21,19 +23,30 @@ const columns: ColumnDef<Budget>[] = [
   getSelectionColumn(),
   {
     accessorKey: "name",
-    header: "Budget Name"
+    header: "Budget Name",
+    cell: ({ row }) => <BudgetNameBadge budget={row.original} />
   },
   {
     accessorKey: "balance.current",
-    header: "Balance"
+    header: "Balance",
+    cell: ({ row }) => (
+      <BalanceBadge className="px-3 py-1 min-w-28"
+        separatorProps={{ className: "h-4" }}
+        orientation="vertical"
+        size="xs"
+        iconSize={18}
+        balance={row.original.balance}
+      />
+    )
   },
-  {
-    accessorKey: "type",
-    header: "Type"
-  }
+  // TODO: it might not be necessary
+  // {
+  //   accessorKey: "type",
+  //   header: "Type"
+  // }
 ]
 
-const BackupTable = () => {
+const CreateBackup = () => {
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
   const { data: backup, isPending: isBackupPending, mutateAsync: createBackup } = useCreateBackup()
 
@@ -57,7 +70,11 @@ const BackupTable = () => {
 
           <Button className="w-fit mx-auto icon-wrapper md:ml-2"
             onClick={() => handleCreate(table)}
-            disabled={isBackupPending || !!backup}
+            disabled={
+              isBackupPending ||
+              !!backup ||
+              (!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected())
+            }
           >
             <PackageOpen />
             Create a Backup
@@ -83,4 +100,4 @@ const BackupTable = () => {
   )
 }
 
-export default BackupTable
+export default CreateBackup

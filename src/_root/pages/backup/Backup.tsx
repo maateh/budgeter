@@ -2,8 +2,8 @@
 import { Separator } from "@/components/ui/separator"
 
 // components
-import BackupSidebar from "./components/BackupSidebar"
-import BackupTable from "./components/BackupTable"
+import RestoreBackup from "./components/RestoreBackup"
+import CreateBackup from "./components/CreateBackup"
 
 const Backup = () => {
   return (
@@ -16,11 +16,11 @@ const Backup = () => {
 
       <div className="flex flex-col justify-between gap-x-8 gap-y-6 md:flex-row">
         <section className="min-w-56 md:w-2/5 md:min-w-72 md:max-w-lg">
-          <BackupSidebar />
+          <RestoreBackup />
         </section>
 
         <section className="flex-1 section-wrapper md:w-3/5">
-          <BackupTable />
+          <CreateBackup />
         </section>
       </div>
     </div>
