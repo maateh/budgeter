@@ -24,19 +24,21 @@ const BackupInfo = ({ backup_date, complete, version, data, className, ...props 
       {...props}
     >
       {complete ? (
-        <InfoBadge className="max-w-md mx-auto text-xs border border-primary bg-destructive/85 hover:bg-destructive/90"
+        <InfoBadge className="max-w-md mx-auto text-xs bg-destructive/35 hover:bg-destructive/40"
+          separatorProps={{ className: "hidden" }}
           valueProps={{ className: "font-medium break-words" }}
           variant="destructive"
-          icon={<FileWarning />}
+          icon={<FileWarning className="text-destructive" />}
           value="This backup is a complete system backup. If you restore it, you will override every current data."
         />
       ) : (
         <div className="flex flex-col items-center gap-y-2.5">
-          <InfoBadge className="max-w-md mx-auto text-xs border border-destructive bg-destructive/15 text-muted-foreground hover:bg-destructive/20"
+          <InfoBadge className="max-w-md mx-auto text-xs"
             separatorProps={{ className: "hidden" }}
             valueProps={{ className: "font-medium break-words" }}
+            variant="destructive"
             icon={<FileWarning className="text-destructive" />}
-            value="If you restore this backup, the following budgets will be overridden"
+            value="If you restore this backup, the following budgets will be overridden:"
           />
 
           <ul className="flex flex-wrap justify-center items-center gap-x-2.5 gap-y-2">
