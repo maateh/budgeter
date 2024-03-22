@@ -14,7 +14,7 @@
     --popover-foreground: 0 0% 13%;
     --primary: 12 5% 79%;
     --primary-foreground: 0 0% 13%;
-    --secondary: 17 4% 68%;
+    --secondary: 20 2% 73%;
     --secondary-foreground: 0 0% 13%;
     --muted: 0 3% 56%;
     --muted-foreground: 20 2% 25%;
@@ -107,7 +107,7 @@
 
   /* CUSTOM BORDERS */
   .indent-border {
-    @apply pl-2 border-l-4 rounded;
+    @apply pl-2.5 border-l-4 rounded;
   }
   .border-sm {
     @apply rounded-sm rounded-tl-[18px] rounded-br-[12px];

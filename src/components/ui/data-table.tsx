@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<D, V> {
   columns: ColumnDef<D, V>[]
@@ -95,14 +96,17 @@ function DataTable<D, V>({ data, columns, children }: DataTableProps<D, V>) {
   )
 }
 
-interface DataTablePaginationProps<D> {
-  table: RTable<D>
-  showOnlyIfRequired?: boolean
+interface DataTablePaginationProps<D>
+  extends React.HTMLAttributes<HTMLDivElement> {
+    table: RTable<D>
+    showOnlyIfRequired?: boolean
 }
  
-function DataTablePagination<D>({ table, showOnlyIfRequired }: DataTablePaginationProps<D>) {
-  return !showOnlyIfRequired || (table.getCanPreviousPage() || table.getCanNextPage()) && (
-    <div className="flex items-center justify-between px-2">
+function DataTablePagination<D>({
+  table, showOnlyIfRequired, className, ...props
+}: DataTablePaginationProps<D>) {
+  return (!showOnlyIfRequired || (table.getCanPreviousPage() || table.getCanNextPage())) && (
+    <div className={cn("flex items-center justify-between px-2", className)} {...props}>
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -129,18 +133,16 @@ function DataTablePagination<D>({ table, showOnlyIfRequired }: DataTablePaginati
             <span className="sr-only">Go to previous page</span>
             <ChevronLeftIcon className="h-4 w-4" />
           </Button>
-          <Button
+          <Button className="h-8 w-8 p-0"
             variant="outline"
-            className="h-8 w-8 p-0"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
-          <Button
+          <Button className="hidden h-8 w-8 p-0 lg:flex"
             variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
