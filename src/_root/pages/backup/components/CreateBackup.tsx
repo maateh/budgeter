@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom"
 import { ColumnDef, Table as RTable } from "@tanstack/react-table"
 
 // icons
@@ -5,7 +6,7 @@ import { PackageCheck, PackageOpen, X } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { DataTable, DataTablePagination, getSelectionColumn } from "@/components/ui/data-table"
+import { DataTable, DataTablePagination, getDefaultSelectedRows, getSelectionColumn } from "@/components/ui/data-table"
 
 // components
 import BackupInfo from "@/components/shared/backup/BackupInfo"
@@ -47,6 +48,8 @@ const columns: ColumnDef<Budget>[] = [
 ]
 
 const CreateBackup = () => {
+  const { budgetId } = useParams() as { budgetId?: string }
+
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
   const {
     data: backup,
@@ -68,17 +71,20 @@ const CreateBackup = () => {
   }
 
   return !isBudgetsLoading && budgets && (
-    <DataTable columns={columns} data={budgets}>
+    <DataTable
+      columns={columns}
+      data={budgets}
+      defaultSelectedRows={budgetId ? getDefaultSelectedRows(budgets, [budgetId]) : {}}
+    >
       {(table) => (
         <div className="my-2 py-3 px-2 sticky bottom-1.5 space-y-2.5 bg-primary rounded-3xl">
           <DataTablePagination table={table} />
-
           <div className="mx-2 flex justify-between items-center">
             <Button className="icon-wrapper"
               onClick={() => handleCreate(table)}
               disabled={
-                isBackupPending ||
                 !!backup ||
+                isBackupPending ||
                 (!table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected())
               }
             >

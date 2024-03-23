@@ -1,18 +1,16 @@
 import { useState } from "react"
-import { ColumnDef, Table as RTable, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, Table as RTable, RowSelectionState, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
+
+// icons
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
 
-interface DataTableProps<D, V> {
-  columns: ColumnDef<D, V>[]
-  data: D[]
-  children?: (table: RTable<D>) => React.ReactNode
-}
+// utils
+import { cn } from "@/lib/utils"
 
 function getSelectionColumn<D, V>(): ColumnDef<D, V> {
   return {
@@ -37,8 +35,25 @@ function getSelectionColumn<D, V>(): ColumnDef<D, V> {
   }
 }
 
-function DataTable<D, V>({ data, columns, children }: DataTableProps<D, V>) {
-  const [rowSelection, setRowSelection] = useState({})
+function getDefaultSelectedRows<D extends { id: string }>(data: D[], customIds: string[]): RowSelectionState {
+  return data.reduce((selectedRows, { id }, index) => {
+    if (!customIds.includes(id)) return selectedRows
+    return {
+      ...selectedRows,
+      [index]: true
+    }
+  }, {} as RowSelectionState)
+}
+
+interface DataTableProps<D, V> {
+  columns: ColumnDef<D, V>[]
+  data: D[]
+  defaultSelectedRows?: RowSelectionState
+  children?: (table: RTable<D>) => React.ReactNode
+}
+
+function DataTable<D, V>({ data, columns, defaultSelectedRows = {}, children }: DataTableProps<D, V>) {
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>(defaultSelectedRows)
 
   const table = useReactTable({
     data,
@@ -158,5 +173,6 @@ function DataTablePagination<D>({
 export {
   DataTable,
   DataTablePagination,
-  getSelectionColumn
+  getSelectionColumn,
+  getDefaultSelectedRows
 }

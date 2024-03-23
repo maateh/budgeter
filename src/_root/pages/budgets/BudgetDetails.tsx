@@ -29,7 +29,7 @@ const BudgetDetails = () => {
 
         <Button className="ml-auto icon-wrapper"
           variant="outline"
-          onClick={() => navigate('/backup')}
+          onClick={() => navigate(`/backup/${id}`)}
         >
           <Archive />
           Manage Backups

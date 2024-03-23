@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/splitter" element={<Splitter />} />
-          <Route path="/backup" element={<Backup />} />
+          <Route path="/backup/:budgetId?" element={<Backup />} />
           <Route path="*" element={<p>Page not found!</p>} />
         </Route>
       </Routes>
