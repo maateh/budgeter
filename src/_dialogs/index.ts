@@ -2,6 +2,7 @@
 export { default as Budgets } from './budget/Budgets'
 export { default as SaveBudget } from './budget/SaveBudget'
 export { default as DeleteBudget } from './budget/DeleteBudget'
+export { default as TransferMoney } from './budget/TransferMoney'
 
 // budget-note
 export { default as DeleteNote } from './budget-note/DeleteNote'

@@ -6,7 +6,7 @@ import { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } from "@
 
 import DialogLayout from "@/_dialogs/DialogLayout"
 import AlertLayout from "@/_dialogs/AlertLayout"
-import { Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails } from "@/_dialogs"
+import { Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -38,6 +38,7 @@ const App = () => {
               <Route index element={<Budgets />} />
               <Route path="create" element={<SaveBudget type="create" />} />
               <Route path="edit/:id" element={<SaveBudget type="edit" />} />
+              <Route path="transfer/:id" element={<TransferMoney />} />
             </Route>
 
             <Route path="/transactions">

@@ -1,5 +1,5 @@
 // icons
-import { Pencil, Trash2 } from "lucide-react"
+import { Coins, Pencil, Trash2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -18,7 +18,7 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
   const { openDialog } = useDialog()
 
   return (
-    <div className="ml-auto flex flex-wrap-reverse items-center justify-end gap-y-2 gap-x-4">
+    <div className="ml-auto flex flex-wrap-reverse items-center justify-end gap-x-2.5 gap-y-2">
       <Button className="icon-wrapper"
         variant="destructive"
         size="sm"
@@ -36,14 +36,13 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
         <span>Edit</span>
       </Button>
 
-      {/* TODO: implement transfer money action */}
-      {/* <Button className="icon-wrapper bg-blue-600 dark:bg-blue-400 hover:bg-blue-600/90 hover:dark:bg-blue-400/90"
+      <Button className="icon-wrapper bg-blue-600 dark:bg-blue-400 hover:bg-blue-600/90 hover:dark:bg-blue-400/90"
         size="lg"
-        onClick={() => {}}
+        onClick={() => openDialog(`/budgets/transfer/${budget.id}`)}
       >
         <span>Transfer Money</span>
         <Coins size={18} />
-      </Button> */}
+      </Button>
     </div>
   )
 }
