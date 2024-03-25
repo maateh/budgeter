@@ -1,23 +1,29 @@
-import { SubmitHandler } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 // hooks
-// import { useTransferMoney } from "@/lib/react-query/mutations"
+import { useTransferMoney } from "@/lib/react-query/mutations"
 
 // types
-import { TransferMoneyFieldValues } from "../types"
+import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
 
-const useTransferMoneySubmit = () => {
-  // const { mutateAsync: transferMoney } = useTransferMoney()
+const useTransferMoneySubmit = (form: UseFormReturn<TransferMoneyFieldValues>) => {
+  const navigate = useNavigate()
 
-  const onSubmit: SubmitHandler<TransferMoneyFieldValues> = (values) => {
+  const { mutateAsync: transferMoney, isPending } = useTransferMoney()
+
+  const onSubmit: SubmitHandler<TransferMoneyFieldValues> = async (values) => {
     try {
-      // await transferMoney(values)
+      await transferMoney(values)
+
+      form.reset()
+      navigate(-1)
     } catch (err) {
       console.error(err)
     }
   }
 
-  return { onSubmit, isPending: false }
+  return { onSubmit, isPending }
 }
 
 export default useTransferMoneySubmit

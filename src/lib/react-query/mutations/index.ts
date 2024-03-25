@@ -12,6 +12,9 @@ export { default as useCreateTransaction } from './transaction/useCreateTransact
 export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
 export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'
 
+// transaction
+export { default as useTransferMoney } from './transfer-money/useTransferMoney'
+
 // backup
 export { default as useCreateBackup } from './backup/useCreateBackup'
 export { default as useRestoreBackup } from './backup/useRestoreBackup'

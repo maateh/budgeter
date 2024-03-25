@@ -8,6 +8,7 @@ import { Budget, Pagination, PaginationParams, Transaction } from "@/services/ap
 
 // validations
 import { transactionSchema } from "@/components/form/transaction/validations"
+import { transferMoneySchema } from "@/components/form/transfer-money/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -94,6 +95,23 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     return transaction
+  }
+
+  public async transferMoney(
+    data: z.infer<typeof transferMoneySchema>
+  ): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }> {
+    const rootTransaction = await this.create(data)
+
+    const targetTransaction = await this.create({
+        ...data,
+        budgetId: data.targetBudgetId,
+        payment: {
+          ...data.payment,
+          type: data.payment.type === '+' ? '-' : '+'
+        }
+      })
+
+    return { rootTransaction, targetTransaction }
   }
 
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
