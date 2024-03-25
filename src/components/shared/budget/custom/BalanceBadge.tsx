@@ -14,7 +14,7 @@ import { formatWithCurrency } from "@/utils"
 import { cn } from "@/lib/utils"
 
 type BalanceBadgeProps = {
-  balance: Budget['balance']
+  balance: Pick<Budget['balance'], 'current' | 'currency'>
   iconSize?: number
   showLabel?: boolean
 } & Omit<InfoBadgeProps, 'label' | 'icon' | 'value'>

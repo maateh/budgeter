@@ -13,7 +13,7 @@ import { Budget } from "@/services/api/types"
 import { cn } from "@/lib/utils"
 
 type BudgetNameBadgeProps = {
-  budget: Budget
+  budget: Pick<Budget, 'id' | 'name' | 'theme'>
 } & BadgeProps
 
 const BudgetNameBadge = forwardRef<HTMLDivElement, BudgetNameBadgeProps>(({

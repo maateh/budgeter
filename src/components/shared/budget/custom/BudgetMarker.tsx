@@ -10,7 +10,7 @@ import { Budget } from "@/services/api/types"
 import { cn } from "@/lib/utils"
 
 type BudgetMarkerProps = {
-  budget: Budget
+  budget: Pick<Budget, 'id' | 'name' | 'theme'>
   showTooltip?: boolean
   className?: string
 }

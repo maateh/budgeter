@@ -14,7 +14,7 @@ import { formatWithCurrency } from "@/utils"
 import { cn } from "@/lib/utils"
 
 type PaymentBadgeProps = {
-  transaction: Transaction
+  transaction: Pick<Transaction, 'payment' | 'type' | 'processed'>
   currency: string
   iconSize?: number
 } & BadgeProps

@@ -1,31 +1,75 @@
-import { UseFormReturn } from "react-hook-form"
+import { UseFormReturn, useWatch } from "react-hook-form"
 
 // icons
 import { Minus, Plus } from "lucide-react"
 
 // shadcn
+import { Button } from "@/components/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
+import BudgetSelector from "@/components/input/BudgetSelector"
+import TransferPreview from "@/components/shared/transfer-money/TransferPreview"
+
+// hooks
+import { useBudget } from "@/lib/react-query/queries"
 
 // types
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
 import { Transaction } from "@/services/api/types"
-import { Button } from "@/components/ui/button"
 
-type TransferMoneyFormFieldsProps = UseFormReturn<TransferMoneyFieldValues>
+type TransferMoneyFormFieldsProps = {
+  budgetId: string
+} & UseFormReturn<TransferMoneyFieldValues>
 
-const TransferMoneyFormFields = ({ control }: TransferMoneyFormFieldsProps) => {
-  // TODO: add targetBudgetId selector
+const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsProps) => {
+  const targetBudgetIdField = useWatch({
+    control,
+    name: 'targetBudgetId'
+  })
 
-  // TODO: create a bit of "interactive" layout to display changes
-  // on the root and target budgets how their balances will grow or decrease
-  // based on the given payment
+  const paymentField = useWatch({
+    control,
+    name: 'payment'
+  })
+
+  const { data: rootBudget, isLoading: isRootBudgetLoading } = useBudget(budgetId)
+  const { data: targetBudget } = useBudget(targetBudgetIdField)
 
   return (
     <>
+      <div className="flex flex-wrap justify-around gap-x-8-gap-y-4">
+        {!isRootBudgetLoading && rootBudget && (
+          <TransferPreview
+            rootBudget={rootBudget}
+            targetBudget={targetBudget}
+            payment={paymentField}
+          />
+        )}
+      </div>
+
+      <Separator className="w-2/3 mx-auto" />
+
+      <FormField
+        control={control}
+        name="targetBudgetId"
+        render={({ field }) => (
+          <FormItem className="min-w-36 flex-1">
+            <FormLabel>Select Target Budget</FormLabel>
+            <FormControl>
+              <BudgetSelector
+                defaultValue={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <FormField
         control={control}
         name="name"
@@ -97,7 +141,7 @@ const TransferMoneyFormFields = ({ control }: TransferMoneyFormFieldsProps) => {
       <Button className="sm:ml-auto sm:w-fit"
         type="submit"
       >
-        Execute
+        Transfer {targetBudget && `to "${targetBudget.name}"`} 
       </Button>
     </>
   )
