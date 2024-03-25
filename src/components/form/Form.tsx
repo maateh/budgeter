@@ -1,31 +1,30 @@
-import { DefaultValues, FieldValues, SubmitHandler, UseFormReturn, useForm } from "react-hook-form"
+import { FieldValues, SubmitHandler, UseFormProps, UseFormReturn, useForm } from "react-hook-form"
 
 import { ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 // shadcn
-import { Form as ShadcnForm } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
+import { Form as ShadcnForm } from "@/components/ui/form"
 
 type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P = object> = {
   type: 'create' | 'edit',
-  customButtonRequired?: boolean,
-  defaultValues?: DefaultValues<FV>,
   validationSchema: Z,
   useSubmit: (form: UseFormReturn<FV>, props: P) => {
     onSubmit: SubmitHandler<FV>
     isPending: boolean
   },
   submitProps?: P
+  customButtonRequired?: boolean,
   children: (methods: UseFormReturn<FV>) => React.ReactNode
-}
+} & UseFormProps<FV, Z>
 
 function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({
-  type, customButtonRequired, defaultValues, validationSchema, useSubmit, submitProps, children
+  type, customButtonRequired, validationSchema, useSubmit, submitProps, children, ...props
 }: FormProps<FV, Z, P>) {
   const form = useForm<FV>({
     resolver: zodResolver(validationSchema),
-    defaultValues
+    ...props
   })
   const { onSubmit, isPending } = useSubmit(form, submitProps || {} as P)
   
