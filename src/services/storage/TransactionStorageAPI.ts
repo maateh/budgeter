@@ -100,15 +100,17 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async transferMoney(
     data: z.infer<typeof transferMoneySchema>
   ): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }> {
-    const rootTransaction = await this.create(data)
+    const rootTransaction = await this.create({
+      ...data,
+      payment: {
+        ...data.payment,
+        type: data.payment.type === '+' ? '-' : '+'
+      }
+    })
 
     const targetTransaction = await this.create({
         ...data,
-        budgetId: data.targetBudgetId,
-        payment: {
-          ...data.payment,
-          type: data.payment.type === '+' ? '-' : '+'
-        }
+        budgetId: data.targetBudgetId
       })
 
     return { rootTransaction, targetTransaction }

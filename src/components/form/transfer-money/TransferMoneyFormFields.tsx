@@ -41,52 +41,52 @@ const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsP
 
   return (
     <>
-      <div className="flex flex-wrap justify-around gap-x-8-gap-y-4">
-        {!isRootBudgetLoading && rootBudget && (
-          <TransferPreview
-            rootBudget={rootBudget}
-            targetBudget={targetBudget}
-            payment={paymentField}
-          />
-        )}
-      </div>
+      {!isRootBudgetLoading && rootBudget && (
+        <TransferPreview
+          rootBudget={rootBudget}
+          targetBudget={targetBudget}
+          payment={paymentField}
+        />
+      )}
 
       <Separator className="w-2/3 mx-auto" />
 
-      <FormField
-        control={control}
-        name="targetBudgetId"
-        render={({ field }) => (
-          <FormItem className="min-w-36 flex-1">
-            <FormLabel>Select Target Budget</FormLabel>
-            <FormControl>
-              <BudgetSelector
-                defaultValue={field.value}
-                onChange={field.onChange}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="w-full flex flex-wrap justify-around gap-x-8 gap-y-5">
+        <FormField
+          control={control}
+          name="targetBudgetId"
+          render={({ field }) => (
+            <FormItem className="min-w-48 flex-1">
+              <FormLabel>Select Target Budget</FormLabel>
+              <FormControl>
+                <BudgetSelector
+                  defaultValue={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        control={control}
-        name="name"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Transfer Name</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                placeholder='e.g. "Deposit money into bank account"'
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+        <FormField
+          control={control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="min-w-52 flex-1">
+              <FormLabel>Transfer Name</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder='e.g. "Deposit money into bank account"'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <div>
         <FormLabel>
