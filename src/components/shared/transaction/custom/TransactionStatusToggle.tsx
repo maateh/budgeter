@@ -1,5 +1,5 @@
 // icons
-import { BadgeCheck, XCircle } from "lucide-react"
+import { BadgeCheck, Coins, XCircle } from "lucide-react"
 
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
@@ -36,8 +36,13 @@ const TransactionStatusToggle = ({ transaction }: TransactionStatusToggleProps) 
     <StateToggle
       status={transaction.processed ? 'processed' : 'unprocessed'}
       icon={{
-        processed: (
+        processed: transaction.type !== 'transfer' ? (
           <BadgeCheck className="text-green-700 dark:text-green-400"
+            size={20}
+            strokeWidth={2.5}
+          />
+        ) : (
+          <Coins className="text-blue-600 dark:text-blue-400"
             size={20}
             strokeWidth={2.5}
           />
@@ -45,11 +50,12 @@ const TransactionStatusToggle = ({ transaction }: TransactionStatusToggleProps) 
         unprocessed: <XCircle className="text-destructive" size={20} strokeWidth={2.5} />
       }}
       tooltip={{
-        processed: 'Click to withdraw',
+        processed: transaction.type !== 'transfer' ? 'Click to withdraw' : 'Transfers cannot be withdrawn.',
         unprocessed: 'Click for crediting'
       }}
-      onClick={handleUpdateStatus}
+      onClick={transaction.type !== 'transfer' ? handleUpdateStatus : undefined}
       toggleOnHover
+      toggleDisabled={transaction.type === 'transfer'}
     />
   )
 }

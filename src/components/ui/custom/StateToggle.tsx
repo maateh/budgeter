@@ -10,11 +10,12 @@ type StateToggleProps<C extends string, U extends string> = {
   icon: { [key in C | U]: React.ReactNode }
   tooltip?: { [key in C | U]: string }
   toggleOnHover?: boolean
+  toggleDisabled?: boolean
   ref?: React.Ref<HTMLButtonElement>
 } & ButtonProps
 
 function StateToggle<C extends string, U extends string>({
-  status, icon, tooltip, toggleOnHover, variant = "ghost", size = "icon", className, ref, ...props
+  status, icon, tooltip, toggleOnHover, toggleDisabled, variant = "ghost", size = "icon", className, ref, ...props
 }: StateToggleProps<C, U>) {
   const isChecked = status === Object.keys(icon)[0]
 
@@ -26,7 +27,7 @@ function StateToggle<C extends string, U extends string>({
       {...props}
     >
       <span className={cn(isChecked && 'active')}>
-        {toggleOnHover
+        {!toggleDisabled && toggleOnHover
           ? icon[isChecked
               ? Object.keys(icon)[0] as C | U
               : Object.keys(icon)[1] as C | U
@@ -35,7 +36,7 @@ function StateToggle<C extends string, U extends string>({
         }
       </span>
       <span className={cn(!isChecked && 'active')}>
-        {toggleOnHover
+        {!toggleDisabled && toggleOnHover
           ? icon[isChecked
               ? Object.keys(icon)[1] as C | U
               : Object.keys(icon)[0] as C | U
