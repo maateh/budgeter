@@ -5,7 +5,6 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
-import { Transaction } from "@/services/api/types"
 
 const useTransferMoney = () => {
   const queryClient = useQueryClient()
@@ -17,7 +16,7 @@ const useTransferMoney = () => {
     onSuccess: ({ rootTransaction, targetTransaction }) => {
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', rootTransaction.budgetId] })
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', targetTransaction.budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', 'default' as Transaction['type'], true] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', { type: 'default', processed: true }] })
 
       queryClient.invalidateQueries({ queryKey: ['budget', rootTransaction.budgetId] })
       queryClient.invalidateQueries({ queryKey: ['budget', targetTransaction.budgetId] })

@@ -22,9 +22,12 @@ export function paginate<D>(data: D[], { offset, limit }: PaginationParams): Pag
 export function filter<D>(documents: D[], filterBy?: Partial<D>): D[] {
   if (!filterBy) return documents
 
-  return documents
-    .filter((entry: D) => Object.keys(filterBy)
-      .every((key) => filterBy[key as keyof D] === entry[key as keyof D]))
+  return documents.filter((entry: D) => Object.entries(filterBy)
+    .every(([key, value]) => {
+      if (value === undefined) return true
+      return value === entry[key as keyof D]
+    })
+  )
 }
 
 export function filterObject<D extends { id: string }>(documents: Record<string, D>, filter: (doc: D) => boolean): Record<string, D> {

@@ -11,19 +11,16 @@ type PaginatedTransactionsWithBudgetsQueryOptions = {
   filterBy?: Partial<Transaction>
 }
 
-const usePaginatedTransactionsWithBudgets = (
-  type: Transaction['type'],
-  processed: Transaction['processed'],
-  { params, filterBy }: PaginatedTransactionsWithBudgetsQueryOptions = {}) => {
+const usePaginatedTransactionsWithBudgets = ({ params, filterBy }: PaginatedTransactionsWithBudgetsQueryOptions = {}) => {
   const { api } = useAPI()
 
   return useInfiniteQuery({
-    queryKey: ['paginatedTransactionsWithBudgets', type, processed],
+    queryKey: ['paginatedTransactionsWithBudgets', filterBy],
     queryFn: async ({ pageParam: offset }) => {
       return await api.transaction.getPaginatedWithBudgets({
         limit: params?.limit || 5,
         offset
-      }, { type, processed, ...filterBy })
+      }, filterBy)
     },
     initialPageParam: params?.offset || 0,
     getNextPageParam: (lastPage) => lastPage.nextPageOffset

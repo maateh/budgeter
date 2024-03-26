@@ -18,20 +18,16 @@ import { usePaginatedTransactionsWithBudgets } from "@/lib/react-query/queries"
 import { Transaction } from "@/services/api/types"
 
 type TransactionListProps = {
-  type: Transaction['type']
-  processed: Transaction['processed']
-  budgetId?: string
+  filterBy?: Partial<Transaction>
   maxItemLimit?: number
 }
 
-const TransactionList = ({ type, processed, budgetId, maxItemLimit = 10 }: TransactionListProps) => {
+const TransactionList = ({ filterBy, maxItemLimit = 10 }: TransactionListProps) => {
   const navigate = useNavigate()
 
   const {
     data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
-  } = usePaginatedTransactionsWithBudgets(type, processed, {
-    filterBy: (budgetId && { budgetId })
-  })
+  } = usePaginatedTransactionsWithBudgets({ filterBy })
 
   const { isLimitExceeded, manualPagination } = usePagination({
     data, fetchNextPage, maxItemLimit,

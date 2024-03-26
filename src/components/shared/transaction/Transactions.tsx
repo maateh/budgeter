@@ -49,11 +49,11 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
           { value: 'borrow', Icon: Handshake }
         ]}
       >
-        {(value) => (
+        {(type) => (
           <div className="mt-4 flex flex-col gap-y-2.5">
             <div className="pl-1.5 flex items-center gap-x-2.5 border-l-4 rounded">
               <p className="font-heading tracking-wide">
-                {value === 'default' ? 'Processed' : 'Paid Back'}
+                {type === 'default' ? 'Processed' : 'Paid Back'}
               </p>
               <Switch className="data-[state=checked]:bg-green-500"
                 checked={processed}
@@ -71,10 +71,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
               />
             </div>
 
-            <TransactionList
-              type={value}
-              processed={processed}
-              budgetId={budgetId}
+            <TransactionList filterBy={{ type, processed, budgetId }}
             />
           </div>
         )}
