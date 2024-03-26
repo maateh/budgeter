@@ -54,7 +54,9 @@ const TransactionDetails = () => {
 
       <div className="justify-center text-lg text-center font-heading icon-wrapper">
         <TransactionStatusToggle transaction={transaction} />
-        {transaction.processed ? (
+        {transaction.type === 'transfer' ? (
+          <p>This is a <span className="text-blue-600 dark:text-blue-400 overline">transfer</span> transaction.</p>
+        ) : transaction.processed ? (
           <p>This transaction is <span className="text-accent overline">processed</span>.</p>
         ) : (
           <p>This transaction <span className="text-destructive overline">hasn't been processed</span> yet.</p>
@@ -89,24 +91,26 @@ const TransactionDetails = () => {
 
       <Separator />
 
-      <DialogFooter className="flex flex-wrap flex-row justify-between items-center gap-4 sm:flex-row sm:justify-between">
-        <div className="flex items-center gap-x-2.5">
-          <TransactionStatusToggle transaction={transaction} />
-          <PaymentBadge
-            transaction={transaction}
-            currency={transaction.budget.balance.currency}
-            size="lg"
-          />
-        </div>
+      <DialogFooter className="block space-y-2.5">
+        <div className="flex flex-wrap flex-row justify-between items-center gap-4 sm:flex-row sm:justify-between">
+          <div className="flex items-center gap-x-2.5">
+            <TransactionStatusToggle transaction={transaction} />
+            <PaymentBadge
+              transaction={transaction}
+              currency={transaction.budget.balance.currency}
+              size="lg"
+            />
+          </div>
 
-        <Button className="ml-auto flex items-center gap-x-1.5"
-          variant="destructive"
-          size="sm"
-          onClick={() => openDialog(`/transactions/delete/${transaction.id}`, { replace: true })}
-        >
-          <Trash2 size={18} />
-          <span>Delete</span>
-        </Button>
+          <Button className="ml-auto flex items-center gap-x-1.5"
+            variant="destructive"
+            size="sm"
+            onClick={() => openDialog(`/transactions/delete/${transaction.id}`, { replace: true })}
+          >
+            <Trash2 size={18} />
+            <span>Delete</span>
+          </Button>
+        </div>
       </DialogFooter>
     </DialogContent>
   ) : <>Loading...</> // TODO: skeleton

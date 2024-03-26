@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 // icons
-import { Plus, Receipt, Handshake, Verified, XCircle } from "lucide-react"
+import { Plus, Receipt, Handshake, Verified, XCircle, Coins } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -46,30 +46,33 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
         className="mx-auto"
         tabItems={[
           { value: 'default', Icon: Receipt },
-          { value: 'borrow', Icon: Handshake }
+          { value: 'borrow', Icon: Handshake },
+          { value: 'transfer', Icon: Coins }
         ]}
       >
         {(type) => (
           <div className="mt-4 flex flex-col gap-y-2.5">
-            <div className="pl-1.5 flex items-center gap-x-2.5 border-l-4 rounded">
-              <p className="font-heading tracking-wide">
-                {type === 'default' ? 'Processed' : 'Paid Back'}
-              </p>
-              <Switch className="data-[state=checked]:bg-green-500"
-                checked={processed}
-                onCheckedChange={() => setProcessed((prev) => !prev)}
-                customThumb={
-                  <SwitchThumb
-                    variant="custom"
+            {type !== 'transfer' && (
+              <div className="pl-1.5 flex items-center gap-x-2.5 border-l-4 rounded">
+                <p className="font-heading tracking-wide">
+                  {type === 'default' ? 'Processed' : 'Paid Back'}
+                </p>
+                  <Switch className="data-[state=checked]:bg-green-500"
                     checked={processed}
-                    customIcon={{
-                      Checked: Verified,
-                      Unchecked: XCircle
-                    }}
+                    onCheckedChange={() => setProcessed((prev) => !prev)}
+                    customThumb={
+                      <SwitchThumb
+                        variant="custom"
+                        checked={processed}
+                        customIcon={{
+                          Checked: Verified,
+                          Unchecked: XCircle
+                        }}
+                      />
+                    }
                   />
-                }
-              />
-            </div>
+              </div>
+            )}
 
             <TransactionList filterBy={{ type, processed, budgetId }}
             />

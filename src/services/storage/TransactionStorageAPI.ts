@@ -64,7 +64,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
   }
 
-  public async create(data: z.infer<typeof transactionSchema>, executePayment = true): Promise<Transaction> {
+  public async create(data: z.infer<typeof transactionSchema | typeof transferMoneySchema>, executePayment = true): Promise<Transaction> {
     const transaction = await this.storage.save({
       id: crypto.randomUUID(),
       budgetId: data.budgetId,
@@ -78,7 +78,7 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     if (!executePayment) return transaction
 
-    if (transaction.type === 'default' && transaction.processed) {
+    if ((transaction.type === 'default' || transaction.type === 'transfer') && transaction.processed) {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
         [transaction.payment],
@@ -109,9 +109,9 @@ class TransactionStorageAPI implements ITransactionAPI {
     })
 
     const targetTransaction = await this.create({
-        ...data,
-        budgetId: data.targetBudgetId
-      })
+      ...data,
+      budgetId: data.targetBudgetId
+    })
 
     return { rootTransaction, targetTransaction }
   }

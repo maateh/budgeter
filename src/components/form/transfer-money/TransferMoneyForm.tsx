@@ -23,7 +23,7 @@ const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
       defaultValues={{
         budgetId,
         processed: true,
-        type: 'default',
+        type: 'transfer',
         name: '',
         payment: {
           amount: 0,
