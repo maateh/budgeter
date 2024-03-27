@@ -44,6 +44,7 @@ const Subpayments = ({ transaction }: SubpaymentsProps) => {
             <PaymentBadge
               transaction={{ ...transaction, payment }}
               currency={transaction.budget.balance.currency}
+              showRemoveButton
             />
           </li>
         )) : (
