@@ -5,8 +5,10 @@ import RootLayout from "@/_root/RootLayout"
 import { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } from "@/_root/pages"
 
 import DialogLayout from "@/_dialogs/DialogLayout"
-import AlertLayout from "@/_dialogs/AlertLayout"
-import { Budgets, CreateTransaction, DeleteBudget, DeleteNote, DeleteTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"
+import { Budgets, CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"
+
+import AlertLayout from "@/_alerts/AlertLayout"
+import { DeleteBudget, DeleteNote, DeleteTransaction } from "@/_alerts"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -36,14 +38,14 @@ const App = () => {
           <Route path="/" element={<DialogLayout />}>
             <Route path="/budgets">
               <Route index element={<Budgets />} />
-              <Route path="create" element={<SaveBudget type="create" />} />
-              <Route path="edit/:id" element={<SaveBudget type="edit" />} />
+              <Route path="create" element={<SaveBudget />} />
+              <Route path="edit/:id" element={<SaveBudget />} />
               <Route path="transfer/:id" element={<TransferMoney />} />
             </Route>
 
             <Route path="/transactions">
               <Route path="create/:budgetId?" element={<CreateTransaction />} />
-              <Route path=":id" element={<TransactionDetails />} />
+              <Route path="details/:id" element={<TransactionDetails />} />
             </Route>
           </Route>
 
@@ -63,4 +65,3 @@ const App = () => {
 }
 
 export default App
-

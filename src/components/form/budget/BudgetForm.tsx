@@ -1,5 +1,3 @@
-import { useParams } from "react-router-dom"
-
 // components
 import Form from "@/components/form/Form"
 import BudgetFormFields from "@/components/form/budget/BudgetFormFields"
@@ -15,17 +13,15 @@ import { BudgetSubmitProps, BudgetFieldValues } from "@/components/form/budget/t
 import { budgetSchema } from "@/components/form/budget/validations"
 
 type BudgetFormProps = {
-  type: "create" | "edit"
+  id?: string
 }
 
-const BudgetForm = ({ type }: BudgetFormProps) => {
-  const { id } = useParams() as { id: string }
-
+const BudgetForm = ({ id }: BudgetFormProps) => {
   const { data: budget, isLoading } = useBudget(id)
   
   return (
     <Form<BudgetFieldValues, typeof budgetSchema, BudgetSubmitProps>
-      type={type}
+      type={id ? 'edit' : 'create'}
       validationSchema={budgetSchema}
       defaultValues={{
         name: budget?.name || '',
@@ -38,10 +34,10 @@ const BudgetForm = ({ type }: BudgetFormProps) => {
         theme: budget?.theme || '#e58e58'
       }}
       useSubmit={useBudgetSubmit}
-      submitProps={{ budgetId: budget?.id, type }}
+      submitProps={{ budgetId: budget?.id, type: id ? 'edit' : 'create' }}
     >
       {(form) => (
-        <BudgetFormFields form={form} disabled={type === 'edit' && isLoading} />
+        <BudgetFormFields form={form} disabled={!!id && isLoading} />
       )}
     </Form>
   )
