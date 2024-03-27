@@ -56,7 +56,7 @@ const TransactionDetails = () => {
                 <span className="text-base font-normal">Subpayments</span>
               </div>
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="mx-3">
               <Subpayments transaction={transaction} />
             </AccordionContent>
           </AccordionItem>
