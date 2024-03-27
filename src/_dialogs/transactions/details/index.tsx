@@ -1,117 +1,71 @@
 import { useParams } from "react-router-dom"
-import { format } from "date-fns"
 
 // icons
-import { Handshake, Calendar, Receipt, CalendarCheck, Trash2 } from "lucide-react"
+import { Receipt, Banknote } from "lucide-react"
 
 // shadcn
-import { Button } from "@/components/ui/button"
-import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogContent } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
 // components
-import InfoBadge from "@/components/ui/custom/InfoBadge"
-import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
-import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
-import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
+import Header from "./components/Header"
+import Info from "./components/Info"
+import RelatedTransactions from "./components/RelatedTransactions"
+import Subpayments from "./components/Subpayments"
+import Footer from "./components/Footer"
 
 // hooks
 import { useTransactionWithBudget } from "@/lib/react-query/queries"
-import { useDialog } from "@/hooks"
 
 // utils
-import { formatWithCurrency } from "@/utils"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 const TransactionDetails = () => {
   const { id } = useParams() as { id: string }
-  const { openDialog } = useDialog()
 
   const { data: transaction, isLoading } = useTransactionWithBudget(id)
 
   return !isLoading && transaction ? (
     <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
-      <DialogHeader className="mx-1.5 flex flex-wrap flex-row justify-between items-center gap-4 max-sm:mt-5">
-        <DialogTitle className="break-all icon-wrapper">
-          {transaction.type === 'default' ? (
-            <Receipt size={26} strokeWidth={1.85} />
-          ) : (
-            <Handshake size={26} strokeWidth={1.85} />
-          )}
-          <span className="tracking-wide">{transaction.name}</span>
-        </DialogTitle>
-
-        <InfoBadge className="ml-auto flex-none w-fit px-5 py-2"
-          separatorProps={{ className: "h-5" }}
-          orientation="vertical"
-          label={transaction.budget.name}
-          value={formatWithCurrency(transaction.budget.balance.current, transaction.budget.balance.currency)}
-          icon={<BudgetMarker budget={transaction.budget} />}
-          style={{ borderColor: transaction.budget.theme }}
-        />
-      </DialogHeader>
+      <Header transaction={transaction} />
 
       <Separator />
 
-      <div className="justify-center text-lg text-center font-heading icon-wrapper">
-        <TransactionStatusToggle transaction={transaction} />
-        {transaction.type === 'transfer' ? (
-          <p>This is a <span className="text-blue-600 dark:text-blue-400 overline">transfer</span> transaction.</p>
-        ) : transaction.processed ? (
-          <p>This transaction is <span className="text-accent overline">processed</span>.</p>
-        ) : (
-          <p>This transaction <span className="text-destructive overline">hasn't been processed</span> yet.</p>
-        )}
-      </div>
+      <Info transaction={transaction} />
 
-      <div className="flex flex-col items-center gap-y-2 text-sm text-center font-heading">
-        <div className="icon-wrapper">
-          <Calendar size={18} strokeWidth={2.5} className="text-muted-foreground/80" />
-          <p>
-            Created at
-            <span className="px-1 text-foreground/40">»</span>
-            <span className="pl-1 text-muted-foreground/80 font-medium">
-              {format(transaction.createdAt, 'yyyy. MM. dd. ppp')}
-            </span>
-          </p>
-        </div>
+      <Separator />
+      
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>
+            <div className="icon-wrapper">
+              <Receipt />
+              <span className="text-base font-normal">Related transactions</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="w-5/6 mx-auto">
+            <RelatedTransactions transaction={transaction} />
+          </AccordionContent>
+        </AccordionItem>
 
-        {transaction.processedAt && (
-          <div className="icon-wrapper">
-            <CalendarCheck size={20} strokeWidth={2.5} className="text-accent" />
-            <p>
-              Processed at
-              <span className="px-1 text-foreground/35">»</span>
-              <span className="pl-1 text-accent font-medium">
-                {format(transaction.processedAt, 'yyyy. MM. dd. ppp')}
-              </span>
-            </p>
-          </div>
+        {transaction.type === 'borrow' && (
+          <AccordionItem value="item-2">
+            <AccordionTrigger>
+              <div className="icon-wrapper">
+                <Banknote />
+                <span className="text-base font-normal">Subpayments</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Subpayments transaction={transaction} />
+            </AccordionContent>
+          </AccordionItem>
         )}
-      </div>
+      </Accordion>
 
       <Separator />
 
-      <DialogFooter className="block space-y-2.5">
-        <div className="flex flex-wrap flex-row justify-between items-center gap-4 sm:flex-row sm:justify-between">
-          <div className="flex items-center gap-x-2.5">
-            <TransactionStatusToggle transaction={transaction} />
-            <PaymentBadge
-              transaction={transaction}
-              currency={transaction.budget.balance.currency}
-              size="lg"
-            />
-          </div>
-
-          <Button className="ml-auto flex items-center gap-x-1.5"
-            variant="destructive"
-            size="sm"
-            onClick={() => openDialog(`/transactions/delete/${transaction.id}`, { replace: true })}
-          >
-            <Trash2 size={18} />
-            <span>Delete</span>
-          </Button>
-        </div>
-      </DialogFooter>
+      <Footer transaction={transaction} />
     </DialogContent>
   ) : <>Loading...</> // TODO: skeleton
 }
