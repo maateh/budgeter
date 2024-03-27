@@ -10,6 +10,7 @@ import { budgetNoteSchema } from "@/components/form/budget-note/validations"
 import { transactionSchema } from "@/components/form/transaction/validations"
 import { backupFileSchema } from "@/components/form/backup/validations"
 import { transferMoneySchema } from "@/components/form/transfer-money/validations"
+import { paymentSchema } from "@/components/form/subpayment/validations"
 
 export interface ICurrencyAPI {
   get(): Promise<Currencies>
@@ -39,9 +40,10 @@ export interface ITransactionAPI {
   getByIdWithBudget(transactionId: string): Promise<Transaction & { budget: Budget }>
   get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]>
   getPaginatedWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
-
+  
   create(data: z.infer<typeof transactionSchema | typeof transferMoneySchema>, executePayment: boolean): Promise<Transaction>
   transferMoney(data: z.infer<typeof transferMoneySchema>): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }>
+  createSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction>
   updateStatus(id: string, processed: boolean): Promise<Transaction>
   delete(id: string, undoPayment: boolean): Promise<Transaction>
 }

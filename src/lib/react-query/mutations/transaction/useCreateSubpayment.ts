@@ -3,17 +3,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-const useUpdateTransactionStatus = (transactionId: string) => {
+// types
+import { SubpaymentFieldValues } from "@/components/form/subpayment/types"
+
+const useCreateSubpayment = (transactionId: string) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
   return useMutation({
-    mutationKey: ['updateTransactionStatus', transactionId],
-    mutationFn: async ({ id, processed }: {
+    mutationKey: ['createSubpayment', transactionId],
+    mutationFn: async ({ id, data }: {
       id: string
-      processed: boolean
-    }) => await api.transaction.updateStatus(id, processed),
-    onSuccess: ({ id, type, budgetId }) => {
+      data: SubpaymentFieldValues
+    }) => api.transaction.createSubpayment(id, data),
+    onSuccess: ({ id, budgetId, type }) => {
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', budgetId] })
       queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', { type }] })
@@ -24,4 +27,4 @@ const useUpdateTransactionStatus = (transactionId: string) => {
   })
 }
 
-export default useUpdateTransactionStatus
+export default useCreateSubpayment

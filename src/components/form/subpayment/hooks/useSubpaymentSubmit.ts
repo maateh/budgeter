@@ -1,21 +1,28 @@
-import { SubmitHandler } from "react-hook-form"
+import { SubmitHandler, UseFormReturn } from "react-hook-form"
+
+// hooks
+import { useCreateSubpayment } from "@/lib/react-query/mutations"
 
 // types
-import { SubpaymentFieldValues } from "@/components/form/subpayment/types"
+import { SubpaymentFieldValues, SubpaymentSubmitProps } from "@/components/form/subpayment/types"
 
-const useSubpaymentSubmit = () => {
-  // TODO: implement
-  // const { mutateAsync: createSubpayment, isPending } = useCreateSubpayment()
+const useSubpaymentSubmit = (form: UseFormReturn<SubpaymentFieldValues>, { transactionId }: SubpaymentSubmitProps) => {
+  const { mutateAsync: createSubpayment, isPending } = useCreateSubpayment(transactionId)
 
   const onSubmit: SubmitHandler<SubpaymentFieldValues> = async (values) => {
     try {
-      // await createSubpayment(values)
+      await createSubpayment({
+        id: transactionId,
+        data: values
+      })
+
+      form.reset()
     } catch (err) {
       console.error(err)
     }
   }
 
-  return { onSubmit, isPending: false }
+  return { onSubmit, isPending }
 }
 
 export default useSubpaymentSubmit

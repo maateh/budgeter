@@ -20,7 +20,7 @@ type SubpaymentsProps = {
 
 const Subpayments = ({ transaction }: SubpaymentsProps) => {
   return (
-    <div className="flex flex-col gap-y-5">
+    <div className="flex flex-col gap-y-4">
       <ul className="flex flex-wrap gap-x-2.5 gap-y-2">
         <Popover>
           <PopoverTrigger>
@@ -35,7 +35,7 @@ const Subpayments = ({ transaction }: SubpaymentsProps) => {
             </li>
           </PopoverTrigger>
           <PopoverContent>
-            <SubpaymentForm />
+            <SubpaymentForm transactionId={transaction.id} />
           </PopoverContent>
         </Popover>
 

@@ -11,9 +11,8 @@ export { default as useDeleteNote } from './budget-note/useDeleteNote'
 export { default as useCreateTransaction } from './transaction/useCreateTransaction'
 export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
 export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'
-
-// transaction
-export { default as useTransferMoney } from './transfer-money/useTransferMoney'
+export { default as useTransferMoney } from './transaction/useTransferMoney'
+export { default as useCreateSubpayment } from './transaction/useCreateSubpayment'
 
 // backup
 export { default as useCreateBackup } from './backup/useCreateBackup'

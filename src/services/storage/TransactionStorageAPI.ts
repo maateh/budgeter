@@ -16,6 +16,7 @@ import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
 
 // utils
 import { paginate } from "@/utils"
+import { paymentSchema } from "@/components/form/subpayment/validations"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -116,6 +117,35 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { rootTransaction, targetTransaction }
   }
 
+  public async createSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction> {
+    const transaction = await this.storage.findById(id)
+    
+    await this.budgetStorageApi.managePayments(
+      transaction.budgetId,
+      [data],
+      'execute'
+    )
+
+    const updatedTransaction = {
+      ...transaction,
+      payment: {
+        ...transaction.payment,
+        amount: transaction.payment.amount - (data.type === '+' ? data.amount : -data.amount)
+      },
+      subpayments: [
+        ...(transaction.subpayments ? transaction.subpayments : []),
+        data
+      ]
+    }
+
+    if (updatedTransaction.payment.amount <= 0) {
+      updatedTransaction.processed = true
+      updatedTransaction.processedAt = new Date()
+    }
+
+    return await this.storage.save(updatedTransaction)
+  }
+
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
 
@@ -130,7 +160,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       )
     }
 
-    if (transaction.type === 'borrow') {
+    if (transaction.type === 'borrow' && !transaction.subpayments?.length) {
       await this.budgetStorageApi.managePayments(
         transaction.budgetId,
         [transaction.payment],
