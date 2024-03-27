@@ -7,7 +7,6 @@ import TransactionFormFields from "@/components/form/transaction/TransactionForm
 import { useTransactionSubmit } from "@/components/form/transaction/hooks"
 
 // types
-import { Transaction } from "@/services/api/types"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
 
 // validations
@@ -24,10 +23,10 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
       validationSchema={transactionSchema}
       defaultValues={{
         budgetId: budgetId || '',
-        type: 'default' as Transaction['type'],
+        type: 'default',
         name: '',
         payment: {
-          type: '+' as Transaction['payment']['type'],
+          type: '+',
           amount: 0
         },
         processed: false
