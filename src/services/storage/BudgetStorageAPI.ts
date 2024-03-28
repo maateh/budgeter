@@ -7,7 +7,7 @@ import { IBudgetAPI } from "@/services/api/interfaces"
 import { Budget, Pagination, PaginationParams, Payment } from "@/services/api/types"
 
 // validations
-import { budgetSchema } from "@/components/form/budget/validations"
+import { budgetFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -47,11 +47,10 @@ class BudgetStorageAPI implements IBudgetAPI {
     return paginate(budgets, params)
   }
 
-  public async create(data: z.infer<typeof budgetSchema>): Promise<Budget> {
+  public async create(data: z.infer<typeof budgetFormSchema>): Promise<Budget> {
     return await this.storage.save({
       id: crypto.randomUUID(),
       name: data.name,
-      type: data.type as Budget['type'],
       balance: {
         ...data.balance,
         income: 0,
@@ -61,13 +60,12 @@ class BudgetStorageAPI implements IBudgetAPI {
     })
   }
 
-  public async update(id: string, data: z.infer<typeof budgetSchema>): Promise<Budget> {
+  public async update(id: string, data: z.infer<typeof budgetFormSchema>): Promise<Budget> {
     const budget = await this.storage.findById(id)
 
     return await this.storage.save({
       ...budget,
       ...data,
-      type: data.type as Budget['type'],
       balance: { ...budget.balance, ...data.balance }
     })
   }

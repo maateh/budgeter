@@ -7,9 +7,7 @@ import { ITransactionAPI } from "@/services//api/interfaces"
 import { Budget, Pagination, PaginationParams, Payment, Transaction } from "@/services/api/types"
 
 // validations
-import { transactionSchema } from "@/components/form/transaction/validations"
-import { transferMoneySchema } from "@/components/form/transfer-money/validations"
-import { paymentSchema } from "@/components/form/subpayment/validations"
+import { paymentFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -63,7 +61,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
   }
 
-  public async create(data: z.infer<typeof transactionSchema | typeof transferMoneySchema>, executePayment = true): Promise<Transaction> {
+  public async create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>, executePayment = true): Promise<Transaction> {
     const transactionId = crypto.randomUUID()
     const transaction = await this.storage.save({
       id: transactionId,
@@ -144,7 +142,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   public async transferMoney(
-    data: z.infer<typeof transferMoneySchema>
+    data: z.infer<typeof transferMoneyFormSchema>
   ): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }> {
     const rootTransaction = await this.create({
       ...data,
@@ -162,7 +160,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { rootTransaction, targetTransaction }
   }
 
-  public async addSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction> {
+  public async addSubpayment(id: string, data: z.infer<typeof paymentFormSchema>): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
     
     const subpayment: Payment = {
