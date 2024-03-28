@@ -4,8 +4,7 @@ const balanceFormSchema = z.object({
   currency: z.string()
     .min(1, { message: 'Too short.' })
     .max(5, { message: 'Too long.' }),
-  current: z.coerce.number(),
-  ceiling: z.coerce.number()
+  current: z.coerce.number()
 })
 
 const balanceSchema = balanceFormSchema.extend({

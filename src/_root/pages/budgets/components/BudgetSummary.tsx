@@ -1,6 +1,3 @@
-// icons
-import { ArrowUpToLine } from 'lucide-react'
-
 // shadcn
 import { Separator } from '@/components/ui/separator'
 
@@ -41,11 +38,13 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           showLabel
         />
 
-        <InfoBadge className="flex-1 max-w-72 min-w-40"
+        {/* TODO: instead of ceiling might be better to show something else
+          e.g. costs this month, expected balance based on unprocessed transactions */}
+        {/* <InfoBadge className="flex-1 max-w-72 min-w-40"
           label="Ceiling"
           value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
           icon={<ArrowUpToLine strokeWidth={2.25} />}
-        />
+        /> */}
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2">

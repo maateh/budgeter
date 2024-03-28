@@ -25,11 +25,9 @@ const BudgetForm = ({ id }: BudgetFormProps) => {
       validationSchema={budgetFormSchema}
       defaultValues={{
         name: budget?.name || '',
-        type: budget?.type || 'income',
         balance: budget?.balance || {
           currency: '',
-          current: 0,
-          ceiling: 0
+          current: 0
         },
         theme: budget?.theme || '#e58e58'
       }}

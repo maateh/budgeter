@@ -1,15 +1,11 @@
 import { UseFormReturn } from "react-hook-form"
 
-// icons
-import { BookMinus, BookPlus } from "lucide-react"
-
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 
 // components
-import StateToggle from "@/components/ui/custom/StateToggle"
 import ColorPicker from "@/components/input/ColorPicker"
 
 // hooks
@@ -17,7 +13,6 @@ import { useCurrencies } from "@/lib/react-query/queries"
 
 // types
 import { BudgetFieldValues } from "@/components/form/budget/types"
-import { Budget } from "@/services/api/types"
 
 type BudgetFormFieldsProps = {
   form: UseFormReturn<BudgetFieldValues>
@@ -79,55 +74,6 @@ const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
                     ))}
                   </SelectContent>
                 </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
-      <div className="w-full flex gap-x-5">
-        <FormField
-          control={control}
-          name="type"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-y-1">
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <StateToggle<Budget['type'], Budget['type']>
-                  type="button"
-                  className={`rounded-xl p-1.5
-                    ${field.value === 'income'
-                      ? 'bg-blue-500 hover:bg-blue-500/90'
-                      : 'bg-red-500 hover:bg-red-500/90'}
-                  `}
-                  status={field.value as Budget['type']}
-                  icon={{
-                    income: <BookPlus size={22} strokeWidth={2.75} />,
-                    expense: <BookMinus size={22} strokeWidth={2.75} />
-                  }}
-                  tooltip={{ income: 'Income', expense: 'Expense' }}
-                  onClick={() => field.onChange(field.value === 'income' ? 'expense' : 'income')}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={control}
-          name="balance.ceiling"
-          disabled={disabled}
-          render={({ field }) => (
-            <FormItem className="min-w-[38%]">
-              <FormLabel>Expected Ceiling</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="e.g. $200"
-                  {...field}
-                />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}

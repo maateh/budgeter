@@ -20,11 +20,9 @@ export type Currencies = {
 export type Budget = {
   id: string
   name: string
-  type: 'income' | 'expense'
   balance: {
     currency: string
     current: number
-    ceiling: number
     income: number
     loss: number
   }
