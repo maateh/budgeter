@@ -15,9 +15,6 @@ import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
 import { useUpdateNoteStatus } from "@/lib/react-query/mutations"
 import { useDialog } from "@/hooks"
 
-// context
-import FormProvider from "@/services/providers/form/FormProvider"
-
 // types
 import { Budget, BudgetNote } from "@/services/api/types"
 
@@ -55,16 +52,13 @@ const Note = ({ budget, note }: NoteProps) => {
     >
       <div className="h-max mx-2.5 font-medium">
         {editingMode ? (
-          <FormProvider
-            cleanForm={() => setEditingMode(false)}
-            cancelAction={() => setEditingMode(false)}
-          >
-            <BudgetNoteForm
-              type="edit"
-              budgetId={budget.id}
-              note={note}
-            />
-          </FormProvider>
+          <BudgetNoteForm
+            type="edit"
+            budgetId={budget.id}
+            note={note}
+            onSubmitted={() => setEditingMode(false)}
+            onCancel={() => setEditingMode(false)}
+          />
         ) : (
           <p className="break-words whitespace-break-spaces tracking-wide">
             {note.text}

@@ -5,21 +5,14 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 
-// hooks
-import { useFormContext } from "@/services/providers/form/FormContext.hooks"
-
 // types
 import { BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 
-type BudgetNoteFormFieldsProps = {
-  form: UseFormReturn<BudgetNoteFieldValues>
+type BudgetNoteFormFieldsProps = UseFormReturn<BudgetNoteFieldValues> & {
+  onCancel: () => void
 }
 
-const BudgetNoteFormFields = ({ form }: BudgetNoteFormFieldsProps) => {
-  const { control } = form
-  
-  const { cancelAction } = useFormContext()
-
+const BudgetNoteFormFields = ({ control, onCancel }: BudgetNoteFormFieldsProps) => {
   return (
     <div className="min-w-[75%] mx-auto flex flex-col gap-1.5">
       <FormField
@@ -43,7 +36,7 @@ const BudgetNoteFormFields = ({ form }: BudgetNoteFormFieldsProps) => {
         <Button type="button"
           size="sm"
           variant="destructive"
-          onClick={cancelAction}
+          onClick={onCancel}
         >
           Cancel
         </Button>

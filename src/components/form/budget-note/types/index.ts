@@ -8,4 +8,5 @@ export type BudgetNoteFieldValues = z.infer<typeof budgetNoteSchema>
 export type BudgetNoteSubmitProps = {
   budgetId: string
   noteId?: string
+  onSubmitted: () => void
 }
