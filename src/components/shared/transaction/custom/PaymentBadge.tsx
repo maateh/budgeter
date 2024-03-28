@@ -34,12 +34,12 @@ type PaymentBadgeProps = {
   transaction: Pick<Transaction, 'id' | 'payment' | 'type' | 'processed'>
   currency: string
   iconSize?: number
-  disableNeutral?: boolean
+  ignoreNeutral?: boolean
   showRemoveButton?: boolean
 } & BadgeProps
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
-  transaction, currency, iconSize = 16, showRemoveButton, disableNeutral, size = 'sm', className, ...props
+  transaction, currency, iconSize = 16, showRemoveButton, ignoreNeutral: disableNeutral, size = 'sm', className, ...props
 }, ref) => {
   const { payment, type, processed } = transaction
 
