@@ -3,7 +3,6 @@ import { BadgeInfo, BadgePlus } from "lucide-react"
 
 // shadcn
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // components
@@ -13,6 +12,7 @@ import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
+import PaymentProgress from "@/components/shared/transaction/PaymentProgress"
 
 type SubpaymentsProps = {
   transaction: Transaction & { budget: Budget }
@@ -61,11 +61,7 @@ const Subpayments = ({ transaction }: SubpaymentsProps) => {
         )}
       </ul>
 
-      {/* TODO: redesign progress ui component */}
-      <Progress className="min-w-32 max-w-md mx-auto"
-        maxValue={transaction.payment.amount}
-        value={transaction.payment.paidBackAmount}
-      />
+      <PaymentProgress transaction={transaction} />
     </div>
   )
 }
