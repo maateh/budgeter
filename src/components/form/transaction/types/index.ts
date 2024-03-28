@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 // validations
-import { transactionSchema } from "@/components/form/transaction/validations"
+import { transactionFormSchema } from "@/lib/validations"
 
-export type TransactionFieldValues = z.infer<typeof transactionSchema>
+export type TransactionFieldValues = z.infer<typeof transactionFormSchema>
 

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
 // validations
-import { backupFileSchema } from "@/components/form/backup/validations"
+import { backupSchema } from "@/lib/validations"
 
-export type RestoreBackupFieldValues = z.infer<typeof backupFileSchema>
+export type RestoreBackupFieldValues = z.infer<typeof backupSchema>

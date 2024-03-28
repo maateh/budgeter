@@ -10,7 +10,7 @@ import { useTransactionSubmit } from "@/components/form/transaction/hooks"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
 
 // validations
-import { transactionSchema } from "@/components/form/transaction/validations"
+import { transactionFormSchema } from "@/lib/validations"
 
 type TransactionFormProps = {
   budgetId?: string
@@ -18,9 +18,9 @@ type TransactionFormProps = {
 
 const TransactionForm = ({ budgetId }: TransactionFormProps) => {
   return (
-    <Form<TransactionFieldValues, typeof transactionSchema>
+    <Form<TransactionFieldValues, typeof transactionFormSchema>
       type="create"
-      validationSchema={transactionSchema}
+      validationSchema={transactionFormSchema}
       defaultValues={{
         budgetId: budgetId || '',
         type: 'default',

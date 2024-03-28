@@ -9,7 +9,7 @@ import { useSubpaymentSubmit } from "@/components/form/subpayment/hooks"
 import { SubpaymentFieldValues, SubpaymentSubmitProps } from "@/components/form/subpayment/types"
 
 // validations
-import { paymentSchema } from "@/components/form/subpayment/validations"
+import { paymentFormSchema } from "@/lib/validations"
 
 type SubpaymentFormProps = {
   transactionId: string
@@ -17,9 +17,9 @@ type SubpaymentFormProps = {
 
 const SubpaymentForm = ({ transactionId }: SubpaymentFormProps) => {
   return (
-    <Form<SubpaymentFieldValues, typeof paymentSchema, SubpaymentSubmitProps>
+    <Form<SubpaymentFieldValues, typeof paymentFormSchema, SubpaymentSubmitProps>
       type="create"
-      validationSchema={paymentSchema}
+      validationSchema={paymentFormSchema}
       defaultValues={{
         type: '+',
         amount: 0

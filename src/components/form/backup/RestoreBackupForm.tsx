@@ -9,13 +9,13 @@ import { useRestoreBackupSubmit } from "@/components/form/backup/hooks"
 import { RestoreBackupFieldValues } from "@/components/form/backup/types"
 
 // validation
-import { backupFileSchema } from "@/components/form/backup/validations"
+import { backupSchema } from "@/lib/validations"
 
 const RestoreBackupForm = () => {
   return (
-    <Form<RestoreBackupFieldValues, typeof backupFileSchema>
+    <Form<RestoreBackupFieldValues, typeof backupSchema>
       type="create"
-      validationSchema={backupFileSchema}
+      validationSchema={backupSchema}
       useSubmit={useRestoreBackupSubmit}
       customButtonRequired
     >

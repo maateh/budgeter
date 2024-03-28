@@ -12,7 +12,7 @@ import { BackupData, BackupFileContent } from "@/services/backup/types"
 import { IBackupAPI } from "@/services/api/interfaces"
 
 // validations
-import { backupFileSchema } from "@/components/form/backup/validations"
+import { backupSchema } from "@/lib/validations"
 
 // utils
 import { filterObject } from "@/utils"
@@ -48,7 +48,7 @@ class BackupHelper implements IBackupAPI {
     }
   }
 
-  public async restore({ fileContent }: z.infer<typeof backupFileSchema>): Promise<void> {
+  public async restore({ fileContent }: z.infer<typeof backupSchema>): Promise<void> {
     const { data, complete } = fileContent
     const { budgets, transactions, notes } = data
 

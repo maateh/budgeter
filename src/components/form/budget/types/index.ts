@@ -1,9 +1,9 @@
 import { z } from "zod"
 
 // validations
-import { budgetSchema } from "@/components/form/budget/validations"
+import { budgetFormSchema } from "@/lib/validations"
 
-export type BudgetFieldValues = z.infer<typeof budgetSchema>
+export type BudgetFieldValues = z.infer<typeof budgetFormSchema>
 
 export type BudgetSubmitProps = {
   budgetId?: string

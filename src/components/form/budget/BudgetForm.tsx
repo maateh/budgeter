@@ -10,7 +10,7 @@ import { useBudgetSubmit } from "@/components/form/budget/hooks"
 import { BudgetSubmitProps, BudgetFieldValues } from "@/components/form/budget/types"
 
 // validations
-import { budgetSchema } from "@/components/form/budget/validations"
+import { budgetSchema } from "@/lib/validations"
 
 type BudgetFormProps = {
   id?: string

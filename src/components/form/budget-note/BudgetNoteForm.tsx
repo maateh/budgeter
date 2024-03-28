@@ -11,7 +11,7 @@ import { BudgetNoteSubmitProps, BudgetNoteFieldValues } from "@/components/form/
 import { BudgetNote } from "@/services/api/types"
 
 // validation
-import { budgetNoteSchema } from "@/components/form/budget-note/validations"
+import { noteFormSchema } from "@/lib/validations"
 
 type BudgetNoteFormProps = {
   budgetId: string
@@ -27,9 +27,9 @@ type BudgetNoteFormProps = {
 
 const BudgetNoteForm = ({ type, budgetId, note, onSubmitted, onCancel }: BudgetNoteFormProps) => {
   return (
-    <Form<BudgetNoteFieldValues, typeof budgetNoteSchema, BudgetNoteSubmitProps>
+    <Form<BudgetNoteFieldValues, typeof noteFormSchema, BudgetNoteSubmitProps>
       type={type}
-      validationSchema={budgetNoteSchema}
+      validationSchema={noteFormSchema}
       defaultValues={{
         text: note?.text || ''
       }}

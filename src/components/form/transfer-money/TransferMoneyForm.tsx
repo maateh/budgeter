@@ -9,7 +9,7 @@ import { useTransferMoneySubmit } from "@/components/form/transfer-money/hooks"
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
 
 // validations
-import { transferMoneySchema } from "@/components/form/transfer-money/validations"
+import { transferMoneyFormSchema } from "@/lib/validations"
 
 type TransferMoneyFormProps = {
   budgetId: string
@@ -17,9 +17,9 @@ type TransferMoneyFormProps = {
 
 const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
   return (
-    <Form<TransferMoneyFieldValues, typeof transferMoneySchema>
+    <Form<TransferMoneyFieldValues, typeof transferMoneyFormSchema>
       type="create"
-      validationSchema={transferMoneySchema}
+      validationSchema={transferMoneyFormSchema}
       defaultValues={{
         budgetId,
         processed: true,

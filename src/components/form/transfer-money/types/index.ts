@@ -1,6 +1,6 @@
 import { z } from "zod"
 
 // validations
-import { transferMoneySchema } from "@/components/form/transfer-money/validations"
+import { transferMoneyFormSchema } from "@/lib/validations"
 
-export type TransferMoneyFieldValues = z.infer<typeof transferMoneySchema>
+export type TransferMoneyFieldValues = z.infer<typeof transferMoneyFormSchema>
