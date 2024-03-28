@@ -2,13 +2,11 @@
 import { ArrowUpToLine } from 'lucide-react'
 
 // shadcn
-import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 
 // components
 import BalanceBadge from '@/components/shared/budget/custom/BalanceBadge'
 import BudgetNameBadge from '@/components/shared/budget/custom/BudgetNameBadge'
-import BudgetTypeBadge from '@/components/shared/budget/BudgetTypeBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
 import BudgetActions from './BudgetActions'
 
@@ -68,16 +66,6 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
       </div>
 
       <Separator className="w-11/12 mx-auto my-1.5" />
-
-      {/* TODO: this still needs to be redesigned */}
-      <div className="flex items-center justify-between gap-x-4">
-        <BudgetTypeBadge budget={budget} />
-        <Progress className="h-5"
-          value={budget.balance.current}
-          maxValue={budget.balance.ceiling}
-          variant={budget.balance.current > 0 ? budget.type : 'negative'}
-        />
-      </div>
     </div>
   )
 }

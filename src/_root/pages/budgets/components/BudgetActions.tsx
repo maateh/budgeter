@@ -40,8 +40,8 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
         size="lg"
         onClick={() => openDialog(`/budgets/transfer/${budget.id}`)}
       >
-        <span>Transfer Money</span>
         <Coins size={18} />
+        <span>Transfer Money</span>
       </Button>
     </div>
   )
