@@ -47,10 +47,9 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-1.5 justify-between items-center">
-        {/* TODO: show tooltip - if borrowed & has subpayments */}
         {transaction.type === 'borrow' && transaction.subpayments?.length && (
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
               <Badge className="-mr-1 p-1"
                 size="icon"
                 variant="ghost"
@@ -58,9 +57,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
                 <BadgeInfo size={16} />
               </Badge>
             </PopoverTrigger>
-            <PopoverContent>
-
-
+            <PopoverContent onClick={(e) => e.stopPropagation()}>
               <PaymentProgress transaction={{ ...transaction, budget }} />
             </PopoverContent>
           </Popover>

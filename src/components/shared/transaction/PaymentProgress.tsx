@@ -1,12 +1,17 @@
 // icons
-import { Banknote, Handshake } from "lucide-react"
+import { BadgePlus, Banknote, Handshake } from "lucide-react"
 
 // shadcn
+import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
+import PaymentList from "@/components/shared/transaction/PaymentList"
+import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
+import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
@@ -20,7 +25,38 @@ type PaymentProgressProps = {
 
 const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
   return (
-    <div>
+    <>
+      <PaymentList className="mb-2.5"
+        payments={transaction.subpayments}
+        firstElement={(
+          <Popover>
+            <PopoverTrigger>
+              <li>
+                <Badge className="cursor-pointer icon-wrapper"
+                  variant="outline"
+                  size="sm"
+                >
+                  <BadgePlus size={20} />
+                  <span>New</span>
+                </Badge>
+              </li>
+            </PopoverTrigger>
+            <PopoverContent>
+              <SubpaymentForm transactionId={transaction.id} />
+            </PopoverContent>
+          </Popover>
+        )}
+      >
+        {(payment) => (
+          <PaymentBadge
+            payment={payment}
+            processed={true}
+            currency={transaction.budget.balance.currency}
+            showRemoveButton
+          />
+        )}
+      </PaymentList>
+
       <p className="text-base text-center font-heading">
         Progress of subpayments
       </p>
@@ -56,7 +92,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           )}
         />
       </div>
-    </div>
+    </>
   )
 }
 
