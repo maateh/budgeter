@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
 
 // components
-import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
+import PaymentBadge, { isNeutral } from "@/components/shared/transaction/custom/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 
 // hooks
@@ -28,9 +28,11 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
         <div className="flex items-center gap-x-2.5">
           <TransactionStatusToggle transaction={transaction} />
           <PaymentBadge
-            transaction={transaction}
-            currency={transaction.budget.balance.currency}
             size="lg"
+            payment={transaction.payment}
+            processed={transaction.processed}
+            currency={transaction.budget.balance.currency}
+            isNeutral={isNeutral(transaction.type, transaction.processed)}
           />
         </div>
 

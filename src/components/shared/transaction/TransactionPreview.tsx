@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 // components
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
-import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
+import PaymentBadge, { isNeutral } from "@/components/shared/transaction/custom/PaymentBadge"
 import PaymentProgress from "@/components/shared/transaction/PaymentProgress"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
@@ -67,8 +67,10 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
         )}
 
         <PaymentBadge
-          transaction={transaction}
+          payment={transaction.payment}
+          processed={transaction.processed}
           currency={budget.balance.currency}
+          isNeutral={isNeutral(transaction.type, transaction.processed)}
         />
 
         <BudgetMarker

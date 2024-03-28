@@ -11,11 +11,11 @@ import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
-import { Budget, Transaction } from "@/services/api/types"
+import { Budget, Payment, Transaction } from "@/services/api/types"
 
 type TransferElementProps = {
   budget: Budget
-  payment: Transaction['payment']
+  payment: Payment
   isRoot?: boolean
 }
 
@@ -39,12 +39,8 @@ const TransferElement = ({ budget, payment, isRoot }: TransferElementProps) => (
       />
 
       <PaymentBadge
-        transaction={{
-          id: '',
-          payment,
-          type: 'default',
-          processed: true
-        }}
+        payment={payment}
+        processed={true}
         currency={budget.balance.currency}
       />
 
