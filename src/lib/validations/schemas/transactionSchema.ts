@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { paymentSchema } from "@/lib/validations"
+import { paymentSchema, paymentFormSchema } from "@/lib/validations"
 
 const transactionFormSchema = z.object({
   budgetId: z.string().uuid({ message: 'Budget ID is invalid.' }),
@@ -11,7 +11,7 @@ const transactionFormSchema = z.object({
   name: z.string()
     .min(2, { message: 'Too short.' })
     .max(28, { message: 'Too long.' }),
-  payment: paymentSchema,
+  payment: paymentFormSchema,
   processed: z.boolean(),
   processedAt: z.coerce.date().optional()
 })
@@ -24,6 +24,7 @@ const transactionSchema = transactionFormSchema.extend({
     z.literal('transfer')
   ]),
   createdAt: z.coerce.date(),
+  payment: paymentSchema,
   subpayments: z.array(paymentSchema).optional(),
   related: z.array(
     z.string().uuid({ message: 'One of related transacion ID is invalid!' })

@@ -10,7 +10,7 @@ import { useBudgetSubmit } from "@/components/form/budget/hooks"
 import { BudgetSubmitProps, BudgetFieldValues } from "@/components/form/budget/types"
 
 // validations
-import { budgetSchema } from "@/lib/validations"
+import { budgetFormSchema } from "@/lib/validations"
 
 type BudgetFormProps = {
   id?: string
@@ -20,9 +20,9 @@ const BudgetForm = ({ id }: BudgetFormProps) => {
   const { data: budget, isLoading } = useBudget(id)
   
   return (
-    <Form<BudgetFieldValues, typeof budgetSchema, BudgetSubmitProps>
+    <Form<BudgetFieldValues, typeof budgetFormSchema, BudgetSubmitProps>
       type={id ? 'edit' : 'create'}
-      validationSchema={budgetSchema}
+      validationSchema={budgetFormSchema}
       defaultValues={{
         name: budget?.name || '',
         type: budget?.type || 'income',
