@@ -40,6 +40,7 @@ const TransferElement = ({ budget, payment, isRoot }: TransferElementProps) => (
 
       <PaymentBadge
         transaction={{
+          id: '',
           payment,
           type: 'default',
           processed: true

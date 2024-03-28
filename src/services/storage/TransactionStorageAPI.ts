@@ -163,30 +163,18 @@ class TransactionStorageAPI implements ITransactionAPI {
       ...data
     }
 
-    await this.managePayment(transaction.budgetId, subpayment, 'execute')
-
-    const updatedTransaction = {
-      ...transaction,
-      payment: {
-        ...transaction.payment,
-        paidBackAmount: subpayment.amount + (transaction.payment.paidBackAmount || 0)
-      },
-      subpayments: [
-        ...(transaction.subpayments ? transaction.subpayments : []),
-        subpayment
-      ]
-    }
-
-    if (updatedTransaction.payment.paidBackAmount >= updatedTransaction.payment.amount) {
-      updatedTransaction.processed = true
-      updatedTransaction.processedAt = new Date()
-    }
-
-    return await this.storage.save(updatedTransaction)
+    return await this.manageSubpayment(transaction, subpayment, 'execute')
   }
 
   public async removeSubpayment(id: string, paymentId: string): Promise<Transaction> {
-    // TODO: implement
+    const transaction = await this.storage.findById(id)
+    const subpayment = transaction.subpayments?.find(({ id }) => id === paymentId)
+
+    if (!subpayment) {
+      throw new Error('Subpayment not found!')
+    }
+
+    return await this.manageSubpayment(transaction, subpayment, 'undo')
   }
 
   // helpers
@@ -224,6 +212,39 @@ class TransactionStorageAPI implements ITransactionAPI {
         income: income + incomeDelta,
         loss: loss + lossDelta
       }
+    })
+  }
+
+  private async manageSubpayment(transaction: Transaction, subpayment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
+    await this.managePayment(transaction.budgetId, subpayment, action)
+
+    let payment: Payment = transaction.payment
+    let subpayments: Payment[] = transaction.subpayments || []
+
+    if (action === 'execute') {
+      payment = {
+        ...payment,
+        paidBackAmount: subpayment.amount + (payment.paidBackAmount || 0)
+      }
+      subpayments = [...subpayments, subpayment]
+    }
+
+    if (action === 'undo') {
+      payment = {
+        ...payment,
+        paidBackAmount: transaction.payment.paidBackAmount! - subpayment.amount
+      }
+      subpayments = subpayments.filter(({ id }) => id !== subpayment.id)
+    }
+
+    const processed = (payment.paidBackAmount || 0) >= payment.amount ? true : false
+
+    return await this.storage.save({
+      ...transaction,
+      payment,
+      subpayments,
+      processed,
+      processedAt: processed ? new Date() : undefined
     })
   }
 }

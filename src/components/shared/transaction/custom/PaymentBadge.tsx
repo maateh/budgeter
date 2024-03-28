@@ -7,20 +7,15 @@ import { Minus, Plus, X } from "lucide-react"
 import { Badge, BadgeProps } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
+// hooks
+import { useRemoveSubpayment } from "@/lib/react-query/mutations"
+
 // types
 import { Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 import { cn } from "@/lib/utils"
-
-type PaymentBadgeProps = {
-  transaction: Pick<Transaction, 'payment' | 'type' | 'processed'>
-  currency: string
-  iconSize?: number
-  disableNeutral?: boolean
-  showRemoveButton?: boolean
-} & BadgeProps
 
 function isNeutral(type: Transaction['type'], processed: Transaction['processed'], disableNeutral?: boolean): boolean {
   return !disableNeutral &&
@@ -35,10 +30,33 @@ function getPaymentAmount(payment: Transaction['payment'], processed: Transactio
     : payment.amount
 }
 
+type PaymentBadgeProps = {
+  transaction: Pick<Transaction, 'id' | 'payment' | 'type' | 'processed'>
+  currency: string
+  iconSize?: number
+  disableNeutral?: boolean
+  showRemoveButton?: boolean
+} & BadgeProps
+
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
   transaction, currency, iconSize = 16, showRemoveButton, disableNeutral, size = 'sm', className, ...props
 }, ref) => {
   const { payment, type, processed } = transaction
+
+  const { mutateAsync: removeSubpayment, isPending } = useRemoveSubpayment(transaction.id)
+
+  const handleRemove = async () => {
+    try {
+      await removeSubpayment({
+        transactionId: transaction.id,
+        paymentId: transaction.payment.id
+      })
+
+      // TODO: show toast
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   return (
     <Badge className={cn("font-heading font-bold gap-x-1",
@@ -66,7 +84,8 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
         <Button className="ml-1 -mr-0.5 p-0.5"
           variant="outline"
           size="icon"
-          onClick={() => {/* TODO: handle payment remove */}}
+          onClick={handleRemove}
+          disabled={isPending}
         >
           <X size={12} />
         </Button>
