@@ -8,10 +8,11 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 
 // components
+import InfoBadge from "@/components/ui/custom/InfoBadge"
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
-import InfoBadge from "@/components/ui/custom/InfoBadge"
+import PaymentList from "@/components/shared/transaction/PaymentList"
 
 // hooks
 import { useBudgetTransactions } from "@/lib/react-query/queries"
@@ -64,34 +65,41 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       
       <Separator className="mx-auto w-5/6" />
 
-      <ul className="mb-auto flex flex-wrap items-end gap-x-1 gap-y-1">
-        <li><Badge className="flex items-center gap-x-1 cursor-pointer"
-          variant="outline"
-          size="xs"
-          onClick={handleTransactionNavigate}
-        >
-          <BadgePlus size={16} />
-          <span className="font-bold">New</span>
-        </Badge></li>
-
-        {!transactionsIsLoading && transactions ? transactions.map((tr) => (
-          <li key={tr.id}>
-            <PaymentBadge className="font-semibold dark:bg-secondary/80 border"
+      {!transactionsIsLoading && transactions ? (
+        <PaymentList className="mb-auto"
+          payments={transactions.map((tr) => tr.payment)}
+          infoBadgeProps={{ size: "xs" }}
+          firstElement={(
+            <Badge className="flex items-center gap-x-1 cursor-pointer"
+              variant="outline"
               size="xs"
-              transaction={tr}
-              currency={budget.balance.currency}
-              iconSize={10}
-            />
-          </li>
-        )) : <>Loading...</>} {/* TODO: skeleton */}
-
-        <li><Badge className="font-semibold cursor-pointer"
-          variant="outline"
-          size="xs"
+              onClick={handleTransactionNavigate}
+            >
+              <BadgePlus size={16} />
+              <span className="font-bold">New</span>
+            </Badge>
+          )}
+          lastElement={transactions.length ? (
+            <Badge className="font-semibold cursor-pointer"
+              variant="outline"
+              size="xs"
+            >
+              View all
+            </Badge>
+          ) : undefined}
         >
-          View all
-        </Badge></li>
-      </ul>
+          {(payment) => (
+            <PaymentBadge className="font-semibold border dark:bg-secondary/35"
+              size="xs"
+              payment={payment}
+              processed={true}
+              currency={budget.balance.currency}
+            />
+          )}
+        </PaymentList>
+      ) : (
+        <>Loading...</> // TODO: skeleton
+      )}
 
       <div className="flex flex-wrap justify-end items-center gap-x-3.5 gap-y-2">
         <InfoBadge className="px-2.5 text-accent border-accent bg-background/65"
