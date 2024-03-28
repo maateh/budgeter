@@ -83,11 +83,15 @@ class TransactionStorageAPI implements ITransactionAPI {
     if (!executePayment) return transaction
 
     if ((transaction.type === 'default' || transaction.type === 'transfer') && transaction.processed) {
-      await this.managePayment(transaction.budgetId, transaction.payment, 'execute')
+      await BudgetStorageAPI.getInstance().manageBalance(
+        transaction.budgetId, transaction.payment, 'execute'
+      )
     }
 
     if (transaction.type === 'borrow' && !transaction.processed) {
-      await this.managePayment(transaction.budgetId, transaction.payment, 'execute')
+      await BudgetStorageAPI.getInstance().manageBalance(
+        transaction.budgetId, transaction.payment, 'execute'
+      )
     }
 
     return transaction
@@ -100,11 +104,15 @@ class TransactionStorageAPI implements ITransactionAPI {
     if (!undoPayment) return transaction
 
     if (transaction.type === 'default' && transaction.processed) {
-      await this.managePayment(transaction.budgetId, transaction.payment, 'undo')
+      await BudgetStorageAPI.getInstance().manageBalance(
+        transaction.budgetId, transaction.payment, 'undo'
+      )
     }
 
     if (transaction.type === 'borrow' && !transaction.processed) {
-      await this.managePayment(transaction.budgetId, transaction.payment, 'undo')
+      await BudgetStorageAPI.getInstance().manageBalance(
+        transaction.budgetId, transaction.payment, 'undo'
+      )
     }
 
     return transaction
@@ -117,7 +125,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     transaction.processedAt = processed ? new Date() : undefined
 
     if (transaction.type === 'default') {
-      await this.managePayment(
+      await BudgetStorageAPI.getInstance().manageBalance(
         transaction.budgetId,
         transaction.payment,
         processed ? 'execute' : 'undo'
@@ -125,7 +133,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     if (transaction.type === 'borrow' && !transaction.subpayments?.length) {
-      await this.managePayment(
+      await BudgetStorageAPI.getInstance().manageBalance(
         transaction.budgetId,
         transaction.payment,
         processed ? 'undo' : 'execute'
@@ -183,40 +191,16 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
 /**
- * Manages payments within a budget by updating the balance based on the given payment and action.
- * If the action is 'execute', it applies the payment to the budget's balance. If the action is 'undo',
- * it reverts the effect of the payment.
- *
- * @param {object} budget - The budget object containing a balance property.
- * @param {object} payment - The payment object with type (either '+' for income or '-' for loss) and amount.
- * @param {string} action - The action to be performed: 'execute' to apply the payment or 'undo' to revert it.
- * @returns {void}
+ * Manages subpayment execution within a transaction.
+ * @param transaction - The transaction object containing the payment information.
+ * @param subpayment - The subpayment to manage within the transaction.
+ * @param action - The action to perform on the subpayment ('execute' or 'undo').
+ * @returns A Promise resolving to the updated transaction after managing the subpayment.
  */
-  private async managePayment(budgetId: string, payment: Payment, action: 'execute' | 'undo'): Promise<Budget> {
-    const budget = await BudgetStorageAPI.getInstance().getById(budgetId)
-
-    const { current, income, loss } = budget.balance
-    const { type, amount } = payment
-
-    const update = action === 'execute' ? 1 : -1
-
-    const currentDelta = type === '+' ? amount * update : -amount * update
-    const incomeDelta = type === '+' ? amount * update : 0
-    const lossDelta = type === '-' ? amount * update : 0
-
-    return await BudgetStorageAPI.getInstance().getStorage().save({
-      ...budget,
-      balance: {
-        ...budget.balance,
-        current: current + currentDelta,
-        income: income + incomeDelta,
-        loss: loss + lossDelta
-      }
-    })
-  }
-
   private async manageSubpayment(transaction: Transaction, subpayment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
-    await this.managePayment(transaction.budgetId, subpayment, action)
+    await BudgetStorageAPI.getInstance().manageBalance(
+      transaction.budgetId, subpayment, action
+    )
 
     let payment: Payment = transaction.payment
     let subpayments: Payment[] = transaction.subpayments || []
