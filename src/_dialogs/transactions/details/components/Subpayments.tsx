@@ -21,7 +21,7 @@ type SubpaymentsProps = {
 const Subpayments = ({ transaction }: SubpaymentsProps) => {
   return (
     <div className="flex flex-col gap-y-4">
-      <ul className="flex flex-wrap gap-x-2.5 gap-y-2">
+      <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
         <Popover>
           <PopoverTrigger>
             <li>
@@ -39,11 +39,12 @@ const Subpayments = ({ transaction }: SubpaymentsProps) => {
           </PopoverContent>
         </Popover>
 
-        {transaction.subpayments?.length ? transaction.subpayments.map((payment, index) => (
-          <li key={index}>
+        {transaction.subpayments?.length ? transaction.subpayments.map((payment) => (
+          <li key={payment.id}>
             <PaymentBadge
               transaction={{ ...transaction, payment }}
               currency={transaction.budget.balance.currency}
+              disableNeutral
               showRemoveButton
             />
           </li>
@@ -61,9 +62,9 @@ const Subpayments = ({ transaction }: SubpaymentsProps) => {
       </ul>
 
       {/* TODO: redesign progress ui component */}
-      <Progress className="max-w-96 min-w-32 mx-auto"
+      <Progress className="min-w-32 max-w-md mx-auto"
         maxValue={transaction.payment.amount}
-        value={transaction.subpayments?.reduce((sum, payment) => sum + payment.amount, 0)}
+        value={transaction.payment.paidBackAmount}
       />
     </div>
   )

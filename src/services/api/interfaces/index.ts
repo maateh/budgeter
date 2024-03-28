@@ -42,10 +42,12 @@ export interface ITransactionAPI {
   getPaginatedWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
   
   create(data: z.infer<typeof transactionSchema | typeof transferMoneySchema>, executePayment: boolean): Promise<Transaction>
-  transferMoney(data: z.infer<typeof transferMoneySchema>): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }>
-  createSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction>
-  updateStatus(id: string, processed: boolean): Promise<Transaction>
   delete(id: string, undoPayment: boolean): Promise<Transaction>
+  
+  updateStatus(id: string, processed: boolean): Promise<Transaction>
+  transferMoney(data: z.infer<typeof transferMoneySchema>): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }>
+  addSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction>
+  removeSubpayment(id: string, paymentId: string): Promise<Transaction>
 }
 
 export interface IBackupAPI {

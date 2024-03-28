@@ -20,11 +20,9 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   private static _instance: BudgetNoteStorageAPI
 
   private storage: StorageHelper<BudgetNote>
-  private budgetStorageApi: BudgetStorageAPI
 
   private constructor() {
     this.storage = new StorageHelper('notes')
-    this.budgetStorageApi = BudgetStorageAPI.getInstance()
   }
 
   public static getInstance(): BudgetNoteStorageAPI {
@@ -36,7 +34,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
 
   public async getByIdWithBudget(_: string, noteId: string): Promise<BudgetNote & { budget: Budget }> {
     const note = await this.storage.findById(noteId)
-    const budget = await this.budgetStorageApi.getById(note.budgetId)
+    const budget = await BudgetStorageAPI.getInstance().getById(note.budgetId)
     return { ...note, budget }
   }
 

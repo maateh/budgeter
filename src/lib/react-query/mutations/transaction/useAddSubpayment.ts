@@ -6,7 +6,7 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { SubpaymentFieldValues } from "@/components/form/subpayment/types"
 
-const useCreateSubpayment = (transactionId: string) => {
+const useAddSubpayment = (transactionId: string) => {
   const queryClient = useQueryClient()
   const { api } = useAPI()
 
@@ -15,7 +15,7 @@ const useCreateSubpayment = (transactionId: string) => {
     mutationFn: async ({ id, data }: {
       id: string
       data: SubpaymentFieldValues
-    }) => api.transaction.createSubpayment(id, data),
+    }) => api.transaction.addSubpayment(id, data),
     onSuccess: ({ id, budgetId, type }) => {
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', budgetId] })
@@ -27,4 +27,4 @@ const useCreateSubpayment = (transactionId: string) => {
   })
 }
 
-export default useCreateSubpayment
+export default useAddSubpayment

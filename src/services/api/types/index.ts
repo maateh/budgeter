@@ -41,16 +41,21 @@ export type BudgetNote = {
   closedAt?: Date
 }
 
+export type Payment = {
+  id: string
+  transactionId: string
+  type: '+' | '-',
+  amount: number
+  paidBackAmount?: number
+}
+
 export type Transaction = {
   id: string
   budgetId: string
   type: 'default' | 'borrow' | 'transfer'
   name: string
-  payment: {
-    type: '+' | '-',
-    amount: number
-  }
-  subpayments?: Transaction['payment'][]
+  payment: Payment
+  subpayments?: Payment[]
   createdAt: Date
   processed: boolean
   processedAt?: Date

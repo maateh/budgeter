@@ -9,10 +9,10 @@ export { default as useDeleteNote } from './budget-note/useDeleteNote'
 
 // transaction
 export { default as useCreateTransaction } from './transaction/useCreateTransaction'
-export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
 export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'
+export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
 export { default as useTransferMoney } from './transaction/useTransferMoney'
-export { default as useCreateSubpayment } from './transaction/useCreateSubpayment'
+export { default as useAddSubpayment } from './transaction/useAddSubpayment'
 
 // backup
 export { default as useCreateBackup } from './backup/useCreateBackup'

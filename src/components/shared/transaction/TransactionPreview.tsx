@@ -39,16 +39,9 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-2 justify-between items-center">
+        {/* TODO: show tooltip - if borrowed & has subpayments */}
         <PaymentBadge
-          transaction={{
-            ...transaction,
-            payment: transaction.subpayments?.length ? {
-              ...transaction.payment,
-              amount: transaction.subpayments.reduce((total, payment) => {
-                return total - (payment.type === '+' ? payment.amount : -payment.amount)
-              }, transaction.payment.amount)
-            } : transaction.payment
-          }}
+          transaction={transaction}
           currency={budget.balance.currency}
         />
 

@@ -4,11 +4,12 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
+import { Budget, Pagination, PaginationParams, Payment, Transaction } from "@/services/api/types"
 
 // validations
 import { transactionSchema } from "@/components/form/transaction/validations"
 import { transferMoneySchema } from "@/components/form/transfer-money/validations"
+import { paymentSchema } from "@/components/form/subpayment/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -16,17 +17,14 @@ import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
 
 // utils
 import { paginate } from "@/utils"
-import { paymentSchema } from "@/components/form/subpayment/validations"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
 
   private storage: StorageHelper<Transaction>
-  private budgetStorageApi: BudgetStorageAPI
 
   private constructor() {
     this.storage = new StorageHelper('transactions')
-    this.budgetStorageApi = BudgetStorageAPI.getInstance()
   }
 
   public static getInstance() {
@@ -38,7 +36,7 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }> {
     const transaction = await this.storage.findById(id)
-    const budget = await this.budgetStorageApi.getById(transaction.budgetId)
+    const budget = await BudgetStorageAPI.getInstance().getById(transaction.budgetId)
 
     return { ...transaction, budget }
   }
@@ -52,7 +50,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     Pagination<Transaction & { budget: Budget }>
   > {
     const transactions = await this.storage.find(filterBy)
-    const budgets = await this.budgetStorageApi.getStorage().find()
+    const budgets = await BudgetStorageAPI.getInstance().getStorage().find()
 
     const { data, ...paginationData } = paginate(transactions, params)
 
@@ -66,12 +64,17 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   public async create(data: z.infer<typeof transactionSchema | typeof transferMoneySchema>, executePayment = true): Promise<Transaction> {
+    const transactionId = crypto.randomUUID()
     const transaction = await this.storage.save({
-      id: crypto.randomUUID(),
+      id: transactionId,
       budgetId: data.budgetId,
-      type: data.type as Transaction['type'],
+      type: data.type,
       name: data.name,
-      payment: data.payment as Transaction['payment'],
+      payment: {
+        id: crypto.randomUUID(),
+        transactionId,
+        ...data.payment,
+      },
       createdAt: new Date(),
       processed: data.processed,
       processedAt: data.processedAt
@@ -80,22 +83,56 @@ class TransactionStorageAPI implements ITransactionAPI {
     if (!executePayment) return transaction
 
     if ((transaction.type === 'default' || transaction.type === 'transfer') && transaction.processed) {
-      await this.budgetStorageApi.managePayments(
-        transaction.budgetId,
-        [transaction.payment],
-        'execute'
-      )
+      await this.managePayment(transaction.budgetId, transaction.payment, 'execute')
     }
 
     if (transaction.type === 'borrow' && !transaction.processed) {
-      await this.budgetStorageApi.managePayments(
-        transaction.budgetId,
-        [transaction.payment],
-        'execute'
-      )
+      await this.managePayment(transaction.budgetId, transaction.payment, 'execute')
     }
 
     return transaction
+  }
+
+  public async delete(id: string, undoPayment = true): Promise<Transaction> {
+    const transaction = await this.storage.findById(id)
+    await this.storage.deleteById(id)
+
+    if (!undoPayment) return transaction
+
+    if (transaction.type === 'default' && transaction.processed) {
+      await this.managePayment(transaction.budgetId, transaction.payment, 'undo')
+    }
+
+    if (transaction.type === 'borrow' && !transaction.processed) {
+      await this.managePayment(transaction.budgetId, transaction.payment, 'undo')
+    }
+
+    return transaction
+  }
+
+  public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
+    const transaction = await this.storage.findById(id)
+
+    transaction.processed = processed
+    transaction.processedAt = processed ? new Date() : undefined
+
+    if (transaction.type === 'default') {
+      await this.managePayment(
+        transaction.budgetId,
+        transaction.payment,
+        processed ? 'execute' : 'undo'
+      )
+    }
+
+    if (transaction.type === 'borrow' && !transaction.subpayments?.length) {
+      await this.managePayment(
+        transaction.budgetId,
+        transaction.payment,
+        processed ? 'undo' : 'execute'
+      )
+    }
+
+    return await this.storage.save(transaction)
   }
 
   public async transferMoney(
@@ -117,28 +154,30 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { rootTransaction, targetTransaction }
   }
 
-  public async createSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction> {
+  public async addSubpayment(id: string, data: z.infer<typeof paymentSchema>): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
     
-    await this.budgetStorageApi.managePayments(
-      transaction.budgetId,
-      [data],
-      'execute'
-    )
+    const subpayment: Payment = {
+      id: crypto.randomUUID(),
+      transactionId: id,
+      ...data
+    }
+
+    await this.managePayment(transaction.budgetId, subpayment, 'execute')
 
     const updatedTransaction = {
       ...transaction,
       payment: {
         ...transaction.payment,
-        amount: transaction.payment.amount - (data.type === '+' ? data.amount : -data.amount)
+        paidBackAmount: subpayment.amount + (transaction.payment.paidBackAmount || 0)
       },
       subpayments: [
         ...(transaction.subpayments ? transaction.subpayments : []),
-        data
+        subpayment
       ]
     }
 
-    if (updatedTransaction.payment.amount <= 0) {
+    if (updatedTransaction.payment.paidBackAmount >= updatedTransaction.payment.amount) {
       updatedTransaction.processed = true
       updatedTransaction.processedAt = new Date()
     }
@@ -146,59 +185,46 @@ class TransactionStorageAPI implements ITransactionAPI {
     return await this.storage.save(updatedTransaction)
   }
 
-  public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
-    const transaction = await this.storage.findById(id)
-
-    transaction.processed = processed
-    transaction.processedAt = processed ? new Date() : undefined
-
-    if (transaction.type === 'default') {
-      await this.budgetStorageApi.managePayments(
-        transaction.budgetId,
-        [transaction.payment],
-        processed ? 'execute' : 'undo'
-      )
-    }
-
-    if (transaction.type === 'borrow' && !transaction.subpayments?.length) {
-      await this.budgetStorageApi.managePayments(
-        transaction.budgetId,
-        [transaction.payment],
-        processed ? 'undo' : 'execute'
-      )
-    }
-
-    return await this.storage.save(transaction)
-  }
-
-  public async delete(id: string, undoPayment = true): Promise<Transaction> {
-    const transaction = await this.storage.findById(id)
-    await this.storage.deleteById(id)
-
-    if (!undoPayment) return transaction
-
-    if (transaction.type === 'default' && transaction.processed) {
-      await this.budgetStorageApi.managePayments(
-        transaction.budgetId,
-        [transaction.payment],
-        'undo'
-      )
-    }
-
-    if (transaction.type === 'borrow' && !transaction.processed) {
-      await this.budgetStorageApi.managePayments(
-        transaction.budgetId,
-        [transaction.payment],
-        'undo'
-      )
-    }
-
-    return transaction
+  public async removeSubpayment(id: string, paymentId: string): Promise<Transaction> {
+    // TODO: implement
   }
 
   // helpers
   public getStorage() {
     return this.storage
+  }
+
+/**
+ * Manages payments within a budget by updating the balance based on the given payment and action.
+ * If the action is 'execute', it applies the payment to the budget's balance. If the action is 'undo',
+ * it reverts the effect of the payment.
+ *
+ * @param {object} budget - The budget object containing a balance property.
+ * @param {object} payment - The payment object with type (either '+' for income or '-' for loss) and amount.
+ * @param {string} action - The action to be performed: 'execute' to apply the payment or 'undo' to revert it.
+ * @returns {void}
+ */
+  private async managePayment(budgetId: string, payment: Payment, action: 'execute' | 'undo'): Promise<Budget> {
+    const budget = await BudgetStorageAPI.getInstance().getById(budgetId)
+
+    const { current, income, loss } = budget.balance
+    const { type, amount } = payment
+
+    const update = action === 'execute' ? 1 : -1
+
+    const currentDelta = type === '+' ? amount * update : -amount * update
+    const incomeDelta = type === '+' ? amount * update : 0
+    const lossDelta = type === '-' ? amount * update : 0
+
+    return await BudgetStorageAPI.getInstance().getStorage().save({
+      ...budget,
+      balance: {
+        ...budget.balance,
+        current: current + currentDelta,
+        income: income + incomeDelta,
+        loss: loss + lossDelta
+      }
+    })
   }
 }
 

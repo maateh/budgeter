@@ -18,20 +18,31 @@ type PaymentBadgeProps = {
   transaction: Pick<Transaction, 'payment' | 'type' | 'processed'>
   currency: string
   iconSize?: number
+  disableNeutral?: boolean
   showRemoveButton?: boolean
 } & BadgeProps
 
+function isNeutral(type: Transaction['type'], processed: Transaction['processed'], disableNeutral?: boolean): boolean {
+  return !disableNeutral &&
+    ((type === 'default' && !processed) || (type === 'borrow' && processed))
+}
+
+function getPaymentAmount(payment: Transaction['payment'], processed: Transaction['processed']): number {
+  const difference = payment.amount - (payment.paidBackAmount || 0)
+
+  return processed ? payment.amount
+    : difference > 0 ? difference
+    : payment.amount
+}
+
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
-  transaction, currency, iconSize = 16, showRemoveButton, size = 'sm', className, ...props
+  transaction, currency, iconSize = 16, showRemoveButton, disableNeutral, size = 'sm', className, ...props
 }, ref) => {
   const { payment, type, processed } = transaction
 
-  const isNeutral = (type === 'default' && !processed) ||
-                    (type === 'borrow' && processed)
-
   return (
     <Badge className={cn("font-heading font-bold gap-x-1",
-        isNeutral ? 'text-muted-foreground opacity-75'
+        isNeutral(type, processed, disableNeutral) ? 'text-muted-foreground opacity-75'
           : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
       size={size}
       ref={ref}
@@ -43,11 +54,16 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
         ) : (
           <Minus size={iconSize} strokeWidth={7.5} />
         )}
-        <span>{formatWithCurrency(payment.amount, currency)}</span>
+        <span>
+          {formatWithCurrency(
+            getPaymentAmount(payment, processed),
+            currency
+          )}
+        </span>
       </div>
 
       {showRemoveButton && (
-        <Button className="ml-1 p-0.5"
+        <Button className="ml-1 -mr-0.5 p-0.5"
           variant="outline"
           size="icon"
           onClick={() => {/* TODO: handle payment remove */}}

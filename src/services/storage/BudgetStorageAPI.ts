@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
+import { Budget, Pagination, PaginationParams } from "@/services/api/types"
 
 // validations
 import { budgetSchema } from "@/components/form/budget/validations"
@@ -88,44 +88,6 @@ class BudgetStorageAPI implements IBudgetAPI {
   // helpers
   public getStorage() {
     return this.storage
-  }
-
-  public async managePayments(budgetId: string, payments: Transaction['payment'][], action: 'execute' | 'undo') {
-    const budget = await this.storage.findById(budgetId)
-
-    payments.forEach((payment) => {
-      this.managePayment(budget, payment, action)
-    })
-
-    await this.storage.save(budget)
-  }
-
-/**
- * Manages payments within a budget by updating the balance based on the given payment and action.
- * If the action is 'execute', it applies the payment to the budget's balance. If the action is 'undo',
- * it reverts the effect of the payment.
- *
- * @param {object} budget - The budget object containing a balance property.
- * @param {object} payment - The payment object with type (either '+' for income or '-' for loss) and amount.
- * @param {string} action - The action to be performed: 'execute' to apply the payment or 'undo' to revert it.
- * @returns {void}
- */
-  private managePayment(budget: Budget, payment: Transaction['payment'], action: 'execute' | 'undo'): void {
-    const { current, income, loss } = budget.balance
-    const { type, amount } = payment
-  
-    const update = action === 'execute' ? 1 : -1
-  
-    const currentDelta = type === '+' ? amount * update : -amount * update
-    const incomeDelta = type === '+' ? amount * update : 0
-    const lossDelta = type === '-' ? amount * update : 0
-  
-    budget.balance = {
-      ...budget.balance,
-      current: current + currentDelta,
-      income: income + incomeDelta,
-      loss: loss + lossDelta
-    }
   }
 }
 
