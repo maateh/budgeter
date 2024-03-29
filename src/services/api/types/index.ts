@@ -44,7 +44,7 @@ export type Payment = {
   transactionId: string
   type: '+' | '-',
   amount: number
-  paidBackAmount?: number
+  processAmount?: number
 }
 
 export type Transaction = {
@@ -53,9 +53,9 @@ export type Transaction = {
   type: 'default' | 'borrow' | 'transfer'
   name: string
   payment: Payment
-  subpayments?: Payment[]
+  subpayments: Payment[]
   createdAt: Date
   processed: boolean
   processedAt?: Date
-  related?: string[]
+  related: string[]
 }

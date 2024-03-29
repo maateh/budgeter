@@ -72,11 +72,14 @@ class TransactionStorageAPI implements ITransactionAPI {
       payment: {
         id: crypto.randomUUID(),
         transactionId,
+        processAmount: 0,
         ...data.payment,
       },
+      subpayments: [],
       createdAt: new Date(),
       processed: data.processed,
-      processedAt: data.processedAt
+      processedAt: data.processed ? data.processedAt || new Date() : undefined,
+      related: []
     })
 
     if (transaction.type === 'borrow') {
@@ -104,8 +107,8 @@ class TransactionStorageAPI implements ITransactionAPI {
     await BudgetStorageAPI.getInstance().manageBalance(transaction.budgetId, {
         ...transaction.payment,
         amount: transaction.type === 'borrow'
-          ? transaction.payment.amount - (transaction.payment.paidBackAmount || 0)
-          : (transaction.payment.paidBackAmount || 0)
+          ? transaction.payment.amount - (transaction.payment.processAmount || 0)
+          : (transaction.payment.processAmount || 0)
       }, 'undo'
     )
 
@@ -128,7 +131,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       const subpayment = this.generateSubpaymentFromPayment({
         ...transaction.payment,
         type: transaction.payment.type === '+' ? '-' : '+',
-        amount: transaction.payment.amount - (transaction.payment.paidBackAmount || 0)
+        amount: transaction.payment.amount - (transaction.payment.processAmount || 0)
       })
 
       return await this.manageSubpayment(
@@ -203,12 +206,12 @@ class TransactionStorageAPI implements ITransactionAPI {
     )
 
     let payment: Payment = transaction.payment
-    let subpayments: Payment[] = transaction.subpayments || []
+    let subpayments: Payment[] = transaction.subpayments
 
     if (action === 'execute') {
       payment = {
         ...payment,
-        paidBackAmount: subpayment.amount + (payment.paidBackAmount || 0)
+        processAmount: subpayment.amount + (payment.processAmount || 0)
       }
       subpayments = [...subpayments, subpayment]
     }
@@ -216,12 +219,12 @@ class TransactionStorageAPI implements ITransactionAPI {
     if (action === 'undo') {
       payment = {
         ...payment,
-        paidBackAmount: transaction.payment.paidBackAmount! - subpayment.amount
+        processAmount: (payment.processAmount || 0) - subpayment.amount
       }
       subpayments = subpayments.filter(({ id }) => id !== subpayment.id)
     }
 
-    const processed = (payment.paidBackAmount || 0) >= payment.amount
+    const processed = (payment.processAmount || 0) >= payment.amount
 
     return await this.storage.save({
       ...transaction,
@@ -233,7 +236,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   private generateSubpaymentFromPayment(payment: Payment): Payment {
-    delete payment.paidBackAmount
+    delete payment.processAmount
     return {
       ...payment,
       id: crypto.randomUUID()

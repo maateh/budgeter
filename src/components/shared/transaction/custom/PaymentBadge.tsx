@@ -23,7 +23,7 @@ export function isNeutral(type: Transaction['type'], processed: boolean): boolea
 }
 
 function getPaymentAmount(payment: Payment, processed: boolean): number {
-  const difference = payment.amount - (payment.paidBackAmount || 0)
+  const difference = payment.amount - (payment.processAmount || 0)
 
   return processed ? payment.amount
     : difference > 0 ? difference
