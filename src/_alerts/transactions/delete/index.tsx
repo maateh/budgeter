@@ -17,7 +17,7 @@ const DeleteTransaction = () => {
 
   const deleteConfirm = async () => {
     try {
-      await deleteTransaction({ id })
+      await deleteTransaction(id)
       navigate(-1)
     } catch (err) {
       console.error(err)

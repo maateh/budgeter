@@ -12,15 +12,13 @@ const useCreateTransaction = () => {
 
   return useMutation({
     mutationKey: ['createTransaction'],
-    mutationFn: async ({ data, executePayment = true }: {
-      data: TransactionFieldValues
-      executePayment?: boolean
-    }) => await api.transaction.create(data, executePayment),
+    mutationFn: async (data: TransactionFieldValues) => await api.transaction.create(data),
     onSuccess: ({ type, processed, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', budgetId] })
       queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', { type, processed }] })
 
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
     }
   })
 }

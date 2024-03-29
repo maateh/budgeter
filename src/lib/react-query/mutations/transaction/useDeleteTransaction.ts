@@ -9,10 +9,7 @@ const useDeleteTransaction = (transactionId: string) => {
 
   return useMutation({
     mutationKey: ['deleteTransaction', transactionId],
-    mutationFn: async ({ id, undoPayment = true }: {
-      id: string
-      undoPayment?: boolean
-    }) => await api.transaction.delete(id, undoPayment),
+    mutationFn: async (id: string) => await api.transaction.delete(id),
     onSuccess: ({ id ,type, processed, budgetId }) => {
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
       queryClient.invalidateQueries({ queryKey: ['budgetTransactions', budgetId] })
