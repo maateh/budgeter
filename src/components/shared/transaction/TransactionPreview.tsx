@@ -4,7 +4,6 @@ import { formatDistance } from "date-fns"
 import { BadgeInfo } from "lucide-react"
 
 // shadcn
-import { Badge } from "@/components/ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // components
@@ -33,7 +32,12 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       onClick={() => openDialog(`/transactions/details/${transaction.id}`)}
     >
       <div className="flex items-center gap-x-1">
-        <TransactionStatusToggle transaction={transaction} />
+        <TransactionStatusToggle
+          transaction={transaction}
+          iconProps={{ size: 20, strokeWidth: 2.5 }}
+          showTooltip
+        />
+
         <div className="grid">
           <p className="text-md font-heading font-medium truncate">{transaction.name}</p>
           <p className="text-xs max-sm:truncate sm:text-ellipsis">
@@ -47,28 +51,30 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       </div>
 
       <div className="flex gap-x-1.5 justify-between items-center">
-        {transaction.type === 'borrow' && transaction.subpayments?.length && (
-          <Popover>
-            <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
-              <Badge className="-mr-1 p-1"
-                size="icon"
-                variant="ghost"
-              >
-                <BadgeInfo size={16} />
-              </Badge>
-            </PopoverTrigger>
-            <PopoverContent onClick={(e) => e.stopPropagation()}>
+        <Popover>
+          <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+            <PaymentBadge
+              payment={transaction.payment}
+              processed={transaction.processed}
+              currency={budget.balance.currency}
+              isNeutral={isNeutral(transaction.type, transaction.processed)}
+            />
+          </PopoverTrigger>
+          <PopoverContent onClick={(e) => e.stopPropagation()}>
+            {transaction.type === 'borrow' ? (
               <PaymentProgress transaction={{ ...transaction, budget }} />
-            </PopoverContent>
-          </Popover>
-        )}
-
-        <PaymentBadge
-          payment={transaction.payment}
-          processed={transaction.processed}
-          currency={budget.balance.currency}
-          isNeutral={isNeutral(transaction.type, transaction.processed)}
-        />
+            ) : (
+              <div className="icon-wrapper">
+                <BadgeInfo size={18} />
+                <span className="text-sm">
+                  {transaction.processed
+                    ? 'Payment has already been processed.'
+                    : "Payment hasn't been processed yet."}
+                </span>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
 
         <BudgetMarker
           budget={budget}

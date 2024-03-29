@@ -1,3 +1,5 @@
+import { ForwardedRef } from "react"
+
 // shadcn
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button, ButtonProps } from "@/components/ui/button"
@@ -10,12 +12,11 @@ type StateToggleProps<C extends string, U extends string> = {
   icon: { [key in C | U]: React.ReactNode }
   tooltip?: { [key in C | U]: string }
   toggleOnHover?: boolean
-  toggleDisabled?: boolean
-  ref?: React.Ref<HTMLButtonElement>
+  forwardedRef?: ForwardedRef<HTMLButtonElement>
 } & ButtonProps
 
 function StateToggle<C extends string, U extends string>({
-  status, icon, tooltip, toggleOnHover, toggleDisabled, variant = "ghost", size = "icon", className, ref, ...props
+  status, icon, tooltip, toggleOnHover, variant = "ghost", size = "icon", className, forwardedRef, ...props
 }: StateToggleProps<C, U>) {
   const isChecked = status === Object.keys(icon)[0]
 
@@ -23,11 +24,11 @@ function StateToggle<C extends string, U extends string>({
     <Button className={cn("toggle hover:bg-foreground/5", toggleOnHover && "hover-toggle-mode", className)}
       variant={variant}
       size={size}
-      ref={ref}
+      ref={forwardedRef}
       {...props}
     >
       <span className={cn(isChecked && 'active')}>
-        {!toggleDisabled && toggleOnHover
+        {toggleOnHover
           ? icon[isChecked
               ? Object.keys(icon)[0] as C | U
               : Object.keys(icon)[1] as C | U
@@ -36,7 +37,7 @@ function StateToggle<C extends string, U extends string>({
         }
       </span>
       <span className={cn(!isChecked && 'active')}>
-        {!toggleDisabled && toggleOnHover
+        {toggleOnHover
           ? icon[isChecked
               ? Object.keys(icon)[1] as C | U
               : Object.keys(icon)[0] as C | U

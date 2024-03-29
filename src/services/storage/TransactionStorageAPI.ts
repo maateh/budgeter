@@ -65,10 +65,8 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction> {
     const transactionId = crypto.randomUUID()
     const transaction = await this.storage.save({
+      ...data,
       id: transactionId,
-      budgetId: data.budgetId,
-      type: data.type,
-      name: data.name,
       payment: {
         id: crypto.randomUUID(),
         transactionId,
@@ -77,7 +75,6 @@ class TransactionStorageAPI implements ITransactionAPI {
       },
       subpayments: [],
       createdAt: new Date(),
-      processed: data.processed,
       processedAt: data.processed ? data.processedAt || new Date() : undefined,
       related: []
     })
@@ -118,32 +115,19 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
     const transaction = await this.storage.findById(id)
-
-    if (transaction.type === 'default') {
-      const subpayment = this.generateSubpaymentFromPayment(transaction.payment)
-
-      return await this.manageSubpayment(
-        transaction, subpayment, processed ? 'execute' : 'undo'
-      )
+    
+    if (transaction.type !== 'default') {
+      throw new Error('You can only update transactions of the default type.')
     }
 
-    if (transaction.type === 'borrow') {
-      const subpayment = this.generateSubpaymentFromPayment({
-        ...transaction.payment,
-        type: transaction.payment.type === '+' ? '-' : '+',
-        amount: transaction.payment.amount - (transaction.payment.processAmount || 0)
-      })
+    const amount = processed
+      ? transaction.payment.amount
+      : transaction.payment.processAmount || 0
 
-      return await this.manageSubpayment(
-        transaction, subpayment, processed ? 'execute' : 'undo'
-      )
-    }
-
-    return await this.storage.save({
-      ...transaction,
-      processed,
-      processedAt: processed ? new Date() : undefined
-    })
+    return await this.manageSubpayment(transaction, {
+      ...transaction.payment,
+      amount
+    }, processed ? 'execute' : 'undo')
   }
 
   public async transferMoney(

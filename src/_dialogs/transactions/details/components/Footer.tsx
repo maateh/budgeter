@@ -26,7 +26,11 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
     <DialogFooter className="block">
       <div className="flex flex-wrap flex-row justify-between items-center gap-4 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-x-2.5">
-          <TransactionStatusToggle transaction={transaction} />
+          <TransactionStatusToggle
+            transaction={transaction}
+            showTooltip={transaction.type === 'default'}
+          />
+
           <PaymentBadge
             size="lg"
             payment={transaction.payment}

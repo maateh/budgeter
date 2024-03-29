@@ -69,7 +69,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
         value={transaction.payment.processAmount}
       />
 
-      <div className="mx-0.5 my-2.5 flex justify-between gap-x-1.5 sm:mx-6 sm:gap-x-2.5">
+      <div className="mx-0.5 mt-2.5 flex justify-between gap-x-1.5 sm:mx-6 sm:gap-x-2.5">
         <InfoBadge className="min-w-24 px-6"
           variant="outline"
           size="sm"

@@ -22,7 +22,7 @@ const buttonVariants = cva(
         sm: "h-9 px-3 text-sm shadow-md",
         lg: "h-11 px-4 text-lg tracking-wide shadow-xl",
         xl: "h-12 px-5 text-lg tracking-wide shadow-md",
-        icon: "w-fit h-fit p-1"
+        icon: "w-fit h-fit p-1.5"
       },
     },
     defaultVariants: {

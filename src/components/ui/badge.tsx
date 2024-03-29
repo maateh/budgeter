@@ -19,7 +19,7 @@ const badgeVariants = cva(
         xs: "px-2 py-0.5 text-xs font-medium",
         sm: "px-4 py-1 text-sm",
         lg: "px-6 py-2 text-lg font-semibold",
-        icon: "p-2.5",
+        icon: "p-1.5",
       }
     },
     defaultVariants: {
