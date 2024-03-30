@@ -24,6 +24,7 @@ const transactionSchema = transactionFormSchema.extend({
     z.literal('transfer')
   ]),
   createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
   payment: paymentSchema,
   subpayments: z.array(paymentSchema),
   related: z.array(

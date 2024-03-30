@@ -41,7 +41,9 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]> {
     const transactions = await this.storage.find(filterBy)
-    return transactions.slice(params?.offset, params?.limit)
+    return transactions
+      .sort(({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1)
+      .slice(params?.offset, params?.limit)
   }
 
   public async getPaginatedWithBudgets(
@@ -51,10 +53,13 @@ class TransactionStorageAPI implements ITransactionAPI {
     const transactions = await this.storage.find(filterBy)
     const budgets = await BudgetStorageAPI.getInstance().getStorage().find()
 
-    const { data, ...paginationData } = paginate(transactions, params)
+    const { data, ...pagination } = paginate(
+      transactions, params,
+      ({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1
+    )
 
     return {
-      ...paginationData,
+      ...pagination,
       data: data.reduce((trs, tr) => ([
         ...trs,
         { ...tr, budget: budgets.find(b => b.id === tr.budgetId)!}
@@ -64,6 +69,8 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction> {
     const transactionId = crypto.randomUUID()
+    const date = new Date()
+
     const transaction = await this.storage.save({
       ...data,
       id: transactionId,
@@ -74,8 +81,9 @@ class TransactionStorageAPI implements ITransactionAPI {
         ...data.payment,
       },
       subpayments: [],
-      createdAt: new Date(),
-      processedAt: data.processed ? data.processedAt || new Date() : undefined,
+      createdAt: date,
+      updatedAt: date,
+      processedAt: data.processed ? data.processedAt || date : undefined,
       related: []
     })
 
@@ -209,13 +217,15 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     const processed = (payment.processAmount || 0) >= payment.amount
+    const date = new Date()
 
     return await this.storage.save({
       ...transaction,
       payment,
       subpayments,
       processed,
-      processedAt: processed ? new Date() : undefined
+      processedAt: processed ? date : undefined,
+      updatedAt: date
     })
   }
 

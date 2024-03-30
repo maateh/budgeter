@@ -55,6 +55,7 @@ export type Transaction = {
   payment: Payment
   subpayments: Payment[]
   createdAt: Date
+  updatedAt: Date
   processed: boolean
   processedAt?: Date
   related: string[]
