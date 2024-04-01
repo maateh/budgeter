@@ -64,7 +64,6 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async getWithBudget({ params, filterBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction & { budget: Budget }>> {
     const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
 
-    // FIXME: add -1 as limit to pagination params
     const { data: transactions } = await this.get({ params, filterBy })
     const budgets = await budgetStorage.find()
 

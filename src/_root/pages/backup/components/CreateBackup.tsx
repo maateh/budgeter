@@ -39,12 +39,7 @@ const columns: ColumnDef<Budget>[] = [
         balance={row.original.balance}
       />
     )
-  },
-  // TODO: it might not be necessary
-  // {
-  //   accessorKey: "type",
-  //   header: "Type"
-  // }
+  }
 ]
 
 const CreateBackup = () => {

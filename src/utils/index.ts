@@ -23,15 +23,20 @@ export function formatWithCurrency(amount: number, currency: string) {
  * @returns An object containing paginated data and metadata.
  */
 export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
-  const offset = params?.offset || 0
-  const limit = params?.limit || 10 // FIXME: set -1 as default === limitless
+  const { offset = 0, limit = -1 } = params || {}
+
+  const nextPageOffset = limit > -1
+    ? offset + limit < data.length ? offset + limit : null
+    : null
+
+  const sortedData = data.sort(sortBy)
 
   return {
     offset,
     limit,
-    nextPageOffset: offset + limit < data.length ? offset + limit : null,
+    nextPageOffset,
     total: data.length,
-    data: data.sort(sortBy).slice(offset, offset + limit)
+    data: limit > -1 ? sortedData.slice(offset, offset + limit) : sortedData
   }
 }
 
