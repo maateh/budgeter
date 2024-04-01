@@ -11,8 +11,11 @@ const paymentFormSchema = z.object({
 
 const paymentSchema = paymentFormSchema.extend({
   id: z.string().uuid({ message: 'Payment ID is invalid!' }),
+  budgetId: z.string().uuid({ message: 'Budget ID is invalid!' }),
   transactionId: z.string().uuid({ message: 'Transaction ID is invalid!' }),
-  processAmount: z.coerce.number().optional()
+  createdAt: z.coerce.date(),
+  processAmount: z.coerce.number().optional(),
+  isSubpayment: z.coerce.boolean()
 })
 
 export { paymentSchema, paymentFormSchema }

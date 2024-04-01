@@ -4,14 +4,16 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Budget, Pagination, PaginationParams, Payment, Transaction } from "@/services/api/types"
+import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
+import { TransactionDocument } from "@/services/storage/types"
 
 // validations
-import { paymentFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
+import { transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
 import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
+import PaymentStorageAPI from "@/services/storage/PaymentStorageAPI"
 
 // utils
 import { paginate } from "@/utils"
@@ -19,38 +21,51 @@ import { paginate } from "@/utils"
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
 
-  private storage: StorageHelper<Transaction>
+  private storage: StorageHelper<TransactionDocument>
 
   private constructor() {
     this.storage = new StorageHelper('transactions')
   }
 
   public static getInstance() {
-    if (!TransactionStorageAPI._instance) {
-      TransactionStorageAPI._instance = new TransactionStorageAPI()
+    if (!this._instance) {
+      this._instance = new TransactionStorageAPI()
     }
-    return TransactionStorageAPI._instance
+    return this._instance
   }
 
   public async getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }> {
-    const transaction = await this.storage.findById(id)
-    const budget = await BudgetStorageAPI.getInstance().getById(transaction.budgetId)
+    const { budgetId, paymentId, ...doc } = await this.storage.findById(id)
 
-    return { ...transaction, budget }
+    const budget = await BudgetStorageAPI.getInstance().getById(budgetId)
+    const payment = await PaymentStorageAPI.getInstance()
+      .getStorage().findById(paymentId)
+
+    return { ...doc, budgetId, payment, budget }
   }
 
+  // TODO: pagination
   public async get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]> {
-    const transactions = await this.storage.find(filterBy)
+    const documents = await this.storage.find(filterBy)
+    const payments = await PaymentStorageAPI.getInstance()
+      .getStorage().fetchFromStorage()
+
+    const transactions: Transaction[] = documents.map((doc) => ({
+      ...doc,
+      payment: payments[doc.paymentId]
+    }))
+
     return transactions
       .sort(({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1)
       .slice(params?.offset, params?.limit)
   }
 
+  // TODO: rename -> getWithBudget
   public async getPaginatedWithBudgets(
     params: PaginationParams,
     filterBy?: Partial<Transaction>
   ): Promise<Pagination<Transaction & { budget: Budget }>> {
-    const transactions = await this.storage.find(filterBy)
+    const transactions = await this.get(params, filterBy)
     const budgets = await BudgetStorageAPI.getInstance().getStorage().find()
 
     const { data, ...pagination } = paginate(
@@ -62,80 +77,84 @@ class TransactionStorageAPI implements ITransactionAPI {
       ...pagination,
       data: data.reduce((trs, tr) => ([
         ...trs,
-        { ...tr, budget: budgets.find(b => b.id === tr.budgetId)!}
+        { ...tr, budget: budgets.find(b => b.id === tr.budgetId)! }
       ]), [] as (Transaction & { budget: Budget })[])
     }
   }
 
   public async create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction> {
+    const paymentApi = PaymentStorageAPI.getInstance()
+    const budgetApi = BudgetStorageAPI.getInstance()
+
     const transactionId = crypto.randomUUID()
+    const paymentId = crypto.randomUUID()
     const date = new Date()
 
-    const transaction = await this.storage.save({
+    const { budgetId, type, processed, ...doc } = await this.storage.save({
       ...data,
       id: transactionId,
-      payment: {
-        id: crypto.randomUUID(),
-        transactionId,
-        processAmount: 0,
-        ...data.payment,
-      },
-      subpayments: [],
+      paymentId,
       createdAt: date,
       updatedAt: date,
       processedAt: data.processed ? data.processedAt || date : undefined,
       related: []
     })
 
-    if (transaction.type === 'borrow') {
-      await BudgetStorageAPI.getInstance().manageBalance(
-        transaction.budgetId, transaction.payment, 'execute'
-      )
+    const payment = await paymentApi.getStorage()
+      .save({
+        ...data.payment,
+        id: paymentId,
+        budgetId,
+        transactionId,
+        processAmount: 0,
+        createdAt: date,
+        isSubpayment: false
+      })
+
+    if (type === 'borrow') {
+      await budgetApi.manageBalance(budgetId, payment, 'execute')
     }
 
-    if (!transaction.processed) return transaction
+    if (!processed) return { ...doc, budgetId, payment, type, processed }
 
-    let subpayment: Payment = this.generateSubpaymentFromPayment(transaction.payment)
-    if (transaction.type === 'borrow') {
-      subpayment = {
-        ...subpayment,
-        type: transaction.payment.type === '+' ? '-' : '+'
-      }
+    if (type === 'borrow') {
+      return await paymentApi.manageSubpayment(transactionId, {
+        ...payment,
+        id: crypto.randomUUID(),
+        type: payment.type === '+' ? '-' : '+',
+        isSubpayment: true
+      }, 'execute')
     }
 
-    return await this.manageSubpayment(transaction, subpayment, 'execute')
+    return await paymentApi.managePayment(transactionId, payment, 'execute')
   }
 
   public async delete(id: string): Promise<Transaction> {
-    const transaction = await this.storage.findById(id)
+    const budgetApi = BudgetStorageAPI.getInstance()
+    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    await BudgetStorageAPI.getInstance().manageBalance(transaction.budgetId, {
-        ...transaction.payment,
-        amount: transaction.type === 'borrow'
-          ? transaction.payment.amount - (transaction.payment.processAmount || 0)
-          : (transaction.payment.processAmount || 0)
-      }, 'undo'
-    )
+    const { budgetId, paymentId, ...doc } = await this.storage.findById(id)
+    const payment = await paymentStorage.findById(paymentId)
+
+    await budgetApi.manageBalance(budgetId, payment, 'undo')
 
     await this.storage.deleteById(id)
-    return transaction
+    await paymentStorage.deleteById(paymentId)
+
+    return { ...doc, budgetId, payment }
   }
 
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
-    const transaction = await this.storage.findById(id)
-    
-    if (transaction.type !== 'default') {
+    const paymentApi = PaymentStorageAPI.getInstance()
+
+    const { paymentId, type } = await this.storage.findById(id)
+
+    if (type !== 'default') {
       throw new Error('You can only update transactions of the default type.')
     }
 
-    const amount = processed
-      ? transaction.payment.amount
-      : transaction.payment.processAmount || 0
-
-    return await this.manageSubpayment(transaction, {
-      ...transaction.payment,
-      amount
-    }, processed ? 'execute' : 'undo')
+    const payment = await paymentApi.getStorage().findById(paymentId)
+    return await paymentApi.managePayment(id, payment, processed ? 'execute' : 'undo')
   }
 
   public async transferMoney(
@@ -157,84 +176,9 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { rootTransaction, targetTransaction }
   }
 
-  public async addSubpayment(id: string, data: z.infer<typeof paymentFormSchema>): Promise<Transaction> {
-    const transaction = await this.storage.findById(id)
-    
-    const subpayment: Payment = {
-      id: crypto.randomUUID(),
-      transactionId: id,
-      ...data
-    }
-
-    return await this.manageSubpayment(transaction, subpayment, 'execute')
-  }
-
-  public async removeSubpayment(id: string, paymentId: string): Promise<Transaction> {
-    const transaction = await this.storage.findById(id)
-    const subpayment = transaction.subpayments?.find(({ id }) => id === paymentId)
-
-    if (!subpayment) {
-      throw new Error('Subpayment not found!')
-    }
-
-    return await this.manageSubpayment(transaction, subpayment, 'undo')
-  }
-
   // helpers
   public getStorage() {
     return this.storage
-  }
-
-/**
- * Manages subpayment execution within a transaction.
- * @param transaction - The transaction object containing the payment information.
- * @param subpayment - The subpayment to manage within the transaction.
- * @param action - The action to perform on the subpayment ('execute' or 'undo').
- * @returns A Promise resolving to the updated transaction after managing the subpayment.
- */
-  private async manageSubpayment(transaction: Transaction, subpayment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
-    await BudgetStorageAPI.getInstance().manageBalance(
-      transaction.budgetId, subpayment, action
-    )
-
-    let payment: Payment = transaction.payment
-    let subpayments: Payment[] = transaction.subpayments
-
-    if (action === 'execute') {
-      payment = {
-        ...payment,
-        processAmount: subpayment.amount + (payment.processAmount || 0)
-      }
-      subpayments = [...subpayments, subpayment]
-    }
-
-    if (action === 'undo') {
-      payment = {
-        ...payment,
-        processAmount: (payment.processAmount || 0) - subpayment.amount
-      }
-      subpayments = subpayments.filter(({ id }) => id !== subpayment.id)
-    }
-
-    const processed = (payment.processAmount || 0) >= payment.amount
-    const date = new Date()
-
-    return await this.storage.save({
-      ...transaction,
-      payment,
-      subpayments,
-      processed,
-      processedAt: processed ? date : undefined,
-      updatedAt: date
-    })
-  }
-
-  private generateSubpaymentFromPayment(payment: Payment): Payment {
-    delete payment.processAmount
-    return {
-      ...payment,
-      id: crypto.randomUUID()
-    }
   }
 }
 

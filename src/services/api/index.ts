@@ -5,10 +5,11 @@ import CurrencyAPI from '@/services/api/CurrencyAPI'
 import BudgetStorageAPI from '@/services/storage/BudgetStorageAPI'
 import BudgetNoteStorageAPI from '@/services/storage/BudgetNoteStorageAPI'
 import TransactionStorageAPI from '@/services/storage/TransactionStorageAPI'
+import PaymentStorageAPI from '@/services/storage/PaymentStorageAPI'
 import BackupHelper from '@/services/backup/BackupHelper'
 
 // interfaces
-import { IBackupAPI, IBudgetAPI, IBudgetNoteAPI, ITransactionAPI } from '@/services/api/interfaces'
+import { IBackupAPI, IBudgetAPI, IBudgetNoteAPI, IPaymentAPI, ITransactionAPI } from '@/services/api/interfaces'
 
 class API {
   private static _instance: API
@@ -17,6 +18,7 @@ class API {
   public budget: IBudgetAPI
   public budgetNote: IBudgetNoteAPI
   public transaction: ITransactionAPI
+  public payment: IPaymentAPI
   public backup: IBackupAPI
 
   private constructor(type: 'storage' | 'remote') {
@@ -26,12 +28,14 @@ class API {
       this.budget = BudgetStorageAPI.getInstance()
       this.budgetNote = BudgetNoteStorageAPI.getInstance()
       this.transaction = TransactionStorageAPI.getInstance()
+      this.payment = PaymentStorageAPI.getInstance()
       this.backup = BackupHelper.getInstance()
     } else {
       // TODO: create remote api
       this.budget = BudgetStorageAPI.getInstance()
       this.budgetNote = BudgetNoteStorageAPI.getInstance()
       this.transaction = TransactionStorageAPI.getInstance()
+      this.payment = PaymentStorageAPI.getInstance()
       this.backup = BackupHelper.getInstance()
     }
   }

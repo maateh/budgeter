@@ -15,7 +15,7 @@ import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import PaymentList from "@/components/shared/transaction/PaymentList"
 
 // hooks
-import { useBudgetTransactions } from "@/lib/react-query/queries"
+import { usePayments } from "@/lib/react-query/queries"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -34,9 +34,9 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
   const { openDialog } = useDialog()
 
-  const { data: transactions, isLoading: transactionsIsLoading } = useBudgetTransactions(budget.id, {
+  const { data: payments, isLoading: isPaymentsLoading } = usePayments({
     params: { offset: 0, limit: 7 },
-    filterBy: { processed: true }
+    filterBy: { budgetId: budget.id }
   })
   
   const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -65,9 +65,9 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       
       <Separator className="mx-auto w-5/6" />
 
-      {!transactionsIsLoading && transactions ? (
+      {!isPaymentsLoading && payments ? (
         <PaymentList className="mb-auto"
-          payments={transactions.map((tr) => tr.payment)}
+          payments={payments}
           infoBadgeProps={{ size: "xs" }}
           firstElement={(
             <Badge className="flex items-center gap-x-1 cursor-pointer"
@@ -79,7 +79,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               <span className="font-bold">New</span>
             </Badge>
           )}
-          lastElement={transactions.length ? (
+          lastElement={payments.length ? (
             <Badge className="font-semibold cursor-pointer"
               variant="outline"
               size="xs"
@@ -92,8 +92,8 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             <PaymentBadge className="font-semibold border dark:bg-secondary/35"
               size="xs"
               payment={payment}
-              processed={true}
               currency={budget.balance.currency}
+              processed
             />
           )}
         </PaymentList>

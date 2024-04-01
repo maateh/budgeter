@@ -5,7 +5,7 @@ export { noteSchema, noteFormSchema } from "./schemas/noteSchema"
 
 // transaction
 export { paymentSchema, paymentFormSchema } from "./schemas/paymentSchema"
-export { transactionSchema, transactionFormSchema } from "./schemas/transactionSchema"
+export { transactionSchema, transactionFormSchema, transactionDocumentSchema } from "./schemas/transactionSchema"
 export { transferMoneyFormSchema } from "./schemas/transferMoneySchema"
 
 // backup

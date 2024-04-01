@@ -26,10 +26,15 @@ const transactionSchema = transactionFormSchema.extend({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   payment: paymentSchema,
-  subpayments: z.array(paymentSchema),
   related: z.array(
     z.string().uuid({ message: 'One of related transacion ID is invalid!' })
   )
 })
 
-export { transactionSchema, transactionFormSchema }
+const transactionDocumentSchema = transactionSchema.omit({
+  payment: true
+}).extend({
+  paymentId: z.string().uuid({ message: 'Payment ID is invalid!' }),
+})
+
+export { transactionSchema, transactionFormSchema, transactionDocumentSchema }

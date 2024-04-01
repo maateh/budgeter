@@ -14,3 +14,4 @@ export { default as usePaginatedNotesByStatus } from './buget-note/usePaginatedN
 export { default as useTransactionWithBudget } from './transaction/useTransactionWithBudget'
 export { default as useBudgetTransactions } from './transaction/useBudgetTransactions'
 export { default as usePaginatedTransactionsWithBudgets } from './transaction/usePaginatedTransactionsWithBudgets'
+export { default as usePayments } from './transaction/usePayments'

@@ -13,6 +13,9 @@ import PaymentList from "@/components/shared/transaction/PaymentList"
 import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
+// hooks
+import { usePayments } from "@/lib/react-query/queries"
+
 // types
 import { Budget, Transaction } from "@/services/api/types"
 
@@ -24,10 +27,14 @@ type PaymentProgressProps = {
 }
 
 const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
+  const { data: subpayments } = usePayments({
+    filterBy: { transactionId: transaction.id, isSubpayment: true }
+  })
+
   return (
     <>
       <PaymentList className="mb-2.5"
-        payments={transaction.subpayments}
+        payments={subpayments}
         firstElement={(
           <Popover>
             <PopoverTrigger>

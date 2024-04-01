@@ -23,11 +23,12 @@ export function isNeutral(type: Transaction['type'], processed: boolean): boolea
 }
 
 function getPaymentAmount(payment: Payment, processed: boolean): number {
-  const difference = payment.amount - (payment.processAmount || 0)
-
-  return processed ? payment.amount
+  const { processAmount = 0, amount } = payment
+  const difference = amount - processAmount
+  
+  return processed ? amount
     : difference > 0 ? difference
-    : payment.amount
+    : amount
 }
 
 type PaymentBadgeProps = {

@@ -1,11 +1,15 @@
 import { z } from "zod"
 
 // storage
+import StorageHelper from "@/services/storage/StorageHelper"
 import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
 import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
 import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
+import PaymentStorageAPI from "@/services/storage/PaymentStorageAPI"
 
 // types
+import { Budget, BudgetNote, Payment } from "@/services/api/types"
+import { TransactionDocument } from "@/services/storage/types"
 import { BackupData, BackupFileContent } from "@/services/backup/types"
 
 // interfaces
@@ -20,14 +24,16 @@ import { filterObject } from "@/utils"
 class BackupHelper implements IBackupAPI {
   public static _instance: BackupHelper
 
-  private budgetStorageApi: BudgetStorageAPI
-  private budgetNoteStorageApi: BudgetNoteStorageAPI
-  private transactionStorageApi: TransactionStorageAPI
+  private budgetStorage: StorageHelper<Budget>
+  private budgetNoteStorage: StorageHelper<BudgetNote>
+  private transactionStorage: StorageHelper<TransactionDocument>
+  private paymentStorage: StorageHelper<Payment>
 
   private constructor() {
-    this.budgetStorageApi = BudgetStorageAPI.getInstance()
-    this.budgetNoteStorageApi = BudgetNoteStorageAPI.getInstance()
-    this.transactionStorageApi = TransactionStorageAPI.getInstance()
+    this.budgetStorage = BudgetStorageAPI.getInstance().getStorage()
+    this.budgetNoteStorage = BudgetNoteStorageAPI.getInstance().getStorage()
+    this.transactionStorage = TransactionStorageAPI.getInstance().getStorage()
+    this.paymentStorage = PaymentStorageAPI.getInstance().getStorage()
   }
 
   public static getInstance() {
@@ -50,45 +56,45 @@ class BackupHelper implements IBackupAPI {
 
   public async restore({ fileContent }: z.infer<typeof backupSchema>): Promise<void> {
     const { data, complete } = fileContent
-    const { budgets, transactions, notes } = data
+    const { budgets, transactions, payments, notes } = data
 
     if (complete) {
-      await this.budgetStorageApi.getStorage().saveToStorage(budgets)
-      await this.transactionStorageApi.getStorage().saveToStorage(transactions)
-      await this.budgetNoteStorageApi.getStorage().saveToStorage(notes)
+      await this.budgetStorage.saveToStorage(budgets)
+      await this.transactionStorage.saveToStorage(transactions)
+      await this.paymentStorage.saveToStorage(payments)
+      await this.budgetNoteStorage.saveToStorage(notes)
       return
     }
 
-    await this.budgetStorageApi.getStorage()
-      .restore(budgets,
-        (budget) => Object.keys(budgets).some((key) => key === budget.id)
-      )
+    await this.budgetStorage.restore(budgets,
+      (budget) => Object.keys(budgets).some((key) => key === budget.id))
 
-    await this.transactionStorageApi.getStorage()
-      .restore(transactions,
-        (tr) => Object.values(budgets).some((budget) => budget.id === tr.id)
-      )
+    await this.transactionStorage.restore(transactions,
+      (tr) => Object.values(budgets).some((budget) => budget.id === tr.id))
 
-    await this.budgetNoteStorageApi.getStorage()
-      .restore(notes,
-        (note) => Object.values(budgets).some((budget) => budget.id === note.id)
-      )
+    await this.paymentStorage.restore(payments,
+      (payment) => Object.values(budgets).some((budget) => budget.id === payment.id))
+
+    await this.budgetNoteStorage.restore(notes,
+      (note) => Object.values(budgets).some((budget) => budget.id === note.id))
   }
 
   // helpers
   private async collectData(complete: boolean, budgetIds: string[]): Promise<BackupData> {
-    const budgets = await this.budgetStorageApi.getStorage().fetchFromStorage()
-    const notes = await this.budgetNoteStorageApi.getStorage().fetchFromStorage()
-    const transactions = await this.transactionStorageApi.getStorage().fetchFromStorage()
+    const budgets = await this.budgetStorage.fetchFromStorage()
+    const notes = await this.budgetNoteStorage.fetchFromStorage()
+    const transactions = await this.transactionStorage.fetchFromStorage()
+    const payments = await this.paymentStorage.fetchFromStorage()
 
     if (complete) {
-      return { budgets, transactions, notes }
+      return { budgets, notes, transactions, payments }
     }
 
     return {
       budgets: filterObject(budgets, (budget) => budgetIds.includes(budget.id)),
-      transactions: filterObject(transactions, (tr) => budgetIds.includes(tr.budgetId)),
       notes: filterObject(notes, (note) => budgetIds.includes(note.budgetId)),
+      transactions: filterObject(transactions, (tr) => budgetIds.includes(tr.budgetId)),
+      payments: filterObject(payments, (payment) => budgetIds.includes(payment.budgetId))
     }
   }
 

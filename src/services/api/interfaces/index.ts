@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 // types
-import { Budget, BudgetNote, Currencies, Pagination, PaginationParams, Transaction } from "@/services/api/types"
+import { Budget, BudgetNote, Currencies, Pagination, PaginationParams, Payment, Transaction } from "@/services/api/types"
 import { BackupFileContent } from "@/services/backup/types"
 
 // validations
@@ -41,8 +41,12 @@ export interface ITransactionAPI {
   
   updateStatus(id: string, processed: boolean): Promise<Transaction>
   transferMoney(data: z.infer<typeof transferMoneyFormSchema>): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }>
-  addSubpayment(id: string, data: z.infer<typeof paymentFormSchema>): Promise<Transaction>
-  removeSubpayment(id: string, paymentId: string): Promise<Transaction>
+}
+
+export interface IPaymentAPI {
+  get(params?: PaginationParams, filterBy?: Partial<Payment>): Promise<Pagination<Payment>>
+  addSubpayment(transactionId: string, data: z.infer<typeof paymentFormSchema>): Promise<Transaction>
+  removeSubpayment(transactionId: string, subpaymentId: string): Promise<Transaction>
 }
 
 export interface IBackupAPI {

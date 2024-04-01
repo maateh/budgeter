@@ -22,8 +22,9 @@ export function formatWithCurrency(amount: number, currency: string) {
  * @param limit - The maximum number of items per page.
  * @returns An object containing paginated data and metadata.
  */
-export function paginate<D>(data: D[], params: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
-  const { offset, limit } = params
+export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
+  const offset = params?.offset || 0
+  const limit = params?.limit || 10
 
   return {
     offset,
