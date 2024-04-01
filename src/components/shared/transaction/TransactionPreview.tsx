@@ -42,7 +42,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
           <p className="text-md font-heading font-medium truncate">{transaction.name}</p>
           <p className="text-xs max-sm:truncate sm:text-ellipsis">
             {formatDistance(
-              transaction.processedAt || transaction.createdAt, Date.now(), {
+              transaction.updatedAt, Date.now(), {
                 addSuffix: true
               }
             )}

@@ -1,7 +1,7 @@
 import { format } from "date-fns"
 
 // icons
-import { Calendar, CalendarCheck } from "lucide-react"
+import { Calendar, CalendarCheck, CalendarClock } from "lucide-react"
 
 // components
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
@@ -35,6 +35,17 @@ const TransactionDetailsInfo = ({ transaction }: TransactionDetailsInfoProps) =>
             <span className="px-1 text-foreground/40">»</span>
             <span className="pl-1 text-muted-foreground/80 font-medium">
               {format(transaction.createdAt, 'yyyy. MM. dd. - hh:mm')}
+            </span>
+          </p>
+        </div>
+
+        <div className="icon-wrapper">
+          <CalendarClock size={18} strokeWidth={2.5} className="text-muted-foreground/80" />
+          <p>
+            Last updated at
+            <span className="px-1 text-foreground/40">»</span>
+            <span className="pl-1 text-muted-foreground/80 font-medium">
+              {format(transaction.updatedAt, 'yyyy. MM. dd. - hh:mm')}
             </span>
           </p>
         </div>
