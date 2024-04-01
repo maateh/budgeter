@@ -12,6 +12,11 @@ export type PaginationParams = {
   limit: number
 }
 
+export type QueryOptions<T> = {
+  params?: PaginationParams
+  filterBy?: Partial<T>
+}
+
 // data models
 export type Currencies = {
   [key: string]: string

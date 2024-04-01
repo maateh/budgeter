@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IPaymentAPI } from "@/services/api/interfaces"
 
 // types
-import { Pagination, PaginationParams, Payment, Transaction } from "@/services/api/types"
+import { Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
 
 // validations
 import { paymentFormSchema } from "@/lib/validations"
@@ -33,7 +33,7 @@ class PaymentStorageAPI implements IPaymentAPI {
     return this._instance
   }
 
-  public async get(params?: PaginationParams, filterBy?: Partial<Payment>): Promise<Pagination<Payment>> {
+  public async get({ params, filterBy }: QueryOptions<Payment> = {}): Promise<Pagination<Payment>> {
     const payments = await this.storage.find(filterBy)
 
     return paginate(

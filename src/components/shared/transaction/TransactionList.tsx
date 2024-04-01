@@ -12,7 +12,7 @@ import PaginationList from "@/components/pagination-list/PaginationList"
 
 // hooks
 import { usePagination } from "@/components/pagination-list/hooks"
-import { usePaginatedTransactionsWithBudgets } from "@/lib/react-query/queries"
+import { useTransactionsPagination } from "@/lib/react-query/queries"
 
 // types
 import { Transaction } from "@/services/api/types"
@@ -27,7 +27,7 @@ const TransactionList = ({ filterBy, maxItemLimit = 10 }: TransactionListProps) 
 
   const {
     data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
-  } = usePaginatedTransactionsWithBudgets({ filterBy })
+  } = useTransactionsPagination({ filterBy })
 
   const { isLimitExceeded, manualPagination } = usePagination({
     data, fetchNextPage, maxItemLimit,

@@ -11,16 +11,20 @@ const useDeleteBudget = (budgetId: string) => {
     mutationKey: ['deleteBudget', budgetId],
     mutationFn: async (id: string) => await api.budget.delete(id),
     onSuccess: ({ id }) => {
+      // budget
       queryClient.invalidateQueries({ queryKey: ['budget', id] })
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
 
-      queryClient.invalidateQueries({ queryKey: ['noteWithBudget', budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedNotesByStatus', id] })
+      // note
+      queryClient.invalidateQueries({ queryKey: ['noteWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['notes', { budgetId: id }] })
 
+      // transaction
       queryClient.invalidateQueries({ queryKey: ['transactionWithBudget'] })
-      queryClient.invalidateQueries({ queryKey: ['budgetTransactions', id] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets'] })
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
+      
+      // payment
+      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId: id }] })
     }
   })
 }

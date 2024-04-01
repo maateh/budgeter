@@ -14,12 +14,16 @@ const useTransferMoney = () => {
     mutationKey: [],
     mutationFn: async (data: TransferMoneyFieldValues) => await api.transaction.transferMoney(data),
     onSuccess: ({ rootTransaction, targetTransaction }) => {
-      queryClient.invalidateQueries({ queryKey: ['budgetTransactions', rootTransaction.budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['budgetTransactions', targetTransaction.budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', { type: 'default', processed: true }] })
-
+      // budget
       queryClient.invalidateQueries({ queryKey: ['budget', rootTransaction.budgetId] })
       queryClient.invalidateQueries({ queryKey: ['budget', targetTransaction.budgetId] })
+
+      // transaction
+      queryClient.invalidateQueries({ queryKey: ['transactions', { type: 'transfer' }] })
+
+      // payment
+      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId: rootTransaction.budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId: targetTransaction.budgetId }] })
     }
   })
 }

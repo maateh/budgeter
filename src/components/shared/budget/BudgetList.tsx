@@ -9,7 +9,7 @@ import PaginationList from "@/components/pagination-list/PaginationList"
 import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
-import { usePaginatedBudgets } from "@/lib/react-query/queries"
+import { useBudgetsPagination } from "@/lib/react-query/queries"
 import { usePagination } from "@/components/pagination-list/hooks"
 
 // hooks
@@ -24,7 +24,7 @@ const BudgetList = ({ disableScrolling }: BudgetListProps) => {
 
   const {
     data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage
-  } = usePaginatedBudgets({ disableScrolling })
+  } = useBudgetsPagination({ disableScrolling })
 
   const { observerRef } = usePagination({
     data, fetchNextPage, disableScrolling

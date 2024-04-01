@@ -3,7 +3,7 @@ import PaginationList from "@/components/pagination-list/PaginationList"
 import Note from "@/components/shared/budget-note/Note"
 
 // hooks
-import { usePaginatedNotesByStatus } from "@/lib/react-query/queries"
+import { useNotesPagination } from "@/lib/react-query/queries"
 
 // types
 import { Budget, BudgetNote } from "@/services/api/types"
@@ -14,7 +14,9 @@ type NoteListProps = {
 }
 
 const NoteList = ({ budget, status }: NoteListProps) => {
-  const { data, isLoading } = usePaginatedNotesByStatus(budget.id, status)
+  const { data, isLoading } = useNotesPagination({
+    filterBy: { budgetId: budget.id, status }
+  })
 
   return !isLoading && data ? (
     <PaginationList className="w-full px-2 flex flex-wrap items-center gap-x-12 gap-y-4"

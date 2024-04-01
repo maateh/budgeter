@@ -12,8 +12,10 @@ export { default as useCreateTransaction } from './transaction/useCreateTransact
 export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'
 export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
 export { default as useTransferMoney } from './transaction/useTransferMoney'
-export { default as useAddSubpayment } from './transaction/useAddSubpayment'
-export { default as useRemoveSubpayment } from './transaction/useRemoveSubpayment'
+
+// payment
+export { default as useAddSubpayment } from './payment/useAddSubpayment'
+export { default as useRemoveSubpayment } from './payment/useRemoveSubpayment'
 
 // backup
 export { default as useCreateBackup } from './backup/useCreateBackup'

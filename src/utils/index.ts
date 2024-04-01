@@ -24,7 +24,7 @@ export function formatWithCurrency(amount: number, currency: string) {
  */
 export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
   const offset = params?.offset || 0
-  const limit = params?.limit || 10
+  const limit = params?.limit || 10 // FIXME: set -1 as default === limitless
 
   return {
     offset,

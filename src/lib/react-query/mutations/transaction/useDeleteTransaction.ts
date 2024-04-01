@@ -11,12 +11,15 @@ const useDeleteTransaction = (transactionId: string) => {
     mutationKey: ['deleteTransaction', transactionId],
     mutationFn: async (id: string) => await api.transaction.delete(id),
     onSuccess: ({ id ,type, processed, budgetId }) => {
-      queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
-      queryClient.invalidateQueries({ queryKey: ['budgetTransactions', budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedTransactionsWithBudgets', { type, processed }] })
-
+      // budget
       queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['paginatedBudgets'] })
+
+      // transaction
+      queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['transactions', { type, processed }] })
+      
+      // payment
+      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId }] })
     }
   })
 }

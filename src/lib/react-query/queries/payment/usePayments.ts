@@ -15,9 +15,9 @@ const usePayments = ({ params, filterBy }: TransactionsQueryOptions = {}) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['payments', { filterBy }],
+    queryKey: ['payments', filterBy],
     queryFn: async () => {
-      const { data } = await api.payment.get(params, filterBy)
+      const { data } = await api.payment.get({ params, filterBy })
       return data
     }
   })

@@ -4,7 +4,7 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Budget, Pagination, PaginationParams, Transaction } from "@/services/api/types"
+import { Budget, Pagination, QueryOptions, Transaction } from "@/services/api/types"
 import { TransactionDocument } from "@/services/storage/types"
 
 // validations
@@ -44,29 +44,29 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { ...doc, budgetId, payment, budget }
   }
 
-  // TODO: pagination
-  public async get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]> {
+  public async get({ params, filterBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction>> {
+    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+
     const documents = await this.storage.find(filterBy)
-    const payments = await PaymentStorageAPI.getInstance()
-      .getStorage().fetchFromStorage()
+    const payments = await paymentStorage.fetchFromStorage()
 
     const transactions: Transaction[] = documents.map((doc) => ({
       ...doc,
       payment: payments[doc.paymentId]
     }))
 
-    return transactions
-      .sort(({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1)
-      .slice(params?.offset, params?.limit)
+    return paginate(
+      transactions, params,
+      ({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1
+    )
   }
 
-  // TODO: rename -> getWithBudget
-  public async getPaginatedWithBudgets(
-    params: PaginationParams,
-    filterBy?: Partial<Transaction>
-  ): Promise<Pagination<Transaction & { budget: Budget }>> {
-    const transactions = await this.get(params, filterBy)
-    const budgets = await BudgetStorageAPI.getInstance().getStorage().find()
+  public async getWithBudget({ params, filterBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction & { budget: Budget }>> {
+    const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
+
+    // FIXME: add -1 as limit to pagination params
+    const { data: transactions } = await this.get({ params, filterBy })
+    const budgets = await budgetStorage.find()
 
     const { data, ...pagination } = paginate(
       transactions, params,

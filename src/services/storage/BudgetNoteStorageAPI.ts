@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IBudgetNoteAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, BudgetNote, Pagination, PaginationParams } from "@/services/api/types"
+import { Budget, BudgetNote, Pagination, QueryOptions } from "@/services/api/types"
 
 // validations
 import { noteFormSchema } from "@/lib/validations"
@@ -25,11 +25,11 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     this.storage = new StorageHelper('notes')
   }
 
-  public static getInstance(): BudgetNoteStorageAPI {
-    if (!BudgetNoteStorageAPI._instance) {
-      BudgetNoteStorageAPI._instance = new BudgetNoteStorageAPI()
+  public static getInstance() {
+    if (!this._instance) {
+      this._instance = new BudgetNoteStorageAPI()
     }
-    return BudgetNoteStorageAPI._instance
+    return this._instance
   }
 
   public async getByIdWithBudget(_: string, noteId: string): Promise<BudgetNote & { budget: Budget }> {
@@ -38,7 +38,7 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return { ...note, budget }
   }
 
-  public async getPaginated(params: PaginationParams, filterBy?: Partial<BudgetNote>): Promise<Pagination<BudgetNote>> {
+  public async get({ params, filterBy }: QueryOptions<BudgetNote> = {}): Promise<Pagination<BudgetNote>> {
     const notes = await this.storage.find(filterBy)
     return paginate(notes, params)
   }

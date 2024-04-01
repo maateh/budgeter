@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, Pagination, PaginationParams, Payment } from "@/services/api/types"
+import { Budget, Pagination, Payment, QueryOptions } from "@/services/api/types"
 
 // validations
 import { budgetFormSchema } from "@/lib/validations"
@@ -26,23 +26,18 @@ class BudgetStorageAPI implements IBudgetAPI {
     this.storage = new StorageHelper('budgets')
   }
 
-  public static getInstance(): BudgetStorageAPI {
-    if (!BudgetStorageAPI._instance) {
-      BudgetStorageAPI._instance = new BudgetStorageAPI()
+  public static getInstance() {
+    if (!this._instance) {
+      this._instance = new BudgetStorageAPI()
     }
-    return BudgetStorageAPI._instance
+    return this._instance
   }
 
   public async getById(id: string): Promise<Budget> {
     return await this.storage.findById(id)
   }
 
-  public async get(params?: PaginationParams, filterBy?: Partial<Budget>): Promise<Budget[]> {
-    const budgets = await this.storage.find(filterBy)
-    return budgets.slice(params?.offset, params?.limit)
-  }
-
-  public async getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>> {
+  public async get({ params, filterBy }: QueryOptions<Budget> = {}): Promise<Pagination<Budget>> {
     const budgets = await this.storage.find(filterBy)
     return paginate(budgets, params)
   }

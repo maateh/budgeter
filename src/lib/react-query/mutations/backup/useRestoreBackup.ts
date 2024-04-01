@@ -13,9 +13,7 @@ const useRestoreBackup = () => {
   return useMutation({
     mutationKey: ['restoreBackup'],
     mutationFn: (backupFile: RestoreBackupFieldValues) => api.backup.restore(backupFile),
-    onSuccess: () => {
-      queryClient.invalidateQueries()
-    }
+    onSuccess: () => queryClient.invalidateQueries()
   })
 }
 

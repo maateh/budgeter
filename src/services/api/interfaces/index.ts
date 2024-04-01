@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 // types
-import { Budget, BudgetNote, Currencies, Pagination, PaginationParams, Payment, Transaction } from "@/services/api/types"
+import { Budget, BudgetNote, Currencies, Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
 import { BackupFileContent } from "@/services/backup/types"
 
 // validations
@@ -13,8 +13,7 @@ export interface ICurrencyAPI {
 
 export interface IBudgetAPI {
   getById(id: string): Promise<Budget>
-  get(params?: PaginationParams, filterBy?: Partial<Budget>): Promise<Budget[]>
-  getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<Budget>>
+  get(options?: QueryOptions<Budget>): Promise<Pagination<Budget>>
 
   create(data: z.infer<typeof budgetFormSchema>): Promise<Budget>
   update(id: string, data: z.infer<typeof budgetFormSchema>): Promise<Budget>
@@ -23,7 +22,7 @@ export interface IBudgetAPI {
 
 export interface IBudgetNoteAPI {
   getByIdWithBudget(budgetId: string, noteId: string): Promise<BudgetNote & { budget: Budget }>
-  getPaginated(params: PaginationParams, filterBy?: Partial<Budget>): Promise<Pagination<BudgetNote>>
+  get(options?: QueryOptions<BudgetNote>): Promise<Pagination<BudgetNote>>
 
   create(budgetId: string, data: z.infer<typeof noteFormSchema>): Promise<BudgetNote>
   updateText(budgetId: string, noteId: string, data: z.infer<typeof noteFormSchema>): Promise<BudgetNote>
@@ -32,9 +31,9 @@ export interface IBudgetNoteAPI {
 }
 
 export interface ITransactionAPI {
-  getByIdWithBudget(transactionId: string): Promise<Transaction & { budget: Budget }>
-  get(params?: PaginationParams, filterBy?: Partial<Transaction>): Promise<Transaction[]>
-  getPaginatedWithBudgets(params: PaginationParams, filterBy?: Partial<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
+  getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }>
+  get(options?: QueryOptions<Transaction>): Promise<Pagination<Transaction>>
+  getWithBudget(options?: QueryOptions<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
   
   create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction>
   delete(id: string): Promise<Transaction>
@@ -44,7 +43,7 @@ export interface ITransactionAPI {
 }
 
 export interface IPaymentAPI {
-  get(params?: PaginationParams, filterBy?: Partial<Payment>): Promise<Pagination<Payment>>
+  get(options?: QueryOptions<Payment>): Promise<Pagination<Payment>>
   addSubpayment(transactionId: string, data: z.infer<typeof paymentFormSchema>): Promise<Transaction>
   removeSubpayment(transactionId: string, subpaymentId: string): Promise<Transaction>
 }
