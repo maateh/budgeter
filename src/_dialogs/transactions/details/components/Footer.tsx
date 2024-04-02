@@ -28,7 +28,7 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
         <div className="flex items-center gap-x-2.5">
           <TransactionStatusToggle
             transaction={transaction}
-            showTooltip={transaction.type === 'default'}
+            budget={transaction.budget}
           />
 
           <PaymentBadge

@@ -19,7 +19,6 @@ import { useBudget } from "@/lib/react-query/queries"
 
 // types
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
-import { Transaction } from "@/services/api/types"
 
 type TransferMoneyFormFieldsProps = {
   budgetId: string
@@ -45,7 +44,7 @@ const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsP
         <TransferPreview
           rootBudget={rootBudget}
           targetBudget={targetBudget}
-          payment={paymentField}
+          // FIXME: payment={paymentField}
         />
       )}
 
@@ -99,17 +98,17 @@ const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsP
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <StateToggle<Transaction['payment']['type'], Transaction['payment']['type']>
+                  <StateToggle
                     type="button"
                     className={`rounded-xl p-1.5
                       ${field.value === '+'
                         ? 'bg-accent hover:bg-accent/90'
                         : 'bg-red-500 hover:bg-red-500/90'}
                     `}
-                    status={field.value as Transaction['payment']['type']}
+                    status={field.value === '+' ? 'on' : 'off'}
                     icon={{
-                      "+": <Plus size={20} strokeWidth={4} />,
-                      '-': <Minus size={20} strokeWidth={4} />
+                      on: <Plus size={20} strokeWidth={4} />,
+                      off: <Minus size={20} strokeWidth={4} />
                     }}
                     onClick={() => field.onChange(field.value === '+' ? '-' : '+')}
                   />

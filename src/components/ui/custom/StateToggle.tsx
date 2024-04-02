@@ -1,57 +1,57 @@
-import { ForwardedRef } from "react"
+import { forwardRef } from "react"
 
 // shadcn
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button, ButtonProps } from "@/components/ui/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // utils
 import { cn } from "@/lib/utils"
 
-type StateToggleProps<C extends string, U extends string> = {
-  status: C | U
-  icon: { [key in C | U]: React.ReactNode }
-  tooltip?: { [key in C | U]: string }
+export type ToggleStatus = 'on' | 'off'
+
+type StateToggleProps = {
+  status: 'on' | 'off'
+  icon: { [key in ToggleStatus]: React.ReactNode }
+  tooltip?: { [key in ToggleStatus]: string }
   toggleOnHover?: boolean
-  forwardedRef?: ForwardedRef<HTMLButtonElement>
 } & ButtonProps
 
-function StateToggle<C extends string, U extends string>({
-  status, icon, tooltip, toggleOnHover, variant = "ghost", size = "icon", className, forwardedRef, ...props
-}: StateToggleProps<C, U>) {
-  const isChecked = status === Object.keys(icon)[0]
-
-  const element =
+const StateToggle = forwardRef<HTMLButtonElement, StateToggleProps>(({
+  status, icon, tooltip, toggleOnHover, className, variant = "ghost", size = "icon", ...props
+}, ref) => {
+  const toggleElement = (
     <Button className={cn("toggle hover:bg-foreground/5", toggleOnHover && "hover-toggle-mode", className)}
       variant={variant}
       size={size}
-      ref={forwardedRef}
+      ref={ref}
       {...props}
     >
-      <span className={cn(isChecked && 'active')}>
+      <span className={cn(status === 'on' && 'active')}>
         {toggleOnHover
-          ? icon[isChecked
-              ? Object.keys(icon)[0] as C | U
-              : Object.keys(icon)[1] as C | U
+          ? icon[status === 'on'
+              ? Object.keys(icon)[0] as ToggleStatus
+              : Object.keys(icon)[1] as ToggleStatus
             ]
           : icon[status]
         }
       </span>
-      <span className={cn(!isChecked && 'active')}>
+      <span className={cn(status === 'off' && 'active')}>
         {toggleOnHover
-          ? icon[isChecked
-              ? Object.keys(icon)[1] as C | U
-              : Object.keys(icon)[0] as C | U
+          ? icon[status === 'on'
+              ? Object.keys(icon)[1] as ToggleStatus
+              : Object.keys(icon)[0] as ToggleStatus
             ]
           : icon[status]
         }
       </span>
     </Button>
+  )
 
-  return !tooltip ? element : (
+  return !tooltip ? toggleElement : (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          {element}
+          {toggleElement}
         </TooltipTrigger>
         <TooltipContent className="tracking-wide">
           {tooltip[status]}
@@ -59,6 +59,6 @@ function StateToggle<C extends string, U extends string>({
       </Tooltip>
     </TooltipProvider>
   )
-}
+})
 
 export default StateToggle

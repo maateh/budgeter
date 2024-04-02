@@ -17,7 +17,11 @@ const TransactionDetailsInfo = ({ transaction }: TransactionDetailsInfoProps) =>
   return (
     <>
       <div className="justify-center text-lg text-center font-heading icon-wrapper">
-        <TransactionStatusToggle transaction={transaction} />
+        <TransactionStatusToggle
+          transaction={transaction}
+          budget={transaction.budget}
+        />
+
         {transaction.type === 'transfer' ? (
           <p>This is a <span className="text-blue-600 dark:text-blue-400 overline">transfer</span> transaction.</p>
         ) : transaction.processed ? (

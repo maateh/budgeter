@@ -13,7 +13,6 @@ import StateToggle from "@/components/ui/custom/StateToggle"
 
 // types
 import { SubpaymentFieldValues } from "@/components/form/subpayment/types"
-import { Transaction } from "@/services/api/types"
 
 type SubpaymentFormFieldsProps = UseFormReturn<SubpaymentFieldValues>
 
@@ -29,17 +28,17 @@ const SubpaymentFormFields = ({ control }: SubpaymentFormFieldsProps) => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <StateToggle<Transaction['payment']['type'], Transaction['payment']['type']>
+                <StateToggle
                   type="button"
                   className={`rounded-xl p-1.5
                     ${field.value === '+'
                       ? 'bg-accent hover:bg-accent/90'
                       : 'bg-red-500 hover:bg-red-500/90'}
                   `}
-                  status={field.value as Transaction['payment']['type']}
+                  status={field.value === '+' ? 'on' : 'off'}
                   icon={{
-                    "+": <Plus size={18} strokeWidth={4} />,
-                    '-': <Minus size={18} strokeWidth={4} />
+                    on: <Plus size={18} strokeWidth={4} />,
+                    off: <Minus size={18} strokeWidth={4} />
                   }}
                   onClick={() => field.onChange(field.value === '+' ? '-' : '+')}
                 />

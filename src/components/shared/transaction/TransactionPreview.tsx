@@ -34,8 +34,8 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
       <div className="flex items-center gap-x-1">
         <TransactionStatusToggle
           transaction={transaction}
+          budget={budget}
           iconProps={{ size: 20, strokeWidth: 2.5 }}
-          showTooltip
         />
 
         <div className="grid">
