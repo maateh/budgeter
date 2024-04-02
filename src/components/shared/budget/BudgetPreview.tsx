@@ -11,8 +11,8 @@ import { Separator } from "@/components/ui/separator"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
-import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
-import PaymentList from "@/components/shared/transaction/PaymentList"
+import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentList from "@/components/shared/payment/PaymentList"
 
 // hooks
 import { usePayments } from "@/lib/react-query/queries"

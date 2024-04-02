@@ -5,7 +5,7 @@ import { BadgeCheck, Banknote, Coins, LucideProps, XCircle } from "lucide-react"
 
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
-import PaymentProgress from "@/components/shared/transaction/PaymentProgress"
+import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
 import { useUpdateTransactionStatus } from "@/lib/react-query/mutations"
@@ -97,7 +97,10 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
         {toggleElement}
       </PopoverTrigger>
       <PopoverContent onClick={(e) => e.stopPropagation()}>
-        <PaymentProgress transaction={{ ...transaction, budget }} />
+        <PaymentProgress
+          transaction={transaction}
+          budget={budget}
+        />
       </PopoverContent>
     </Popover>
   )

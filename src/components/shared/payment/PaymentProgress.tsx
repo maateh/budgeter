@@ -9,8 +9,8 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
-import PaymentList from "@/components/shared/transaction/PaymentList"
-import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
+import PaymentList from "@/components/shared/payment/PaymentList"
+import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
 import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
 // hooks
@@ -23,10 +23,11 @@ import { Budget, Transaction } from "@/services/api/types"
 import { formatWithCurrency } from "@/utils"
 
 type PaymentProgressProps = {
-  transaction: Transaction & { budget: Budget }
+  transaction: Transaction
+  budget: Budget
 }
 
-const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
+const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
   const { data: subpayments } = usePayments({
     filter: {
       filterBy: { transactionId: transaction.id, isSubpayment: true }
@@ -60,7 +61,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           <PaymentBadge
             payment={payment}
             processed={true}
-            currency={transaction.budget.balance.currency}
+            currency={budget.balance.currency}
             showRemoveButton
           />
         )}
@@ -86,7 +87,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           label="Paid Back"
           value={formatWithCurrency(
             transaction.payment.processedAmount || 0,
-            transaction.budget.balance.currency
+            budget.balance.currency
           )}
         />
 
@@ -97,7 +98,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           label="Total"
           value={formatWithCurrency(
             transaction.payment.amount,
-            transaction.budget.balance.currency
+            budget.balance.currency
           )}
         />
       </div>

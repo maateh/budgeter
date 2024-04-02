@@ -8,8 +8,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 // components
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
-import PaymentBadge, { isNeutral } from "@/components/shared/transaction/custom/PaymentBadge"
-import PaymentProgress from "@/components/shared/transaction/PaymentProgress"
+import PaymentBadge, { isNeutral } from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
 // hooks
@@ -62,7 +62,10 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
           </PopoverTrigger>
           <PopoverContent onClick={(e) => e.stopPropagation()}>
             {transaction.type === 'borrow' ? (
-              <PaymentProgress transaction={{ ...transaction, budget }} />
+              <PaymentProgress
+                transaction={transaction}
+                budget={budget}
+              />
             ) : (
               <div className="icon-wrapper">
                 <BadgeInfo size={18} />

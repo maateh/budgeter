@@ -8,7 +8,7 @@ import { DialogContent } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
 // components
-import PaymentProgress from "@/components/shared/transaction/PaymentProgress"
+import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 import Header from "./components/Header"
 import Info from "./components/Info"
 import RelatedTransactions from "./components/RelatedTransactions"
@@ -57,7 +57,10 @@ const TransactionDetails = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent className="mx-3">
-              <PaymentProgress transaction={transaction} />
+              <PaymentProgress
+                transaction={transaction}
+                budget={transaction.budget}
+              />
             </AccordionContent>
           </AccordionItem>
         )}

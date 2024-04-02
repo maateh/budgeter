@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
 
 // components
-import PaymentBadge, { isNeutral } from "@/components/shared/transaction/custom/PaymentBadge"
+import PaymentBadge, { isNeutral } from "@/components/shared/payment/custom/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 
 // hooks

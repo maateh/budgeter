@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator"
 // components
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
-import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
