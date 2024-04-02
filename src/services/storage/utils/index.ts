@@ -27,10 +27,14 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
 }
 
 /**
- * Filters an array of documents based on the provided filter object.
+ * Filters an array of documents based on the provided filter and exclusion criteria.
  * @param documents - The array of documents to filter.
- * @param filterBy - The partial object used as a filter criteria.
- * @returns An array of documents that match the filter criteria.
+ * @param filter - An object containing filter and exclusion criteria.
+ * @param filter.filterBy - The partial object used as filter criteria.
+ * @param filter.excludeBy - The partial object used as exclusion criteria.
+ * @returns An array of documents that match the filter criteria and are not excluded.
+ * 
+ * Filtering criteria can include arrays of values for each property to match against.
  */
 export function filter<D>(documents: D[], filter?: FilterOptions<D>): D[] {
   const { filterBy, excludeBy } = filter || {}

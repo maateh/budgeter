@@ -73,6 +73,15 @@ class PaymentStorageAPI implements IPaymentAPI {
     return this.storage
   }
 
+/**
+ * Manages a payment within a transaction by updating the payment details, processing status,
+ * and triggering balance management for the associated budget.
+ *
+ * @param transactionId - The ID of the transaction to which the payment belongs.
+ * @param payment - The payment object to be managed.
+ * @param action - The action to be performed: 'execute' to apply the payment or 'undo' to revert it.
+ * @returns A Promise resolving to the updated transaction after managing the payment.
+ */
   public async managePayment(transactionId: string, payment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
     const budgetApi = BudgetStorageAPI.getInstance()
     const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
@@ -109,10 +118,12 @@ class PaymentStorageAPI implements IPaymentAPI {
   }
 
 /**
- * Manages subpayment execution within a transaction.
- * @param transaction - The transaction object containing the payment information.
- * @param subpayment - The subpayment to manage within the transaction.
- * @param action - The action to perform on the subpayment ('execute' or 'undo').
+ * Manages a subpayment within a transaction by updating the subpayment details, processing status,
+ * and triggering balance management for the associated budget.
+ *
+ * @param transactionId - The ID of the transaction to which the subpayment belongs.
+ * @param subpayment - The subpayment object to be managed.
+ * @param action - The action to be performed: 'execute' to apply the subpayment or 'undo' to revert it.
  * @returns A Promise resolving to the updated transaction after managing the subpayment.
  */
   public async manageSubpayment(transactionId: string, subpayment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
