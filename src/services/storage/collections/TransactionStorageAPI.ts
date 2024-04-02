@@ -95,7 +95,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       createdAt: date,
       updatedAt: date,
       processedAt: data.processed ? data.processedAt || date : undefined,
-      related: []
+      related: data.related || []
     })
 
     const payment = await paymentApi.getStorage()
@@ -163,12 +163,14 @@ class TransactionStorageAPI implements ITransactionAPI {
       payment: {
         ...data.payment,
         type: data.payment.type === '+' ? '-' : '+'
-      }
+      },
+      related: [data.targetBudgetId]
     })
 
     const targetTransaction = await this.create({
       ...data,
-      budgetId: data.targetBudgetId
+      budgetId: data.targetBudgetId,
+      related: [rootTransaction.id]
     })
 
     return { rootTransaction, targetTransaction }

@@ -13,7 +13,10 @@ const transactionFormSchema = z.object({
     .max(28, { message: 'Too long.' }),
   payment: paymentFormSchema,
   processed: z.boolean(),
-  processedAt: z.coerce.date().optional()
+  processedAt: z.coerce.date().optional(),
+  related: z.array(
+    z.string().uuid({ message: 'One of related Transacion ID is invalid!' })
+  ).optional()
 })
 
 const transactionSchema = transactionFormSchema.extend({
@@ -27,7 +30,7 @@ const transactionSchema = transactionFormSchema.extend({
   updatedAt: z.coerce.date(),
   payment: paymentSchema,
   related: z.array(
-    z.string().uuid({ message: 'One of related transacion ID is invalid!' })
+    z.string().uuid({ message: 'One of related Transacion ID is invalid!' })
   )
 })
 
