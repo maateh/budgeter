@@ -12,4 +12,6 @@ const balanceSchema = balanceFormSchema.extend({
   loss: z.coerce.number().gte(0)
 })
 
-export { balanceSchema, balanceFormSchema }
+const balanceDocumentSchema = balanceSchema
+
+export { balanceSchema, balanceDocumentSchema, balanceFormSchema }

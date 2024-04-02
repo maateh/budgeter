@@ -16,4 +16,6 @@ const noteSchema = noteFormSchema.extend({
   closedAt: z.coerce.date().optional()
 })
 
-export { noteSchema, noteFormSchema }
+const noteDocumentSchema = noteSchema
+
+export { noteSchema, noteDocumentSchema, noteFormSchema }

@@ -5,6 +5,7 @@ import { IBudgetNoteAPI } from "@/services/api/interfaces"
 
 // types
 import { Budget, BudgetNote, Pagination, QueryOptions } from "@/services/api/types"
+import { BudgetNoteDocument } from "@/services/storage/types"
 
 // validations
 import { noteFormSchema } from "@/lib/validations"
@@ -19,7 +20,7 @@ import { paginate } from "@/utils"
 class BudgetNoteStorageAPI implements IBudgetNoteAPI {
   private static _instance: BudgetNoteStorageAPI
 
-  private storage: StorageHelper<BudgetNote>
+  private storage: StorageHelper<BudgetNoteDocument>
 
   private constructor() {
     this.storage = new StorageHelper('notes')

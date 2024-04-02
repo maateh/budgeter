@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { balanceFormSchema, balanceSchema } from "@/lib/validations"
+import { balanceSchema, balanceDocumentSchema, balanceFormSchema } from "@/lib/validations"
 
 const budgetFormSchema = z.object({
   name: z.string()
@@ -17,4 +17,8 @@ const budgetSchema = budgetFormSchema.extend({
   balance: balanceSchema
 })
 
-export { budgetSchema, budgetFormSchema }
+const budgetDocumentSchema = budgetSchema.extend({
+  balance: balanceDocumentSchema
+})
+
+export { budgetSchema, budgetDocumentSchema, budgetFormSchema }

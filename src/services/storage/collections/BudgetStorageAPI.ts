@@ -5,6 +5,7 @@ import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
 import { Budget, Pagination, Payment, QueryOptions } from "@/services/api/types"
+import { BudgetDocument } from "@/services/storage/types"
 
 // validations
 import { budgetFormSchema } from "@/lib/validations"
@@ -19,7 +20,7 @@ import { paginate } from "@/utils"
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
 
-  private storage: StorageHelper<Budget>
+  private storage: StorageHelper<BudgetDocument>
 
   private constructor() {
     this.storage = new StorageHelper('budgets')

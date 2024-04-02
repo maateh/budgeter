@@ -1,12 +1,12 @@
 import { z } from "zod"
 
-import { budgetSchema, noteSchema, paymentSchema, transactionDocumentSchema } from "@/lib/validations"
+import { budgetDocumentSchema, noteDocumentSchema, paymentDocumentSchema, transactionDocumentSchema } from "@/lib/validations"
 
 const backupDataSchema = z.object({
-  budgets: z.record(z.string().uuid(), budgetSchema),
+  budgets: z.record(z.string().uuid(), budgetDocumentSchema),
   transactions: z.record(z.string().uuid(), transactionDocumentSchema),
-  payments: z.record(z.string().uuid(), paymentSchema),
-  notes: z.record(z.string().uuid(), noteSchema)
+  payments: z.record(z.string().uuid(), paymentDocumentSchema),
+  notes: z.record(z.string().uuid(), noteDocumentSchema)
 })
 
 const backupSchema = z.object({

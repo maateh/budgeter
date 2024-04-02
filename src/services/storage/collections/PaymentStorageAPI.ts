@@ -5,6 +5,7 @@ import { IPaymentAPI } from "@/services/api/interfaces"
 
 // types
 import { Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
+import { PaymentDocument } from "@/services/storage/types"
 
 // validations
 import { paymentFormSchema } from "@/lib/validations"
@@ -19,7 +20,7 @@ import { paginate } from "@/utils"
 class PaymentStorageAPI implements IPaymentAPI {
   private static _instance: PaymentStorageAPI
 
-  private storage: StorageHelper<Payment>
+  private storage: StorageHelper<PaymentDocument>
 
   private constructor() {
     this.storage = new StorageHelper('payments')

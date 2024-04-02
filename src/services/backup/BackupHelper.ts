@@ -5,8 +5,7 @@ import StorageHelper from "@/services/storage/StorageHelper"
 import { BudgetStorageAPI, BudgetNoteStorageAPI, PaymentStorageAPI, TransactionStorageAPI } from '@/services/storage/collections'
 
 // types
-import { Budget, BudgetNote, Payment } from "@/services/api/types"
-import { TransactionDocument } from "@/services/storage/types"
+import { BudgetDocument, BudgetNoteDocument, PaymentDocument, TransactionDocument } from "@/services/storage/types"
 import { BackupData, BackupFileContent } from "@/services/backup/types"
 
 // interfaces
@@ -21,10 +20,10 @@ import { filterObject } from "@/utils"
 class BackupHelper implements IBackupAPI {
   public static _instance: BackupHelper
 
-  private budgetStorage: StorageHelper<Budget>
-  private budgetNoteStorage: StorageHelper<BudgetNote>
+  private budgetStorage: StorageHelper<BudgetDocument>
+  private budgetNoteStorage: StorageHelper<BudgetNoteDocument>
   private transactionStorage: StorageHelper<TransactionDocument>
-  private paymentStorage: StorageHelper<Payment>
+  private paymentStorage: StorageHelper<PaymentDocument>
 
   private constructor() {
     this.budgetStorage = BudgetStorageAPI.getInstance().getStorage()

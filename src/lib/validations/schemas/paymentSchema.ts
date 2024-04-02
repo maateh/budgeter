@@ -18,4 +18,6 @@ const paymentSchema = paymentFormSchema.extend({
   isSubpayment: z.coerce.boolean()
 })
 
-export { paymentSchema, paymentFormSchema }
+const paymentDocumentSchema = paymentSchema
+
+export { paymentSchema, paymentDocumentSchema, paymentFormSchema }
