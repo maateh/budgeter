@@ -12,8 +12,7 @@ import { transactionFormSchema, transferMoneyFormSchema } from "@/lib/validation
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
-import PaymentStorageAPI from "@/services/storage/PaymentStorageAPI"
+import { BudgetStorageAPI, PaymentStorageAPI } from "@/services/storage/collections"
 
 // utils
 import { paginate } from "@/utils"

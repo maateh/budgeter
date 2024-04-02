@@ -2,10 +2,7 @@
 import CurrencyAPI from '@/services/api/CurrencyAPI'
 
 // storage
-import BudgetStorageAPI from '@/services/storage/BudgetStorageAPI'
-import BudgetNoteStorageAPI from '@/services/storage/BudgetNoteStorageAPI'
-import TransactionStorageAPI from '@/services/storage/TransactionStorageAPI'
-import PaymentStorageAPI from '@/services/storage/PaymentStorageAPI'
+import { BudgetStorageAPI, BudgetNoteStorageAPI, PaymentStorageAPI, TransactionStorageAPI } from '@/services/storage/collections'
 import BackupHelper from '@/services/backup/BackupHelper'
 
 // interfaces

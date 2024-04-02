@@ -2,10 +2,7 @@ import { z } from "zod"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
-import BudgetNoteStorageAPI from "@/services/storage/BudgetNoteStorageAPI"
-import TransactionStorageAPI from "@/services/storage/TransactionStorageAPI"
-import PaymentStorageAPI from "@/services/storage/PaymentStorageAPI"
+import { BudgetStorageAPI, BudgetNoteStorageAPI, PaymentStorageAPI, TransactionStorageAPI } from '@/services/storage/collections'
 
 // types
 import { Budget, BudgetNote, Payment } from "@/services/api/types"

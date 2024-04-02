@@ -11,7 +11,7 @@ import { noteFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import BudgetStorageAPI from "@/services/storage/BudgetStorageAPI"
+import { BudgetStorageAPI } from "@/services/storage/collections"
 
 // utils
 import { paginate } from "@/utils"
