@@ -15,10 +15,10 @@ const useRemoveSubpayment = (transactionId: string) => {
     }) => api.payment.removeSubpayment(transactionId, paymentId),
     onSuccess: ({ id, budgetId, type }) => {
       // budget
-      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })
 
       // transaction
-      queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
       queryClient.invalidateQueries({ queryKey: ['transactions', { type }] })
 
       // payment

@@ -15,7 +15,7 @@ const useCreateTransaction = () => {
     mutationFn: async (data: TransactionFieldValues) => await api.transaction.create(data),
     onSuccess: ({ type, processed, budgetId }) => {
       // budget
-      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
 
       // transaction

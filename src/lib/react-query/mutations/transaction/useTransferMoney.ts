@@ -15,8 +15,8 @@ const useTransferMoney = () => {
     mutationFn: async (data: TransferMoneyFieldValues) => await api.transaction.transferMoney(data),
     onSuccess: ({ rootTransaction, targetTransaction }) => {
       // budget
-      queryClient.invalidateQueries({ queryKey: ['budget', rootTransaction.budgetId] })
-      queryClient.invalidateQueries({ queryKey: ['budget', targetTransaction.budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['budget', { id: rootTransaction.budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['budget', { id: targetTransaction.budgetId }] })
 
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transactions', { type: 'transfer' }] })

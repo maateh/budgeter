@@ -19,7 +19,7 @@ const useUpdateNoteStatus = (budgetId: string, noteId: string) => {
     }) => await api.budgetNote.updateStatus(budgetId, noteId, status),
     onSuccess: ({ id, budgetId }) => {
       // note
-      queryClient.invalidateQueries({ queryKey: ['noteWithBudget', budgetId, id] })
+      queryClient.invalidateQueries({ queryKey: ['note', { id, budgetId }] })
       queryClient.invalidateQueries({ queryKey: ['notes', { budgetId }] })
     }
   })

@@ -7,7 +7,7 @@ const useNoteWithBudget = (budgetId: string, noteId: string) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['noteWithBudget', budgetId, noteId],
+    queryKey: ['note', { id: noteId, budgetId }],
     queryFn: async () => await api.budgetNote.getByIdWithBudget(budgetId, noteId),
   })
 }

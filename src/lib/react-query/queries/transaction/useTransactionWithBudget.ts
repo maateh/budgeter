@@ -7,7 +7,7 @@ const useTransactionWithBudget = (transactionId: string) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['transactionWithBudget', transactionId],
+    queryKey: ['transaction', { id: transactionId }],
     queryFn: async () => await api.transaction.getByIdWithBudget(transactionId)
   })
 }

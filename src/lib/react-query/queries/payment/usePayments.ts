@@ -4,14 +4,9 @@ import { useQuery } from "@tanstack/react-query"
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
-import { PaginationParams, Payment } from "@/services/api/types"
+import { Payment, QueryOptions } from "@/services/api/types"
 
-type TransactionsQueryOptions = {
-  params?: PaginationParams
-  filterBy?: Partial<Payment>
-}
-
-const usePayments = ({ params, filterBy }: TransactionsQueryOptions = {}) => {
+const usePayments = ({ params, filterBy }: QueryOptions<Payment> = {}) => {
   const { api } = useAPI()
 
   return useQuery({

@@ -18,10 +18,10 @@ const useAddSubpayment = (transactionId: string) => {
     }) => api.payment.addSubpayment(id, data),
     onSuccess: ({ id, budgetId, type }) => {
       // budget
-      queryClient.invalidateQueries({ queryKey: ['budget', budgetId] })
+      queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })
 
       // transaction
-      queryClient.invalidateQueries({ queryKey: ['transactionWithBudget', id] })
+      queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
       queryClient.invalidateQueries({ queryKey: ['transactions', { type }] })
 
       // payment

@@ -23,7 +23,7 @@ const useSaveBudget = (budgetId?: string) => {
     },
     onSuccess: ({ id }) => {
       // budget
-      queryClient.invalidateQueries({ queryKey: ['budget', id] })
+      queryClient.invalidateQueries({ queryKey: ['budget', { id }] })
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
     }
   })
