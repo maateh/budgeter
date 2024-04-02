@@ -38,7 +38,7 @@ class PaymentStorageAPI implements IPaymentAPI {
 
     return paginate(
       payments, params,
-      ({ createdAt: a }, { createdAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1
+      ({ createdAt: a }, { createdAt: b }) => a < b ? 1 : -1
     )
   }
 

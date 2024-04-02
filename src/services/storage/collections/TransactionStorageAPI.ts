@@ -56,7 +56,7 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     return paginate(
       transactions, params,
-      ({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1
+      ({ updatedAt: a }, { updatedAt: b }) => a < b ? 1 : -1
     )
   }
 
@@ -68,7 +68,7 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     const { data, ...pagination } = paginate(
       transactions, params,
-      ({ updatedAt: a }, { updatedAt: b }) => Date.parse(a.toString()) < Date.parse(b.toString()) ? 1 : -1
+      ({ updatedAt: a }, { updatedAt: b }) => a < b ? 1 : -1
     )
 
     return {
