@@ -16,6 +16,7 @@ const useUpdateTransactionStatus = (transactionId: string) => {
     onSuccess: ({ id, type, budgetId }) => {
       // budget
       queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
 
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })

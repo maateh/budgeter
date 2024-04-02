@@ -17,6 +17,7 @@ const useTransferMoney = () => {
       // budget
       queryClient.invalidateQueries({ queryKey: ['budget', { id: rootTransaction.budgetId }] })
       queryClient.invalidateQueries({ queryKey: ['budget', { id: targetTransaction.budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['budgets'] })
 
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transactions', { type: 'transfer' }] })
