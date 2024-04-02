@@ -15,7 +15,9 @@ type NoteListProps = {
 
 const NoteList = ({ budget, status }: NoteListProps) => {
   const { data, isLoading } = useNotesPagination({
-    filterBy: { budgetId: budget.id, status }
+    filter: {
+      filterBy: { budgetId: budget.id, status }
+    }
   })
 
   return !isLoading && data ? (

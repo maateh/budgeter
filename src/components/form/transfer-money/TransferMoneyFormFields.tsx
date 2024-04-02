@@ -68,6 +68,7 @@ const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsP
                 <BudgetSelector
                   defaultValue={field.value}
                   onChange={field.onChange}
+                  excludeBy={{ id: rootBudget?.id }}
                 />
               </FormControl>
               <FormMessage />

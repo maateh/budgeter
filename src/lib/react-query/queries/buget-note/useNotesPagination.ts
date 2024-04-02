@@ -6,15 +6,17 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { BudgetNote, QueryOptions } from "@/services/api/types"
 
-const useNotesPagination = ({ params, filterBy }: QueryOptions<BudgetNote>) => {
+const useNotesPagination = ({ params, filter }: QueryOptions<BudgetNote>) => {
   const { api } = useAPI()
 
+  const { filterBy, excludeBy } = filter || {}
+
   return useInfiniteQuery({
-    queryKey: ['notes', filterBy],
+    queryKey: ['notes', filterBy, excludeBy],
     queryFn: async ({ pageParam: offset }) => {
       return await api.budgetNote.get({
         params: { limit: params?.limit || 5, offset },
-        filterBy
+        filter
       })
     },
     initialPageParam: params?.offset || 0,

@@ -3,7 +3,7 @@ import { IStorageHelper } from "@/services/storage/interfaces"
 
 // types
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
-import { Filter } from "@/services/api/types"
+import { FilterOptions } from "@/services/api/types"
 
 // utils
 import { filter } from "@/services/storage/utils"
@@ -24,10 +24,10 @@ class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
     localStorage.setItem(this.collection, JSON.stringify(documents))
   }
 
-  public async find(filterBy?: Filter<D>): Promise<D[]> {
+  public async find({ filterBy, excludeBy }: FilterOptions<D> = {}): Promise<D[]> {
     const collectionDocs = await this.fetchFromStorage()
     const documents = Object.values(collectionDocs)
-    return filter(documents, filterBy)
+    return filter(documents, { filterBy, excludeBy })
   }
 
   public async findById(id: string): Promise<D> {

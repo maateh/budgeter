@@ -28,7 +28,9 @@ type PaymentProgressProps = {
 
 const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
   const { data: subpayments } = usePayments({
-    filterBy: { transactionId: transaction.id, isSubpayment: true }
+    filter: {
+      filterBy: { transactionId: transaction.id, isSubpayment: true }
+    }
   })
 
   return (

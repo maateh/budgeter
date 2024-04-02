@@ -6,15 +6,17 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { QueryOptions, Transaction } from "@/services/api/types"
 
-const useTransactionsPagination = ({ params, filterBy }: QueryOptions<Transaction>) => {
+const useTransactionsPagination = ({ params, filter }: QueryOptions<Transaction>) => {
   const { api } = useAPI()
 
+  const { filterBy, excludeBy } = filter || {}
+
   return useInfiniteQuery({
-    queryKey: ['transactions', filterBy],
+    queryKey: ['transactions', filterBy, excludeBy],
     queryFn: async ({ pageParam: offset }) => {
       return await api.transaction.getWithBudget({
         params: { limit: params?.limit || 5, offset },
-        filterBy
+        filter
       })
     },
     initialPageParam: params?.offset || 0,

@@ -36,7 +36,9 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
   const { data: payments, isLoading: isPaymentsLoading } = usePayments({
     params: { offset: 0, limit: 7 },
-    filterBy: { budgetId: budget.id }
+    filter: {
+      filterBy: { budgetId: budget.id }
+    }
   })
   
   const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

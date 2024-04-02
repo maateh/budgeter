@@ -10,15 +10,17 @@ type BudgetsPaginationOptions = QueryOptions<Budget> & {
   disableScrolling?: boolean
 }
 
-const useBudgetsPagination = ({ params, filterBy, disableScrolling }: BudgetsPaginationOptions) => {
+const useBudgetsPagination = ({ params, filter, disableScrolling }: BudgetsPaginationOptions) => {
   const { api } = useAPI()
 
+  const { filterBy, excludeBy } = filter || {}
+
   return useInfiniteQuery({
-    queryKey: ['budgets', filterBy, disableScrolling],
+    queryKey: ['budgets', filterBy, excludeBy, disableScrolling],
     queryFn: async ({ pageParam: offset }) => {
       return await api.budget.get({
         params: { limit: params?.limit || 4, offset },
-        filterBy
+        filter
       })
     },
     initialPageParam: params?.offset || 0,

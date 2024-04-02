@@ -43,10 +43,10 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { ...doc, budgetId, payment, budget }
   }
 
-  public async get({ params, filterBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction>> {
+  public async get({ params, filter }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction>> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const documents = await this.storage.find(filterBy)
+    const documents = await this.storage.find(filter)
     const payments = await paymentStorage.fetchFromStorage()
 
     const transactions: Transaction[] = documents.map((doc) => ({
@@ -60,10 +60,10 @@ class TransactionStorageAPI implements ITransactionAPI {
     )
   }
 
-  public async getWithBudget({ params, filterBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction & { budget: Budget }>> {
+  public async getWithBudget({ params, filter }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction & { budget: Budget }>> {
     const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
 
-    const { data: transactions } = await this.get({ params, filterBy })
+    const { data: transactions } = await this.get({ params, filter })
     const budgets = await budgetStorage.find()
 
     const { data, ...pagination } = paginate(

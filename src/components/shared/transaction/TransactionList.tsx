@@ -15,19 +15,18 @@ import { usePagination } from "@/components/pagination-list/hooks"
 import { useTransactionsPagination } from "@/lib/react-query/queries"
 
 // types
-import { Filter, Transaction } from "@/services/api/types"
+import { FilterOptions, Transaction } from "@/services/api/types"
 
 type TransactionListProps = {
-  filterBy?: Filter<Transaction>
   maxItemLimit?: number
-}
+} & FilterOptions<Transaction>
 
-const TransactionList = ({ filterBy, maxItemLimit = 10 }: TransactionListProps) => {
+const TransactionList = ({ filterBy, excludeBy, maxItemLimit = 10 }: TransactionListProps) => {
   const navigate = useNavigate()
 
   const {
     data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
-  } = useTransactionsPagination({ filterBy })
+  } = useTransactionsPagination({ filter: { filterBy, excludeBy } })
 
   const { isLimitExceeded, manualPagination } = usePagination({
     data, fetchNextPage, maxItemLimit,

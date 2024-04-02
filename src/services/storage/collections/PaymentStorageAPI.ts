@@ -33,8 +33,8 @@ class PaymentStorageAPI implements IPaymentAPI {
     return this._instance
   }
 
-  public async get({ params, filterBy }: QueryOptions<Payment> = {}): Promise<Pagination<Payment>> {
-    const payments = await this.storage.find(filterBy)
+  public async get({ params, filter }: QueryOptions<Payment> = {}): Promise<Pagination<Payment>> {
+    const payments = await this.storage.find(filter)
 
     return paginate(
       payments, params,

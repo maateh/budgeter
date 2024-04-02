@@ -1,11 +1,12 @@
 // types
+import { FilterOptions } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
 
 export interface IStorageHelper<D> {
   fetchFromStorage(): Promise<StorageCollection<D>>
   saveToStorage(documents: StorageCollection<D>): Promise<void>
 
-  find(filterBy?: Partial<D>): Promise<D[]>
+  find(filter?: FilterOptions<D>): Promise<D[]>
   findById(id: string): Promise<D>
 
   save(document: D): Promise<D>

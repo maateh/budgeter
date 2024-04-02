@@ -17,10 +17,15 @@ export type Filter<T> = {
   [K in keyof T]?: T[K] | T[K][]
 }
 
+export type FilterOptions<T> = {
+  filterBy?: Filter<T>
+  excludeBy?: Filter<T>
+}
+
 // options
 export type QueryOptions<T> = {
   params?: PaginationParams
-  filterBy?: Filter<T>
+  filter?: FilterOptions<T>
 }
 
 // data models

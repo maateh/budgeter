@@ -1,5 +1,5 @@
 // types
-import { Filter, Pagination, PaginationParams } from "@/services/api/types"
+import { Filter, FilterOptions, Pagination, PaginationParams } from "@/services/api/types"
 
 /**
  * Paginates the given data based on the provided offset and limit.
@@ -32,23 +32,28 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
  * @param filterBy - The partial object used as a filter criteria.
  * @returns An array of documents that match the filter criteria.
  */
-export function filter<D>(documents: D[], filterBy?: Filter<D>): D[] {
-  if (!filterBy) return documents
+export function filter<D>(documents: D[], filter?: FilterOptions<D>): D[] {
+  const { filterBy, excludeBy } = filter || {}
+  if (!filterBy && !excludeBy) return documents
 
-  return documents.filter((entry: D) => Object.entries(filterBy)
-    .every(([key, value]) => {
-      // If the filter value is not defined, it is ignored
-      if (value === undefined) return true
+  return documents.filter((entry: D) => {
+    const shouldInclude = (criteria?: Filter<D>, inclusion?: boolean) => {
+      return !criteria || Object.entries(criteria).every(([key, value]) => {
+        // If the filter value is not defined, it is ignored
+        if (value === undefined) return true
 
-      const entryValue = entry[key as keyof D]
+        // If the filter value is an array, check if the entry value matches any value in the array
+        // Otherwise, perform a strict equality check
+        // In both cases inclusion is checked (filter or exclude)
+        const entryValue = entry[key as keyof D]
+        return Array.isArray(value)
+          ? value.includes(entryValue) === inclusion
+          : value === entryValue === inclusion
+      })
+    }
 
-      // If the filter value is an array, check if the entry value matches any value in the array
-      // Otherwise, perform a strict equality check
-      return Array.isArray(value)
-        ? value.includes(entryValue)
-        : value === entryValue
-    })
-  )
+    return shouldInclude(filterBy, true) && shouldInclude(excludeBy, false)
+  })
 }
 
 /**
