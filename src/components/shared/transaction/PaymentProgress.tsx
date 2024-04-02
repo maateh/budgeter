@@ -73,7 +73,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
       {/* TODO: redesign progress ui component */}
       <Progress className="min-w-32 max-w-sm mx-auto"
         maxValue={transaction.payment.amount}
-        value={transaction.payment.processAmount}
+        value={transaction.payment.processedAmount}
       />
 
       <div className="mx-0.5 mt-2.5 flex justify-between gap-x-1.5 sm:mx-6 sm:gap-x-2.5">
@@ -83,7 +83,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           icon={<Banknote size={18} />}
           label="Paid Back"
           value={formatWithCurrency(
-            transaction.payment.processAmount || 0,
+            transaction.payment.processedAmount || 0,
             transaction.budget.balance.currency
           )}
         />

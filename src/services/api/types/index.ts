@@ -51,7 +51,7 @@ export type Payment = {
   type: '+' | '-',
   amount: number
   createdAt: Date
-  processAmount?: number
+  processedAmount?: number
   isSubpayment: boolean
 }
 

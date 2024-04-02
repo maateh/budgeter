@@ -104,7 +104,7 @@ class TransactionStorageAPI implements ITransactionAPI {
         id: paymentId,
         budgetId,
         transactionId,
-        processAmount: 0,
+        processedAmount: 0,
         createdAt: date,
         isSubpayment: false
       })

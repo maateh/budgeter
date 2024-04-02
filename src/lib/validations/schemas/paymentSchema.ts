@@ -14,7 +14,7 @@ const paymentSchema = paymentFormSchema.extend({
   budgetId: z.string().uuid({ message: 'Budget ID is invalid!' }),
   transactionId: z.string().uuid({ message: 'Transaction ID is invalid!' }),
   createdAt: z.coerce.date(),
-  processAmount: z.coerce.number().optional(),
+  processedAmount: z.coerce.number().optional(),
   isSubpayment: z.coerce.boolean()
 })
 

@@ -81,20 +81,20 @@ class PaymentStorageAPI implements IPaymentAPI {
     if (action === 'execute') {
       payment = await this.storage.save({
         ...payment,
-        processAmount: payment.amount
+        processedAmount: payment.amount
       })
     }
 
     if (action === 'undo') {
       payment = await this.storage.save({
         ...payment,
-        processAmount: 0
+        processedAmount: 0
       })
     }
     
     await budgetApi.manageBalance(budgetId, payment, action)
 
-    const processed = (payment.processAmount || 0) >= payment.amount
+    const processed = (payment.processedAmount || 0) >= payment.amount
     const date = new Date()
 
     const transaction = await transactionStorage.save({
@@ -120,24 +120,24 @@ class PaymentStorageAPI implements IPaymentAPI {
 
     const { budgetId, paymentId, ...doc } = await transactionStorage.findById(transactionId)
 
-    let { processAmount = 0, ...payment } = await this.storage.findById(paymentId)
+    let { processedAmount = 0, ...payment } = await this.storage.findById(paymentId)
 
     if (action === 'execute') {
-      processAmount += subpayment.amount
+      processedAmount += subpayment.amount
       await this.storage.save(subpayment)
     }
 
     if (action === 'undo') {
-      processAmount -= subpayment.amount
+      processedAmount -= subpayment.amount
       await this.storage.deleteById(subpayment.id)
     }
 
-    const processed = processAmount >= payment.amount
+    const processed = processedAmount >= payment.amount
     const date = new Date()
 
     await budgetApi.manageBalance(budgetId, subpayment, action)
 
-    payment = await this.storage.save({ ...payment, processAmount })
+    payment = await this.storage.save({ ...payment, processedAmount })
     const transaction = await transactionStorage.save({
       ...doc,
       budgetId,
