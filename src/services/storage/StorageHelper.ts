@@ -1,9 +1,9 @@
-
 // interfaces
 import { IStorageHelper } from "@/services/storage/interfaces"
 
 // types
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
+import { Filter } from "@/services/api/types"
 
 // utils
 import { filter } from "@/services/storage/utils"
@@ -24,7 +24,7 @@ class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
     localStorage.setItem(this.collection, JSON.stringify(documents))
   }
 
-  public async find(filterBy?: Partial<D>): Promise<D[]> {
+  public async find(filterBy?: Filter<D>): Promise<D[]> {
     const collectionDocs = await this.fetchFromStorage()
     const documents = Object.values(collectionDocs)
     return filter(documents, filterBy)

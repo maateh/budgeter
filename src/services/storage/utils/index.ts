@@ -1,5 +1,5 @@
 // types
-import { Pagination, PaginationParams } from "@/services/api/types"
+import { Filter, Pagination, PaginationParams } from "@/services/api/types"
 
 /**
  * Paginates the given data based on the provided offset and limit.
@@ -32,13 +32,21 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
  * @param filterBy - The partial object used as a filter criteria.
  * @returns An array of documents that match the filter criteria.
  */
-export function filter<D>(documents: D[], filterBy?: Partial<D>): D[] {
+export function filter<D>(documents: D[], filterBy?: Filter<D>): D[] {
   if (!filterBy) return documents
 
   return documents.filter((entry: D) => Object.entries(filterBy)
     .every(([key, value]) => {
+      // If the filter value is not defined, it is ignored
       if (value === undefined) return true
-      return value === entry[key as keyof D]
+
+      const entryValue = entry[key as keyof D]
+
+      // If the filter value is an array, check if the entry value matches any value in the array
+      // Otherwise, perform a strict equality check
+      return Array.isArray(value)
+        ? value.includes(entryValue)
+        : value === entryValue
     })
   )
 }

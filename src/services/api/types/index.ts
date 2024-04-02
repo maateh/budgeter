@@ -12,9 +12,15 @@ export type PaginationParams = {
   limit: number
 }
 
+// filter
+export type Filter<T> = {
+  [K in keyof T]?: T[K] | T[K][]
+}
+
+// options
 export type QueryOptions<T> = {
   params?: PaginationParams
-  filterBy?: Partial<T>
+  filterBy?: Filter<T>
 }
 
 // data models

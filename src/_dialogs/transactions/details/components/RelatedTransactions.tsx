@@ -10,10 +10,11 @@ type RelatedTransactionsProps = {
 
 const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
   // TODO: implement layout
+
   return (
     <TransactionList
       maxItemLimit={3}
-      // filterBy={{ id: transaction.related }} // TODO: add option to filter by not just a single value
+      filterBy={{ id: transaction.related }}
     />
   )
 }

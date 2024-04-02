@@ -15,10 +15,10 @@ import { usePagination } from "@/components/pagination-list/hooks"
 import { useTransactionsPagination } from "@/lib/react-query/queries"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { Filter, Transaction } from "@/services/api/types"
 
 type TransactionListProps = {
-  filterBy?: Partial<Transaction>
+  filterBy?: Filter<Transaction>
   maxItemLimit?: number
 }
 
