@@ -11,6 +11,7 @@ export { default as useDeleteNote } from './budget-note/useDeleteNote'
 export { default as useCreateTransaction } from './transaction/useCreateTransaction'
 export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'
 export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
+export { default as useAddRelatedTransactions } from './transaction/useAddRelatedTransactions'
 export { default as useTransferMoney } from './transaction/useTransferMoney'
 
 // payment

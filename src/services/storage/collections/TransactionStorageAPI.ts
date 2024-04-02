@@ -8,7 +8,7 @@ import { Budget, Pagination, QueryOptions, Transaction } from "@/services/api/ty
 import { TransactionDocument } from "@/services/storage/types"
 
 // validations
-import { transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
+import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
@@ -153,6 +153,25 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     const payment = await paymentApi.getStorage().findById(paymentId)
     return await paymentApi.managePayment(id, payment, processed ? 'execute' : 'undo')
+  }
+
+  public async addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction> {
+    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+
+    const { related, ...doc } = await this.storage.findById(id)
+
+    const { paymentId, ...transaction } = await this.storage.save({
+      ...doc,
+      related: [
+        ...related,
+        ...data.related.filter((id) => related.some((_id) => _id !== id))
+      ]
+    })
+
+    // TODO: update every related transaction
+
+    const payment = await paymentStorage.findById(paymentId)
+    return { ...transaction, payment }
   }
 
   public async transferMoney(

@@ -5,7 +5,7 @@ import { Budget, BudgetNote, Currencies, Pagination, Payment, QueryOptions, Tran
 import { BackupFileContent } from "@/services/backup/types"
 
 // validations
-import { backupSchema, budgetFormSchema, noteFormSchema, paymentFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
+import { backupSchema, budgetFormSchema, noteFormSchema, paymentFormSchema, relatedTransactionsFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
 
 export interface ICurrencyAPI {
   get(): Promise<Currencies>
@@ -39,6 +39,7 @@ export interface ITransactionAPI {
   delete(id: string): Promise<Transaction>
   
   updateStatus(id: string, processed: boolean): Promise<Transaction>
+  addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction>
   transferMoney(data: z.infer<typeof transferMoneyFormSchema>): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }>
 }
 

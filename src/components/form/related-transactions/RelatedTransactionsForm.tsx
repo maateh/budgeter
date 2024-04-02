@@ -6,7 +6,7 @@ import RelatedTransactionsFormFields from "@/components/form/related-transaction
 import { useRelatedTransactionsSubmit } from "@/components/form/related-transactions/hooks"
 
 // types
-import { RelatedTransactionsFieldValues } from "@/components/form/related-transactions/types"
+import { RelatedTransactionsFieldValues, RelatedTransactionsSubmitProps } from "@/components/form/related-transactions/types"
 import { Transaction } from "@/services/api/types"
 
 // validations
@@ -18,10 +18,11 @@ type RelatedTransactionsFormProps = {
 
 const RelatedTransactionsForm = ({ transaction }: RelatedTransactionsFormProps) => {
   return (
-    <Form<RelatedTransactionsFieldValues, typeof relatedTransactionsFormSchema>
+    <Form<RelatedTransactionsFieldValues, typeof relatedTransactionsFormSchema, RelatedTransactionsSubmitProps>
       type="create"
       validationSchema={relatedTransactionsFormSchema}
       useSubmit={useRelatedTransactionsSubmit}
+      submitProps={{ transactionId: transaction.id }}
       customButtonRequired
     >
       {(form) => (

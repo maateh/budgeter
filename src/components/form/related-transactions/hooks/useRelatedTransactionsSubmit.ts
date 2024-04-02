@@ -1,21 +1,31 @@
-import { SubmitHandler } from "react-hook-form"
+import { SubmitHandler, UseFormReturn } from "react-hook-form"
+
+// hooks
+import { useAddRelatedTransactions } from "@/lib/react-query/mutations"
 
 // types
-import { RelatedTransactionsFieldValues } from "@/components/form/related-transactions/types"
+import { RelatedTransactionsFieldValues, RelatedTransactionsSubmitProps } from "@/components/form/related-transactions/types"
 
-const useRelatedTransactionsSubmit = () => {
-  // TODO: implement mutation
+const useRelatedTransactionsSubmit = (
+  form: UseFormReturn<RelatedTransactionsFieldValues>,
+  { transactionId }: RelatedTransactionsSubmitProps
+) => {
+  const { mutateAsync: addRelated, isPending } = useAddRelatedTransactions(transactionId)
 
-  const onSubmit: SubmitHandler<RelatedTransactionsFieldValues> = (values) => {
+  const onSubmit: SubmitHandler<RelatedTransactionsFieldValues> = async (values) => {
     try {
-      // TODO: mutate
-      // await addRelated(values)
+      await addRelated({
+        id: transactionId,
+        data: values
+      })
+
+      form.reset()
     } catch (err) {
       console.error(err)
     }
   }
 
-  return { onSubmit, isPending: false }
+  return { onSubmit, isPending }
 }
 
 export default useRelatedTransactionsSubmit
