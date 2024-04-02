@@ -44,7 +44,14 @@ const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsP
         <TransferPreview
           rootBudget={rootBudget}
           targetBudget={targetBudget}
-          // FIXME: payment={paymentField}
+          payment={{
+            ...paymentField,
+            id: '',
+            budgetId: '',
+            transactionId: '',
+            createdAt: new Date(),
+            isSubpayment: false
+          }}
         />
       )}
 

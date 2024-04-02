@@ -11,7 +11,7 @@ import PaymentBadge from "@/components/shared/transaction/custom/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
-import { Budget, Payment, Transaction } from "@/services/api/types"
+import { Budget, Payment } from "@/services/api/types"
 
 type TransferElementProps = {
   budget: Budget
@@ -65,7 +65,7 @@ const TransferElement = ({ budget, payment, isRoot }: TransferElementProps) => (
 type TransferPreviewProps = {
   rootBudget: Budget
   targetBudget?: Budget
-  payment: Transaction['payment']
+  payment: Payment
 }
 
 const TransferPreview = ({ rootBudget, targetBudget, payment }: TransferPreviewProps) => {
