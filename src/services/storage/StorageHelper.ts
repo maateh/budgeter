@@ -6,7 +6,7 @@ import { IStorageHelper } from "@/services/storage/interfaces"
 import { StorageCollection, StorageCollections } from "@/services/storage/types"
 
 // utils
-import { filter } from "@/utils"
+import { filter } from "@/services/storage/utils"
 
 class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
   private collection: StorageCollections

@@ -15,7 +15,7 @@ import StorageHelper from "@/services/storage/StorageHelper"
 import { BudgetNoteStorageAPI, TransactionStorageAPI } from "@/services/storage/collections"
 
 // utils
-import { paginate } from "@/utils"
+import { paginate } from "@/services/storage/utils"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI

@@ -15,7 +15,7 @@ import { IBackupAPI } from "@/services/api/interfaces"
 import { backupSchema } from "@/lib/validations"
 
 // utils
-import { filterObject } from "@/utils"
+import { filterObject } from "@/services/storage/utils"
 
 class BackupHelper implements IBackupAPI {
   public static _instance: BackupHelper
