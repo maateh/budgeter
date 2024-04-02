@@ -27,8 +27,10 @@ const BudgetSelector = ({ defaultValue, onChange, filterBy, excludeBy }: BudgetS
         <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
-        {budgets && budgets.map(b => (
-          <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
+        {budgets?.map(budget => (
+          <SelectItem key={budget.id} value={budget.id}>
+            {budget.name}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>

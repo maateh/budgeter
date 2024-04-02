@@ -9,9 +9,9 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import PaymentProgress from "@/components/shared/payment/PaymentProgress"
+import RelatedTransactions from "@/components/shared/transaction/RelatedTransactions"
 import Header from "./components/Header"
 import Info from "./components/Info"
-import RelatedTransactions from "./components/RelatedTransactions"
 import Footer from "./components/Footer"
 
 // hooks
@@ -44,7 +44,10 @@ const TransactionDetails = () => {
             </div>
           </AccordionTrigger>
           <AccordionContent className="w-5/6 mx-auto">
-            <RelatedTransactions transaction={transaction} />
+            <RelatedTransactions
+              transaction={transaction}
+              budget={transaction.budget}
+            />
           </AccordionContent>
         </AccordionItem>
 
