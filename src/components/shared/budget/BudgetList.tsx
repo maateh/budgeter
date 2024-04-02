@@ -5,15 +5,12 @@ import { WalletCards } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import PaginationList from "@/components/pagination-list/PaginationList"
+import PaginationList from "@/components/ui/custom/PaginationList"
 import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
 import { useBudgetsPagination } from "@/lib/react-query/queries"
-import { usePagination } from "@/components/pagination-list/hooks"
-
-// hooks
-import { useDialog } from "@/hooks"
+import { useDialog, usePagination } from "@/hooks"
 
 type BudgetListProps = {
   disableScrolling?: boolean

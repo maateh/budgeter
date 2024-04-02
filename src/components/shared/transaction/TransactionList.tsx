@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button"
 
 // components
 import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
-import PaginationList from "@/components/pagination-list/PaginationList"
+import PaginationList from "@/components/ui/custom/PaginationList"
 
 // hooks
-import { usePagination } from "@/components/pagination-list/hooks"
 import { useTransactionsPagination } from "@/lib/react-query/queries"
+import { usePagination } from "@/hooks"
 
 // types
 import { FilterOptions, Transaction } from "@/services/api/types"

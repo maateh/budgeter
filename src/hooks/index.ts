@@ -1,1 +1,2 @@
-export { default as useDialog } from "@/hooks/useDialog"
+export { default as useDialog } from "./useDialog"
+export { default as usePagination } from './usePagination'

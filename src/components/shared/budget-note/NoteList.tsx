@@ -1,5 +1,5 @@
 // components
-import PaginationList from "@/components/pagination-list/PaginationList"
+import PaginationList from "@/components/ui/custom/PaginationList"
 import Note from "@/components/shared/budget-note/Note"
 
 // hooks
