@@ -158,17 +158,9 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const { related, ...doc } = await this.storage.findById(id)
-
-    const { paymentId, ...transaction } = await this.storage.save({
-      ...doc,
-      related: [
-        ...related,
-        ...data.related.filter((id) => related.some((_id) => _id !== id))
-      ]
-    })
-
-    // TODO: update every related transaction
+    const { paymentId, ...transaction } = await this.manageRelated(
+      id, data.related, 'add'
+    )
 
     const payment = await paymentStorage.findById(paymentId)
     return { ...transaction, payment }
@@ -198,6 +190,48 @@ class TransactionStorageAPI implements ITransactionAPI {
   // helpers
   public getStorage() {
     return this.storage
+  }
+
+/**
+ * Manages related transactions for a given transaction by adding or removing related transaction IDs.
+ *
+ * @param id - The ID of the transaction to manage related transactions for.
+ * @param unfilteredRelated - The array of related transaction IDs to add or remove.
+ * @param action - The action to perform: 'add' to add related transactions or 'remove' to remove them.
+ * @returns A Promise resolving to the updated transaction document after managing related transactions.
+ */
+  private async manageRelated(id: string, unfilteredRelated: string[], action: 'add' | 'remove'): Promise<TransactionDocument> {
+    // Filter out potential duplicates
+    const related: string[] = unfilteredRelated.filter(
+      (id) => related.some((_id) => _id !== id)
+    )
+
+    // Callback for filtering based on the given action
+    const filterOperation = (doc: TransactionDocument): string[] => {
+      return action === 'add'
+        ? [...doc.related, ...related]
+        : doc.related.filter((_id) => _id !== id)
+    }
+
+    // Get and save related transactions to add the
+    // current transaction ID as related
+    const relatedTransactions = await this.storage.find({
+      filterBy: { id: related }
+    })
+
+    await this.storage.bulkSave(
+      relatedTransactions.reduce((docs, tr) => ({
+        ...docs,
+        [tr.id]: { ...tr, related: filterOperation(tr) }
+      }), {} as Record<string, TransactionDocument>)
+    )
+
+    // Get and save current transaction with the updated related ids
+    const document = await this.storage.findById(id)
+    return await this.storage.save({
+      ...document,
+      related: filterOperation(document)
+    })
   }
 }
 
