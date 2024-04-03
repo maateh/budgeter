@@ -19,7 +19,7 @@ const useRelatedTransactionsSubmit = (
         data: values
       })
 
-      form.reset()
+      form.setValue('relatedId', '')
     } catch (err) {
       console.error(err)
     }

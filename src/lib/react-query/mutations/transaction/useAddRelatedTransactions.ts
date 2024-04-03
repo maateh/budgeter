@@ -17,7 +17,7 @@ const useAddRelatedTransactions = (transactionId: string) => {
       data: RelatedTransactionsFieldValues
     }) => await api.transaction.addRelated(id, data),
     onSuccess: ({ id }) => {
-      queryClient.invalidateQueries({ queryKey: ['transactions', {}, { id }] })
+      queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
     }
   })
 }

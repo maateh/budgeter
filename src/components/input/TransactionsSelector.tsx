@@ -8,11 +8,11 @@ import { useTransactions } from "@/lib/react-query/queries"
 import { FilterOptions, Transaction } from "@/services/api/types"
 
 type TransactionsSelectorProps = {
-  defaultValue?: string[]
+  value: string
   onChange: () => void
 } & FilterOptions<Transaction>
 
-const TransactionsSelector = ({ defaultValue, onChange, filterBy, excludeBy }: TransactionsSelectorProps) => {
+const TransactionsSelector = ({ value, onChange, filterBy, excludeBy }: TransactionsSelectorProps) => {
   const { data: transactions, isLoading } = useTransactions({
     filter: { filterBy, excludeBy }
   })
@@ -20,7 +20,7 @@ const TransactionsSelector = ({ defaultValue, onChange, filterBy, excludeBy }: T
   // TODO: implement multi-select input
   return (
     <Select
-      // defaultValue={defaultValue}
+      value={value}
       disabled={!transactions || isLoading}
       onValueChange={onChange}
     >

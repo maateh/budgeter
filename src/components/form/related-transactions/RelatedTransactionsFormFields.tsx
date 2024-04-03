@@ -23,15 +23,15 @@ const RelatedTransactionsFormFields = ({ transaction, control }: RelatedTransact
     <>
       <FormField
         control={control}
-        name="related"
+        name="relatedId"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Select transactions</FormLabel>
             <FormControl>
               <TransactionsSelector
-                defaultValue={field.value}
+                value={field.value}
                 onChange={field.onChange}
-                excludeBy={{ id: transaction.id }}
+                excludeBy={{ id: [transaction.id, ...transaction.related] }}
               />
             </FormControl>
             <FormMessage />

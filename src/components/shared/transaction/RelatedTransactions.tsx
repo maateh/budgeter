@@ -22,7 +22,7 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
     <>
       <RelatedTransactionsForm transaction={transaction} />
 
-      <Separator className="w-2/5 mx-auto my-3.5" />
+      <Separator className="w-3/5 mx-auto my-3.5" />
 
       {transaction.related.length ? (
         <TransactionList
