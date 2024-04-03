@@ -12,6 +12,7 @@ export { default as useCreateTransaction } from './transaction/useCreateTransact
 export { default as useDeleteTransaction } from './transaction/useDeleteTransaction'
 export { default as useUpdateTransactionStatus } from './transaction/useUpdateTransactionStatus'
 export { default as useAddRelatedTransactions } from './transaction/useAddRelatedTransactions'
+export { default as useRemoveRelatedTransaction } from './transaction/useRemoveRelatedTransaction'
 export { default as useTransferMoney } from './transaction/useTransferMoney'
 
 // payment

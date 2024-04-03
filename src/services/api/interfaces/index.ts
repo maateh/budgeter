@@ -40,6 +40,7 @@ export interface ITransactionAPI {
   
   updateStatus(id: string, processed: boolean): Promise<Transaction>
   addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction>
+  removeRelated(id: string, relatedId: string): Promise<Transaction>
   transferMoney(data: z.infer<typeof transferMoneyFormSchema>): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }>
 }
 

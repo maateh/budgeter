@@ -11,6 +11,9 @@ import TransactionList from "@/components/shared/transaction/TransactionList"
 import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
 import RelatedTransactionsForm from "@/components/form/related-transactions/RelatedTransactionsForm"
 
+// hooks
+import { useRemoveRelatedTransaction } from "@/lib/react-query/mutations"
+
 // types
 import { Budget, Transaction } from "@/services/api/types"
 
@@ -20,9 +23,16 @@ type RelatedTransactionsProps = {
 }
 
 const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
+  const { mutateAsync: removeRelated, isPending } = useRemoveRelatedTransaction(transaction.id)
+
   const handleRemove = async (relatedId: string) => {
     try {
-      // await removeRelated(transaction.id, relatedId)
+      await removeRelated({
+        id: transaction.id,
+        relatedId
+      })
+
+      // TODO: show toast
     } catch (err) {
       console.error(err)
     }
@@ -51,6 +61,7 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
                 variant="outline"
                 size="icon"
                 onClick={() => handleRemove(transaction.id)}
+                disabled={isPending}
               >
                 <X size={14} />
               </Button>

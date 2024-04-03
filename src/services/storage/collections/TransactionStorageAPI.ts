@@ -166,6 +166,17 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { ...transaction, payment }
   }
 
+  public async removeRelated(id: string, relatedId: string): Promise<Transaction> {
+    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+
+    const { paymentId, ...transaction } = await this.manageRelated(
+      id, [relatedId], 'remove'
+    )
+
+    const payment = await paymentStorage.findById(paymentId)
+    return { ...transaction, payment }
+  }
+
   public async transferMoney(
     data: z.infer<typeof transferMoneyFormSchema>
   ): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }> {
@@ -210,7 +221,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     const filterOperation = (doc: TransactionDocument, ids: string[]): string[] => {
       return action === 'add'
         ? [...doc.related, ...ids]
-        : doc.related.filter((_id) => _id !== id)
+        : doc.related.filter((id) => !ids.includes(id))
     }
 
     // Get and save related transactions to add the
@@ -218,6 +229,8 @@ class TransactionStorageAPI implements ITransactionAPI {
     const relatedTransactions = await this.storage.find({
       filterBy: { id: related }
     })
+
+    console.log({relatedTransactions})
 
     await this.storage.bulkSave(
       relatedTransactions.reduce((docs, tr) => ({
