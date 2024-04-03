@@ -11,7 +11,7 @@ const useAddSubpayment = (transactionId: string) => {
   const { api } = useAPI()
 
   return useMutation({
-    mutationKey: ['createSubpayment', transactionId],
+    mutationKey: ['addSubpayment', transactionId],
     mutationFn: async ({ id, data }: {
       id: string
       data: SubpaymentFieldValues
@@ -28,7 +28,6 @@ const useAddSubpayment = (transactionId: string) => {
       // payment
       queryClient.invalidateQueries({ queryKey: ['payments', { budgetId }] })
       queryClient.invalidateQueries({ queryKey: ['payments', { transactionId: id, isSubpayment: true }] })
-
     }
   })
 }
