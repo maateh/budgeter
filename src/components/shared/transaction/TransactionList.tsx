@@ -7,7 +7,6 @@ import { ChevronRightCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
 import PaginationList from "@/components/ui/custom/PaginationList"
 
 // hooks
@@ -15,13 +14,14 @@ import { useTransactionsPagination } from "@/lib/react-query/queries"
 import { usePagination } from "@/hooks"
 
 // types
-import { FilterOptions, Transaction } from "@/services/api/types"
+import { Budget, FilterOptions, Transaction } from "@/services/api/types"
 
 type TransactionListProps = {
   maxItemLimit?: number
+  children: ({ transaction, budget }: { transaction: Transaction, budget: Budget }) => React.ReactNode
 } & FilterOptions<Transaction>
 
-const TransactionList = ({ filterBy, excludeBy, maxItemLimit = 10 }: TransactionListProps) => {
+const TransactionList = ({ filterBy, excludeBy, maxItemLimit = 10, children }: TransactionListProps) => {
   const navigate = useNavigate()
 
   const {
@@ -36,9 +36,10 @@ const TransactionList = ({ filterBy, excludeBy, maxItemLimit = 10 }: Transaction
   return !isLoading && data ? (
     <>
       <PaginationList pages={data.pages}>
-        {(tr) => (
+        {({ budget, ...transaction }) => children({ transaction, budget })}
+        {/* {(tr) => (
           <TransactionPreview budget={tr.budget} transaction={tr} />
-        )}
+        )} */}
       </PaginationList>
 
       {hasNextPage && (

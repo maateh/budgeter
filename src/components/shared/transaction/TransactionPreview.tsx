@@ -28,7 +28,7 @@ const TransactionPreview = ({ transaction, budget }: TransactionPreviewProps) =>
 
   return (
     <div
-      className="pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer"
+      className="w-full pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer"
       onClick={() => openDialog(`/transactions/details/${transaction.id}`)}
     >
       <div className="flex items-center gap-x-1">

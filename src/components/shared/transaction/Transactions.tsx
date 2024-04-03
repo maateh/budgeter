@@ -10,6 +10,7 @@ import { Switch, SwitchThumb } from "@/components/ui/switch"
 // components
 import TabsSwitch from "@/components/ui/custom/TabsSwitch"
 import TransactionList from "@/components/shared/transaction/TransactionList"
+import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -74,8 +75,14 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
               </div>
             )}
 
-            <TransactionList filterBy={{ type, processed, budgetId }}
-            />
+            <TransactionList filterBy={{ type, processed, budgetId }}>
+              {({ transaction, budget }) => (
+                <TransactionPreview
+                  transaction={transaction}
+                  budget={budget}
+                />
+              )}
+            </TransactionList>
           </div>
         )}
       </TabsSwitch>
