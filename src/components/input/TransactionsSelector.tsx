@@ -1,5 +1,5 @@
 // shadcn
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { MultiSelect, OptionType } from "@/components/ui/multi-select"
 
 // hooks
 import { useTransactions } from "@/lib/react-query/queries"
@@ -8,7 +8,7 @@ import { useTransactions } from "@/lib/react-query/queries"
 import { FilterOptions, Transaction } from "@/services/api/types"
 
 type TransactionsSelectorProps = {
-  value: string
+  value: string[]
   onChange: () => void
 } & FilterOptions<Transaction>
 
@@ -17,24 +17,18 @@ const TransactionsSelector = ({ value, onChange, filterBy, excludeBy }: Transact
     filter: { filterBy, excludeBy }
   })
 
-  // TODO: implement multi-select input
   return (
-    <Select
-      value={value}
-      disabled={!transactions || isLoading}
-      onValueChange={onChange}
-    >
-      <SelectTrigger>
-        <SelectValue placeholder="Choose..." />
-      </SelectTrigger>
-      <SelectContent>
-        {transactions?.map((transaction) => (
-          <SelectItem key={transaction.id} value={transaction.id}>
-            {transaction.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <MultiSelect
+      selected={value}
+      options={transactions ? transactions.reduce((options, tr) => ([
+        ...options,{
+          label: tr.name,
+          value: tr.id
+        }
+      ]), [] as OptionType[]) : []}
+      onChange={onChange}
+      disabled={isLoading}
+    />
   )
 }
 

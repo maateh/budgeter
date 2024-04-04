@@ -23,7 +23,7 @@ const RelatedTransactionsFormFields = ({ transaction, control }: RelatedTransact
     <>
       <FormField
         control={control}
-        name="relatedId"
+        name="relatedIds"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Select transactions</FormLabel>

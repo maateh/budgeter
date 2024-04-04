@@ -1,7 +1,7 @@
-import { z } from "zod"
+import { transactionSchema } from "@/lib/validations"
 
-const relatedTransactionsFormSchema = z.object({
-  relatedId: z.string().uuid({ message: 'Related transaction ID is invalid!' })
+const relatedTransactionsFormSchema = transactionSchema.pick({
+  relatedIds: true
 })
 
 export { relatedTransactionsFormSchema }

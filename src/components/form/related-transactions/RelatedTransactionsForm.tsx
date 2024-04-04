@@ -21,6 +21,7 @@ const RelatedTransactionsForm = ({ transaction }: RelatedTransactionsFormProps) 
     <Form<RelatedTransactionsFieldValues, typeof relatedTransactionsFormSchema, RelatedTransactionsSubmitProps>
       type="create"
       validationSchema={relatedTransactionsFormSchema}
+      defaultValues={{ relatedIds: [] }}
       useSubmit={useRelatedTransactionsSubmit}
       submitProps={{ transactionId: transaction.id }}
       customButtonRequired

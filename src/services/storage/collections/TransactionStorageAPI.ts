@@ -160,7 +160,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
     const { paymentId, ...transaction } = await this.manageRelated(
-      id, [data.relatedId], 'add'
+      id, data.relatedIds, 'add'
     )
 
     const payment = await paymentStorage.findById(paymentId)
