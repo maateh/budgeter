@@ -95,7 +95,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       createdAt: date,
       updatedAt: date,
       processedAt: data.processed ? data.processedAt || date : undefined,
-      related: data.related || []
+      relatedIds: data.relatedIds || []
     })
 
     const payment = await paymentApi.getStorage()
@@ -131,16 +131,16 @@ class TransactionStorageAPI implements ITransactionAPI {
     const budgetApi = BudgetStorageAPI.getInstance()
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const { budgetId, paymentId, related, ...doc } = await this.storage.findById(id)
+    const { budgetId, paymentId, relatedIds, ...doc } = await this.storage.findById(id)
     const payment = await paymentStorage.findById(paymentId)
 
     await budgetApi.manageBalance(budgetId, payment, 'undo')
     await paymentStorage.deleteById(paymentId)
 
-    await this.manageRelated(id, related, 'remove')
+    await this.manageRelated(id, relatedIds, 'remove')
     await this.storage.deleteById(id)
 
-    return { ...doc, budgetId, payment, related }
+    return { ...doc, budgetId, payment, relatedIds }
   }
 
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
@@ -187,13 +187,13 @@ class TransactionStorageAPI implements ITransactionAPI {
         ...data.payment,
         type: data.payment.type === '+' ? '-' : '+'
       },
-      related: [data.targetBudgetId]
+      relatedIds: [data.targetBudgetId]
     })
 
     const targetTransaction = await this.create({
       ...data,
       budgetId: data.targetBudgetId,
-      related: [rootTransaction.id]
+      relatedIds: [rootTransaction.id]
     })
 
     return { rootTransaction, targetTransaction }
@@ -214,7 +214,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     const ids = transactions.map((tr) => tr.id)
 
     const relatedTransactions = await this.storage.find({
-      filterBy: { id: transactions.flatMap((tr) => tr.related) }
+      filterBy: { id: transactions.flatMap((tr) => tr.relatedIds) }
     })
 
     await this.storage.bulkSave(
@@ -222,7 +222,7 @@ class TransactionStorageAPI implements ITransactionAPI {
         ...docs,
         [tr.id]: {
           ...tr,
-          related: tr.related.filter((id) => !ids.includes(id))
+          relatedIds: tr.relatedIds.filter((id) => !ids.includes(id))
         }
       }), {} as Record<string, TransactionDocument>)
     )
@@ -240,23 +240,23 @@ class TransactionStorageAPI implements ITransactionAPI {
  * @param action - The action to perform: 'add' to add related transactions or 'remove' to remove them.
  * @returns A Promise resolving to the updated transaction document after managing related transactions.
  */
-  private async manageRelated(id: string, unfilteredRelated: string[], action: 'add' | 'remove'): Promise<TransactionDocument> {
+  private async manageRelated(id: string, relatedIds: string[], action: 'add' | 'remove'): Promise<TransactionDocument> {
     // Filter out potential duplicates
-    const related: string[] = unfilteredRelated.filter(
-      (id) => unfilteredRelated.some((_id) => _id === id)
+    relatedIds = relatedIds.filter(
+      (id) => relatedIds.some((_id) => _id === id)
     )
 
     // Callback for filtering based on the given action
     const filterOperation = (doc: TransactionDocument, ids: string[]): string[] => {
       return action === 'add'
-        ? [...doc.related, ...ids]
-        : doc.related.filter((id) => !ids.includes(id))
+        ? [...doc.relatedIds, ...ids]
+        : doc.relatedIds.filter((id) => !ids.includes(id))
     }
 
     // Get and save related transactions to add the
     // current transaction ID as related
     const relatedTransactions = await this.storage.find({
-      filterBy: { id: related }
+      filterBy: { id: relatedIds }
     })
 
     await this.storage.bulkSave(
@@ -264,7 +264,7 @@ class TransactionStorageAPI implements ITransactionAPI {
         ...docs,
         [tr.id]: {
           ...tr,
-          related: filterOperation(tr, [id])
+          relatedIds: filterOperation(tr, [id])
         }
       }), {} as Record<string, TransactionDocument>)
     )
@@ -273,7 +273,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     const document = await this.storage.findById(id)
     return await this.storage.save({
       ...document,
-      related: filterOperation(document, related)
+      relatedIds: filterOperation(document, relatedIds)
     })
   }
 }

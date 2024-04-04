@@ -14,7 +14,7 @@ const transactionFormSchema = z.object({
   payment: paymentFormSchema,
   processed: z.boolean(),
   processedAt: z.coerce.date().optional(),
-  related: z.array(
+  relatedIds: z.array(
     z.string().uuid({ message: 'One of related Transacion ID is invalid!' })
   ).optional()
 })
@@ -29,7 +29,7 @@ const transactionSchema = transactionFormSchema.extend({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   payment: paymentSchema,
-  related: z.array(
+  relatedIds: z.array(
     z.string().uuid({ message: 'One of related Transacion ID is invalid!' })
   )
 })

@@ -31,7 +31,7 @@ const RelatedTransactionsFormFields = ({ transaction, control }: RelatedTransact
               <TransactionsSelector
                 value={field.value}
                 onChange={field.onChange}
-                excludeBy={{ id: [transaction.id, ...transaction.related] }}
+                excludeBy={{ id: [transaction.id, ...transaction.relatedIds] }}
               />
             </FormControl>
             <FormMessage />

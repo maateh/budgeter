@@ -76,5 +76,5 @@ export type Transaction = {
   updatedAt: Date
   processed: boolean
   processedAt?: Date
-  related: string[]
+  relatedIds: string[]
 }

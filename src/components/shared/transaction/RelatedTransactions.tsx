@@ -44,11 +44,11 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
 
       <Separator className="w-3/5 mx-auto my-3.5" />
 
-      {transaction.related.length ? (
+      {transaction.relatedIds.length ? (
         <TransactionList
           // FIXME: maxItemLimit doesn't work
           maxItemLimit={3}
-          filterBy={{ id: transaction.related }}
+          filterBy={{ id: transaction.relatedIds }}
         >
           {({ transaction, budget }) => (
             <div className="flex gap-x-2.5 items-center">
