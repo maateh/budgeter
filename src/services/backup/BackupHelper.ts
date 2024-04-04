@@ -56,23 +56,27 @@ class BackupHelper implements IBackupAPI {
 
     if (complete) {
       await this.budgetStorage.saveToStorage(budgets)
+      await this.budgetNoteStorage.saveToStorage(notes)
       await this.transactionStorage.saveToStorage(transactions)
       await this.paymentStorage.saveToStorage(payments)
-      await this.budgetNoteStorage.saveToStorage(notes)
       return
     }
 
-    await this.budgetStorage.restore(budgets,
-      (budget) => Object.keys(budgets).some((key) => key === budget.id))
+    await this.budgetStorage.restore(budgets, {
+      filterBy: { id: Object.keys(budgets) }
+    })
 
-    await this.transactionStorage.restore(transactions,
-      (tr) => Object.values(budgets).some((budget) => budget.id === tr.id))
+    await this.budgetNoteStorage.restore(notes, {
+      filterBy: { budgetId: Object.keys(budgets) }
+    })
 
-    await this.paymentStorage.restore(payments,
-      (payment) => Object.values(budgets).some((budget) => budget.id === payment.id))
+    await this.transactionStorage.restore(transactions, {
+      filterBy: { budgetId: Object.keys(budgets) }
+    })
 
-    await this.budgetNoteStorage.restore(notes,
-      (note) => Object.values(budgets).some((budget) => budget.id === note.id))
+    await this.paymentStorage.restore(payments, {
+      filterBy: { budgetId: Object.keys(budgets) }
+    })
   }
 
   // helpers

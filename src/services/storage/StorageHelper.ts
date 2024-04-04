@@ -58,17 +58,17 @@ class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
     await this.saveToStorage(documents)
   }
 
-  public async bulkDelete(filter?: (document: D) => boolean) {
+  public async bulkDelete({ filterBy, excludeBy }: FilterOptions<D> = {}) {
     const documents = await this.fetchFromStorage()
 
-    Object.values(documents)
-      .filter(filter || (() => true))
-      .forEach((doc) => delete documents[doc.id])
+    filter(
+      Object.values(documents), { filterBy, excludeBy }
+    ).forEach((doc) => delete documents[doc.id])
 
     await this.saveToStorage(documents)
   }
 
-  public async restore(documents: StorageCollection<D>, filter?: (document: D) => boolean): Promise<void> {
+  public async restore(documents: StorageCollection<D>, filter?: FilterOptions<D>): Promise<void> {
     await this.bulkDelete(filter)
     await this.bulkSave(documents)
   }

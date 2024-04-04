@@ -66,14 +66,18 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async delete(id: string): Promise<Budget> {
+    const noteStorage = BudgetNoteStorageAPI.getInstance().getStorage()
+    const transactionApi = TransactionStorageAPI.getInstance()
+
+    // Delete affected notes from the storage
+    await noteStorage.bulkDelete({ filterBy: { budgetId: id }})
+
+    // Delete affected transactions from the storage
+    await transactionApi.bulkDelete({ filterBy: { budgetId: id } })
+
+    // Delete budget from the storage
     const budget = await this.storage.findById(id)
     await this.storage.deleteById(id)
-
-    await BudgetNoteStorageAPI.getInstance().getStorage()
-      .bulkDelete((note) => note.budgetId === id)
-
-    await TransactionStorageAPI.getInstance().getStorage()
-      .bulkDelete((tr) => tr.budgetId === id)
 
     return budget
   }
