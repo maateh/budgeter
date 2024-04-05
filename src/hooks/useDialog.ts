@@ -5,10 +5,13 @@ const useDialog = () => {
   const location = useLocation()
   const backgroundLocation = location.state?.background as Location
 
-  const openDialog = (to: To, options?: Omit<NavigateOptions, 'state'>) => {
+  const openDialog = (to: To, options?: Omit<NavigateOptions, 'state'>, state?: object) => {
     navigate(to, {
       ...options,
-      state: { background: backgroundLocation || location }
+      state: {
+        background: backgroundLocation || location,
+        ...state
+      }
     })
   }
 

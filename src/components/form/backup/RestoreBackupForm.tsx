@@ -19,7 +19,7 @@ const RestoreBackupForm = () => {
       useSubmit={useRestoreBackupSubmit}
       customButtonRequired
     >
-      {(form, isPending) => <RestoreBackupFormFields {...form} isPending={isPending} />}
+      {(form) => <RestoreBackupFormFields {...form} />}
     </Form>
   )
 }

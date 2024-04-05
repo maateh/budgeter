@@ -8,7 +8,7 @@ import DialogLayout from "@/_dialogs/DialogLayout"
 import { Budgets, CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"
 
 import AlertLayout from "@/_alerts/AlertLayout"
-import { DeleteBudget, DeleteNote, DeleteTransaction } from "@/_alerts"
+import { DeleteBudget, DeleteNote, DeleteTransaction, RestoreBackup } from "@/_alerts"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -56,6 +56,9 @@ const App = () => {
             </Route>
             <Route path="/transactions">
               <Route path="delete/:id" element={<DeleteTransaction />} />
+            </Route>
+            <Route path="/backup">
+              <Route path="restore" element={<RestoreBackup />} />
             </Route>
           </Route>
         </Routes>
