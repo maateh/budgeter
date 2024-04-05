@@ -80,6 +80,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
                 <TransactionPreview
                   transaction={transaction}
                   budget={budget}
+                  onClick={() => openDialog(`/transactions/details/${transaction.id}`)}
                 />
               )}
             </TransactionList>

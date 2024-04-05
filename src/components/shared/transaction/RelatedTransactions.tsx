@@ -12,6 +12,7 @@ import TransactionPreview from "@/components/shared/transaction/TransactionPrevi
 import RelatedTransactionsForm from "@/components/form/related-transactions/RelatedTransactionsForm"
 
 // hooks
+import { useDialog } from "@/hooks"
 import { useRemoveRelatedTransaction } from "@/lib/react-query/mutations"
 
 // types
@@ -23,6 +24,8 @@ type RelatedTransactionsProps = {
 }
 
 const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
+  const { openDialog } = useDialog()
+
   const { mutateAsync: removeRelated, isPending } = useRemoveRelatedTransaction(transaction.id)
 
   const handleRemove = async (relatedId: string) => {
@@ -55,6 +58,9 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
               <TransactionPreview
                 transaction={transaction}
                 budget={budget}
+                onClick={() => openDialog(`/transactions/details/${transaction.id}`, {
+                  replace: true
+                })}
               />
 
               <ButtonTooltip className="p-0.5"
