@@ -2,7 +2,7 @@
 import { BadgeInfo, X } from "lucide-react"
 
 // shadcn
-import { Button } from "@/components/ui/button"
+import { ButtonTooltip } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -51,20 +51,22 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
           filterBy={{ id: transaction.relatedIds }}
         >
           {({ transaction, budget }) => (
-            <div className="flex gap-x-2.5 items-center">
+            <div className="flex gap-x-2 items-center">
               <TransactionPreview
                 transaction={transaction}
                 budget={budget}
               />
 
-              <Button className="p-1"
-                variant="outline"
+              <ButtonTooltip className="p-0.5"
+                variant="icon"
                 size="icon"
                 onClick={() => handleRemove(transaction.id)}
                 disabled={isPending}
+                tooltip="Remove as related"
+                tooltipProps={{ className: "bg-background/85 border-muted-foreground/50 text-muted-foreground text-xs font-heading" }}
               >
-                <X size={14} />
-              </Button>
+                <X size={13} strokeWidth={2.85} />
+              </ButtonTooltip>
             </div>
           )}
         </TransactionList>
