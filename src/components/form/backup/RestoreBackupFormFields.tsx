@@ -1,9 +1,10 @@
 import { UseFormReturn, useWatch } from "react-hook-form"
 
 // icons
-import { ArchiveRestore } from "lucide-react"
+import { AlertTriangle, ArchiveRestore } from "lucide-react"
 
 // shadcn
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
@@ -48,10 +49,39 @@ const RestoreBackupFormFields = ({ form }: RestoreBackupFormFieldsProps) => {
 
       {content && <BackupFileInfo {...content} />}
 
-      <Button className="w-fit ml-auto icon-wrapper">
-        <ArchiveRestore strokeWidth={2.5} />
-        Restore
-      </Button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button className="w-fit ml-auto icon-wrapper"
+            type="button"
+            disabled={!content}
+          >
+            <ArchiveRestore strokeWidth={2.5} />
+            Restore
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent variant="negative">
+          <AlertDialogHeader className="text-lg font-heading font-semibold">
+            Do you want to restore the backup?
+          </AlertDialogHeader>
+
+          <AlertDialogDescription className="icon-wrapper">
+            <AlertTriangle className="text-destructive" size={20} />
+            <span>This action cannot be undone.</span>
+          </AlertDialogDescription>
+
+          {content && <BackupFileInfo {...content} />}
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="icon-wrapper"
+              type="submit"
+              // disabled={isPending}
+            >
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   )
 }
