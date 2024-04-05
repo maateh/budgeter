@@ -20,11 +20,12 @@ import { useBudget } from "@/lib/react-query/queries"
 // types
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
 
-type TransferMoneyFormFieldsProps = {
+type TransferMoneyFormFieldsProps = UseFormReturn<TransferMoneyFieldValues> & {
+  isPending: boolean
   budgetId: string
-} & UseFormReturn<TransferMoneyFieldValues>
+}
 
-const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsProps) => {
+const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoneyFormFieldsProps) => {
   const targetBudgetIdField = useWatch({
     control,
     name: 'targetBudgetId'
@@ -147,6 +148,7 @@ const TransferMoneyFormFields = ({ budgetId, control }: TransferMoneyFormFieldsP
 
       <Button className="sm:ml-auto sm:w-fit"
         type="submit"
+        disabled={isPending}
       >
         Transfer {targetBudget && `to "${targetBudget.name}"`} 
       </Button>

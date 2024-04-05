@@ -14,14 +14,11 @@ import { useCurrencies } from "@/lib/react-query/queries"
 // types
 import { BudgetFieldValues } from "@/components/form/budget/types"
 
-type BudgetFormFieldsProps = {
-  form: UseFormReturn<BudgetFieldValues>
+type BudgetFormFieldsProps = UseFormReturn<BudgetFieldValues> & {
   disabled?: boolean
 }
 
-const BudgetFormFields = ({ form, disabled }: BudgetFormFieldsProps) => {
-  const { control } = form
-  
+const BudgetFormFields = ({ control, disabled }: BudgetFormFieldsProps) => {  
   const {
     data: currencies,
     isLoading: currenciesIsLoading

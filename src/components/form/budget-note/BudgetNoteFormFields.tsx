@@ -1,18 +1,19 @@
 import { UseFormReturn } from "react-hook-form"
 
 // shadcn
+import { Button } from "@/components/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
 
 // types
 import { BudgetNoteFieldValues } from "@/components/form/budget-note/types"
 
 type BudgetNoteFormFieldsProps = UseFormReturn<BudgetNoteFieldValues> & {
+  isPending: boolean
   onCancel: () => void
 }
 
-const BudgetNoteFormFields = ({ control, onCancel }: BudgetNoteFormFieldsProps) => {
+const BudgetNoteFormFields = ({ control, isPending, onCancel }: BudgetNoteFormFieldsProps) => {
   return (
     <div className="min-w-[75%] mx-auto flex flex-col gap-1.5">
       <FormField
@@ -34,15 +35,16 @@ const BudgetNoteFormFields = ({ control, onCancel }: BudgetNoteFormFieldsProps) 
 
       <div className="my-1 flex gap-x-3.5 justify-end">
         <Button type="button"
-          size="sm"
           variant="destructive"
+          size="sm"
           onClick={onCancel}
         >
           Cancel
         </Button>
-        <Button type="submit"
+        <Button className="border-md"
           size="sm"
-          className="border-md"
+          type="submit"
+          disabled={isPending}
         >
           Save
         </Button>

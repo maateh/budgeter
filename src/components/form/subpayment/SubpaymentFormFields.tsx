@@ -14,12 +14,14 @@ import StateToggle from "@/components/ui/custom/StateToggle"
 // types
 import { SubpaymentFieldValues } from "@/components/form/subpayment/types"
 
-type SubpaymentFormFieldsProps = UseFormReturn<SubpaymentFieldValues>
+type SubpaymentFormFieldsProps = UseFormReturn<SubpaymentFieldValues> & {
+  isPending: boolean
+}
 
-const SubpaymentFormFields = ({ control }: SubpaymentFormFieldsProps) => {
+const SubpaymentFormFields = ({ control, isPending }: SubpaymentFormFieldsProps) => {
   return (
     <div>
-      <FormLabel>Subpayment</FormLabel>
+      <FormLabel htmlFor="amount">Subpayment</FormLabel>
       
       <div className="flex items-center gap-x-2.5">
         <FormField
@@ -54,7 +56,7 @@ const SubpaymentFormFields = ({ control }: SubpaymentFormFieldsProps) => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input className="h-9"
+                <Input className="h-9" id="amount"
                   type="number"
                   placeholder="e.g. $8"
                   {...field}
@@ -66,9 +68,10 @@ const SubpaymentFormFields = ({ control }: SubpaymentFormFieldsProps) => {
         />
 
         <Button className="text-green-400 icon-wrapper"
-          type="submit"
           variant="icon"
           size="icon"
+          type="submit"
+          disabled={isPending}
         >
           <Check size={18} strokeWidth={4} />
         </Button>

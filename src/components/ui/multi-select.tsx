@@ -39,7 +39,7 @@ function MultiSelect({ options, selected, onChange, disabled, ...props }: MultiS
 
   const getLabel = (value: string): string => {
     const option = options.find((option) => option.value === value)
-    return option?.label || 'asd'
+    return option?.label || 'Label not found.'
   }
 
   return (

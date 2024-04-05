@@ -26,10 +26,10 @@ const RelatedTransactionsForm = ({ transaction }: RelatedTransactionsFormProps) 
       submitProps={{ transactionId: transaction.id }}
       customButtonRequired
     >
-      {(form) => (
-        <RelatedTransactionsFormFields
+      {(form, isPending) => (
+        <RelatedTransactionsFormFields {...form}
+          isPending={isPending}
           transaction={transaction}
-          {...form}
         />
       )}
     </Form>

@@ -15,13 +15,11 @@ import BackupFileInfo from "@/components/shared/backup/BackupInfo"
 // types
 import { RestoreBackupFieldValues } from "@/components/form/backup/types"
 
-type RestoreBackupFormFieldsProps = {
-  form: UseFormReturn<RestoreBackupFieldValues>
+type RestoreBackupFormFieldsProps = UseFormReturn<RestoreBackupFieldValues> & {
+  isPending: boolean
 }
 
-const RestoreBackupFormFields = ({ form }: RestoreBackupFormFieldsProps) => {
-  const { control } = form
-
+const RestoreBackupFormFields = ({ control, isPending }: RestoreBackupFormFieldsProps) => {
   const content = useWatch({
     control,
     name: 'fileContent'
@@ -75,7 +73,7 @@ const RestoreBackupFormFields = ({ form }: RestoreBackupFormFieldsProps) => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction className="icon-wrapper"
               type="submit"
-              // disabled={isPending}
+              disabled={isPending}
             >
               Confirm
             </AlertDialogAction>

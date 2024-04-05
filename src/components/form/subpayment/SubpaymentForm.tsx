@@ -28,7 +28,7 @@ const SubpaymentForm = ({ transactionId }: SubpaymentFormProps) => {
       submitProps={{ transactionId }}
       customButtonRequired
     >
-      {(form) => <SubpaymentFormFields {...form} />}
+      {(form, isPending) => <SubpaymentFormFields {...form} isPending={isPending} />}
     </Form>
   )
 }

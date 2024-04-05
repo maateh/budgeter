@@ -16,7 +16,7 @@ type FormProps<FV extends FieldValues, Z extends ZodType<FV>, P = object> = {
   },
   submitProps?: P
   customButtonRequired?: boolean,
-  children: (methods: UseFormReturn<FV>) => React.ReactNode
+  children: (methods: UseFormReturn<FV>, isPending: boolean) => React.ReactNode
 } & UseFormProps<FV, Z>
 
 function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({
@@ -32,7 +32,7 @@ function Form<FV extends FieldValues, Z extends ZodType<FV>, P = object>({
     <ShadcnForm {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
 
-        {children(form)}
+        {children(form, isPending)}
 
         {!customButtonRequired && (
           <Button

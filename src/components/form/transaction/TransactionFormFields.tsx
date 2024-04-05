@@ -18,14 +18,11 @@ import StateToggle from "@/components/ui/custom/StateToggle"
 import { TransactionFieldValues } from "@/components/form/transaction/types"
 import { Transaction } from "@/services/api/types"
 
-type TransactionFormFieldsProps = {
+type TransactionFormFieldsProps = UseFormReturn<TransactionFieldValues> & {
   budgetId?: string
-  form: UseFormReturn<TransactionFieldValues>
 }
 
-const TransactionFormFields = ({ budgetId, form }: TransactionFormFieldsProps) => {
-  const { control } = form
-
+const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps) => {
   const typeField = useWatch({
     control,
     name: 'type'

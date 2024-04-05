@@ -33,12 +33,7 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
       }}
       useSubmit={useTransactionSubmit}
     >
-      {(form) => (
-        <TransactionFormFields
-          budgetId={budgetId}
-          form={form}
-        />
-      )}
+      {(form) => <TransactionFormFields {...form} budgetId={budgetId} />}
     </Form>
   )
 }

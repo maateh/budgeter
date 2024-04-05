@@ -14,11 +14,12 @@ import TransactionsSelector from "@/components/input/TransactionsSelector"
 import { RelatedTransactionsFieldValues } from "@/components/form/related-transactions/types"
 import { Transaction } from "@/services/api/types"
 
-type RelatedTransactionsFormFieldsProps = {
+type RelatedTransactionsFormFieldsProps = UseFormReturn<RelatedTransactionsFieldValues> & {
+  isPending: boolean
   transaction: Transaction
-} & UseFormReturn<RelatedTransactionsFieldValues>
+}
 
-const RelatedTransactionsFormFields = ({ transaction, control }: RelatedTransactionsFormFieldsProps) => {
+const RelatedTransactionsFormFields = ({ control, isPending, transaction }: RelatedTransactionsFormFieldsProps) => {
   return (
     <>
       <FormField
@@ -40,8 +41,9 @@ const RelatedTransactionsFormFields = ({ transaction, control }: RelatedTransact
       />
 
       <Button className="w-fit px-3 -mt-2.5 ml-auto icon-wrapper"
-        type="submit"
         size="sm"
+        type="submit"
+        disabled={isPending}
       >
         <BookmarkPlus size={18} />
         <span>Add as related</span>

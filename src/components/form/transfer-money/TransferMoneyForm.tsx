@@ -33,7 +33,12 @@ const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
       useSubmit={useTransferMoneySubmit}
       customButtonRequired
     >
-      {(form) => <TransferMoneyFormFields budgetId={budgetId} {...form} />}
+      {(form, isPending) => (
+        <TransferMoneyFormFields {...form}
+          isPending={isPending}
+          budgetId={budgetId}
+        />
+      )}
     </Form>
   )
 }

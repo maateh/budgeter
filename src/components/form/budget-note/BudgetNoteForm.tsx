@@ -41,8 +41,8 @@ const BudgetNoteForm = ({ type, budgetId, note, onSubmitted, onCancel }: BudgetN
       }}
       customButtonRequired
     >
-      {(form) => (
-        <BudgetNoteFormFields onCancel={onCancel} {...form} />
+      {(form, isPending) => (
+        <BudgetNoteFormFields {...form} isPending={isPending} onCancel={onCancel} />
       )}
     </Form>
   )
