@@ -98,7 +98,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
       </div>
 
       <div>
-        <FormLabel>
+        <FormLabel htmlFor="amount">
           {typeField === 'default' ? 'Payment' : 'Borrowed Money'}
         </FormLabel>
 
@@ -135,7 +135,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
             render={({ field }) => (
               <FormItem className="min-w-[40%]">
                 <FormControl>
-                  <Input
+                  <Input id="amount"
                     type="number"
                     placeholder="e.g. $8"
                     {...field}
