@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, Pagination, Payment, QueryOptions } from "@/services/api/types"
+import { Budget, Pagination, QueryOptions } from "@/services/api/types"
 import { BudgetDocument } from "@/services/storage/types"
 
 // validations
@@ -82,42 +82,8 @@ class BudgetStorageAPI implements IBudgetAPI {
     return budget
   }
 
-  // helpers
   public getStorage() {
     return this.storage
-  }
-
-/**
- * Manages payments within a budget by updating the balance based on the given payment and action.
- * If the action is 'execute', it applies the payment to the budget's balance. If the action is 'undo',
- * it reverts the effect of the payment.
- *
- * @param id - The ID of the budget to manage payments for.
- * @param payment - The payment object with type (either '+' for income or '-' for loss) and amount.
- * @param action - The action to be performed: 'execute' to apply the payment or 'undo' to revert it.
- * @returns A Promise resolving to the updated budget after managing the payment.
- */
-  public async manageBalance(id: string, payment: Payment, action: 'execute' | 'undo'): Promise<Budget> {
-    const budget = await this.storage.findById(id)
-
-    const { current, income, loss } = budget.balance
-    const { type, amount } = payment
-
-    const update: 1 | -1 = action === 'execute' ? 1 : -1
-
-    const currentDelta = type === '+' ? amount * update : -amount * update
-    const incomeDelta = type === '+' ? amount * update : 0
-    const lossDelta = type === '-' ? amount * update : 0
-
-    return await this.storage.save({
-      ...budget,
-      balance: {
-        ...budget.balance,
-        current: current + currentDelta,
-        income: income + incomeDelta,
-        loss: loss + lossDelta
-      }
-    })
   }
 }
 

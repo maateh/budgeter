@@ -36,7 +36,7 @@ export interface ITransactionAPI {
   getWithBudget(options?: QueryOptions<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>
   
   create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction>
-  delete(id: string): Promise<Transaction>
+  delete(id: string, removeRelated?: boolean): Promise<Transaction>
   
   updateStatus(id: string, processed: boolean): Promise<Transaction>
   addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction>

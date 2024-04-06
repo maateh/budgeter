@@ -4,8 +4,8 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Budget, FilterOptions, Pagination, QueryOptions, Transaction } from "@/services/api/types"
-import { TransactionDocument } from "@/services/storage/types"
+import { Budget, FilterOptions, Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
+import { StorageCollection, TransactionDocument } from "@/services/storage/types"
 
 // validations
 import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
@@ -14,8 +14,12 @@ import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyForm
 import StorageHelper from "@/services/storage/StorageHelper"
 import { BudgetStorageAPI, PaymentStorageAPI } from "@/services/storage/collections"
 
+// helpers
+import { revertPaymentsOnBalance, updateBalance } from "@/services/storage/helpers/balance"
+
 // utils
 import { paginate } from "@/services/storage/utils"
+import { updatePayment } from "../helpers/transaction"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -82,7 +86,6 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public async create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction> {
     const paymentApi = PaymentStorageAPI.getInstance()
-    const budgetApi = BudgetStorageAPI.getInstance()
 
     const transactionId = crypto.randomUUID()
     const paymentId = crypto.randomUUID()
@@ -109,38 +112,50 @@ class TransactionStorageAPI implements ITransactionAPI {
         isSubpayment: false
       })
 
+    const transaction: Transaction = { ...doc, budgetId, payment, type, processed }
     if (type === 'borrow') {
-      await budgetApi.manageBalance(budgetId, payment, 'execute')
+      await updateBalance(budgetId, payment, 'execute')
     }
 
-    if (!processed) return { ...doc, budgetId, payment, type, processed }
+    if (!processed) return transaction
 
     if (type === 'borrow') {
-      return await paymentApi.manageSubpayment(transactionId, {
+      const subpayment: Payment = {
         ...payment,
         id: crypto.randomUUID(),
         type: payment.type === '+' ? '-' : '+',
         isSubpayment: true
-      }, 'execute')
+      }
+      return await updatePayment(transactionId, subpayment, 'execute')
     }
 
-    return await paymentApi.managePayment(transactionId, payment, 'execute')
+    return await updatePayment(transactionId, payment, 'execute')
   }
 
-  public async delete(id: string): Promise<Transaction> {
-    const budgetApi = BudgetStorageAPI.getInstance()
+  public async delete(id: string, removeRelated: boolean = false): Promise<Transaction> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const { budgetId, paymentId, relatedIds, ...doc } = await this.storage.findById(id)
+    const { paymentId, ...transaction } = await this.storage.findById(id)
     const payment = await paymentStorage.findById(paymentId)
 
-    await budgetApi.manageBalance(budgetId, payment, 'undo')
-    await paymentStorage.deleteById(paymentId)
+    if (removeRelated) {
+      await this.bulkDelete({
+        filterBy: { id: [id, ...transaction.relatedIds] }
+      }, true)
 
-    await this.manageRelated(id, relatedIds, 'remove')
+      return { ...transaction, payment }
+    }
+
+    // Undo payment that can affect on balance and remove
+    // transaction id from the related transactions
+    await updatePayment(transaction.id, payment, 'undo')
+    await this.manageRelated(id, transaction.relatedIds, 'remove')
+      
+    // Remove transaction and its payments/subpayments
     await this.storage.deleteById(id)
+    await paymentStorage.bulkDelete({ filterBy: { transactionId: id }})
 
-    return { ...doc, budgetId, payment, relatedIds }
+    return { ...transaction, payment }
   }
 
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
@@ -153,7 +168,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     const payment = await paymentApi.getStorage().findById(paymentId)
-    return await paymentApi.managePayment(id, payment, processed ? 'execute' : 'undo')
+    return await updatePayment(id, payment, processed ? 'execute' : 'undo')
   }
 
   public async addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction> {
@@ -199,15 +214,13 @@ class TransactionStorageAPI implements ITransactionAPI {
     return { rootTransaction, targetTransaction }
   }
 
-  // helpers
   public getStorage() {
     return this.storage
   }
 
-  public async bulkDelete(filter?: FilterOptions<Transaction>): Promise<void> {
+  // TODO: move to helpers (?)
+  public async bulkDelete(filter?: FilterOptions<Transaction>, revertPayments: boolean = true): Promise<void> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
-
-    // FIXME: revert payments on budget balance
 
     // Remove affected transaction ids from relatedIds
     const transactions = await this.storage.find(filter)
@@ -224,15 +237,24 @@ class TransactionStorageAPI implements ITransactionAPI {
           ...tr,
           relatedIds: tr.relatedIds.filter((id) => !ids.includes(id))
         }
-      }), {} as Record<string, TransactionDocument>)
+      }), {} as StorageCollection<TransactionDocument>)
     )
 
-    // Delete payments & transactions from the storage
+    // Revert affected payments on budget balance
+    if (revertPayments) {
+      const payments = await paymentStorage.find({
+        filterBy: { transactionId: ids, isSubpayment: false }
+      })
+      await revertPaymentsOnBalance(payments)
+      await paymentStorage.bulkDelete({ filterBy: { transactionId: ids }})
+    }
+
+    // Delete affected payments & transactions from the storage
     await paymentStorage.bulkDelete({ filterBy: { transactionId: ids }})
     await this.storage.bulkDelete(filter)
   }
 
-/**
+/** TODO: move to helpers
  * Manages related transactions for a given transaction by adding or removing related transaction IDs.
  *
  * @param id - The ID of the transaction to manage related transactions for.
