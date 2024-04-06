@@ -45,13 +45,15 @@ const DeleteTransaction = () => {
 
       {transaction?.relatedIds.length ? (
         <div className="icon-wrapper">
-          <Checkbox className="size-5 border-2 data-[state=checked]:border-accent"
+          <Checkbox className="size-5 border-2 data-[state=checked]:border-accent" id="removeRelated"
             checked={removeRelated}
             onCheckedChange={() => setRemoveRelated((removeRelated) => !removeRelated)}
           />
-          <p className="text-accent font-semibold capitalize small-caps">
+          <label className="text-accent font-semibold capitalize small-caps"
+            htmlFor="removeRelated"
+          >
             Delete related transactions
-          </p>
+          </label>
         </div>
       ) : <></>}
 
@@ -61,7 +63,7 @@ const DeleteTransaction = () => {
         </AlertDialogCancel>
         <AlertDialogAction
           onClick={deleteConfirm}
-          disabled={isDeletePending/* || isBulkDeletePending*/}
+          disabled={isDeletePending}
         >
           Confirm
         </AlertDialogAction>
