@@ -96,7 +96,9 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
       <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
         {toggleElement}
       </PopoverTrigger>
-      <PopoverContent onClick={(e) => e.stopPropagation()}>
+      <PopoverContent className="max-w-md"
+        onClick={(e) => e.stopPropagation()}
+      >
         <PaymentProgress
           transaction={transaction}
           budget={budget}

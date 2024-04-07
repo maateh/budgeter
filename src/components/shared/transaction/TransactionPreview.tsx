@@ -56,7 +56,9 @@ const TransactionPreview = ({ transaction, budget, onClick }: TransactionPreview
               isNeutral={isNeutral(transaction.type, transaction.processed)}
             />
           </PopoverTrigger>
-          <PopoverContent onClick={(e) => e.stopPropagation()}>
+          <PopoverContent className="max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
             {transaction.type === 'borrow' ? (
               <PaymentProgress
                 transaction={transaction}
