@@ -4,8 +4,8 @@ import { z } from "zod"
 import { ITransactionAPI } from "@/services//api/interfaces"
 
 // types
-import { Budget, FilterOptions, Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
-import { StorageCollection, TransactionDocument } from "@/services/storage/types"
+import { Budget, Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
+import { TransactionDocument } from "@/services/storage/types"
 
 // validations
 import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
@@ -15,11 +15,11 @@ import StorageHelper from "@/services/storage/StorageHelper"
 import { BudgetStorageAPI, PaymentStorageAPI } from "@/services/storage/collections"
 
 // helpers
-import { revertPaymentsOnBalance, updateBalance } from "@/services/storage/helpers/balance"
+import { updateBalance } from "@/services/storage/helpers/balance"
+import { deleteTransactions, manageRelatedTransactions, updateTransaction } from "@/services/storage/helpers/transaction"
 
 // utils
 import { paginate } from "@/services/storage/utils"
-import { updatePayment } from "../helpers/transaction"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -126,10 +126,10 @@ class TransactionStorageAPI implements ITransactionAPI {
         type: payment.type === '+' ? '-' : '+',
         isSubpayment: true
       }
-      return await updatePayment(transactionId, subpayment, 'execute')
+      return await updateTransaction(transactionId, subpayment, 'execute')
     }
 
-    return await updatePayment(transactionId, payment, 'execute')
+    return await updateTransaction(transactionId, payment, 'execute')
   }
 
   public async delete(id: string, removeRelated: boolean = false): Promise<Transaction> {
@@ -138,20 +138,26 @@ class TransactionStorageAPI implements ITransactionAPI {
     const { paymentId, ...transaction } = await this.storage.findById(id)
     const payment = await paymentStorage.findById(paymentId)
 
+    /**
+     * If related transactions need to be removed, we have
+     * to perform a bulk delete instead of a single delete
+     */
     if (removeRelated) {
-      await this.bulkDelete({
+      await deleteTransactions({
         filterBy: { id: [id, ...transaction.relatedIds] }
       }, true)
 
       return { ...transaction, payment }
     }
 
-    // Undo payment that can affect on balance and remove
-    // transaction id from the related transactions
-    await updatePayment(transaction.id, payment, 'undo')
-    await this.manageRelated(id, transaction.relatedIds, 'remove')
+    /**
+     * Undo payment that can affect on balance and remove
+     * transaction id from the related transactions
+     */
+    await updateTransaction(transaction.id, payment, 'undo')
+    await manageRelatedTransactions(id, transaction.relatedIds, 'remove')
       
-    // Remove transaction and its payments/subpayments
+    /** Remove transaction and its payments/subpayments */
     await this.storage.deleteById(id)
     await paymentStorage.bulkDelete({ filterBy: { transactionId: id }})
 
@@ -168,13 +174,13 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     const payment = await paymentApi.getStorage().findById(paymentId)
-    return await updatePayment(id, payment, processed ? 'execute' : 'undo')
+    return await updateTransaction(id, payment, processed ? 'execute' : 'undo')
   }
 
   public async addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const { paymentId, ...transaction } = await this.manageRelated(
+    const { paymentId, ...transaction } = await manageRelatedTransactions(
       id, data.relatedIds, 'add'
     )
 
@@ -185,7 +191,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async removeRelated(id: string, relatedId: string): Promise<Transaction> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const { paymentId, ...transaction } = await this.manageRelated(
+    const { paymentId, ...transaction } = await manageRelatedTransactions(
       id, [relatedId], 'remove'
     )
 
@@ -216,87 +222,6 @@ class TransactionStorageAPI implements ITransactionAPI {
 
   public getStorage() {
     return this.storage
-  }
-
-  // TODO: move to helpers (?)
-  public async bulkDelete(filter?: FilterOptions<Transaction>, revertPayments: boolean = true): Promise<void> {
-    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
-
-    // Remove affected transaction ids from relatedIds
-    const transactions = await this.storage.find(filter)
-    const ids = transactions.map((tr) => tr.id)
-
-    const relatedTransactions = await this.storage.find({
-      filterBy: { id: transactions.flatMap((tr) => tr.relatedIds) }
-    })
-
-    await this.storage.bulkSave(
-      relatedTransactions.reduce((docs, tr) => ({
-        ...docs,
-        [tr.id]: {
-          ...tr,
-          relatedIds: tr.relatedIds.filter((id) => !ids.includes(id))
-        }
-      }), {} as StorageCollection<TransactionDocument>)
-    )
-
-    // Revert affected payments on budget balance
-    if (revertPayments) {
-      const payments = await paymentStorage.find({
-        filterBy: { transactionId: ids, isSubpayment: false }
-      })
-      await revertPaymentsOnBalance(payments)
-      await paymentStorage.bulkDelete({ filterBy: { transactionId: ids }})
-    }
-
-    // Delete affected payments & transactions from the storage
-    await paymentStorage.bulkDelete({ filterBy: { transactionId: ids }})
-    await this.storage.bulkDelete(filter)
-  }
-
-/** TODO: move to helpers
- * Manages related transactions for a given transaction by adding or removing related transaction IDs.
- *
- * @param id - The ID of the transaction to manage related transactions for.
- * @param unfilteredRelated - The array of related transaction IDs to add or remove.
- * @param action - The action to perform: 'add' to add related transactions or 'remove' to remove them.
- * @returns A Promise resolving to the updated transaction document after managing related transactions.
- */
-  private async manageRelated(id: string, relatedIds: string[], action: 'add' | 'remove'): Promise<TransactionDocument> {
-    // Filter out potential duplicates
-    relatedIds = relatedIds.filter(
-      (id) => relatedIds.some((_id) => _id === id)
-    )
-
-    // Callback for filtering based on the given action
-    const filterOperation = (doc: TransactionDocument, ids: string[]): string[] => {
-      return action === 'add'
-        ? [...doc.relatedIds, ...ids]
-        : doc.relatedIds.filter((id) => !ids.includes(id))
-    }
-
-    // Get and save related transactions to add the
-    // current transaction ID as related
-    const relatedTransactions = await this.storage.find({
-      filterBy: { id: relatedIds }
-    })
-
-    await this.storage.bulkSave(
-      relatedTransactions.reduce((docs, tr) => ({
-        ...docs,
-        [tr.id]: {
-          ...tr,
-          relatedIds: filterOperation(tr, [id])
-        }
-      }), {} as Record<string, TransactionDocument>)
-    )
-
-    // Get and save current transaction with the updated related ids
-    const document = await this.storage.findById(id)
-    return await this.storage.save({
-      ...document,
-      relatedIds: filterOperation(document, relatedIds)
-    })
   }
 }
 

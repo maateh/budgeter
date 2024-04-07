@@ -14,9 +14,11 @@ import { paymentFormSchema } from "@/lib/validations"
 import StorageHelper from "@/services/storage/StorageHelper"
 import { TransactionStorageAPI } from "@/services/storage/collections"
 
+// helpers
+import { updateTransaction } from "@/services/storage/helpers/transaction"
+
 // utils
 import { paginate } from "@/services/storage/utils"
-import { updatePayment } from "../helpers/transaction"
 
 class PaymentStorageAPI implements IPaymentAPI {
   private static _instance: PaymentStorageAPI
@@ -56,7 +58,7 @@ class PaymentStorageAPI implements IPaymentAPI {
       isSubpayment: true
     }
 
-    return await updatePayment(transactionId, subpayment, 'execute')
+    return await updateTransaction(transactionId, subpayment, 'execute')
   }
 
   public async removeSubpayment(transactionId: string, subpaymentId: string): Promise<Transaction> {
@@ -66,7 +68,7 @@ class PaymentStorageAPI implements IPaymentAPI {
       throw new Error('Subpayment not found!')
     }
 
-    return await updatePayment(transactionId, subpayment, 'undo')
+    return await updateTransaction(transactionId, subpayment, 'undo')
   }
 
   public getStorage() {

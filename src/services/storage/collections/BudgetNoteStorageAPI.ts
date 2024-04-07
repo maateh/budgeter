@@ -81,7 +81,6 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return note
   }
 
-  // helpers
   public getStorage() {
     return this.storage
   }

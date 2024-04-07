@@ -28,7 +28,11 @@ class API {
       this.payment = PaymentStorageAPI.getInstance()
       this.backup = BackupHelper.getInstance()
     } else {
-      // TODO: create remote api
+      /**
+       * NOTE: If a separate API is created for 'Budgeter',
+       * the corresponding calls can be implemented here.
+       */
+
       this.budget = BudgetStorageAPI.getInstance()
       this.budgetNote = BudgetNoteStorageAPI.getInstance()
       this.transaction = TransactionStorageAPI.getInstance()
