@@ -11,11 +11,20 @@ import { Filter, FilterOptions, Pagination, PaginationParams } from "@/services/
 export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
   const { offset = 0, limit = -1, maxItemLimit } = params || {}
 
-  const currentLimit = maxItemLimit ? Math.min(offset + limit, maxItemLimit) : offset + limit
-  const fixedLength = maxItemLimit ? Math.min(data.length, maxItemLimit) : data.length
+  /**
+   * If 'maxItemLimit' is specified we have to override the current
+   * offset limit if 'maxItemLimit' is less than the actual, so as
+   * not to exceed the maximum amount of items.
+   */
+  const currentOffsetLimit = maxItemLimit ? Math.min(offset + limit, maxItemLimit) : offset + limit
 
+  /**
+   * Determines the next page offset based on the current offset
+   * and limit, considering the maximum item limit if specified.
+   */
+  const fixedLength = maxItemLimit ? Math.min(data.length, maxItemLimit) : data.length
   const nextPageOffset = limit > -1
-    ? currentLimit < fixedLength ? currentLimit : null
+    ? currentOffsetLimit < fixedLength ? currentOffsetLimit : null
     : null
 
   const sortedData = data.sort(sortBy)
@@ -26,7 +35,7 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
     maxItemLimit: maxItemLimit || data.length,
     nextPageOffset,
     total: data.length,
-    data: limit > -1 ? sortedData.slice(offset, currentLimit) : sortedData
+    data: limit > -1 ? sortedData.slice(offset, currentOffsetLimit) : sortedData
   }
 }
 
@@ -50,9 +59,12 @@ export function filter<D>(documents: D[], filter?: FilterOptions<D>): D[] {
         // If the filter value is not defined, it is ignored
         if (value === undefined) return true
 
-        // If the filter value is an array, check if the entry value matches any value in the array
-        // Otherwise, perform a strict equality check
-        // In both cases inclusion is checked (filter or exclude)
+        /**
+         * If the filter value is an array, check if the entry value matches
+         * any value in the array. (Otherwise, perform a strict equality check.)
+         * 
+         * In both cases inclusion is checked (filter or exclude).
+         */
         const entryValue = entry[key as keyof D]
         return Array.isArray(value)
           ? value.includes(entryValue) === inclusion
