@@ -12,16 +12,19 @@ import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 import { useBudgetsPagination } from "@/lib/react-query/queries"
 import { useDialog, usePagination } from "@/hooks"
 
+// types
+import { Budget, QueryOptions } from "@/services/api/types"
+
 type BudgetListProps = {
   disableScrolling?: boolean
-}
+} & QueryOptions<Budget>
 
-const BudgetList = ({ disableScrolling }: BudgetListProps) => {
+const BudgetList = ({ filter, params, disableScrolling = false }: BudgetListProps) => {
   const { openDialog } = useDialog()
 
   const {
     data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage
-  } = useBudgetsPagination({ disableScrolling })
+  } = useBudgetsPagination({ filter, params, disableScrolling })
 
   const { observerRef } = usePagination({
     data, fetchNextPage, disableScrolling
