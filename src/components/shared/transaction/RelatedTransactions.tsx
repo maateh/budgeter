@@ -49,11 +49,10 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
 
       {transaction.relatedIds.length ? (
         <TransactionList
-          // FIXME: maxItemLimit doesn't work
-          maxItemLimit={3}
-          filterBy={{ id: transaction.relatedIds }}
+          filter={{ filterBy: { id: transaction.relatedIds }}}
+          params={{ limit: 5, offset: 0 }}
         >
-          {({ transaction, budget }) => (
+          {(transaction, budget) => (
             <div className="flex gap-x-2 items-center">
               <TransactionPreview
                 transaction={transaction}

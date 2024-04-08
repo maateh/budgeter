@@ -9,10 +9,13 @@ import { Filter, FilterOptions, Pagination, PaginationParams } from "@/services/
  * @returns An object containing paginated data and metadata.
  */
 export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
-  const { offset = 0, limit = -1 } = params || {}
+  const { offset = 0, limit = -1, maxItemLimit } = params || {}
+
+  const currentLimit = maxItemLimit ? Math.min(offset + limit, maxItemLimit) : offset + limit
+  const fixedLength = maxItemLimit ? Math.min(data.length, maxItemLimit) : data.length
 
   const nextPageOffset = limit > -1
-    ? offset + limit < data.length ? offset + limit : null
+    ? currentLimit < fixedLength ? currentLimit : null
     : null
 
   const sortedData = data.sort(sortBy)
@@ -20,9 +23,10 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
   return {
     offset,
     limit,
+    maxItemLimit: maxItemLimit || data.length,
     nextPageOffset,
     total: data.length,
-    data: limit > -1 ? sortedData.slice(offset, offset + limit) : sortedData
+    data: limit > -1 ? sortedData.slice(offset, currentLimit) : sortedData
   }
 }
 

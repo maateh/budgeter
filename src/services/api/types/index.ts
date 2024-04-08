@@ -1,15 +1,14 @@
 // pagination
 export type Pagination<T> = {
   data: T[]
-  offset: number
   nextPageOffset: number | null
-  limit: number
   total: number
-}
+} & PaginationParams
 
 export type PaginationParams = {
   offset: number
   limit: number
+  maxItemLimit?: number
 }
 
 // filter

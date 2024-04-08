@@ -75,8 +75,11 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
               </div>
             )}
 
-            <TransactionList filterBy={{ type, processed, budgetId }}>
-              {({ transaction, budget }) => (
+            <TransactionList
+              filter={{ filterBy: { type, processed, budgetId }}}
+              params={{ limit: 5, offset: 0, maxItemLimit: 10 }}
+            >
+              {(transaction, budget) => (
                 <TransactionPreview
                   transaction={transaction}
                   budget={budget}
