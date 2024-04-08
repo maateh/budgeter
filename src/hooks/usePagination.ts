@@ -14,7 +14,7 @@ type PaginationOptions<D> = {
   actionAfterLimitExceeded?: () => void
 }
 
-const usePagination = <D,>({ data, fetchNextPage, disableScrolling, maxItemLimit, actionAfterLimitExceeded }: PaginationOptions<D>) => {
+const usePagination = <D,>({ data, fetchNextPage, disableScrolling = false, maxItemLimit, actionAfterLimitExceeded }: PaginationOptions<D>) => {
   const lastPage = data?.pages[data.pages.length - 1]
 
   /** 

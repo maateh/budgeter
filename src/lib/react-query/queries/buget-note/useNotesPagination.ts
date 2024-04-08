@@ -15,7 +15,7 @@ const useNotesPagination = ({ params, filter }: QueryOptions<BudgetNote>) => {
     queryKey: ['notes', filterBy, excludeBy],
     queryFn: async ({ pageParam: offset }) => {
       return await api.budgetNote.get({
-        params: { limit: params?.limit || 5, offset },
+        params: { ...params, limit: params?.limit || 20, offset },
         filter
       })
     },

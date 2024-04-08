@@ -15,7 +15,7 @@ const useTransactionsPagination = ({ params, filter }: QueryOptions<Transaction>
     queryKey: ['transactions', filterBy, excludeBy],
     queryFn: async ({ pageParam: offset }) => {
       return await api.transaction.getWithBudget({
-        params: { ...params, limit: params?.limit || 5, offset },
+        params: { ...params, limit: params?.limit || 20, offset },
         filter
       })
     },

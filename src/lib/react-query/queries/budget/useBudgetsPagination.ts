@@ -19,7 +19,7 @@ const useBudgetsPagination = ({ params, filter, disableScrolling }: BudgetsPagin
     queryKey: ['budgets', filterBy, excludeBy, disableScrolling],
     queryFn: async ({ pageParam: offset }) => {
       return await api.budget.get({
-        params: { ...params, limit: params?.limit || 4, offset },
+        params: { ...params, limit: params?.limit || 20, offset },
         filter
       })
     },
