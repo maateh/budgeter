@@ -1,10 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState } from "react"
-import { ColumnDef, Table as RTable, RowSelectionState, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, Table as RTable, RowSelectionState, SortingState, VisibilityState, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
+
+// icons
+import { ChevronDown } from "lucide-react"
 
 // shadcn
+import { Button, ButtonProps } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Pagination, PaginationContent, PaginationFirst, PaginationInfo, PaginationItem, PaginationLast, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Pagination, PaginationContent, PaginationFirst, PaginationInfo, PaginationItem, PaginationLast, PaginationNext, PaginationPrevious, PaginationProps } from "@/components/ui/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // utils
@@ -13,6 +18,8 @@ import { cn } from "@/lib/utils"
 function getSelectionColumn<D, V>(): ColumnDef<D, V> {
   return {
     id: "select",
+    enableHiding: false,
+    enableSorting: false,
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -52,14 +59,25 @@ interface DataTableProps<D, V> {
 
 function DataTable<D, V>({ data, columns, defaultSelectedRows = {}, children }: DataTableProps<D, V>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(defaultSelectedRows)
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   const table = useReactTable({
+    /** Defaults */
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    /** Pagination */
     getPaginationRowModel: getPaginationRowModel(),
+    /** Row selection */
     onRowSelectionChange: setRowSelection,
-    state: { rowSelection }
+    /** Sorting */
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    /** Visibility */
+    onColumnVisibilityChange: setColumnVisibility,
+    /** State for different functionalities */
+    state: { rowSelection, sorting, columnVisibility }
   })
 
   return (
@@ -104,23 +122,41 @@ function DataTable<D, V>({ data, columns, defaultSelectedRows = {}, children }: 
           )}
         </TableBody>
       </Table>
-      {children && children(table)}
+
+      {children && (
+        <div className="sticky bottom-1.5 my-2">
+          {children(table)}
+        </div>
+      )}
     </>
   )
 }
 
-interface DataTablePaginationProps<D>
+interface DataTableSelectionInfoProps<D>
   extends React.HTMLAttributes<HTMLDivElement> {
-    table: RTable<D>
-    showOnlyIfRequired?: boolean
+  table: RTable<D>
 }
- 
-function DataTablePagination<D>({ table, showOnlyIfRequired, className, ...props }: DataTablePaginationProps<D>) {
+
+function DataTableSelectionInfo<D>({ table, className, ...props }: DataTableSelectionInfoProps<D>) {
   const {
     getFilteredSelectedRowModel,
-    getFilteredRowModel,
-    getCanPreviousPage,
-    getCanNextPage,
+    getFilteredRowModel
+  } = table
+
+  return (
+    <div className={cn("flex-1 text-sm text-muted-foreground", className)} {...props}>
+      {getFilteredSelectedRowModel().rows.length} of{" "}
+      {getFilteredRowModel().rows.length} row(s) selected.
+    </div>
+  )
+}
+
+interface DataTablePaginationProps<D> extends PaginationProps {
+  table: RTable<D>
+}
+ 
+function DataTablePagination<D>({ table, className, ...props }: DataTablePaginationProps<D>) {
+  const {
     getState,
     getPageCount,
     setPageIndex,
@@ -128,49 +164,75 @@ function DataTablePagination<D>({ table, showOnlyIfRequired, className, ...props
     nextPage
   } = table
 
-  /**
-   * Even if pagination is added to data-table, the 'showOnlyIfRequired' prop
-   * makes it possible to show the pagination footer only if the amount
-   * of table data can't fit into a single table.
-   */
-  if (showOnlyIfRequired && !(getCanPreviousPage() || getCanNextPage())) return
+  return (
+    <Pagination className={cn("flex-1 flex flex-col items-end gap-y-2", className)} {...props}>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationFirst onClick={() => setPageIndex(0)} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationPrevious onClick={previousPage} />
+        </PaginationItem>
+
+        <PaginationItem>
+          <PaginationNext onClick={nextPage} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLast onClick={() => setPageIndex(getPageCount() - 1)} />
+        </PaginationItem>
+      </PaginationContent>
+
+      <PaginationInfo className="mr-1.5 text-muted-foreground"
+        currentPage={getState().pagination.pageIndex + 1}
+        totalPage={getPageCount()}
+      />
+    </Pagination>
+  )
+}
+
+interface DataTableColumnToggleProps<D> extends ButtonProps {
+  table: RTable<D>
+}
+
+function DataTableColumnToggle<D>({
+  table, className, variant = "outline", size = "sm", ...props
+}: DataTableColumnToggleProps<D>) {
+  const { getAllColumns } = table
 
   return (
-    <div className={cn("flex flex-wrap items-center justify-between px-2 gap-2.5", className)} {...props}>
-      <div className="flex-1 text-sm text-muted-foreground">
-        {getFilteredSelectedRowModel().rows.length} of{" "}
-        {getFilteredRowModel().rows.length} row(s) selected.
-      </div>
-
-      <Pagination className="flex-1 flex flex-col items-end gap-y-2">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationFirst onClick={() => setPageIndex(0)} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationPrevious onClick={previousPage} />
-          </PaginationItem>
-
-          <PaginationItem>
-            <PaginationNext onClick={nextPage} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLast onClick={() => setPageIndex(getPageCount() - 1)} />
-          </PaginationItem>
-        </PaginationContent>
-
-        <PaginationInfo className="mr-1.5"
-          currentPage={getState().pagination.pageIndex + 1}
-          totalPage={getPageCount()}
-        />
-      </Pagination>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className={cn("ml-auto mr-2.5 font-normal rounded-lg icon-wrapper", className)}
+          variant={variant}
+          size={size}
+          {...props}
+        >
+          <span>Show Columns</span>
+          <ChevronDown className="h-5 w-5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {getAllColumns()
+          .filter((column) => column.getCanHide())
+          .map((column) => (
+            <DropdownMenuCheckboxItem className="capitalize"
+              key={column.id}
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {column.columnDef.header?.toString()}
+            </DropdownMenuCheckboxItem>
+          ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
 export {
   DataTable,
+  DataTableSelectionInfo,
   DataTablePagination,
+  DataTableColumnToggle,
   getSelectionColumn,
   getDefaultSelectedRows
 }
