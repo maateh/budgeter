@@ -2,12 +2,9 @@
 import { useState } from "react"
 import { ColumnDef, Table as RTable, RowSelectionState, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
 
-// icons
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react"
-
 // shadcn
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Pagination, PaginationContent, PaginationFirst, PaginationInfo, PaginationItem, PaginationLast, PaginationNext, PaginationPrevious } from "@/components/ui/pagination"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // utils
@@ -118,55 +115,55 @@ interface DataTablePaginationProps<D>
     showOnlyIfRequired?: boolean
 }
  
-function DataTablePagination<D>({
-  table, showOnlyIfRequired, className, ...props
-}: DataTablePaginationProps<D>) {
-  return (!showOnlyIfRequired || (table.getCanPreviousPage() || table.getCanNextPage())) && (
-    <div className={cn("flex items-center justify-between px-2", className)} {...props}>
+function DataTablePagination<D>({ table, showOnlyIfRequired, className, ...props }: DataTablePaginationProps<D>) {
+  const {
+    getFilteredSelectedRowModel,
+    getFilteredRowModel,
+    getCanPreviousPage,
+    getCanNextPage,
+    getState,
+    getPageCount,
+    setPageIndex,
+    previousPage,
+    nextPage
+  } = table
+
+  /**
+   * Even if pagination is added to data-table, the 'showOnlyIfRequired' prop
+   * makes it possible to show the pagination footer only if the amount
+   * of table data can't fit into a single table.
+   */
+  if (showOnlyIfRequired && !(getCanPreviousPage() || getCanNextPage())) return
+
+  return (
+    <div className={cn("flex flex-wrap items-center justify-between px-2 gap-2.5", className)} {...props}>
       <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {getFilteredSelectedRowModel().rows.length} of{" "}
+        {getFilteredRowModel().rows.length} row(s) selected.
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button className="hidden h-8 w-8 p-0 lg:flex"
-            variant="outline"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className="sr-only">Go to first page</span>
-            <ChevronsLeftIcon className="h-4 w-4" />
-          </Button>
-          <Button className="h-8 w-8 p-0"
-            variant="outline"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className="sr-only">Go to previous page</span>
-            <ChevronLeftIcon className="h-4 w-4" />
-          </Button>
-          <Button className="h-8 w-8 p-0"
-            variant="outline"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className="sr-only">Go to next page</span>
-            <ChevronRightIcon className="h-4 w-4" />
-          </Button>
-          <Button className="hidden h-8 w-8 p-0 lg:flex"
-            variant="outline"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className="sr-only">Go to last page</span>
-            <ChevronsRightIcon className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+
+      <Pagination className="flex-1 flex flex-col items-end gap-y-2">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationFirst onClick={() => setPageIndex(0)} />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationPrevious onClick={previousPage} />
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationNext onClick={nextPage} />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLast onClick={() => setPageIndex(getPageCount() - 1)} />
+          </PaginationItem>
+        </PaginationContent>
+
+        <PaginationInfo className="mr-1.5"
+          currentPage={getState().pagination.pageIndex + 1}
+          totalPage={getPageCount()}
+        />
+      </Pagination>
     </div>
   )
 }
