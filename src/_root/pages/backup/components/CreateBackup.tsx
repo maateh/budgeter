@@ -6,7 +6,7 @@ import { PackageCheck, PackageOpen, X } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { DataTable, DataTablePagination, getDefaultSelectedRows, getSelectionColumn } from "@/components/ui/data-table"
+import { DataTable, DataTablePagination, DataTableSelectionInfo, getDefaultSelectedRows, getSelectionColumn } from "@/components/ui/data-table"
 
 // components
 import BackupInfo from "@/components/shared/backup/BackupInfo"
@@ -72,8 +72,12 @@ const CreateBackup = () => {
       defaultSelectedRows={budgetId ? getDefaultSelectedRows(budgets, [budgetId]) : {}}
     >
       {(table) => (
-        <div className="my-2 py-3 px-2 sticky bottom-1.5 space-y-2.5 bg-primary rounded-3xl">
-          <DataTablePagination table={table} />
+        <div className="py-3 px-2 space-y-2.5 bg-primary rounded-3xl">
+          <div className="flex flex-wrap items-center justify-between px-2 gap-2.5">
+            <DataTableSelectionInfo table={table} />
+            <DataTablePagination table={table} />
+          </div>
+
           <div className="mx-2 flex justify-between items-center">
             <Button className="icon-wrapper"
               onClick={() => handleCreate(table)}
