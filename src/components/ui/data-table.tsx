@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState } from "react"
-import { ColumnDef, Table as RTable, RowSelectionState, SortingState, VisibilityState, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, Table as RTable, RowSelectionState, SortingState, TableOptions, TableState, VisibilityState, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 
 // icons
 import { ChevronDown } from "lucide-react"
@@ -50,24 +50,31 @@ function getDefaultSelectedRows<D extends { id: string }>(data: D[], customIds: 
   }, {} as RowSelectionState)
 }
 
-interface DataTableProps<D, V> {
-  columns: ColumnDef<D, V>[]
+interface DataTableProps<D> {
+  columns: ColumnDef<D>[]
   data: D[]
   defaultSelectedRows?: RowSelectionState
+  pagination?: Pick<TableOptions<D>, 'manualPagination' | 'rowCount' | 'pageCount' | 'onPaginationChange'>
+  state?: Partial<TableState>
   children?: (table: RTable<D>) => React.ReactNode
 }
 
-function DataTable<D, V>({ data, columns, defaultSelectedRows = {}, children }: DataTableProps<D, V>) {
+function DataTable<D>({
+  data, columns, state,
+  pagination,
+  defaultSelectedRows = {},
+  children
+}: DataTableProps<D>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(defaultSelectedRows)
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   const table = useReactTable({
     /** Defaults */
-    data,
-    columns,
+    columns, data,
     getCoreRowModel: getCoreRowModel(),
     /** Pagination */
+    ...pagination,
     getPaginationRowModel: getPaginationRowModel(),
     /** Row selection */
     onRowSelectionChange: setRowSelection,
@@ -77,7 +84,7 @@ function DataTable<D, V>({ data, columns, defaultSelectedRows = {}, children }: 
     /** Visibility */
     onColumnVisibilityChange: setColumnVisibility,
     /** State for different functionalities */
-    state: { rowSelection, sorting, columnVisibility }
+    state: { rowSelection, sorting, columnVisibility, ...state }
   })
 
   return (
