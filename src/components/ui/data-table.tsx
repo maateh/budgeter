@@ -159,6 +159,8 @@ function DataTablePagination<D>({ table, className, ...props }: DataTablePaginat
   const {
     getState,
     getPageCount,
+    getCanPreviousPage,
+    getCanNextPage,
     setPageIndex,
     previousPage,
     nextPage
@@ -168,17 +170,29 @@ function DataTablePagination<D>({ table, className, ...props }: DataTablePaginat
     <Pagination className={cn("flex-1 flex flex-col items-end gap-y-2", className)} {...props}>
       <PaginationContent>
         <PaginationItem>
-          <PaginationFirst onClick={() => setPageIndex(0)} />
+          <PaginationFirst
+            onClick={() => setPageIndex(0)}
+            disabled={!getCanPreviousPage()}
+          />
         </PaginationItem>
         <PaginationItem>
-          <PaginationPrevious onClick={previousPage} />
+          <PaginationPrevious
+            onClick={previousPage}
+            disabled={!getCanPreviousPage()}
+          />
         </PaginationItem>
 
         <PaginationItem>
-          <PaginationNext onClick={nextPage} />
+          <PaginationNext
+            onClick={nextPage}
+            disabled={!getCanNextPage()}
+          />
         </PaginationItem>
         <PaginationItem>
-          <PaginationLast onClick={() => setPageIndex(getPageCount() - 1)} />
+          <PaginationLast
+            onClick={() => setPageIndex(getPageCount() - 1)}
+            disabled={!getCanNextPage()}
+          />
         </PaginationItem>
       </PaginationContent>
 
