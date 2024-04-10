@@ -72,10 +72,14 @@ const CreateBackup = () => {
       defaultSelectedRows={budgetId ? getDefaultSelectedRows(budgets, [budgetId]) : {}}
     >
       {(table) => (
-        <div className="py-3 px-2 space-y-2.5 bg-primary rounded-3xl">
-          <div className="flex flex-wrap items-center justify-between px-2 gap-2.5">
-            <DataTableSelectionInfo table={table} />
-            <DataTablePagination table={table} />
+        <div className="min-w-60 py-3 px-2 bg-primary rounded-3xl">
+          <div className="flex flex-wrap justify-between px-2 gap-x-4 gap-y-3">
+            <DataTableSelectionInfo className="w-fit mt-1.5"
+              table={table}
+            />
+            <DataTablePagination className="w-fit ml-auto"
+              table={table}
+            />
           </div>
 
           <div className="mx-2 flex justify-between items-center">
@@ -101,7 +105,7 @@ const CreateBackup = () => {
           </div>
 
           {!isBackupPending ? backup && (
-            <div className="mx-2">
+            <>
               <BackupInfo {...backup.fileContent} />
               <a className="w-fit ml-auto px-3.5 py-1.5 font-medium font-heading bg-foreground text-background rounded-full icon-wrapper"
                 href={backup.downloadUrl}
@@ -110,7 +114,7 @@ const CreateBackup = () => {
                 <PackageCheck />
                 Your backup is ready to save
               </a>
-            </div>
+            </>
           ) : (
             <>Generating the backup...</> // TODO: skeleton
           )}

@@ -15,7 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 // utils
 import { cn } from "@/lib/utils"
 
-function getSelectionColumn<D, V>(): ColumnDef<D, V> {
+function getSelectionColumn<D>(): ColumnDef<D> {
   return {
     id: "select",
     enableHiding: false,
@@ -151,7 +151,7 @@ function DataTableSelectionInfo<D>({ table, className, ...props }: DataTableSele
   } = table
 
   return (
-    <div className={cn("flex-1 text-sm text-muted-foreground", className)} {...props}>
+    <div className={cn("text-sm text-muted-foreground", className)} {...props}>
       {getFilteredSelectedRowModel().rows.length} of{" "}
       {getFilteredRowModel().rows.length} row(s) selected.
     </div>
@@ -174,7 +174,7 @@ function DataTablePagination<D>({ table, className, ...props }: DataTablePaginat
   } = table
 
   return (
-    <Pagination className={cn("flex-1 flex flex-col items-end gap-y-2", className)} {...props}>
+    <Pagination className={cn("flex flex-col items-end gap-y-2", className)} {...props}>
       <PaginationContent>
         <PaginationItem>
           <PaginationFirst
@@ -223,7 +223,7 @@ function DataTableColumnToggle<D>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className={cn("ml-auto mr-2.5 font-normal rounded-lg icon-wrapper", className)}
+        <Button className={cn("mr-2.5 font-normal rounded-lg icon-wrapper", className)}
           variant={variant}
           size={size}
           {...props}
