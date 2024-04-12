@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 // components
-import TransactionsSelector from "@/components/input/TransactionsSelector"
+import TransactionMultiSelect from "@/components/input/TransactionMultiSelect"
 
 // types
 import { RelatedTransactionsFieldValues } from "@/components/form/related-transactions/types"
@@ -29,9 +29,9 @@ const RelatedTransactionsFormFields = ({ control, isPending, transaction }: Rela
           <FormItem>
             <FormLabel>Select transactions</FormLabel>
             <FormControl>
-              <TransactionsSelector
-                value={field.value}
-                onChange={field.onChange}
+              <TransactionMultiSelect
+                selected={field.value}
+                setSelected={field.onChange}
                 excludeBy={{ id: [transaction.id, ...transaction.relatedIds] }}
               />
             </FormControl>

@@ -10,7 +10,7 @@ import { Switch, SwitchThumb } from "@/components/ui/switch"
 
 // components
 import TabsSelect from "@/components/input/TabsSelect"
-import BudgetSelector from "@/components/input/BudgetSelector"
+import BudgetSelect from "@/components/input/BudgetSelect"
 import DateTimePicker from "@/components/input/DateTimePicker"
 import StateToggle from "@/components/ui/custom/StateToggle"
 
@@ -66,9 +66,9 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
               <FormItem className="min-w-36 flex-1">
                 <FormLabel>Select a Budget</FormLabel>
                 <FormControl>
-                  <BudgetSelector
-                    defaultValue={field.value}
-                    onChange={field.onChange}
+                  <BudgetSelect
+                    value={field.value}
+                    setValue={field.onChange}
                   />
                 </FormControl>
                 <FormMessage />

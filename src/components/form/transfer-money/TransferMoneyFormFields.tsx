@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
-import BudgetSelector from "@/components/input/BudgetSelector"
+import BudgetSelect from "@/components/input/BudgetSelect"
 import TransferPreview from "@/components/shared/transfer-money/TransferPreview"
 
 // hooks
@@ -66,9 +66,9 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
             <FormItem className="min-w-48 flex-1">
               <FormLabel>Select Target Budget</FormLabel>
               <FormControl>
-                <BudgetSelector
-                  defaultValue={field.value}
-                  onChange={field.onChange}
+                <BudgetSelect
+                  value={field.value}
+                  setValue={field.onChange}
                   excludeBy={{ id: rootBudget?.id }}
                 />
               </FormControl>

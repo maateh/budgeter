@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { Check, X, ChevronsUpDown } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandProps } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
@@ -14,27 +14,30 @@ export type OptionType = {
   value: string
 }
 
-interface MultiSelectProps extends Omit<CommandProps, 'onChange'> {
+export interface MultiSelectProps extends ButtonProps {
   options: OptionType[]
   selected: string[]
-  onChange: React.Dispatch<React.SetStateAction<string[]>>
-  disabled?: boolean
+  setSelected: (value: React.SetStateAction<string[]>) => void
+  commandProps?: CommandProps
 }
 
-function MultiSelect({ options, selected, onChange, disabled, ...props }: MultiSelectProps) {
+function MultiSelect({
+  options, selected, setSelected, commandProps,
+  className, variant = "outline", ...props
+}: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
 
   const handleSelect = (option: OptionType) => {
-    onChange(
-      selected.includes(option.value)
-        ? selected.filter((item) => item !== option.value)
-        : [...selected, option.value]
-    )
+    const values = selected.includes(option.value)
+      ? selected.filter((item) => item !== option.value)
+      : [...selected, option.value]
+
+    setSelected(values)
     setOpen(true)
   }
 
   const handleUnselect = (item: string) => {
-    onChange(selected.filter((i) => i !== item))
+    setSelected(selected.filter((i) => i !== item))
   }
 
   const getLabel = (value: string): string => {
@@ -45,12 +48,12 @@ function MultiSelect({ options, selected, onChange, disabled, ...props }: MultiS
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button className="w-full h-fit justify-between"
-          variant="outline"
+        <Button className={cn("w-full h-fit justify-between", className)}
+          variant={variant}
           role="combobox"
           aria-expanded={open}
           onClick={() => setOpen((open) => !open)}
-          disabled={disabled}
+          {...props}
         >
           <div className="flex flex-wrap gap-x-2 gap-y-1.5">
             {selected.length ? selected.map((item) => (
@@ -88,7 +91,7 @@ function MultiSelect({ options, selected, onChange, disabled, ...props }: MultiS
         </Button>
       </PopoverTrigger>
       <PopoverContent asChild>
-        <Command {...props}>
+        <Command {...commandProps}>
           <CommandInput placeholder="Search..." />
             <CommandList>
             <CommandEmpty>No item found.</CommandEmpty>

@@ -1,5 +1,5 @@
 // shadcn
-import { MultiSelect, OptionType } from "@/components/ui/multi-select"
+import { MultiSelect, MultiSelectProps, OptionType } from "@/components/ui/multi-select"
 
 // hooks
 import { useTransactions } from "@/lib/react-query/queries"
@@ -7,29 +7,29 @@ import { useTransactions } from "@/lib/react-query/queries"
 // types
 import { FilterOptions, Transaction } from "@/services/api/types"
 
-type TransactionsSelectorProps = {
-  value: string[]
-  onChange: () => void
-} & FilterOptions<Transaction>
+type TransactionMultiSelectProps = {
+  selected: string[]
+  setSelected: (ids: React.SetStateAction<string[]>) => void
+} & FilterOptions<Transaction> & Omit<MultiSelectProps, 'options'>
 
-const TransactionsSelector = ({ value, onChange, filterBy, excludeBy }: TransactionsSelectorProps) => {
+const TransactionMultiSelect = ({ selected, setSelected, filterBy, excludeBy }: TransactionMultiSelectProps) => {
   const { data: transactions, isLoading } = useTransactions({
     filter: { filterBy, excludeBy }
   })
 
   return (
     <MultiSelect
-      selected={value}
+      selected={selected}
+      setSelected={setSelected}
       options={transactions ? transactions.reduce((options, tr) => ([
         ...options,{
           label: tr.name,
           value: tr.id
         }
       ]), [] as OptionType[]) : []}
-      onChange={onChange}
       disabled={isLoading}
     />
   )
 }
 
-export default TransactionsSelector
+export default TransactionMultiSelect
