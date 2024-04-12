@@ -1,7 +1,7 @@
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
 import { Filter, FilterOptions, PaginationParams } from "@/services/api/types"
 
-export type FilterType = 'filterBy' | 'excludeBy'
+// export type FilterType = 'filterBy' | 'excludeBy'
 
 export type FilterRecord<T> = Record<keyof T, string>
 
@@ -18,6 +18,6 @@ export type FilterHookReturn<T> = FilterOptions<T> & {
   filterBy?: Filter<T>
   excludeBy?: Filter<T>
   setPagination: OnChangeFn<PaginationState>
-  setFilterParam: (item: FilterRecord<T>, type: FilterType) => void
-  removeFilterParam: (key: keyof T, type: FilterType) => void
+  setFilterParam: (item: FilterRecord<T>, type: keyof FilterOptions<T>) => void
+  removeFilterParam: (key: keyof T, type: keyof FilterOptions<T>) => void
 }
