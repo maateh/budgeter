@@ -78,6 +78,25 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
     })
   }
 
+  const toggleFilterParam = (key: keyof T, type: keyof FilterOptions<T>) => {
+    setParams((params) => {
+      const anotherType = type === 'filterBy' ? 'excludeBy' : 'filterBy'
+      const anotherFilter = getFilter<T>(params, anotherType)
+      
+      const value = anotherFilter[key]
+      const filter = { ...getFilter<T>(params, type), [key]: value }
+
+      const param = convertFilterToParam(filter)
+
+      removeFilterParam(key, anotherType)
+      params.set(type, param)
+      params.set('page', '1')
+
+      if (!param) params.delete(type)
+      return params
+    })
+  }
+
   const pageOffsetIndex = getCurrentPage(params) - 1
   return {
     pagination: {
@@ -90,7 +109,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
     },
     filterBy: getFilter(params, 'filterBy'),
     excludeBy: getFilter(params, 'excludeBy'),
-    setPagination, setFilterParam, removeFilterParam
+    setPagination, setFilterParam, removeFilterParam, toggleFilterParam
   }
 }
 

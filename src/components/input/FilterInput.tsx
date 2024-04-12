@@ -40,14 +40,26 @@ type FilterInputProps<F = unknown> = {
   label: string
   labelProps?: LabelProps
   onReset?: () => void
+  onTypeChange?: (type: keyof FilterOptions<F>) => void
 } & (FilterInputWithSelectProps<F> | FilterInputWithoutSelectProps<F>)
 
 function FilterInput<F>({
-  label, labelProps, onReset,
+  label, labelProps, onTypeChange, onReset,
   options, value, setValue,
   children, ...props
 }: FilterInputProps<F>) {
   const [type, setType] = useState<keyof FilterOptions<F>>('filterBy')
+
+  const handleTypeChange = () => {
+    if (!onTypeChange) return
+
+    setType((prevType) => {
+      const type = prevType === 'filterBy' ? 'excludeBy' : 'filterBy'
+      
+      onTypeChange(type)
+      return type
+    })
+  }
 
   return (
     <div className="my-3.5 flex flex-col gap-y-0.5">
@@ -77,19 +89,21 @@ function FilterInput<F>({
         )}
 
         <div className="flex justify-center items-center gap-x-2">
-          <StateToggle
-            status={type === 'filterBy' ? 'on' : 'off'}
-            onClick={() => setType((type) => type === 'filterBy' ? 'excludeBy' : 'filterBy')}
-            icon={{
-              on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
-              off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
-            }}
-            tooltip={{
-              on: "Switch to exclude",
-              off: "Switch to filter"
-            }}
-            toggleOnHover
-          />
+          {onTypeChange && (
+            <StateToggle
+              status={type === 'filterBy' ? 'on' : 'off'}
+              onClick={handleTypeChange}
+              icon={{
+                on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
+                off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
+              }}
+              tooltip={{
+                on: "Switch to exclude",
+                off: "Switch to filter"
+              }}
+              toggleOnHover
+            />
+          )}
 
           {onReset && (
             <ButtonTooltip className="p-1"
