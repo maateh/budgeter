@@ -1,28 +1,24 @@
-import { useState } from "react"
-
 // shadcn
 import { DataTable, DataTableColumnToggle, DataTablePagination } from "@/components/ui/data-table"
 
 // hooks
 import { useTransactionsControlledPagination } from "@/lib/react-query/queries"
+import { useFilter } from "@/hooks"
 
 // types
-import { PaginationState } from "@tanstack/react-table"
+import { Transaction } from "@/services/api/types"
 
 // table columns
 import { columns } from "./columns"
 
 const TransactionsTable = () => {
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
+  const { pagination, filterBy, excludeBy, setPagination } = useFilter<Transaction>({
     pageSize: 10
   })
 
   const { data: currentPage, isLoading } = useTransactionsControlledPagination({
-    params: {
-      limit: pagination.pageSize,
-      offset: pagination.pageIndex * pagination.pageSize
-    }
+    params: pagination.params,
+    filter: { filterBy, excludeBy }
   })
 
   return !isLoading && currentPage && (

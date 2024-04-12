@@ -1,9 +1,7 @@
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
 import { Filter, FilterOptions, PaginationParams } from "@/services/api/types"
 
-// export type FilterType = 'filterBy' | 'excludeBy'
-
-export type FilterRecord<T> = Record<keyof T, string>
+export type FilterRecord<T> = Partial<Record<keyof T, string>>
 
 export type FilterHookOptions = {
   pageSize?: number
