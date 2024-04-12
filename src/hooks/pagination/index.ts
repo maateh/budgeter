@@ -2,19 +2,13 @@ import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 
 // types
-import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query"
-import { Pagination } from "@/services/api/types"
+import { PaginationOptions } from "@/hooks/pagination/types"
 
-type PaginationOptions<D> = {
-  data: InfiniteData<Pagination<D>, unknown> | undefined
-  fetchNextPage: (options?: FetchNextPageOptions | undefined) =>
-    Promise<InfiniteQueryObserverResult<InfiniteData<Pagination<D>, unknown>, Error>>
-  disableScrolling?: boolean
-  maxItemLimit?: number
-  actionAfterLimitExceeded?: () => void
-}
-
-const usePagination = <D,>({ data, fetchNextPage, disableScrolling = false, maxItemLimit, actionAfterLimitExceeded }: PaginationOptions<D>) => {
+function usePagination<D>({
+  data, fetchNextPage,
+  maxItemLimit, actionAfterLimitExceeded,
+  disableScrolling = false,
+}: PaginationOptions<D>) {
   const lastPage = data?.pages[data.pages.length - 1]
 
   /** 

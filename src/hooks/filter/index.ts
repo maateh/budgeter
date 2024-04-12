@@ -2,57 +2,10 @@ import { useSearchParams } from "react-router-dom"
 
 // types
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
-import { Filter, FilterOptions, PaginationParams } from "@/services/api/types"
+import { FilterHookOptions, FilterHookReturn, FilterRecord, FilterType } from "@/hooks/filter/types"
 
-type FilterType = 'filterBy' | 'excludeBy'
-
-type FilterRecord<T> = Record<keyof T, string>
-
-type FilterHookOptions = {
-  pageSize?: number
-}
-
-type FilterHookReturn<T> = FilterOptions<T> & {
-  pagination: {
-    pageIndex: number
-    pageSize: number
-    params: PaginationParams
-  }
-  filterBy?: Filter<T>
-  excludeBy?: Filter<T>
-  setPagination: OnChangeFn<PaginationState>
-  setFilterParam: (item: FilterRecord<T>, type: FilterType) => void
-  removeFilterParam: (key: keyof T, type: FilterType) => void
-}
-
-const KEY_SPLITTER = '@'
-const VALUE_SEPARATOR = ':'
-
-function getCurrentPage(params: URLSearchParams): number {
-  return parseInt(params.get('page') || '1')
-}
-
-function convertToParam<T>(filter: Filter<T>): string {
-  return Object.entries(filter)
-    .reduce((param, [key, value]) => {
-      const item = `${key}${VALUE_SEPARATOR}${value}`
-      return param.concat(item)
-    }, [] as string[])
-    .join(KEY_SPLITTER)
-}
-
-function getFilter<T>(params: URLSearchParams, type: keyof FilterOptions<T>): Filter<T> {
-  const param = params.get(type)
-  if (!param) return {}
-
-  const filter: Filter<T> = param.split(KEY_SPLITTER)
-    .reduce((filter, record) => {
-      const [key, value] = record.split(VALUE_SEPARATOR)
-      return { ...filter, [key]: value }
-    }, {})
-
-  return filter
-}
+// utils
+import { convertFilterToParam, getCurrentPage, getFilter } from "@/hooks/filter/utils"
 
 function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookReturn<T> {
   const [params, setParams] = useSearchParams()
@@ -74,7 +27,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
   const setFilterParam = (record: FilterRecord<T>, type: FilterType) => {
     setParams((params) => {
       const filter = { ...getFilter<T>(params, type), ...record }
-      const param = convertToParam(filter)
+      const param = convertFilterToParam(filter)
 
       params.set(type, param)
       return params
@@ -86,7 +39,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
       const filter = getFilter<T>(params, type)
       delete filter[key]
 
-      const param = convertToParam(filter)
+      const param = convertFilterToParam(filter)
       
       params.set(type, param)
       return params
