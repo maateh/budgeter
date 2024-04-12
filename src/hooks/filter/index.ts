@@ -51,6 +51,8 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
       const param = convertFilterToParam(filter)
 
       params.set(type, param)
+      params.set('page', '1')
+      
       return params
     })
   }
@@ -69,6 +71,9 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
       const param = convertFilterToParam(filter)
       
       params.set(type, param)
+      params.set('page', '1')
+
+      if (!param) params.delete(type)
       return params
     })
   }
