@@ -23,23 +23,23 @@ type SelectOption = {
 }
 
 type FilterInputWithSelectProps<F = unknown> = {
-  options: SelectOption[]
   value: string
   setValue: (value: string, filterType: keyof FilterOptions<F>) => void
+  options: SelectOption[]
   children?: never
-} & SelectTriggerProps
+} & Omit<SelectTriggerProps, 'onReset'>
 
 type FilterInputWithoutSelectProps<F = unknown> = {
   children: (type: keyof FilterOptions<F>) => React.ReactNode
-  options?: never
   value?: never
   setValue?: never
+  options?: never
 }
 
 type FilterInputProps<F = unknown> = {
   label: string
   labelProps?: LabelProps
-  onReset?: () => void
+  onReset?: (type: keyof FilterOptions<F>) => void
   onTypeChange?: (type: keyof FilterOptions<F>) => void
 } & (FilterInputWithSelectProps<F> | FilterInputWithoutSelectProps<F>)
 
@@ -109,7 +109,7 @@ function FilterInput<F>({
             <ButtonTooltip className="p-1"
               variant="outline"
               size="icon"
-              onClick={onReset}
+              onClick={() => onReset(type)}
               tooltip="Clear filter"
             >
               <X size={14} strokeWidth={3.5} />

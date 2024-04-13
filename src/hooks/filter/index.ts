@@ -48,7 +48,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
   const setFilterParam = (record: FilterRecord<T>, type: keyof FilterOptions<T>) => {
     setParams((params) => {
       const filter = { ...getFilter<T>(params, type), ...record }
-      const param = convertFilterToParam(filter)
+      const param = convertFilterToParam<T>(filter)
 
       params.set(type, param)
       params.set('page', '1')
@@ -68,7 +68,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
       const filter = getFilter<T>(params, type)
       delete filter[key]
 
-      const param = convertFilterToParam(filter)
+      const param = convertFilterToParam<T>(filter)
       
       params.set(type, param)
       params.set('page', '1')
@@ -86,7 +86,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
       const value = anotherFilter[key]
       const filter = { ...getFilter<T>(params, type), [key]: value }
 
-      const param = convertFilterToParam(filter)
+      const param = convertFilterToParam<T>(filter)
 
       removeFilterParam(key, anotherType)
       params.set(type, param)
@@ -98,6 +98,9 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
   }
 
   const pageOffsetIndex = getCurrentPage(params) - 1
+  const filterBy = getFilter<T>(params, 'filterBy')
+  const excludeBy = getFilter<T>(params, 'excludeBy')
+
   return {
     pagination: {
       pageSize,
@@ -107,8 +110,8 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
         offset: pageOffsetIndex * pageSize
       }
     },
-    filterBy: getFilter(params, 'filterBy'),
-    excludeBy: getFilter(params, 'excludeBy'),
+    filterBy, excludeBy,
+    params: { ...filterBy, ...excludeBy },
     setPagination, setFilterParam, removeFilterParam, toggleFilterParam
   }
 }
