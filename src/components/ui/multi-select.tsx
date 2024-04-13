@@ -17,7 +17,7 @@ export type OptionType = {
 export interface MultiSelectProps extends ButtonProps {
   options: OptionType[]
   selected: string[]
-  setSelected: (value: React.SetStateAction<string[]>) => void
+  setSelected: (value: string[]) => void
   commandProps?: CommandProps
 }
 
