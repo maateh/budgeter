@@ -18,7 +18,7 @@ const TransactionsTable = () => {
 
   const { data: currentPage, isLoading } = useTransactionsControlledPagination({
     params: pagination.params,
-    filter: { filterBy, excludeBy }
+    filter: { filterBy, excludeBy, partialMatch: true }
   })
 
   return !isLoading && currentPage && (

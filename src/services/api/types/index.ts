@@ -16,9 +16,12 @@ export type Filter<T> = {
   [K in keyof T]?: T[K] | T[K][]
 }
 
+export type FilterKeys = 'filterBy' | 'excludeBy'
+
 export type FilterOptions<T> = {
-  filterBy?: Filter<T>
-  excludeBy?: Filter<T>
+  partialMatch?: boolean
+} & {
+  [key in FilterKeys]?: Filter<T>
 }
 
 // options

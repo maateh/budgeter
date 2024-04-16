@@ -41,23 +41,39 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
 
 /**
  * Filters an array of documents based on the provided filter and exclusion criteria.
- * @param documents - The array of documents to filter.
- * @param filter - An object containing filter and exclusion criteria.
- * @param filter.filterBy - The partial object used as filter criteria.
- * @param filter.excludeBy - The partial object used as exclusion criteria.
- * @returns An array of documents that match the filter criteria and are not excluded.
+ * 
+ * @param {D[]} documents - The array of documents to filter.
+ * @param {FilterOptions<D>} filter - An object containing filter and exclusion criteria.
+ * @param {Partial<D>} filter.filterBy - The partial object used as filter criteria.
+ * @param {Partial<D>} filter.excludeBy - The partial object used as exclusion criteria.
+ * @param {boolean} [filter.partialMatch=false] - A flag indicating whether to perform partial matching for string values.
+ * @returns {D[]} An array of documents that match the filter criteria and are not excluded.
  * 
  * Filtering criteria can include arrays of values for each property to match against.
  */
 export function filter<D>(documents: D[], filter?: FilterOptions<D>): D[] {
-  const { filterBy, excludeBy } = filter || {}
+  const { filterBy, excludeBy, partialMatch = false } = filter || {}
   if (!filterBy && !excludeBy) return documents
 
   return documents.filter((entry: D) => {
     const shouldInclude = (criteria?: Filter<D>, inclusion?: boolean) => {
       return !criteria || Object.entries(criteria).every(([key, value]) => {
-        // If the filter value is not defined, it is ignored
+        /** If the filter value is not defined, it is ignored */
         if (value === undefined) return true
+
+        /**
+         * Value of the property corresponding
+         * to the key from the document entry.
+         */
+        const entryValue = entry[key as keyof D]
+
+        /** 
+         * Performs partial string matching if enabled, by checking if the
+         * lowercase entry value includes the lowercase filter value.
+         */
+        if (partialMatch && typeof value === 'string' && typeof entryValue === 'string') {
+          return entryValue.toLowerCase().includes(value.toLowerCase()) === inclusion
+        }
 
         /**
          * If the filter value is an array, check if the entry value matches
@@ -65,7 +81,6 @@ export function filter<D>(documents: D[], filter?: FilterOptions<D>): D[] {
          * 
          * In both cases inclusion is checked (filter or exclude).
          */
-        const entryValue = entry[key as keyof D]
         return Array.isArray(value)
           ? value.includes(entryValue) === inclusion
           : value === entryValue === inclusion

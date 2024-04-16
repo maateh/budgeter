@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectTriggerProps, S
 import StateToggle from "@/components/ui/custom/StateToggle"
 
 // types
-import { FilterOptions } from "@/services/api/types"
+import { FilterKeys } from "@/services/api/types"
 
 // utils
 import { cn } from "@/lib/utils"
@@ -22,33 +22,33 @@ type SelectOption = {
   label: string
 }
 
-type FilterInputWithSelectProps<F = unknown> = {
+type FilterInputWithSelectProps = {
   value: string
-  setValue: (value: string, filterType: keyof FilterOptions<F>) => void
+  setValue: (value: string, filterType: FilterKeys) => void
   options: SelectOption[]
   children?: never
 } & Omit<SelectTriggerProps, 'onReset'>
 
-type FilterInputWithoutSelectProps<F = unknown> = {
-  children: (type: keyof FilterOptions<F>) => React.ReactNode
+type FilterInputWithoutSelectProps = {
+  children: (type: FilterKeys) => React.ReactNode
   value?: never
   setValue?: never
   options?: never
 }
 
-type FilterInputProps<F = unknown> = {
+type FilterInputProps = {
   label: string
   labelProps?: LabelProps
-  onReset?: (type: keyof FilterOptions<F>) => void
-  onTypeChange?: (type: keyof FilterOptions<F>) => void
-} & (FilterInputWithSelectProps<F> | FilterInputWithoutSelectProps<F>)
+  onReset?: (type: FilterKeys) => void
+  onTypeChange?: (type: FilterKeys) => void
+} & (FilterInputWithSelectProps | FilterInputWithoutSelectProps)
 
-function FilterInput<F>({
+function FilterInput({
   label, labelProps, onTypeChange, onReset,
   options, value, setValue,
   children, ...props
-}: FilterInputProps<F>) {
-  const [type, setType] = useState<keyof FilterOptions<F>>('filterBy')
+}: FilterInputProps) {
+  const [type, setType] = useState<FilterKeys>('filterBy')
 
   const handleTypeChange = () => {
     if (!onTypeChange) return
