@@ -3,10 +3,10 @@ import { useSearchParams } from "react-router-dom"
 // types
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
 import { FilterHookOptions, FilterHookReturn, FilterRecord } from "@/hooks/filter/types"
+import { FilterOptions } from "@/services/api/types"
 
 // utils
 import { convertFilterToParam, getCurrentPage, getFilter } from "@/hooks/filter/utils"
-import { FilterOptions } from "@/services/api/types"
 
 /**
  * A custom hook for managing pagination and filtering parameters in URL search params.
@@ -78,21 +78,18 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
     })
   }
 
-  const toggleFilterParam = (key: keyof T, type: keyof FilterOptions<T>) => {
+  const toggleFilterType = (key: keyof T, type: keyof FilterOptions<T>) => {
     setParams((params) => {
       const anotherType = type === 'filterBy' ? 'excludeBy' : 'filterBy'
       const anotherFilter = getFilter<T>(params, anotherType)
       
       const value = anotherFilter[key]
-      const filter = { ...getFilter<T>(params, type), [key]: value }
+      if (!value) return params
 
-      const param = convertFilterToParam<T>(filter)
-
+      const record = { [key]: value } as unknown as FilterRecord<T>
+      setFilterParam(record, type)
       removeFilterParam(key, anotherType)
-      params.set(type, param)
-      params.set('page', '1')
 
-      if (!param) params.delete(type)
       return params
     })
   }
@@ -112,7 +109,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
     },
     filterBy, excludeBy,
     params: { ...filterBy, ...excludeBy },
-    setPagination, setFilterParam, removeFilterParam, toggleFilterParam
+    setPagination, setFilterParam, removeFilterParam, toggleFilterType
   }
 }
 

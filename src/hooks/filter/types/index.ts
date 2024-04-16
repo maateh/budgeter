@@ -19,5 +19,5 @@ export type FilterHookReturn<T> = FilterOptions<T> & {
   setPagination: OnChangeFn<PaginationState>
   setFilterParam: (item: FilterRecord<T>, type: keyof FilterOptions<T>) => void
   removeFilterParam: (key: keyof T, type: keyof FilterOptions<T>) => void
-  toggleFilterParam: (key: keyof T, type: keyof FilterOptions<T>) => void
+  toggleFilterType: (key: keyof T, type: keyof FilterOptions<T>) => void
 }
