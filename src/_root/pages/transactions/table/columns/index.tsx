@@ -29,9 +29,13 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
     accessorKey: "name",
     enableHiding: false,
-    // TODO: add design
     header: ({ column }) => (
       <div onClick={() => column.toggleSorting()}>Name</div>
+    ),
+    cell: ({ row }) => (
+      <span className="capitalize font-semibold small-caps">
+        {row.original.name}
+      </span>
     )
   },
   {
@@ -49,7 +53,12 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
     // TODO: add design
     accessorKey: "type",
-    header: "Type"
+    header: "Type",
+    cell: ({ row }) => (
+      <span className="capitalize text-base font-normal all-small-caps">
+        {row.original.type}
+      </span>
+    )
   },
   {
     accessorKey: "budgetId",
@@ -64,14 +73,20 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
     accessorKey: "createdAt",
     header: "Created",
-    // TODO: add design
-    cell: ({ row }) => format(row.original.createdAt, 'yyyy. MM. dd.')
+    cell: ({ row }) => (
+      <span className="text-xs font-normal">
+        {format(row.original.createdAt, 'yyyy. MM. dd.')}
+      </span>
+    )
   },
   {
     accessorKey: "updatedAt",
     header: "Last Updated",
-    // TODO: add design
-    cell: ({ row }) => format(row.original.updatedAt, 'yyyy. MM. dd.')
+    cell: ({ row }) => (
+      <span className="text-xs font-normal">
+        {format(row.original.updatedAt, 'yyyy. MM. dd.')}
+      </span>
+    )
   },
   {
     id: "actions",
