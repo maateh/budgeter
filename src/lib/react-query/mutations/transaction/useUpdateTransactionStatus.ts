@@ -13,14 +13,14 @@ const useUpdateTransactionStatus = (transactionId: string) => {
       id: string
       processed: boolean
     }) => await api.transaction.updateStatus(id, processed),
-    onSuccess: ({ id, type, budgetId }) => {
+    onSuccess: ({ id, budgetId }) => {
       // budget
       queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
 
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
-      queryClient.invalidateQueries({ queryKey: ['transactions', { type }] })
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
 
       // payment
       queryClient.invalidateQueries({ queryKey: ['payments', { budgetId }] })
