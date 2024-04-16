@@ -34,7 +34,7 @@ const TransactionsTable = () => {
         state={{ pagination }}
       >
         {(table) => (
-          <div className="min-w-60 py-3.5 px-2.5 flex flex-wrap justify-between gap-x-4 gap-y-3 bg-primary rounded-3xl">
+          <div className="min-w-64 py-3.5 px-2.5 flex flex-wrap justify-between gap-x-4 gap-y-3 bg-primary rounded-3xl">
             <DataTableColumnToggle className="w-fit"
               table={table}
             />

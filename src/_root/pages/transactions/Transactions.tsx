@@ -2,8 +2,9 @@
 import { Separator } from "@/components/ui/separator"
 
 // components
-import TransactionsTable from "./components/TransactionsTable"
-import TransactionsFilter from "./components/TransactionsFilter"
+import BasicFilter from "./components/BasicFilter"
+import AdvancedFilter from "./components/AdvancedFilter"
+import TransactionsTable from "./table"
 
 const Transactions = () => {
   return (
@@ -12,12 +13,18 @@ const Transactions = () => {
 
       <Separator className="my-6" />
 
-      <div className="flex flex-col justify-between gap-x-8 gap-y-6 md:flex-row">
-        <section className="min-w-56 md:w-2/5 md:min-w-72 md:max-w-lg">
-          <TransactionsFilter />
-        </section>
+      <div className="flex flex-col justify-between gap-x-8 gap-y-6 xl:flex-row">
+        <div className="h-fit min-w-64 flex flex-wrap justify-around gap-12 xl:flex-col xl:w-2/6 xl:max-w-md max-sm:flex-col">
+          <section className="flex-1 sm:min-w-80">
+            <BasicFilter />
+          </section>
 
-        <section className="flex-1 section-wrapper md:w-3/5">
+          <section className="flex-1 sm:min-w-80">
+            <AdvancedFilter />
+          </section>
+        </div>
+
+        <section className="flex-1 section-wrapper xl:w-4/6">
           <TransactionsTable />
         </section>
       </div>
