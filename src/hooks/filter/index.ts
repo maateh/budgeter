@@ -52,7 +52,13 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
 
       params.set(type, param)
       params.set('page', '1')
-      
+
+      /**
+       * Filter type needs to be deleted if the record value has
+       * been falsy and no more params are specified on
+       * the actual filter type.
+       */
+      if (!param) params.delete(type)
       return params
     })
   }

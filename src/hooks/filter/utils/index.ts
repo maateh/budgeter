@@ -24,6 +24,9 @@ function getCurrentPage(params: URLSearchParams): number {
 function convertFilterToParam<T>(filter: Filter<T>): string {
   return Object.entries(filter)
     .reduce((param, [key, value]) => {
+      /** If value is falsy we don't have to set that param */
+      if (!value) return param
+
       const item = `${key}${VALUE_SEPARATOR}${value}`
       return param.concat(item)
     }, [] as string[])
