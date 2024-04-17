@@ -13,9 +13,8 @@ export type FilterHookReturn<T> = FilterOptions<T> & {
     pageSize: number
     params: PaginationParams
   }
-  filterBy: Filter<T>
-  excludeBy: Filter<T>
-  params: Filter<T>
+  filter: FilterOptions<T>
+  filterParams: Filter<T>
   setPagination: OnChangeFn<PaginationState>
   setFilterParam: (item: FilterRecord<T>, type: keyof FilterOptions<T>) => void
   removeFilterParam: (key: keyof T, type: keyof FilterOptions<T>) => void

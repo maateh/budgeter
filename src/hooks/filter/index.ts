@@ -107,8 +107,8 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
         offset: pageOffsetIndex * pageSize
       }
     },
-    filterBy, excludeBy,
-    params: { ...filterBy, ...excludeBy },
+    filter: { filterBy, excludeBy },
+    filterParams: { ...filterBy, ...excludeBy },
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
   }
 }

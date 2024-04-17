@@ -24,21 +24,19 @@ const TransactionsTable = () => {
   const { openDialog } = useDialog()
 
   const {
-    params, pagination, filterBy, excludeBy,
+    filterParams, filter, pagination,
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
-  } = useFilter<Transaction>({
-    pageSize: 10
-  })
+  } = useFilter<Transaction>({ pageSize: 10 })
 
-  const { data: currentPage, isLoading } = useTransactionsControlledPagination({
+  const { data: currentPage, isFetching } = useTransactionsControlledPagination({
     params: pagination.params,
-    filter: { filterBy, excludeBy, partialMatch: true }
+    filter: { ...filter, partialMatch: true }
   })
 
-  return !isLoading && currentPage && (
+  return (
     <>
       <div className="flex flex-wrap-reverse justify-between items-center gap-x-14 gap-y-4">
-        <FilterInput className="flex-1 max-w-md" // TODO: add debounce
+        <FilterInput className="flex-1 max-w-md"
           label={<>Search by <span className="text-accent overline">Name</span></>}
           labelProps={{ htmlFor: 'name' }}
           onTypeChange={(filterType) => toggleFilterType('name', filterType)}
@@ -50,7 +48,7 @@ const TransactionsTable = () => {
               <Input id="name" className="min-w-48 h-full pl-10 rounded-lg"
                 type="text"
                 placeholder="Search transactions..."
-                value={params.name as string || ''}
+                value={filterParams.name as string || ''}
                 onChange={(event) => setFilterParam({ name: event.target.value }, filterType)}
               />
             </div>
@@ -67,28 +65,32 @@ const TransactionsTable = () => {
 
       <Separator className="my-3.5 py-[1px] rounded-full bg-foreground/60" />
 
-      <DataTable
-        columns={columns}
-        data={currentPage.data}
-        pagination={{
-          manualPagination: true,
-          rowCount: currentPage.total,
-          onPaginationChange: setPagination
-        }}
-        state={{ pagination }}
-      >
-        {(table) => (
-          <div className="min-w-64 py-3.5 px-3.5 flex flex-wrap justify-between items-center gap-x-2.5 gap-y-3 bg-primary rounded-3xl">
-            <DataTableColumnToggle className="w-fit"
-              table={table}
-            />
-
-            <DataTablePagination className="w-fit ml-auto"
-              table={table}
-            />
-          </div>
-        )}
-      </DataTable>
+      {!isFetching && currentPage ? (
+        <DataTable
+          columns={columns}
+          data={currentPage.data}
+          pagination={{
+            manualPagination: true,
+            rowCount: currentPage.total,
+            onPaginationChange: setPagination
+          }}
+          state={{ pagination }}
+        >
+          {(table) => (
+            <div className="min-w-64 py-3.5 px-3.5 flex flex-wrap justify-between items-center gap-x-2.5 gap-y-3 bg-primary rounded-3xl">
+              <DataTableColumnToggle className="w-fit"
+                table={table}
+              />
+  
+              <DataTablePagination className="w-fit ml-auto"
+                table={table}
+              />
+            </div>
+          )}
+        </DataTable>
+      ) : (
+        <>Loading...</> // TODO: skeleton
+      )}
     </>
   )
 }

@@ -13,7 +13,7 @@ import { Transaction } from "@/services/api/types"
 
 const BasicFilter = () => {
   const {
-    params,
+    filterParams,
     setFilterParam,
     removeFilterParam,
     toggleFilterType
@@ -35,9 +35,9 @@ const BasicFilter = () => {
       >
         {(filterType) => (
           <BudgetSelect id="budgetId"
-            value={params.budgetId as string}
+            value={filterParams.budgetId as string}
             setValue={(id) => setFilterParam({ budgetId: id }, filterType)}
-            key={params.budgetId as string}
+            key={filterParams.budgetId as string}
           />
         )}
       </FilterInput>
@@ -46,7 +46,7 @@ const BasicFilter = () => {
         label={<>Filter by <span className="text-accent overline">Types</span></>}
         labelProps={{ htmlFor: 'type' }}
         triggerProps={{ id: 'type' }}
-        value={params.type as string}
+        value={filterParams.type as string}
         setValue={(type, filterType) => setFilterParam({ type }, filterType)}
         options={[
           { label: 'Default', value: 'default' as Transaction['type'] },
@@ -55,7 +55,7 @@ const BasicFilter = () => {
         ]}
         onTypeChange={(filterType) => toggleFilterType('type', filterType)}
         onReset={(filterType) => removeFilterParam('type', filterType)}
-        key={params.type as string}
+        key={filterParams.type as string}
       />
 
       {/* TODO: add status filter */}
