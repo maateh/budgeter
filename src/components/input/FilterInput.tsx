@@ -1,7 +1,7 @@
-import { useState } from "react"
+import React, { useState } from "react"
 
 // icons
-import { Filter, FilterX, X } from "lucide-react"
+import { Eraser, Filter, FilterX } from "lucide-react"
 
 // shadcn
 import { ButtonTooltip } from "@/components/ui/button"
@@ -26,27 +26,30 @@ type FilterInputWithSelectProps = {
   value: string
   setValue: (value: string, filterType: FilterKeys) => void
   options: SelectOption[]
+  triggerProps?: Omit<SelectTriggerProps, 'onReset'>
   children?: never
-} & Omit<SelectTriggerProps, 'onReset'>
+}
 
 type FilterInputWithoutSelectProps = {
   children: (type: FilterKeys) => React.ReactNode
   value?: never
   setValue?: never
   options?: never
+  triggerProps?: never
 }
 
 type FilterInputProps = {
-  label: string
+  label?: React.ReactNode
   labelProps?: LabelProps
   onReset?: (type: FilterKeys) => void
   onTypeChange?: (type: FilterKeys) => void
-} & (FilterInputWithSelectProps | FilterInputWithoutSelectProps)
+} & Omit<React.ComponentPropsWithoutRef<'div'>, 'children' | 'onReset'>
+  & (FilterInputWithSelectProps | FilterInputWithoutSelectProps)
 
 function FilterInput({
   label, labelProps, onTypeChange, onReset,
-  options, value, setValue,
-  children, ...props
+  options, value, setValue, triggerProps,
+  children, className, ...props
 }: FilterInputProps) {
   const [type, setType] = useState<FilterKeys>('filterBy')
 
@@ -62,12 +65,14 @@ function FilterInput({
   }
 
   return (
-    <div className="my-3.5 flex flex-col gap-y-0.5">
-      <Label {...labelProps}
-        className={cn("text-base font-heading font-normal", labelProps?.className)}
-      >
-        Filter by <span className="text-accent capitalize overline">{label}</span>
-      </Label>
+    <div className={cn("flex flex-col gap-y-0.5", className)} {...props}>
+      {label && (
+        <Label {...labelProps}
+          className={cn("text-base font-heading font-normal", labelProps?.className)}
+        >
+          {label}
+        </Label>
+      )}
 
       <div className="flex justify-between items-center gap-x-2.5">
         {children ? children(type) : (
@@ -75,7 +80,9 @@ function FilterInput({
             value={value}
             onValueChange={(value) => setValue(value, type)}
           >
-            <SelectTrigger className={cn(!value && "text-muted-foreground")} {...props}>
+            <SelectTrigger {...triggerProps}
+              className={cn(!value && "text-muted-foreground", triggerProps?.className)}
+            >
               <SelectValue placeholder="Choose..." />
             </SelectTrigger>
             <SelectContent>
@@ -88,7 +95,7 @@ function FilterInput({
           </Select>
         )}
 
-        <div className="flex justify-center items-center gap-x-2">
+        <div className="flex justify-center items-center gap-x-1">
           {onTypeChange && (
             <StateToggle
               status={type === 'filterBy' ? 'on' : 'off'}
@@ -106,13 +113,13 @@ function FilterInput({
           )}
 
           {onReset && (
-            <ButtonTooltip className="p-1"
-              variant="outline"
+            <ButtonTooltip className="p-1.5 hover:bg-foreground/5"
+              variant="ghost"
               size="icon"
               onClick={() => onReset(type)}
               tooltip="Clear filter"
             >
-              <X size={14} strokeWidth={3.5} />
+              <Eraser size={14} strokeWidth={2.5} />
             </ButtonTooltip>
           )}
         </div>

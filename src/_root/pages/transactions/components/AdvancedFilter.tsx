@@ -19,7 +19,7 @@ const AdvancedFilter = () => {
   } = useFilter<Transaction>()
 
   return (
-    <div className="h-fit px-6 py-5 bg-primary rounded-[2rem]">
+    <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
       <h2 className="indent-border">
         <span className="text-red-600 dark:text-red-500">Filter</span> by ranges
       </h2>

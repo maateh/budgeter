@@ -21,7 +21,7 @@ const BasicFilter = () => {
   } = useFilter<Transaction>()
 
   return (
-    <div className="h-fit px-6 py-5 bg-primary rounded-[2rem]">
+    <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
       <h2 className="indent-border">
         <span className="text-orange-600 dark:text-orange-400">Filter</span> Transactions
       </h2>
@@ -45,7 +45,7 @@ const BasicFilter = () => {
       </FilterInput>
 
       <FilterInput
-        label="Budgets"
+        label={<>Filter by <span className="text-accent overline">Budgets</span></>}
         labelProps={{ htmlFor: 'budgetId' }}
         onTypeChange={(filterType) => toggleFilterType('budgetId', filterType)}
         onReset={(filterType) => removeFilterParam('budgetId', filterType)}
@@ -59,9 +59,10 @@ const BasicFilter = () => {
         )}
       </FilterInput>
 
-      <FilterInput id="type"
-        label="Types"
+      <FilterInput
+        label={<>Filter by <span className="text-accent overline">Types</span></>}
         labelProps={{ htmlFor: 'type' }}
+        triggerProps={{ id: 'type' }}
         value={params.type as string}
         setValue={(type, filterType) => setFilterParam({ type }, filterType)}
         options={[
