@@ -1,5 +1,4 @@
 // shadcn
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -27,22 +26,6 @@ const BasicFilter = () => {
       </h2>
 
       <Separator className="my-4 mx-auto w-11/12" />
-
-      <FilterInput // TODO: add debounce (and maybe move this input to the top of the table)
-        label="Name"
-        labelProps={{ htmlFor: 'name' }}
-        onTypeChange={(filterType) => toggleFilterType('name', filterType)}
-        onReset={(filterType) => removeFilterParam('name', filterType)}
-      >
-        {(filterType) => (
-          <Input id="name"
-            type="text"
-            placeholder="Type transaction name..."
-            value={params.name as string || ''}
-            onChange={(event) => setFilterParam({ name: event.target.value }, filterType)}
-          />
-        )}
-      </FilterInput>
 
       <FilterInput
         label={<>Filter by <span className="text-accent overline">Budgets</span></>}
