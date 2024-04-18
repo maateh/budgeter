@@ -9,10 +9,13 @@ import FilterInput from "@/components/input/FilterInput"
 import { useFilter } from "@/hooks"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { TransactionSearchParams } from "@/_root/transactions/filter/types"
 
 const AdvancedFilter = () => {
-  const { filterParams, setFilterParam, removeFilterParam } = useFilter<Transaction>()
+  const {
+    filterParams,
+    setFilterParam, removeFilterParam
+  } = useFilter<TransactionSearchParams>()
 
   return (
     <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
@@ -30,10 +33,10 @@ const AdvancedFilter = () => {
       >
         {(filterType) => (
           <DateRangePicker
-            // date={{
-            //   from: filterParams.dateFrom,
-            //   to: filterParams.dateTo
-            // }}
+            date={{
+              from: filterParams.dateFrom as Date,
+              to: filterParams.dateTo as Date
+            }}
             // onSelect={(date) => setFilterParam(date, filterType)}
             onSelect={() => {}}
           />

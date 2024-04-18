@@ -10,6 +10,7 @@ import { useFilter } from "@/hooks"
 
 // types
 import { Transaction } from "@/services/api/types"
+import { TransactionSearchParams } from "@/_root/transactions/filter/types"
 
 const BasicFilter = () => {
   const {
@@ -17,7 +18,7 @@ const BasicFilter = () => {
     setFilterParam,
     removeFilterParam,
     toggleFilterType
-  } = useFilter<Transaction>()
+  } = useFilter<TransactionSearchParams>()
 
   return (
     <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
@@ -58,7 +59,20 @@ const BasicFilter = () => {
         key={filterParams.type as string}
       />
 
-      {/* TODO: add status filter */}
+      <FilterInput
+        label={<>Filter by <span className="text-accent overline">Status</span></>}
+        labelProps={{ htmlFor: 'status' }}
+        triggerProps={{ id: 'status' }}
+        value={filterParams.processed as string}
+        setValue={(processed, filterType) => setFilterParam({ processed }, filterType)}
+        options={[
+          { label: 'Processed', value: 'true' as TransactionSearchParams['processed'] },
+          { label: 'Not processed', value: 'false' as TransactionSearchParams['processed'] },
+        ]}
+        onTypeChange={(filterType) => toggleFilterType('processed', filterType)}
+        onReset={(filterType) => removeFilterParam('processed', filterType)}
+        key={filterParams.processed as string}
+      />
     </div>
   )
 }

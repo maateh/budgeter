@@ -15,7 +15,10 @@ import { useTransactionsControlledPagination } from "@/lib/react-query/queries"
 import { useDialog, useFilter } from "@/hooks"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { TransactionSearchParams } from "@/_root/transactions/filter/types"
+
+// utils
+import { convertTransactionSearchToFilter } from "@/_root/transactions/filter/utils"
 
 // table columns
 import { columns } from "./columns"
@@ -26,11 +29,15 @@ const TransactionsTable = () => {
   const {
     filterParams, filter, pagination,
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
-  } = useFilter<Transaction>({ pageSize: 10 })
+  } = useFilter<TransactionSearchParams>({ pageSize: 10 })
 
   const { data: currentPage, isFetching } = useTransactionsControlledPagination({
     params: pagination.params,
-    filter: { ...filter, partialMatch: true }
+    filter: {
+      filterBy: convertTransactionSearchToFilter(filter.filterBy),
+      excludeBy: convertTransactionSearchToFilter(filter.excludeBy),
+      partialMatch: true
+    }
   })
 
   return (
