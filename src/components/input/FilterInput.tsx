@@ -74,7 +74,7 @@ function FilterInput({
         </Label>
       )}
 
-      <div className="flex justify-between items-center gap-x-2.5">
+      <div className="flex justify-between items-center">
         {children ? children(type) : (
           <Select
             value={value}
@@ -95,34 +95,36 @@ function FilterInput({
           </Select>
         )}
 
-        <div className="flex justify-center items-center gap-x-1">
-          {onTypeChange && (
-            <StateToggle
-              status={type === 'filterBy' ? 'on' : 'off'}
-              onClick={handleTypeChange}
-              icon={{
-                on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
-                off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
-              }}
-              tooltip={{
-                on: "Switch to exclude",
-                off: "Switch to filter"
-              }}
-              toggleOnHover
-            />
-          )}
-
-          {onReset && (
-            <ButtonTooltip className="p-1.5 hover:bg-foreground/5"
-              variant="ghost"
-              size="icon"
-              onClick={() => onReset(type)}
-              tooltip="Clear filter"
-            >
-              <Eraser size={14} strokeWidth={2.5} />
-            </ButtonTooltip>
-          )}
-        </div>
+        {(onReset || onTypeChange) && (
+          <div className="ml-2.5 flex justify-center items-center gap-x-1">
+            {onTypeChange && (
+              <StateToggle
+                status={type === 'filterBy' ? 'on' : 'off'}
+                onClick={handleTypeChange}
+                icon={{
+                  on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
+                  off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
+                }}
+                tooltip={{
+                  on: "Switch to exclude",
+                  off: "Switch to filter"
+                }}
+                toggleOnHover
+              />
+            )}
+  
+            {onReset && (
+              <ButtonTooltip className="p-1.5 hover:bg-foreground/5"
+                variant="ghost"
+                size="icon"
+                onClick={() => onReset(type)}
+                tooltip="Clear filter"
+              >
+                <Eraser size={14} strokeWidth={2.5} />
+              </ButtonTooltip>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
