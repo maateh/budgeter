@@ -14,12 +14,12 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 
 type DateRangePickerProps = {
-  date?: DateRange
-  onSelect: (date?: DateRange) => void
+  dateRange?: DateRange
+  onSelect: (dateRange?: DateRange) => void
 } & Omit<ButtonProps, 'onSelect'>
 
 const DateRangePicker = ({
-  date, onSelect,
+  dateRange, onSelect,
   className, variant = "outline", size = "sm", ...props
 }: DateRangePickerProps) => {
   return (
@@ -35,7 +35,7 @@ const DateRangePicker = ({
             <p className="flex gap-x-1.5">
               Start Date
               <span className="pl-1.5 border-l-2 font-medium">
-                {date?.from ? format(date.from, 'yyyy. MM. dd.') : 'Select...'}
+                {dateRange?.from ? format(dateRange.from, 'yyyy. MM. dd.') : 'Select...'}
               </span>
             </p>
           </div>
@@ -47,7 +47,7 @@ const DateRangePicker = ({
             <p className="flex gap-x-1.5">
               End Date
               <span className="pl-1.5 border-l-2 font-medium">
-                {date?.to ? format(date.to, 'yyyy. MM. dd.') : 'Select...'}
+                {dateRange?.to ? format(dateRange.to, 'yyyy. MM. dd.') : 'Select...'}
               </span>
             </p>
           </div>
@@ -56,8 +56,8 @@ const DateRangePicker = ({
       <PopoverContent>
         <Calendar
           mode="range"
-          defaultMonth={date?.from}
-          selected={date}
+          defaultMonth={dateRange?.to}
+          selected={dateRange}
           onSelect={onSelect}
           initialFocus
         />

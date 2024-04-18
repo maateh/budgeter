@@ -2,7 +2,7 @@
 import { Separator } from "@/components/ui/separator"
 
 // components
-import { AdvancedFilter, BasicFilter } from "./filter"
+import { RangeFilter, BasicFilter } from "./filter"
 import TransactionsTable from "./table"
 
 const Transactions = () => {
@@ -21,7 +21,7 @@ const Transactions = () => {
           </div>
 
           <div className="flex-1 w-full mx-auto max-w-lg sm:min-w-80">
-            <AdvancedFilter />
+            <RangeFilter />
           </div>
         </section>
 
