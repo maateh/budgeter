@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom"
 
 // layouts
 import RootLayout from "@/_root/RootLayout"
-import { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } from "@/_root/pages"
+import { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } from "@/_root"
 
 import DialogLayout from "@/_dialogs/DialogLayout"
 import { Budgets, CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"

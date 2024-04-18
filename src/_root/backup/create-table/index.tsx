@@ -1,17 +1,15 @@
 import { useParams } from "react-router-dom"
-import { ColumnDef, Table as RTable } from "@tanstack/react-table"
+import { Table as RTable } from "@tanstack/react-table"
 
 // icons
 import { PackageCheck, PackageOpen, X } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { DataTable, DataTablePagination, DataTableSelectionInfo, getDefaultSelectedRows, getSelectionColumn } from "@/components/ui/data-table"
+import { DataTable, DataTablePagination, DataTableSelectionInfo, getDefaultSelectedRows } from "@/components/ui/data-table"
 
 // components
 import BackupInfo from "@/components/shared/backup/BackupInfo"
-import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
-import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 
 // hooks
 import { useBudgets } from "@/lib/react-query/queries"
@@ -20,37 +18,16 @@ import { useCreateBackup } from "@/lib/react-query/mutations"
 // types
 import { Budget } from "@/services/api/types"
 
-const columns: ColumnDef<Budget>[] = [
-  getSelectionColumn(),
-  {
-    accessorKey: "name",
-    header: "Budget Name",
-    cell: ({ row }) => <BudgetNameBadge budget={row.original} />
-  },
-  {
-    accessorKey: "balance.current",
-    header: "Balance",
-    cell: ({ row }) => (
-      <BalanceBadge className="px-3 py-1 min-w-28"
-        separatorProps={{ className: "h-4" }}
-        orientation="vertical"
-        size="xs"
-        iconSize={18}
-        balance={row.original.balance}
-      />
-    )
-  }
-]
+// table columns
+import { columns } from "./columns"
 
-const CreateBackup = () => {
+const BackupCreateTable = () => {
   const { budgetId } = useParams() as { budgetId?: string }
 
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
   const {
-    data: backup,
-    isPending: isBackupPending,
-    mutateAsync: createBackup,
-    reset: resetBackup
+    data: backup, isPending: isBackupPending,
+    mutateAsync: createBackup, reset: resetBackup
   } = useCreateBackup()
 
   const handleCreate = async (table: RTable<Budget>) => {
@@ -124,4 +101,4 @@ const CreateBackup = () => {
   )
 }
 
-export default CreateBackup
+export default BackupCreateTable

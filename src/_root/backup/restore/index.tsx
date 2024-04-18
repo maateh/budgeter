@@ -1,7 +1,7 @@
 // components
 import RestoreBackupForm from "@/components/form/backup/RestoreBackupForm"
 
-const RestoreBackup = () => {
+const BackupRestore = () => {
   return (
     <div className="h-fit px-6 py-5 bg-primary rounded-[2rem]">
       <h2 className="indent-border">
@@ -15,4 +15,4 @@ const RestoreBackup = () => {
   )
 }
 
-export default RestoreBackup
+export default BackupRestore

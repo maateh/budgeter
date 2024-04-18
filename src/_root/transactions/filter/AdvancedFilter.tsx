@@ -2,6 +2,7 @@
 import { Separator } from "@/components/ui/separator"
 
 // components
+import DateRangePicker from "@/components/input/DateRangePicker"
 import FilterInput from "@/components/input/FilterInput"
 
 // hooks
@@ -11,12 +12,7 @@ import { useFilter } from "@/hooks"
 import { Transaction } from "@/services/api/types"
 
 const AdvancedFilter = () => {
-  const {
-    params,
-    setFilterParam,
-    removeFilterParam,
-    toggleFilterType
-  } = useFilter<Transaction>()
+  const { filterParams, setFilterParam, removeFilterParam } = useFilter<Transaction>()
 
   return (
     <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
@@ -28,7 +24,21 @@ const AdvancedFilter = () => {
 
       {/* TODO: add payment filter (amount of the payment more or less than xy) */}
 
-      {/* TODO: add date filter (using shadcn's DateRangePicker) */}
+      {/* TODO: add option to filter by date & ranges */}
+      <FilterInput
+        label={<>Filter by <span className="text-red-600 dark:text-red-500 overline">Last Updated</span></>}
+      >
+        {(filterType) => (
+          <DateRangePicker
+            // date={{
+            //   from: filterParams.dateFrom,
+            //   to: filterParams.dateTo
+            // }}
+            // onSelect={(date) => setFilterParam(date, filterType)}
+            onSelect={() => {}}
+          />
+        )}
+      </FilterInput>
     </div>
   )
 }

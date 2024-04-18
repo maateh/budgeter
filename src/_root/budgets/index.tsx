@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 // components
 import BudgetNotes from "@/components/shared/budget-note/BudgetNotes"
 import Transactions from "@/components/shared/transaction/Transactions"
-import BudgetSummary from "./components/BudgetSummary"
+import BudgetSummary from "./summary"
 
 // hooks
 import { useBudget } from "@/lib/react-query/queries"
