@@ -65,10 +65,7 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
                       <SwitchThumb
                         variant="custom"
                         checked={processed}
-                        customIcon={{
-                          Checked: Verified,
-                          Unchecked: XCircle
-                        }}
+                        customIcon={{ Checked: Verified, Unchecked: XCircle }}
                       />
                     }
                   />
@@ -76,7 +73,13 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
             )}
 
             <TransactionList
-              filter={{ filterBy: { type, processed, budgetId }}}
+              filter={{
+                filterBy: {
+                  type,
+                  processed: type === 'transfer' || processed,
+                  budgetId
+                }
+              }}
               params={{ limit: 5, offset: 0, maxItemLimit: 10 }}
             >
               {(transaction, budget) => (
