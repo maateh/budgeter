@@ -1,14 +1,28 @@
 // types
 import { Range, RangeFilter, RangeFilterEntryValue } from "@/services/api/types"
 
-// TODO: write documentation
+const KEY_REF_SPLITTER = '.'
+
+/**
+ * Filters an array of documents based on the provided ranges for specified keys.
+ * 
+ * @template T - The type of documents being filtered.
+ * @param {T[]} documents - The array of documents to filter.
+ * @param {RangeFilter} ranges - An object containing ranges for specified keys.
+ * @returns {T[]} An array of documents that fall within the specified ranges.
+ */
 function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
   return documents.filter((document) => {
+    /** Iterate through each key-reference pair in the ranges object. */
     for (const keyRef in ranges) {
       const range = ranges[keyRef]
 
+      /**
+       * Extract the entry value corresponding to the 
+       * key reference from the document.
+       */
       let entryValue: RangeFilterEntryValue
-      keyRef.split('.')
+      keyRef.split(KEY_REF_SPLITTER)
         .reduce((doc, key) => {
           const nestedValue = doc[key as keyof T] as (T | number | string)
           if (typeof nestedValue === 'number' || typeof nestedValue === 'string') {
@@ -18,22 +32,35 @@ function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
           return nestedValue
         }, document as T)
 
-      if (!isInRange(entryValue, range)) {
-        return false
-      }
+      /** Check if the extracted value falls within the specified range. */
+      return isInRange(entryValue, range)
     }
+
+    /** If no ranges are provided, include the document defaultly. */
     return true
   })
 }
 
+/**
+ * Checks if a given value falls within the specified range.
+ * 
+ * @param {RangeFilterEntryValue} value - The value to check.
+ * @param {Range} range - The range to compare against.
+ * @returns {boolean} True if the value falls within the range, otherwise false.
+ */
 function isInRange(value: RangeFilterEntryValue, range?: Range): boolean {
   if (!value || !range) return true
 
+  /**
+   * If the value is a string and can be parsed as a date,
+   * convert it to a timestamp value.
+  */
   if (typeof value === 'string') {
     if (isNaN(Date.parse(value as string))) return true
     value = new Date(value).getTime()
   }
 
+  /** Checks if the value is within the specified range. */
   if (range.min !== undefined && value < range.min) return false
   if (range.max !== undefined && value > range.max) return false
 
