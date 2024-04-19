@@ -1,5 +1,5 @@
 // types
-import { Range, RangeFilter } from "@/services/api/types"
+import { Range, RangeFilter, RangeFilterEntryValue } from "@/services/api/types"
 
 // TODO: write documentation
 function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
@@ -7,18 +7,18 @@ function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
     for (const keyRef in ranges) {
       const range = ranges[keyRef]
 
-      let value: number | undefined
+      let entryValue: RangeFilterEntryValue
       keyRef.split('.')
         .reduce((doc, key) => {
-          const nestedValue = doc[key as keyof T] as (T | number)
-          if (typeof nestedValue === 'number') {
-            value = nestedValue
+          const nestedValue = doc[key as keyof T] as (T | number | string)
+          if (typeof nestedValue === 'number' || typeof nestedValue === 'string') {
+            entryValue = nestedValue
             return doc
           }
           return nestedValue
         }, document as T)
 
-      if (!isInRange(value, range)) {
+      if (!isInRange(entryValue, range)) {
         return false
       }
     }
@@ -26,8 +26,13 @@ function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
   })
 }
 
-function isInRange(value: number | undefined, range?: Range): boolean {
+function isInRange(value: RangeFilterEntryValue, range?: Range): boolean {
   if (!value || !range) return true
+
+  if (typeof value === 'string') {
+    if (isNaN(Date.parse(value as string))) return true
+    value = new Date(value).getTime()
+  }
 
   if (range.min !== undefined && value < range.min) return false
   if (range.max !== undefined && value > range.max) return false
