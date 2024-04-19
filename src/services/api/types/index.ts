@@ -12,14 +12,24 @@ export type PaginationParams = {
 }
 
 // filter
+export type FilterKeys = 'filterBy' | 'excludeBy'
+
 export type Filter<T> = {
   [K in keyof T]?: T[K] | T[K][]
 }
 
-export type FilterKeys = 'filterBy' | 'excludeBy'
+export type RangeFilter = {
+  [keyRef: string]: Range
+}
+
+export type Range = {
+  min?: number
+  max?: number
+}
 
 export type FilterOptions<T> = {
   partialMatch?: boolean
+  rangeBy?: RangeFilter
 } & {
   [key in FilterKeys]?: Filter<T>
 }

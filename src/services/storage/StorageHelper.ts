@@ -24,10 +24,10 @@ class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
     localStorage.setItem(this.collection, JSON.stringify(documents))
   }
 
-  public async find({ filterBy, excludeBy, partialMatch }: FilterOptions<D> = {}): Promise<D[]> {
+  public async find(filterOptions?: FilterOptions<D>): Promise<D[]> {
     const collectionDocs = await this.fetchFromStorage()
     const documents = Object.values(collectionDocs)
-    return filter(documents, { filterBy, excludeBy, partialMatch })
+    return filter(documents, filterOptions)
   }
 
   public async findById(id: string): Promise<D> {
