@@ -2,7 +2,7 @@
 import { Range, RangeFilter } from "@/services/api/types"
 
 // TODO: write documentation
-export function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
+function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
   return documents.filter((document) => {
     for (const keyRef in ranges) {
       const range = ranges[keyRef]
@@ -34,3 +34,5 @@ function isInRange(value: number | undefined, range?: Range): boolean {
 
   return true
 }
+
+export default filterByRanges

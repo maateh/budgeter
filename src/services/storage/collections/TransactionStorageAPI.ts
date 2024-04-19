@@ -19,8 +19,7 @@ import { updateBalance } from "@/services/storage/helpers/balance"
 import { deleteTransactions, manageRelatedTransactions, updateTransaction } from "@/services/storage/helpers/transaction"
 
 // utils
-import { paginate } from "@/services/storage/utils"
-import { filterByRanges } from "../utils/filterByRanges"
+import { paginate, filterByRanges } from "@/services/storage/utils"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
