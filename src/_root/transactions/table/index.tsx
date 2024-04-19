@@ -27,15 +27,14 @@ const TransactionsTable = () => {
   const { openDialog } = useDialog()
 
   const {
-    filterParams, filter, pagination,
+    filterParams, searchParams, pagination,
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
   } = useFilter<TransactionSearchParams>({ pageSize: 10 })
 
   const { data: currentPage, isFetching } = useTransactionsControlledPagination({
     params: pagination.params,
     filter: {
-      filterBy: convertTransactionSearchToFilter(filter.filterBy),
-      excludeBy: convertTransactionSearchToFilter(filter.excludeBy),
+      ...convertTransactionSearchToFilter(searchParams),
       partialMatch: true
     }
   })

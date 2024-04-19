@@ -2,7 +2,7 @@
 import { KEY_SPLITTER, VALUE_SEPARATOR } from "@/hooks/filter/constants"
 
 // types
-import { Filter, FilterOptions } from "@/services/api/types"
+import { Filter, FilterKeys } from "@/services/api/types"
 
 /**
  * Retrieves the current page index from the URL search params.
@@ -41,7 +41,7 @@ function convertFilterToParam<T>(filter: Filter<T>): string {
  * @param {keyof FilterOptions<T>} type - The type of filter ('filterBy' or 'excludeBy').
  * @returns {Filter<T>} The filter object extracted from the URL search params.
  */
-function getFilter<T>(params: URLSearchParams, type: keyof FilterOptions<T>): Filter<T> {
+function getFilter<T>(params: URLSearchParams, type: FilterKeys): Filter<T> {
   const param = params.get(type)
   if (!param) return {}
 

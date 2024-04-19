@@ -36,12 +36,12 @@ const RangeFilter = () => {
     setFilterParam({
       dateFrom: dateRange?.from?.getTime().toString(),
       dateTo: dateRange?.to?.getTime().toString()
-    }, 'filterBy')
+    }, 'rangeBy')
   }
 
   const handleClearSearch = () => {
-    removeFilterParam('dateFrom', 'filterBy')
-    removeFilterParam('dateTo', 'filterBy')
+    removeFilterParam('dateFrom', 'rangeBy')
+    removeFilterParam('dateTo', 'rangeBy')
   }
 
   return (

@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom"
 // types
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
 import { FilterHookOptions, FilterHookReturn, FilterRecord } from "@/hooks/filter/types"
-import { FilterOptions } from "@/services/api/types"
+import { FilterKeys } from "@/services/api/types"
 
 // utils
 import { convertFilterToParam, getCurrentPage, getFilter } from "@/hooks/filter/utils"
@@ -45,7 +45,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
    * @param {FilterRecord<T>} record - The filter record containing filter values to set.
    * @param {FilterType} type - The type of filter ('filterBy' or 'excludeBy').
    */
-  const setFilterParam = (record: FilterRecord<T>, type: keyof FilterOptions<T>) => {
+  const setFilterParam = (record: FilterRecord<T>, type: FilterKeys) => {
     setParams((params) => {
       const filter = { ...getFilter<T>(params, type), ...record }
       const param = convertFilterToParam<T>(filter)
@@ -69,7 +69,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
    * @param {keyof T} key - The key of the filter parameter to remove.
    * @param {FilterType} type - The type of filter ('filterBy' or 'excludeBy').
    */
-  const removeFilterParam = (key: keyof T, type: keyof FilterOptions<T>) => {
+  const removeFilterParam = (key: keyof T, type: FilterKeys) => {
     setParams((params) => {
       const filter = getFilter<T>(params, type)
       delete filter[key]
@@ -84,7 +84,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
     })
   }
 
-  const toggleFilterType = (key: keyof T, type: keyof FilterOptions<T>) => {
+  const toggleFilterType = (key: keyof T, type: FilterKeys) => {
     setParams((params) => {
       const anotherType = type === 'filterBy' ? 'excludeBy' : 'filterBy'
       const anotherFilter = getFilter<T>(params, anotherType)
@@ -103,6 +103,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
   const pageOffsetIndex = getCurrentPage(params) - 1
   const filterBy = getFilter<T>(params, 'filterBy')
   const excludeBy = getFilter<T>(params, 'excludeBy')
+  const rangeBy = getFilter<T>(params, 'rangeBy')
 
   return {
     pagination: {
@@ -113,7 +114,7 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
         offset: pageOffsetIndex * pageSize
       }
     },
-    filter: { filterBy, excludeBy },
+    searchParams: { filterBy, excludeBy, rangeBy },
     filterParams: { ...filterBy, ...excludeBy },
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
   }

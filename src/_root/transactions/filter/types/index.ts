@@ -5,10 +5,10 @@ export type TransactionSearchParams = {
   budgetId: Transaction['budgetId']
   type: Transaction['type']
   processed: 'true' | 'false'
-  dateFrom: string // TODO: handle filtering by date & ranges
-  dateTo: string // TODO: handle filtering by date & ranges
-  paymentFrom: number // TODO: add option to filter by ranges
-  paymentTo: number // TODO: add option to filter by ranges
+  dateFrom: string
+  dateTo: string
+  paymentFrom: number // TODO: add option to filter by payment range
+  paymentTo: number // TODO: add option to filter by payment range
 }
 
 export type TransactionSearchFilter = FilterOptions<TransactionSearchParams>
