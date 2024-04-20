@@ -4,6 +4,9 @@ export type * from "./pagination"
 // filter
 export type * from "./filter"
 
+// sort
+export type * from "./sort"
+
 // options
 export type * from "./query"
 
