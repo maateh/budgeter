@@ -1,7 +1,8 @@
 // types
 import { Range, RangeFilter, RangeFilterEntryValue } from "@/services/api/types"
 
-const KEY_REF_SPLITTER = '.'
+// utils
+import { getNestedValue } from "@/services/storage/utils"
 
 /**
  * Filters an array of documents based on the provided ranges for specified keys.
@@ -11,7 +12,7 @@ const KEY_REF_SPLITTER = '.'
  * @param {RangeFilter} ranges - An object containing ranges for specified keys.
  * @returns {T[]} An array of documents that fall within the specified ranges.
  */
-function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
+function rangeFilter<T>(documents: T[], ranges?: RangeFilter): T[] {
   return documents.filter((document) => {
     /** Iterate through each key-reference pair in the ranges object. */
     for (const keyRef in ranges) {
@@ -21,16 +22,7 @@ function filterByRanges<T>(documents: T[], ranges?: RangeFilter): T[] {
        * Extract the entry value corresponding to the 
        * key reference from the document.
        */
-      let entryValue: RangeFilterEntryValue
-      keyRef.split(KEY_REF_SPLITTER)
-        .reduce((doc, key) => {
-          const nestedValue = doc[key as keyof T] as (T | number | string)
-          if (typeof nestedValue === 'number' || typeof nestedValue === 'string') {
-            entryValue = nestedValue
-            return doc
-          }
-          return nestedValue
-        }, document as T)
+      const entryValue = getNestedValue<T>(document, keyRef)
 
       /** Check if the extracted value falls within the specified range. */
       return isInRange(entryValue, range)
@@ -67,4 +59,4 @@ function isInRange(value: RangeFilterEntryValue, range?: Range): boolean {
   return true
 }
 
-export default filterByRanges
+export default rangeFilter

@@ -19,7 +19,7 @@ import { updateBalance } from "@/services/storage/helpers/balance"
 import { deleteTransactions, manageRelatedTransactions, updateTransaction } from "@/services/storage/helpers/transaction"
 
 // utils
-import { paginate, filterByRanges } from "@/services/storage/utils"
+import { paginate, rangeFilter } from "@/services/storage/utils"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -71,7 +71,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     const budgets = await budgetStorage.find()
 
     const { data, ...pagination } = paginate(
-      filterByRanges(transactions, filter?.rangeBy),
+      rangeFilter(transactions, filter?.rangeBy),
       params,
       ({ updatedAt: a }, { updatedAt: b }) => a < b ? 1 : -1
     )
