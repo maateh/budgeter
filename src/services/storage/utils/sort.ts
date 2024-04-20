@@ -12,7 +12,9 @@ import { getNestedValue } from "@/services/storage/utils"
  * @param {Sort} sortBy - An object containing the sorting criteria.
  * @returns {T[]} The sorted array of documents.
  */
-function sort<T>(documents: T[], sortBy: Sort): T[] {
+function sort<T>(documents: T[], sortBy?: Sort): T[] {
+  if (!sortBy) return documents
+
   return documents.sort((a, b) => {
     for (const keyRef in sortBy) {
       const order = sortBy[keyRef]

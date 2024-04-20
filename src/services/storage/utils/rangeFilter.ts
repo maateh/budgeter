@@ -13,6 +13,8 @@ import { getNestedValue } from "@/services/storage/utils"
  * @returns {T[]} An array of documents that fall within the specified ranges.
  */
 function rangeFilter<T>(documents: T[], ranges?: RangeFilter): T[] {
+  if (!ranges) return documents
+
   return documents.filter((document) => {
     /** Iterate through each key-reference pair in the ranges object. */
     for (const keyRef in ranges) {
