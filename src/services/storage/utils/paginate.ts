@@ -1,5 +1,8 @@
 // types
-import { Pagination, PaginationParams } from "@/services/api/types"
+import { Pagination, PaginationParams, Sort } from "@/services/api/types"
+
+// utils
+import { sort } from "@/services/storage/utils"
 
 /**
  * Paginates the given data based on the provided offset and limit.
@@ -8,7 +11,7 @@ import { Pagination, PaginationParams } from "@/services/api/types"
  * @param limit - The maximum number of items per page.
  * @returns An object containing paginated data and metadata.
  */
-export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D, b: D) => number): Pagination<D> {
+export function paginate<D>(data: D[], params: PaginationParams | undefined, sortBy: Sort | undefined): Pagination<D> {
   const { offset = 0, limit = -1, maxItemLimit } = params || {}
 
   /**
@@ -27,7 +30,7 @@ export function paginate<D>(data: D[], params?: PaginationParams, sortBy?: (a: D
     ? currentOffsetLimit < fixedLength ? currentOffsetLimit : null
     : null
 
-  const sortedData = data.sort(sortBy)
+  const sortedData = sort(data, sortBy)
 
   return {
     offset,

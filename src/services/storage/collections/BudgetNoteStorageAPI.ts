@@ -39,9 +39,9 @@ class BudgetNoteStorageAPI implements IBudgetNoteAPI {
     return { ...note, budget }
   }
 
-  public async get({ params, filter }: QueryOptions<BudgetNote> = {}): Promise<Pagination<BudgetNote>> {
+  public async get({ params, filter, sortBy }: QueryOptions<BudgetNote> = {}): Promise<Pagination<BudgetNote>> {
     const notes = await this.storage.find(filter)
-    return paginate(notes, params)
+    return paginate(notes, params, sortBy)
   }
 
   public async create(budgetId: string, data: z.infer<typeof noteFormSchema>): Promise<BudgetNote> {
