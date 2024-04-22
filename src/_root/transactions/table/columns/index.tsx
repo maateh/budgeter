@@ -12,6 +12,7 @@ import { Budget, Transaction } from "@/services/api/types"
 
 // utils
 import { format } from "date-fns"
+import SortingHeader from "./SortingHeader"
 
 export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
@@ -29,9 +30,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
     accessorKey: "name",
     enableHiding: false,
-    header: ({ column }) => (
-      <div onClick={() => column.toggleSorting()}>Name</div>
-    ),
+    header: () => <SortingHeader sortingKey="name">Name</SortingHeader>,
     cell: ({ row }) => (
       <span className="capitalize font-semibold small-caps">
         {row.original.name}
@@ -40,7 +39,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "paymentId",
-    header: "Payment",
+    header: () => <SortingHeader sortingKey="payment.amount">Payment</SortingHeader>,
     cell: ({ row }) => (
       <PaymentBadge
         size="sm"
@@ -51,9 +50,8 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
-    // TODO: add design
     accessorKey: "type",
-    header: "Type",
+    header: () => <SortingHeader sortingKey="type">Type</SortingHeader>,
     cell: ({ row }) => (
       <span className="capitalize text-base font-normal all-small-caps">
         {row.original.type}
@@ -62,7 +60,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "budgetId",
-    header: "Budget",
+    header: () => <SortingHeader sortingKey="budgetId">Budget</SortingHeader>,
     cell: ({ row }) => (
       <BudgetNameBadge
         size="sm"
@@ -72,7 +70,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Created",
+    header: () => <SortingHeader sortingKey="createdAt">Created</SortingHeader>,
     cell: ({ row }) => (
       <span className="text-xs font-normal">
         {format(row.original.createdAt, 'yyyy. MM. dd.')}
@@ -81,7 +79,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: "Last Updated",
+    header: () => <SortingHeader sortingKey="updatedAt">Last Updated</SortingHeader>,
     cell: ({ row }) => (
       <span className="text-xs font-normal">
         {format(row.original.updatedAt, 'yyyy. MM. dd.')}

@@ -12,7 +12,7 @@ import FilterInput from "@/components/input/FilterInput"
 
 // hooks
 import { useTransactionsControlledPagination } from "@/lib/react-query/queries"
-import { useDialog, useFilter } from "@/hooks"
+import { useDialog, useFilter, useSorting } from "@/hooks"
 
 // types
 import { TransactionSearchParams } from "@/_root/transactions/filter/types"
@@ -31,12 +31,15 @@ const TransactionsTable = () => {
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
   } = useFilter<TransactionSearchParams>({ pageSize: 10 })
 
+  const { sortBy } = useSorting({ updatedAt: -1 })
+
   const { data: currentPage, isFetching } = useTransactionsControlledPagination({
     params: pagination.params,
     filter: {
       ...convertTransactionSearchToFilter(searchParams),
       partialMatch: true
-    }
+    },
+    sortBy: { ...sortBy, updatedAt: -1 }
   })
 
   return (

@@ -7,7 +7,7 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 import { QueryOptions, Transaction } from "@/services/api/types"
 import { useDebounce } from "@/hooks"
 
-const useTransactionsControlledPagination = ({ params, filter }: QueryOptions<Transaction> = {}) => {
+const useTransactionsControlledPagination = ({ params, filter, sortBy }: QueryOptions<Transaction> = {}) => {
   const { api } = useAPI()
   
   const { rangeBy } = filter || {}
@@ -21,8 +21,8 @@ const useTransactionsControlledPagination = ({ params, filter }: QueryOptions<Tr
   excludeBy = { ...excludeBy, name: excludeBy?.name ? debouncedName : undefined}
 
   return useQuery({
-    queryKey: ['transactions', filterBy, excludeBy, rangeBy, params],
-    queryFn: async () => await api.transaction.getWithBudget({ params, filter }),
+    queryKey: ['transactions', filterBy, excludeBy, rangeBy, sortBy, params],
+    queryFn: async () => await api.transaction.getWithBudget({ params, filter, sortBy }),
     placeholderData: keepPreviousData
   })
 }
