@@ -1,12 +1,15 @@
 import { useSearchParams } from "react-router-dom"
 
+// hooks
+import { useSearch } from "@/hooks"
+
 // types
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
-import { FilterHookOptions, FilterHookReturn, FilterRecord } from "@/hooks/filter/types"
+import { FilterHookOptions, FilterHookReturn, FilterRecord, SearchFilter } from "@/hooks/filter/types"
 import { FilterKeys } from "@/services/api/types"
 
 // utils
-import { convertFilterToParam, getCurrentPage, getFilter } from "@/hooks/filter/utils"
+import { getCurrentPage } from "@/hooks/filter/utils"
 
 /**
  * A custom hook for managing pagination and filtering parameters in URL search params.
@@ -17,8 +20,10 @@ import { convertFilterToParam, getCurrentPage, getFilter } from "@/hooks/filter/
  * @param {FilterHookOptions} options - Optional configuration options for the filter hook.
  * @returns {FilterHookReturn<T>} An object containing pagination and filtering methods and parameters.
  */
-function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookReturn<T> {
-  const [params, setParams] = useSearchParams()
+function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookReturn<T> {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const { getParam, convertToSearchParam } = useSearch<FilterKeys | 'page', FilterRecord<T>>()
   
   /**
    * Sets the pagination parameters in the URL search params based on the provided updater function.
@@ -26,84 +31,93 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
    * @param {OnChangeFn<PaginationState>} updater - The function that updates the pagination state.
    */
   const setPagination: OnChangeFn<PaginationState> = (updater) => {
-    setParams((params) => {
-      if (typeof updater !== 'function') return params
+    setSearchParams((searchParams) => {
+      if (typeof updater !== 'function') return searchParams
 
       const { pageIndex } = updater({
         pageSize,
-        pageIndex: getCurrentPage(params)
+        pageIndex: getCurrentPage(searchParams)
       })
 
-      params.set('page', pageIndex.toString())
-      return params
+      searchParams.set('page', pageIndex.toString())
+      return searchParams
     })
   }
 
   /**
-   * Sets a filter parameter in the URL search params based on the provided filter record and type.
+   * Sets a filter parameter in the URL search params
+   * based on the provided filter entry and type.
    * 
-   * @param {FilterRecord<T>} record - The filter record containing filter values to set.
-   * @param {FilterType} type - The type of filter ('filterBy' or 'excludeBy').
+   * @param {FilterKeys} filterKey - The key of the filter parameter to set ('filterBy', 'excludeBy' or 'rangeBy').
+   * @param {SearchFilter<T>} entry - The filter entry containing filter values to set.
    */
-  const setFilterParam = (record: FilterRecord<T>, type: FilterKeys) => {
-    setParams((params) => {
-      const filter = { ...getFilter<T>(params, type), ...record }
-      const param = convertFilterToParam<T>(filter)
+  const setFilterEntry = (filterKey: FilterKeys, entry: SearchFilter<T>) => {
+    setSearchParams((searchParams) => {
+      const filter = getParam(filterKey)
+      const param = convertToSearchParam({ ...filter, ...entry })
 
-      params.set(type, param)
-      params.set('page', '1')
+      searchParams.set(filterKey, param)
+      searchParams.set('page', '1')
 
       /**
-       * Filter type needs to be deleted if the record value has
-       * been falsy and no more params are specified on
+       * Filter type needs to be deleted if the param is
+       * falsy because no more entries are specified on
        * the actual filter type.
        */
-      if (!param) params.delete(type)
-      return params
+      if (!param) searchParams.delete(filterKey)
+      return searchParams
     })
   }
 
   /**
-   * Removes a filter parameter from the URL search params based on the provided key and filter type.
+   * Removes a filter parameter from the URL search
+   * params based on the provided key and filter type.
    * 
-   * @param {keyof T} key - The key of the filter parameter to remove.
-   * @param {FilterType} type - The type of filter ('filterBy' or 'excludeBy').
+   * @param {FilterKeys} filterKey - The key of the filter parameter to remove ('filterBy', 'excludeBy' or 'rangeBy').
+   * @param {keyof T} entryKey - The key of the filter entry to remove.
    */
-  const removeFilterParam = (key: keyof T, type: FilterKeys) => {
-    setParams((params) => {
-      const filter = getFilter<T>(params, type)
-      delete filter[key]
+  const removeFilterEntry = (filterKey: FilterKeys, entryKey: keyof T) => {
+    setSearchParams((searchParams) => {
+      const filter = getParam(filterKey)
+      delete filter[entryKey]
 
-      const param = convertFilterToParam<T>(filter)
-      
-      params.set(type, param)
-      params.set('page', '1')
+      const param = convertToSearchParam(filter)
+      searchParams.set(filterKey, param)
+      searchParams.set('page', '1')
 
-      if (!param) params.delete(type)
-      return params
+      if (!param) searchParams.delete(filterKey)
+      return searchParams
     })
   }
 
-  const toggleFilterType = (key: keyof T, type: FilterKeys) => {
-    setParams((params) => {
-      const anotherType = type === 'filterBy' ? 'excludeBy' : 'filterBy'
-      const anotherFilter = getFilter<T>(params, anotherType)
+  /**
+   * Toggles a filter entry between 'filterBy' and 'excludeBy'
+   * in the URL search params based on the provided key.
+   * 
+   * @param {FilterKeys} filterKey - The key of the filter parameter to toggle ('filterBy' or 'excludeBy').
+   * @param {keyof T} entryKey - The key of the filter entry to toggle.
+   */
+  const toggleFilterType = (filterKey: FilterKeys, entryKey: keyof T) => {
+    setSearchParams((searchParams) => {
+      const anotherFilterKey = filterKey === 'filterBy' ? 'excludeBy' : 'filterBy'
+      const anotherFilter = getParam(anotherFilterKey)
       
-      const value = anotherFilter[key]
-      if (!value) return params
+      const value = anotherFilter[entryKey]
+      const entry = { [entryKey]: value } as unknown as FilterRecord<T>
 
-      const record = { [key]: value } as unknown as FilterRecord<T>
-      setFilterParam(record, type)
-      removeFilterParam(key, anotherType)
+      if (!value) return searchParams
 
-      return params
+      setFilterEntry(filterKey, entry)
+      removeFilterEntry(anotherFilterKey, entryKey)
+
+      return searchParams
     })
   }
 
-  const pageOffsetIndex = getCurrentPage(params) - 1
-  const filterBy = getFilter<T>(params, 'filterBy')
-  const excludeBy = getFilter<T>(params, 'excludeBy')
-  const rangeBy = getFilter<T>(params, 'rangeBy')
+  const pageOffsetIndex = getCurrentPage(searchParams) - 1
+  const filterBy = getParam('filterBy')
+  const excludeBy = getParam('excludeBy')
+  const rangeBy = getParam('rangeBy')
 
   return {
     pagination: {
@@ -114,9 +128,9 @@ function useFilter<T>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookRetu
         offset: pageOffsetIndex * pageSize
       }
     },
-    searchParams: { filterBy, excludeBy, rangeBy },
-    filterParams: { ...filterBy, ...excludeBy },
-    setPagination, setFilterParam, removeFilterParam, toggleFilterType
+    searchFilter: { filterBy, excludeBy, rangeBy },
+    filterEntries: { ...filterBy, ...excludeBy },
+    setPagination, setFilterEntry, removeFilterEntry, toggleFilterType
   }
 }
 

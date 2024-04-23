@@ -14,10 +14,8 @@ import { TransactionSearchParams } from "@/_root/transactions/filter/types"
 
 const BasicFilter = () => {
   const {
-    filterParams,
-    setFilterParam,
-    removeFilterParam,
-    toggleFilterType
+    filterEntries,
+    setFilterEntry, removeFilterEntry, toggleFilterType
   } = useFilter<TransactionSearchParams>()
 
   return (
@@ -31,14 +29,14 @@ const BasicFilter = () => {
       <FilterInput
         label={<>Filter by <span className="text-accent overline">Budgets</span></>}
         labelProps={{ htmlFor: 'budgetId' }}
-        onTypeChange={(filterType) => toggleFilterType('budgetId', filterType)}
-        onReset={(filterType) => removeFilterParam('budgetId', filterType)}
+        onTypeChange={(filterKey) => toggleFilterType(filterKey, 'budgetId')}
+        onReset={(filterKey) => removeFilterEntry(filterKey, 'budgetId')}
       >
-        {(filterType) => (
+        {(filterKey) => (
           <BudgetSelect id="budgetId"
-            value={filterParams.budgetId as string}
-            setValue={(id) => setFilterParam({ budgetId: id }, filterType)}
-            key={filterParams.budgetId as string}
+            value={filterEntries.budgetId as string}
+            setValue={(id) => setFilterEntry(filterKey, { budgetId: id })}
+            key={filterEntries.budgetId as string}
           />
         )}
       </FilterInput>
@@ -47,31 +45,31 @@ const BasicFilter = () => {
         label={<>Filter by <span className="text-accent overline">Types</span></>}
         labelProps={{ htmlFor: 'type' }}
         triggerProps={{ id: 'type' }}
-        value={filterParams.type as string}
-        setValue={(type, filterType) => setFilterParam({ type }, filterType)}
+        value={filterEntries.type as string}
+        setValue={(type, filterKey) => setFilterEntry(filterKey, { type })}
         options={[
           { label: 'Default', value: 'default' as Transaction['type'] },
           { label: 'Borrow', value: 'borrow' as Transaction['type'] },
           { label: 'Transfer', value: 'transfer' as Transaction['type'] },
         ]}
-        onTypeChange={(filterType) => toggleFilterType('type', filterType)}
-        onReset={(filterType) => removeFilterParam('type', filterType)}
-        key={filterParams.type as string}
+        onTypeChange={(filterKey) => toggleFilterType(filterKey, 'type')}
+        onReset={(filterKey) => removeFilterEntry(filterKey, 'type')}
+        key={filterEntries.type as string}
       />
 
       <FilterInput
         label={<>Filter by <span className="text-accent overline">Status</span></>}
         labelProps={{ htmlFor: 'status' }}
         triggerProps={{ id: 'status' }}
-        value={filterParams.processed as string}
-        setValue={(processed, filterType) => setFilterParam({ processed }, filterType)}
+        value={filterEntries.processed as string}
+        setValue={(processed, filterKey) => setFilterEntry(filterKey, { processed })}
         options={[
           { label: 'Processed', value: 'true' as TransactionSearchParams['processed'] },
           { label: 'Not processed', value: 'false' as TransactionSearchParams['processed'] },
         ]}
-        onTypeChange={(filterType) => toggleFilterType('processed', filterType)}
-        onReset={(filterType) => removeFilterParam('processed', filterType)}
-        key={filterParams.processed as string}
+        onTypeChange={(filterKey) => toggleFilterType(filterKey, 'processed')}
+        onReset={(filterKey) => removeFilterEntry(filterKey, 'processed')}
+        key={filterEntries.processed as string}
       />
     </div>
   )

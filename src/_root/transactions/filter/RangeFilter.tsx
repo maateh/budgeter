@@ -29,19 +29,19 @@ const RangeFilter = () => {
     to: date
   })
 
-  const { setFilterParam, removeFilterParam } = useFilter<TransactionSearchParams>()
+  const { setFilterEntry, removeFilterEntry } = useFilter<TransactionSearchParams>()
 
   const handleSearch = () => {
     /** Set date range params */
-    setFilterParam({
+    setFilterEntry('rangeBy', {
       dateFrom: dateRange?.from?.getTime().toString(),
       dateTo: dateRange?.to?.getTime().toString()
-    }, 'rangeBy')
+    })
   }
 
   const handleClearSearch = () => {
-    removeFilterParam('dateFrom', 'rangeBy')
-    removeFilterParam('dateTo', 'rangeBy')
+    removeFilterEntry('rangeBy', 'dateFrom')
+    removeFilterEntry('rangeBy', 'dateTo')
   }
 
   return (
@@ -54,7 +54,6 @@ const RangeFilter = () => {
 
       {/* TODO: add payment filter (amount of the payment more or less than xy) */}
 
-      {/* TODO: handle filtering by date & ranges */}
       <FilterInput
         label={<>Filter by <span className="text-red-600 dark:text-red-500 overline">Last Updated</span></>}
       >

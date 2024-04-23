@@ -28,14 +28,14 @@ const TransactionsTable = () => {
 
   const { sortBy } = useSorting()
   const {
-    filterParams, searchParams, pagination,
-    setPagination, setFilterParam, removeFilterParam, toggleFilterType
+    pagination, filterEntries, searchFilter,
+    setPagination, setFilterEntry, removeFilterEntry, toggleFilterType
   } = useFilter<TransactionSearchParams>({ pageSize: 10 })
 
   const { data: currentPage, isFetching } = useTransactionsControlledPagination({
     params: pagination.params,
     filter: {
-      ...convertSearchToFilter(searchParams),
+      ...convertSearchToFilter(searchFilter),
       partialMatch: true
     },
     sortBy: sortBy ? convertSearchToSortBy(sortBy) : { updatedAt: -1 }
@@ -47,17 +47,17 @@ const TransactionsTable = () => {
         <FilterInput className="flex-1 max-w-md"
           label={<>Search by <span className="text-accent overline">Name</span></>}
           labelProps={{ htmlFor: 'name' }}
-          onTypeChange={(filterType) => toggleFilterType('name', filterType)}
-          onReset={(filterType) => removeFilterParam('name', filterType)}
+          onTypeChange={(filterKey) => toggleFilterType(filterKey, 'name')}
+          onReset={(filterKey) => removeFilterEntry(filterKey, 'name')}
         >
-          {(filterType) => (
+          {(filterKey) => (
             <div className="relative flex-1 flex items-center">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 transform" size={18} />
               <Input id="name" className="min-w-48 h-full pl-10 rounded-lg"
                 type="text"
                 placeholder="Search transactions..."
-                value={filterParams.name as string || ''}
-                onChange={(event) => setFilterParam({ name: event.target.value }, filterType)}
+                value={filterEntries.name as string || ''}
+                onChange={(event) => setFilterEntry(filterKey, { name: event.target.value })}
               />
             </div>
           )}
