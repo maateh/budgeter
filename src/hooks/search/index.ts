@@ -3,6 +3,9 @@ import { useSearchParams } from "react-router-dom"
 // types
 import { SearchReturn } from "@/hooks/search/types"
 
+// constants
+import { ENTRY_SEPARATOR, PARAM_SPLITTER } from "@/hooks/search/constants"
+
 function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<ParamKeys, T> {
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -10,9 +13,9 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
     const searchParam = searchParams.get(key)
     if (!searchParam) return {} as T
   
-    const param: T = searchParam.split(',')
+    const param: T = searchParam.split(PARAM_SPLITTER)
       .reduce((param, record) => {
-        const [key, value] = record.split(':')
+        const [key, value] = record.split(ENTRY_SEPARATOR)
         return { ...param, [key]: value }
       }, {} as T)
   
@@ -24,10 +27,10 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
       .reduce((searchParam, [key, value]) => {
         if (!value) return searchParam
 
-        const searchParamEntry = `${key}:${value}`
+        const searchParamEntry = `${key}${ENTRY_SEPARATOR}${value}`
         return searchParam.concat(searchParamEntry)
       }, [] as string[])
-      .join(',')
+      .join(PARAM_SPLITTER)
   }
 
   const setParam = (paramKey: ParamKeys, entry: Partial<T>) => {
@@ -67,7 +70,6 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
 
   return {
     params: [], // TODO: get every params
-    searchParams,
     getParam, convertToSearchParam,
     setParamEntry, removeParamEntry, setParam, clearParam
   }
