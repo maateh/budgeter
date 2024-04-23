@@ -1,33 +1,33 @@
 // types
 import { Filter, FilterOptions, RangeFilter, Sort, Transaction } from "@/services/api/types"
 import { TransactionSearchParams } from "@/_root/transactions/filter/types"
-import { FilterSearchParams } from "@/hooks/filter/types"
+import { FilterSearchParams, SearchFilter } from "@/hooks/filter/types"
 import { SearchSort } from "@/hooks/sorting/types"
 
-function convertSearchToFilter(searchParams?: FilterSearchParams<TransactionSearchParams>): FilterOptions<Transaction> | undefined {
-  if (!searchParams) return undefined
+function convertSearchToFilter(searchFilter?: FilterSearchParams<TransactionSearchParams>): FilterOptions<Transaction> | undefined {
+  if (!searchFilter) return undefined
 
-  const convertFilter = (searchFilter?: Filter<TransactionSearchParams>): Filter<Transaction> | undefined => {
-    if (!searchFilter) return undefined
+  const convertFilter = (filterEntries?: SearchFilter<TransactionSearchParams>): Filter<Transaction> | undefined => {
+    if (!filterEntries) return undefined
 
     return {
-      ...searchFilter,
+      ...filterEntries,
       processed:
-        searchFilter.processed === 'true' ? true :
-        searchFilter.processed === 'false' ? false : undefined
-    }
+        filterEntries.processed === 'true' ? true :
+        filterEntries.processed === 'false' ? false : undefined
+    } as Filter<Transaction>
   }
 
-  const convertRange = (searchFilter?: Filter<TransactionSearchParams>): RangeFilter | undefined => {
-    if (!searchFilter) return undefined
+  const convertRange = (filterEntries?: SearchFilter<TransactionSearchParams>): RangeFilter | undefined => {
+    if (!filterEntries) return undefined
 
     return {
       updatedAt: {
-        min: searchFilter.dateFrom
-          ? new Date(parseInt(searchFilter.dateFrom as string)).getTime()
+        min: filterEntries.dateFrom
+          ? new Date(parseInt(filterEntries.dateFrom as string)).getTime()
           : undefined,
-        max: searchFilter.dateTo
-          ? new Date(parseInt(searchFilter.dateTo as string)).getTime()
+        max: filterEntries.dateTo
+          ? new Date(parseInt(filterEntries.dateTo as string)).getTime()
           : undefined,
       },
       // TODO: add input for payments
@@ -39,9 +39,9 @@ function convertSearchToFilter(searchParams?: FilterSearchParams<TransactionSear
   }
 
   return {
-    filterBy: convertFilter(searchParams.filterBy),
-    excludeBy: convertFilter(searchParams.excludeBy),
-    rangeBy: convertRange(searchParams.rangeBy)
+    filterBy: convertFilter(searchFilter.filterBy),
+    excludeBy: convertFilter(searchFilter.excludeBy),
+    rangeBy: convertRange(searchFilter.rangeBy)
   }
 }
 

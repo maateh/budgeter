@@ -1,7 +1,6 @@
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
-import { FilterKeys, FilterOptions, PaginationParams } from "@/services/api/types"
+import { FilterKeys, PaginationParams } from "@/services/api/types"
 
-export type FilterRecord<T> = Partial<Record<keyof T, string>>
 export type SearchFilter<T> = {
   [K in keyof T]?: string
 }
@@ -14,7 +13,7 @@ export type FilterSearchParams<T> = {
   [K in FilterKeys]: SearchFilter<T>
 }
 
-export type FilterHookReturn<T> = FilterOptions<T> & {
+export type FilterHookReturn<T> = {
   pagination: {
     pageIndex: number
     pageSize: number

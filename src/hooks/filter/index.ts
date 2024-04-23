@@ -5,7 +5,7 @@ import { useSearch } from "@/hooks"
 
 // types
 import { OnChangeFn, PaginationState } from "@tanstack/react-table"
-import { FilterHookOptions, FilterHookReturn, FilterRecord, SearchFilter } from "@/hooks/filter/types"
+import { FilterHookOptions, FilterHookReturn, SearchFilter } from "@/hooks/filter/types"
 import { FilterKeys } from "@/services/api/types"
 
 // utils
@@ -23,7 +23,7 @@ import { getCurrentPage } from "@/hooks/filter/utils"
 function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}): FilterHookReturn<T> {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const { getParam, convertToSearchParam } = useSearch<FilterKeys | 'page', FilterRecord<T>>()
+  const { getParam, convertToSearchParam } = useSearch<FilterKeys | 'page', SearchFilter<T>>()
   
   /**
    * Sets the pagination parameters in the URL search params based on the provided updater function.
@@ -103,7 +103,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
       const anotherFilter = getParam(anotherFilterKey)
       
       const value = anotherFilter[entryKey]
-      const entry = { [entryKey]: value } as unknown as FilterRecord<T>
+      const entry = { [entryKey]: value } as unknown as SearchFilter<T>
 
       if (!value) return searchParams
 
