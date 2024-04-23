@@ -76,10 +76,10 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
    * @param {FilterKeys} filterKey - The key of the filter parameter to remove ('filterBy', 'excludeBy' or 'rangeBy').
    * @param {keyof T} entryKey - The key of the filter entry to remove.
    */
-  const removeFilterEntry = (filterKey: FilterKeys, entryKey: keyof T) => {
+  const removeFilterEntries = (filterKey: FilterKeys, entryKeys: (keyof T)[]) => {
     setSearchParams((searchParams) => {
       const filter = getParam(filterKey)
-      delete filter[entryKey]
+      entryKeys.forEach((entryKey) => delete filter[entryKey])
 
       const param = convertToSearchParam(filter)
       searchParams.set(filterKey, param)
@@ -108,7 +108,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
       if (!value) return searchParams
 
       setFilterEntry(filterKey, entry)
-      removeFilterEntry(anotherFilterKey, entryKey)
+      removeFilterEntries(anotherFilterKey, [entryKey])
 
       return searchParams
     })
@@ -130,7 +130,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
     },
     searchFilter: { filterBy, excludeBy, rangeBy },
     filterEntries: { ...filterBy, ...excludeBy },
-    setPagination, setFilterEntry, removeFilterEntry, toggleFilterType
+    setPagination, setFilterEntry, removeFilterEntries, toggleFilterType
   }
 }
 

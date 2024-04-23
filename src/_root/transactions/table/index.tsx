@@ -29,7 +29,7 @@ const TransactionsTable = () => {
   const { sortBy } = useSorting()
   const {
     pagination, filterEntries, searchFilter,
-    setPagination, setFilterEntry, removeFilterEntry, toggleFilterType
+    setPagination, setFilterEntry, removeFilterEntries, toggleFilterType
   } = useFilter<TransactionSearchParams>({ pageSize: 10 })
 
   const { data: currentPage, isFetching } = useTransactionsControlledPagination({
@@ -48,7 +48,7 @@ const TransactionsTable = () => {
           label={<>Search by <span className="text-accent overline">Name</span></>}
           labelProps={{ htmlFor: 'name' }}
           onTypeChange={(filterKey) => toggleFilterType(filterKey, 'name')}
-          onReset={(filterKey) => removeFilterEntry(filterKey, 'name')}
+          onReset={(filterKey) => removeFilterEntries(filterKey, ['name'])}
         >
           {(filterKey) => (
             <div className="relative flex-1 flex items-center">

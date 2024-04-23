@@ -29,7 +29,7 @@ const RangeFilter = () => {
     to: date
   })
 
-  const { setFilterEntry, removeFilterEntry } = useFilter<TransactionSearchParams>()
+  const { setFilterEntry, removeFilterEntries } = useFilter<TransactionSearchParams>()
 
   const handleSearch = () => {
     /** Set date range params */
@@ -40,8 +40,7 @@ const RangeFilter = () => {
   }
 
   const handleClearSearch = () => {
-    removeFilterEntry('rangeBy', 'dateFrom')
-    removeFilterEntry('rangeBy', 'dateTo')
+    removeFilterEntries('rangeBy', ['dateFrom', 'dateTo'])
   }
 
   return (

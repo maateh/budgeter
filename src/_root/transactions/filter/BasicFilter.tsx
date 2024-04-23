@@ -15,7 +15,7 @@ import { TransactionSearchParams } from "@/_root/transactions/filter/types"
 const BasicFilter = () => {
   const {
     filterEntries,
-    setFilterEntry, removeFilterEntry, toggleFilterType
+    setFilterEntry, removeFilterEntries, toggleFilterType
   } = useFilter<TransactionSearchParams>()
 
   return (
@@ -30,7 +30,7 @@ const BasicFilter = () => {
         label={<>Filter by <span className="text-accent overline">Budgets</span></>}
         labelProps={{ htmlFor: 'budgetId' }}
         onTypeChange={(filterKey) => toggleFilterType(filterKey, 'budgetId')}
-        onReset={(filterKey) => removeFilterEntry(filterKey, 'budgetId')}
+        onReset={(filterKey) => removeFilterEntries(filterKey, ['budgetId'])}
       >
         {(filterKey) => (
           <BudgetSelect id="budgetId"
@@ -53,7 +53,7 @@ const BasicFilter = () => {
           { label: 'Transfer', value: 'transfer' as Transaction['type'] },
         ]}
         onTypeChange={(filterKey) => toggleFilterType(filterKey, 'type')}
-        onReset={(filterKey) => removeFilterEntry(filterKey, 'type')}
+        onReset={(filterKey) => removeFilterEntries(filterKey, ['type'])}
         key={filterEntries.type as string}
       />
 
@@ -68,7 +68,7 @@ const BasicFilter = () => {
           { label: 'Not processed', value: 'false' as TransactionSearchParams['processed'] },
         ]}
         onTypeChange={(filterKey) => toggleFilterType(filterKey, 'processed')}
-        onReset={(filterKey) => removeFilterEntry(filterKey, 'processed')}
+        onReset={(filterKey) => removeFilterEntries(filterKey, ['processed'])}
         key={filterEntries.processed as string}
       />
     </div>

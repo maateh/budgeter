@@ -20,14 +20,10 @@ export type FilterHookReturn<T> = FilterOptions<T> & {
     pageSize: number
     params: PaginationParams
   }
-  // searchParams: FilterSearchParams<T>
-  // filterParams: Filter<T>
   searchFilter: FilterSearchParams<T>
   filterEntries: SearchFilter<T>
   setPagination: OnChangeFn<PaginationState>
-  // setFilterParam: (item: FilterRecord<T>, type: FilterKeys) => void
   setFilterEntry: (filterKey: FilterKeys, entry: SearchFilter<T>) => void
-  // removeFilterParam: (key: keyof T, type: FilterKeys) => void
-  removeFilterEntry: (filterKey: FilterKeys, entryKey: keyof T) => void
+  removeFilterEntries: (filterKey: FilterKeys, entryKeys: (keyof T)[]) => void
   toggleFilterType: (filterKey: FilterKeys, entryKey: keyof T) => void
 }
