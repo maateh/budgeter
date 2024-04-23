@@ -1,9 +1,10 @@
 // types
-import { Filter, FilterOptions, RangeFilter, Transaction } from "@/services/api/types"
+import { Filter, FilterOptions, RangeFilter, Sort, Transaction } from "@/services/api/types"
 import { TransactionSearchParams } from "@/_root/transactions/filter/types"
 import { FilterSearchParams } from "@/hooks/filter/types"
+import { SearchSort } from "@/hooks/sorting/types"
 
-export function convertTransactionSearchToFilter(searchParams?: FilterSearchParams<TransactionSearchParams>): FilterOptions<Transaction> | undefined {
+function convertSearchToFilter(searchParams?: FilterSearchParams<TransactionSearchParams>): FilterOptions<Transaction> | undefined {
   if (!searchParams) return undefined
 
   const convertFilter = (searchFilter?: Filter<TransactionSearchParams>): Filter<Transaction> | undefined => {
@@ -43,3 +44,17 @@ export function convertTransactionSearchToFilter(searchParams?: FilterSearchPara
     rangeBy: convertRange(searchParams.rangeBy)
   }
 }
+
+function convertSearchToSortBy(param: SearchSort): Sort {
+  return Object.entries(param)
+    .reduce((sortBy, [keyRef, value]) => {
+      if (!value) return sortBy
+      
+      return {
+        ...sortBy,
+        [keyRef]: parseInt(value) as 1 | -1
+      }
+    }, {} as Sort)
+}
+
+export { convertSearchToFilter, convertSearchToSortBy }

@@ -18,7 +18,7 @@ import { useDialog, useFilter, useSorting } from "@/hooks"
 import { TransactionSearchParams } from "@/_root/transactions/filter/types"
 
 // utils
-import { convertTransactionSearchToFilter } from "@/_root/transactions/filter/utils"
+import { convertSearchToSortBy, convertSearchToFilter } from "@/_root/transactions/utils"
 
 // table columns
 import { columns } from "./columns"
@@ -26,20 +26,19 @@ import { columns } from "./columns"
 const TransactionsTable = () => {
   const { openDialog } = useDialog()
 
+  const { sortBy } = useSorting()
   const {
     filterParams, searchParams, pagination,
     setPagination, setFilterParam, removeFilterParam, toggleFilterType
   } = useFilter<TransactionSearchParams>({ pageSize: 10 })
 
-  const { sortBy } = useSorting({ updatedAt: -1 })
-
   const { data: currentPage, isFetching } = useTransactionsControlledPagination({
     params: pagination.params,
     filter: {
-      ...convertTransactionSearchToFilter(searchParams),
+      ...convertSearchToFilter(searchParams),
       partialMatch: true
     },
-    sortBy: { ...sortBy, updatedAt: -1 }
+    sortBy: sortBy ? convertSearchToSortBy(sortBy) : { updatedAt: -1 }
   })
 
   return (

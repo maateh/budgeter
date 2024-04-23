@@ -1,32 +1,27 @@
-import { useSearchParams } from "react-router-dom"
+// hooks
+import { useSearch } from "@/hooks"
 
 // types
-import { Sort } from "@/services/api/types"
-import { SortHookReturn } from "@/hooks/sorting/types"
+import { SearchSort, SortHookReturn } from "@/hooks/sorting/types"
 
 // utils
-import { convertToParam, getSort, handleOrderToggle } from "@/hooks/sorting/utils"
+import { handleOrderToggle } from "@/hooks/sorting/utils"
 
-function useSorting(defaultSort: Sort = {}): SortHookReturn {
-  const [params, setParams] = useSearchParams()
+function useSorting(defaultSort?: SearchSort): SortHookReturn {
+  const { getParam, setParam } = useSearch<'sortBy', SearchSort>()
 
-  const toggleSort = (key: string, fixedOrder?: 1 | -1) => {
-    setParams((params) => {
-      const sortBy = getSort(params)
-      const order = sortBy[key]
-
-      const record = handleOrderToggle(key, fixedOrder || order, !!fixedOrder)      
-      const param = convertToParam(record || defaultSort)
-
-      params.set('sortBy', param)
-      
-      if (!param) params.delete('sortBy')
-      return params
-    })
+  const toggleSort = (entryKey: string, fixedOrder?: '1' | '-1') => {
+    const sortBy = getParam('sortBy')
+    const order = sortBy[entryKey]
+    
+    const paramEntry = handleOrderToggle(entryKey, fixedOrder || order, !!fixedOrder)
+    setParam('sortBy', paramEntry || defaultSort)
   }
 
+  const sortBy = getParam('sortBy')
+
   return {
-    sortBy: getSort(params),
+    sortBy: Object.keys(sortBy).length ? sortBy : undefined,
     toggleSort
   }
 }

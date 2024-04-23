@@ -1,6 +1,8 @@
-import { Sort } from "@/services/api/types"
+export type SearchSort = {
+  [keyRef: string]: '1' | '-1' | undefined
+}
 
 export type SortHookReturn = {
-  sortBy: Sort,
-  toggleSort: (key: string, fixedOrder?: -1 | 1) => void
+  sortBy?: SearchSort,
+  toggleSort: (key: string, fixedOrder?: '1' | '-1') => void
 }
