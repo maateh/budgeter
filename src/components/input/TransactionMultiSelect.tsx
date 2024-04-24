@@ -14,7 +14,8 @@ type TransactionMultiSelectProps = {
 
 const TransactionMultiSelect = ({ selected, setSelected, filterBy, excludeBy }: TransactionMultiSelectProps) => {
   const { data: transactions, isLoading } = useTransactions({
-    filter: { filterBy, excludeBy }
+    filter: { filterBy, excludeBy },
+    sortBy: { updatedAt: -1 }
   })
 
   return (

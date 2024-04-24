@@ -26,7 +26,7 @@ const TransactionList = ({ params, filter, maxItemLimit, children }: Transaction
 
   const {
     data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage
-  } = useTransactionsPagination({ filter, params })
+  } = useTransactionsPagination({ filter, params, sortBy: { updatedAt: -1 } })
 
   const { isLimitExceeded, manualPagination } = usePagination({
     data, fetchNextPage, maxItemLimit,

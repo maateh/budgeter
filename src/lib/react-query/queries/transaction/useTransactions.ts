@@ -6,15 +6,15 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { QueryOptions, Transaction } from "@/services/api/types"
 
-const useTransactions = ({ params, filter }: QueryOptions<Transaction> = {}) => {
+const useTransactions = ({ params, filter, sortBy }: QueryOptions<Transaction> = {}) => {
   const { api } = useAPI()
   
   const { filterBy, excludeBy } = filter || {}
 
   return useQuery({
-    queryKey: ['transactions', filterBy, excludeBy],
+    queryKey: ['transactions', filterBy, excludeBy, sortBy],
     queryFn: async () => {
-      const { data } = await api.transaction.get({ params, filter })
+      const { data } = await api.transaction.get({ params, filter, sortBy })
       return data
     }
   })

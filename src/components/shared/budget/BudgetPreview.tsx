@@ -38,7 +38,8 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
     params: { offset: 0, limit: 7 },
     filter: {
       filterBy: { budgetId: budget.id }
-    }
+    },
+    sortBy: { createdAt: -1 }
   })
   
   const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

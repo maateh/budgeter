@@ -31,7 +31,8 @@ const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
   const { data: subpayments } = usePayments({
     filter: {
       filterBy: { transactionId: transaction.id, isSubpayment: true }
-    }
+    },
+    sortBy: { createdAt: -1 }
   })
 
   return (
