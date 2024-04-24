@@ -36,6 +36,29 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
   }
 
   /**
+   * Retrieves all parameters stored in the search.
+   * 
+   * @returns {T[]} An array containing all parameters stored in the search.
+   */
+  const getParams = (): T[] => {
+    const params: T[] = []
+
+    searchParams.forEach((_, key) => {
+      const param = getParam(key as ParamKeys)
+
+      /**
+       * Filters out params that have no value (assuming that
+       * param isn't associated with the useSearch hook),
+       * then adds the rest to the params array.
+       */
+      if (Object.values(param).some((value) => !value)) return
+      params.push(param)
+    })
+
+    return params
+  }
+
+  /**
    * Converts a partial search parameter object to a URL search parameter string.
    * 
    * @param {Partial<T>} param - The partial search parameter object.
@@ -111,7 +134,7 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
   }
 
   return {
-    params: [], // TODO: get every params
+    params: getParams(),
     getParam, convertToSearchParam,
     setParamEntry, removeParamEntry, setParam, clearParam
   }

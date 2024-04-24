@@ -74,7 +74,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
    * params based on the provided key and filter type.
    * 
    * @param {FilterKeys} filterKey - The key of the filter parameter to remove ('filterBy', 'excludeBy' or 'rangeBy').
-   * @param {keyof T} entryKey - The key of the filter entry to remove.
+   * @param {keyof T} entryKeys - The key of the filter entry to remove.
    */
   const removeFilterEntries = (filterKey: FilterKeys, entryKeys: (keyof T)[]) => {
     setSearchParams((searchParams) => {
