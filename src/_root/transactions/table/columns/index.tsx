@@ -2,6 +2,7 @@
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
+import SortingButton from "@/components/ui/custom/SortingButton"
 
 // custom cells
 import Actions from "./Actions"
@@ -12,7 +13,6 @@ import { Budget, Transaction } from "@/services/api/types"
 
 // utils
 import { format } from "date-fns"
-import SortingHeader from "./SortingHeader"
 
 export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
@@ -30,7 +30,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
     accessorKey: "name",
     enableHiding: false,
-    header: () => <SortingHeader sortingKey="name">Name</SortingHeader>,
+    header: () => <SortingButton sortingKey="name">Name</SortingButton>,
     cell: ({ row }) => (
       <span className="capitalize font-semibold small-caps">
         {row.original.name}
@@ -39,7 +39,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "paymentId",
-    header: () => <SortingHeader sortingKey="payment.amount">Payment</SortingHeader>,
+    header: () => <SortingButton sortingKey="payment.amount">Payment</SortingButton>,
     cell: ({ row }) => (
       <PaymentBadge
         size="sm"
@@ -51,7 +51,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "type",
-    header: () => <SortingHeader sortingKey="type">Type</SortingHeader>,
+    header: () => <SortingButton sortingKey="type">Type</SortingButton>,
     cell: ({ row }) => (
       <span className="capitalize text-base font-normal all-small-caps">
         {row.original.type}
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "budgetId",
-    header: () => <SortingHeader sortingKey="budgetId">Budget</SortingHeader>,
+    header: () => <SortingButton sortingKey="budgetId">Budget</SortingButton>,
     cell: ({ row }) => (
       <BudgetNameBadge
         size="sm"
@@ -70,7 +70,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: () => <SortingHeader sortingKey="createdAt">Created</SortingHeader>,
+    header: () => <SortingButton sortingKey="createdAt">Created</SortingButton>,
     cell: ({ row }) => (
       <span className="text-xs font-normal">
         {format(row.original.createdAt, 'yyyy. MM. dd.')}
@@ -79,7 +79,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: () => <SortingHeader sortingKey="updatedAt">Last Updated</SortingHeader>,
+    header: () => <SortingButton sortingKey="updatedAt">Last Updated</SortingButton>,
     cell: ({ row }) => (
       <span className="text-xs font-normal">
         {format(row.original.updatedAt, 'yyyy. MM. dd.')}
