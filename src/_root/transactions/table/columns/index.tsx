@@ -16,9 +16,10 @@ import { format } from "date-fns"
 
 export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
+    id: "Status",
     accessorKey: "processed",
-    header: "Status",
     enableHiding: false,
+    header: "Status",
     cell: ({ row }) => (
       <TransactionStatusToggle
         iconProps={{ size: 20 }}
@@ -28,9 +29,12 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Name",
     accessorKey: "name",
     enableHiding: false,
-    header: () => <SortingButton sortingKey="name">Name</SortingButton>,
+    header: ({ column }) => (
+      <SortingButton sortingKey="name">{column.id}</SortingButton>
+    ),
     cell: ({ row }) => (
       <span className="capitalize font-semibold small-caps">
         {row.original.name}
@@ -38,8 +42,11 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Payment",
     accessorKey: "paymentId",
-    header: () => <SortingButton sortingKey="payment.amount">Payment</SortingButton>,
+    header: ({ column }) => (
+      <SortingButton sortingKey="payment.amount">{column.id}</SortingButton>
+    ),
     cell: ({ row }) => (
       <PaymentBadge
         size="sm"
@@ -50,6 +57,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Type",
     accessorKey: "type",
     header: () => <SortingButton sortingKey="type">Type</SortingButton>,
     cell: ({ row }) => (
@@ -59,8 +67,11 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Budget",
     accessorKey: "budgetId",
-    header: () => <SortingButton sortingKey="budgetId">Budget</SortingButton>,
+    header: ({ column }) => (
+      <SortingButton sortingKey="budgetId">{column.id}</SortingButton>
+    ),
     cell: ({ row }) => (
       <BudgetNameBadge
         size="sm"
@@ -69,8 +80,9 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Created",
     accessorKey: "createdAt",
-    header: () => <SortingButton sortingKey="createdAt">Created</SortingButton>,
+    header: ({ column }) => <SortingButton sortingKey="createdAt">{column.id}</SortingButton>,
     cell: ({ row }) => (
       <span className="text-xs font-normal">
         {format(row.original.createdAt, 'yyyy. MM. dd.')}
@@ -78,8 +90,11 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Last Updated",
     accessorKey: "updatedAt",
-    header: () => <SortingButton sortingKey="updatedAt">Last Updated</SortingButton>,
+    header: ({ column }) => (
+      <SortingButton sortingKey="updatedAt">{column.id}</SortingButton>
+    ),
     cell: ({ row }) => (
       <span className="text-xs font-normal">
         {format(row.original.updatedAt, 'yyyy. MM. dd.')}
@@ -87,7 +102,7 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
-    id: "actions",
+    id: "Actions",
     enableSorting: false,
     enableHiding: false,
     cell: ({ row }) => <Actions transaction={row.original} />
