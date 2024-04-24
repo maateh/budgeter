@@ -1,15 +1,8 @@
 import { formatDistance } from "date-fns"
 
-// icons
-import { BadgeInfo } from "lucide-react"
-
-// shadcn
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-
 // components
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 import PaymentBadge, { isNeutral } from "@/components/shared/payment/custom/PaymentBadge"
-import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
 // types
@@ -47,35 +40,15 @@ const TransactionPreview = ({ transaction, budget, onClick }: TransactionPreview
       </div>
 
       <div className="flex gap-x-1.5 justify-between items-center">
-        <Popover>
-          <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
-            <PaymentBadge
-              payment={transaction.payment}
-              processed={transaction.processed}
-              currency={budget.balance.currency}
-              isNeutral={isNeutral(transaction.type, transaction.processed)}
-            />
-          </PopoverTrigger>
-          <PopoverContent className="max-w-md"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {transaction.type === 'borrow' ? (
-              <PaymentProgress
-                transaction={transaction}
-                budget={budget}
-              />
-            ) : (
-              <div className="icon-wrapper">
-                <BadgeInfo size={18} />
-                <span className="text-sm">
-                  {transaction.processed
-                    ? 'Payment has already been processed.'
-                    : "Payment hasn't been processed yet."}
-                </span>
-              </div>
-            )}
-          </PopoverContent>
-        </Popover>
+        <PaymentBadge
+          payment={transaction.payment}
+          processed={transaction.processed}
+          currency={budget.balance.currency}
+          isNeutral={isNeutral(transaction.type, transaction.processed)}
+          transaction={transaction}
+          budget={budget}
+          showProgress
+        />
 
         <BudgetMarker
           budget={budget}

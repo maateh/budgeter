@@ -2,23 +2,27 @@
 import { forwardRef } from "react"
 
 // icons
-import { Minus, Plus, X } from "lucide-react"
+import { BadgeInfo, Minus, Plus, X } from "lucide-react"
 
 // shadcn
 import { Badge, BadgeProps } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
+// components
+import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
 import { useRemoveSubpayment } from "@/lib/react-query/mutations"
 
 // types
-import { Payment, Transaction } from "@/services/api/types"
+import { Budget, Payment, Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 import { cn } from "@/lib/utils"
 
-export function isNeutral(type: Transaction['type'], processed: boolean): boolean {
+function isNeutral(type: Transaction['type'], processed: boolean): boolean {
   return ((type === 'default' && !processed) || (type === 'borrow' && processed))
 }
 
@@ -27,8 +31,7 @@ function getPaymentAmount(payment: Payment, processed: boolean): number {
   const difference = amount - processedAmount
   
   return processed ? amount
-    : difference > 0 ? difference
-    : amount
+    : difference > 0 ? difference : amount
 }
 
 type PaymentBadgeProps = {
@@ -38,10 +41,20 @@ type PaymentBadgeProps = {
   isNeutral?: boolean
   iconSize?: number
   showRemoveButton?: boolean
-} & BadgeProps
+} & BadgeProps & ({
+  showProgress: boolean
+  transaction: Transaction
+  budget: Budget
+} | {
+  showProgress?: never
+  transaction?: never
+  budget?: never
+})
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
-  payment, processed, currency, isNeutral, iconSize = 16, showRemoveButton, size = 'sm', className, ...props
+  payment, processed, currency, isNeutral, iconSize = 16, showRemoveButton,
+  showProgress, transaction, budget,
+  className, size = 'sm', ...props
 }, ref) => {
   const { mutateAsync: removeSubpayment, isPending } = useRemoveSubpayment(payment.transactionId)
 
@@ -58,7 +71,7 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
     }
   }
 
-  return (
+  const element: React.ReactNode = (
     <Badge className={cn("font-heading font-bold gap-x-1",
         isNeutral ? 'text-muted-foreground opacity-75'
           : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
@@ -92,6 +105,34 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       )}
     </Badge>
   )
+
+  return !showProgress ? element : (
+    <Popover>
+      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+        {element}
+      </PopoverTrigger>
+      <PopoverContent className="max-w-md"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {transaction.type === 'borrow' ? (
+          <PaymentProgress
+            transaction={transaction}
+            budget={budget}
+          />
+        ) : (
+          <div className="icon-wrapper">
+            <BadgeInfo size={18} />
+            <span className="text-sm">
+              {transaction.processed
+                ? 'Payment has already been processed.'
+                : "Payment hasn't been processed yet."}
+            </span>
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
+  )
 })
 
+export { isNeutral }
 export default PaymentBadge

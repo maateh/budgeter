@@ -48,11 +48,14 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
       <SortingButton sortingKey="payment.amount">{column.id}</SortingButton>
     ),
     cell: ({ row }) => (
-      <PaymentBadge
+      <PaymentBadge className="cursor-pointer"
         size="sm"
         payment={row.original.payment}
         currency={row.original.budget.balance.currency}
         processed={row.original.processed}
+        transaction={row.original}
+        budget={row.original.budget}
+        showProgress
       />
     )
   },
