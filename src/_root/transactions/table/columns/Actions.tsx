@@ -1,5 +1,5 @@
 // icons
-import { MoreHorizontal, Trash2 } from "lucide-react"
+import { BadgeInfo, MoreHorizontal, Trash2 } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
@@ -31,8 +31,16 @@ const Actions = ({ transaction }: ActionsProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="space-y-0.5" align="end">
         <DropdownMenuLabel className="text-base font-heading small-caps">
-        Actions
+          Actions
         </DropdownMenuLabel>
+
+        <DropdownMenuItem className="icon-wrapper hover:cursor-pointer"
+          onClick={() => openDialog(`/transactions/details/${transaction.id}`)}
+        >
+          <BadgeInfo size={14} strokeWidth={3} />
+          <span>Details</span>
+        </DropdownMenuItem>
+        
         <DropdownMenuItem className="text-destructive font-bold icon-wrapper hover:cursor-pointer focus:bg-destructive"
           onClick={() => openDialog(`/transactions/delete/${transaction.id}`)}
         >
