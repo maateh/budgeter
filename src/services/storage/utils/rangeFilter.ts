@@ -17,21 +17,17 @@ function rangeFilter<T>(documents: T[], ranges?: RangeFilter): T[] {
 
   return documents.filter((document) => {
     /** Iterate through each key-reference pair in the ranges object. */
-    for (const keyRef in ranges) {
-      const range = ranges[keyRef]
+    return Object.entries(ranges)
+      .reduce((inRange, [keyRef, range]) => {
+        /**
+         * Extract the entry value corresponding to the 
+         * key reference from the document.
+         */
+        const entryValue = getNestedValue<T>(document, keyRef)
 
-      /**
-       * Extract the entry value corresponding to the 
-       * key reference from the document.
-       */
-      const entryValue = getNestedValue<T>(document, keyRef)
-
-      /** Check if the extracted value falls within the specified range. */
-      return isInRange(entryValue, range)
-    }
-
-    /** If no ranges are provided, include the document defaultly. */
-    return true
+        /** Check if the extracted value falls within the specified range. */
+        return inRange && isInRange(entryValue, range)
+      }, true)
   })
 }
 
