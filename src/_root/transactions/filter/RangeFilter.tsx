@@ -58,11 +58,12 @@ const RangeFilter = () => {
       <div className="flex flex-wrap justify-between gap-x-4 gap-y-2.5">
         <FilterInput className="flex-1 min-w-40"
           label={<>Min. <span className="text-red-600 dark:text-red-500 overline">Payment</span></>}
+          labelProps={{ htmlFor: 'minPayment' }}
         >
           {() => (
-            <Input
+            <Input id="minPayment"
               type="number"
-              value={parseInt(paymentRange.paymentMin || '') || ''}
+              value={parseInt(paymentRange.paymentMin as string) || ''}
               onChange={(e) => setPaymentRange((prev) => ({ ...prev, paymentMin: e.target.value }))}
             />
           )}
@@ -70,12 +71,12 @@ const RangeFilter = () => {
 
         <FilterInput className="flex-1 min-w-40"
           label={<>Max. <span className="text-red-600 dark:text-red-500 overline">Payment</span></>}
-          labelProps={{ className: "ml-auto" }}
+          labelProps={{ className: 'ml-auto', htmlFor: 'maxPayment' }}
         >
           {() => (
-            <Input
+            <Input id="maxPayment"
               type="number"
-              value={parseInt(paymentRange.paymentMax || '') || ''}
+              value={parseInt(paymentRange.paymentMax as string) || ''}
               onChange={(e) => setPaymentRange((prev) => ({ ...prev, paymentMax: e.target.value }))}
             />
           )}
@@ -84,9 +85,10 @@ const RangeFilter = () => {
 
       <FilterInput
         label={<>Select <span className="text-red-600 dark:text-red-500 overline">Date Range</span></>}
+        labelProps={{ htmlFor: 'dateRange' }}
       >
         {() => (
-          <DateRangePicker
+          <DateRangePicker id="dateRange"
             dateRange={dateRange}
             onSelect={setDateRange}
           />
