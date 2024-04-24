@@ -10,31 +10,36 @@ function convertSearchToFilter(searchFilter?: FilterSearchParams<TransactionSear
   const convertFilter = (filterEntries?: SearchFilter<TransactionSearchParams>): Filter<Transaction> | undefined => {
     if (!filterEntries) return undefined
 
+    const { name, budgetId, type, processed } = filterEntries
+    
     return {
-      ...filterEntries,
-      processed:
-        filterEntries.processed === 'true' ? true :
-        filterEntries.processed === 'false' ? false : undefined
+      name, budgetId, type,
+      processed: processed === 'true'
+        ? true
+        : processed === 'false'
+          ? false
+          : undefined
     } as Filter<Transaction>
   }
 
   const convertRange = (filterEntries?: SearchFilter<TransactionSearchParams>): RangeFilter | undefined => {
     if (!filterEntries) return undefined
 
+    const { dateFrom, dateTo, paymentMin, paymentMax } = filterEntries
+    
     return {
       updatedAt: {
-        min: filterEntries.dateFrom
-          ? new Date(parseInt(filterEntries.dateFrom as string)).getTime()
+        min: dateFrom
+          ? new Date(parseInt(dateFrom as string)).getTime()
           : undefined,
-        max: filterEntries.dateTo
-          ? new Date(parseInt(filterEntries.dateTo as string)).getTime()
+        max: dateTo
+          ? new Date(parseInt(dateTo as string)).getTime()
           : undefined,
       },
-      // TODO: add input for payments
-      // ['payment.amount']: {
-      //   min: searchFilter.paymentFrom as number,
-      //   max: searchFilter.paymentTo as number
-      // }
+      ['payment.amount']: {
+        min: parseInt(paymentMin as string) || undefined,
+        max: parseInt(paymentMax as string) || undefined
+      }
     }
   }
 

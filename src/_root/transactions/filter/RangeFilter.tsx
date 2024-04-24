@@ -5,6 +5,7 @@ import { SearchX, TextSearch } from "lucide-react"
 
 // shadcn
 import { Button, ButtonTooltip } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 
 // components
@@ -16,31 +17,34 @@ import { useFilter } from "@/hooks"
 
 // types
 import { DateRange } from "react-day-picker"
-import { TransactionSearchParams } from "@/_root/transactions/filter/types"
-
-// utils
-import { addDays } from "date-fns"
-
-const date = new Date()
+import { SearchPaymentRange, TransactionSearchParams } from "@/_root/transactions/filter/types"
 
 const RangeFilter = () => {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: addDays(date, -date.getDate() + 1),
-    to: date
-  })
+  const [paymentRange, setPaymentRange] = useState<SearchPaymentRange>({})
+
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({ from: undefined })
 
   const { setFilterEntry, removeFilterEntries } = useFilter<TransactionSearchParams>()
 
   const handleSearch = () => {
-    /** Set date range params */
     setFilterEntry('rangeBy', {
+      paymentMin: paymentRange.paymentMin,
+      paymentMax: paymentRange.paymentMax,
       dateFrom: dateRange?.from?.getTime().toString(),
       dateTo: dateRange?.to?.getTime().toString()
     })
   }
 
   const handleClearSearch = () => {
-    removeFilterEntries('rangeBy', ['dateFrom', 'dateTo'])
+    setPaymentRange({})
+    setDateRange({ from: undefined })
+
+    removeFilterEntries('rangeBy', [
+      'dateFrom',
+      'dateTo',
+      'paymentMin',
+      'paymentMax'
+    ])
   }
 
   return (
@@ -51,10 +55,35 @@ const RangeFilter = () => {
 
       <Separator className="my-4 mx-auto w-11/12" />
 
-      {/* TODO: add payment filter (amount of the payment more or less than xy) */}
+      <div className="flex flex-wrap justify-between gap-x-4 gap-y-2.5">
+        <FilterInput className="flex-1 min-w-40"
+          label={<>Min. <span className="text-red-600 dark:text-red-500 overline">Payment</span></>}
+        >
+          {() => (
+            <Input
+              type="number"
+              value={parseInt(paymentRange.paymentMin || '') || ''}
+              onChange={(e) => setPaymentRange((prev) => ({ ...prev, paymentMin: e.target.value }))}
+            />
+          )}
+        </FilterInput>
+
+        <FilterInput className="flex-1 min-w-40"
+          label={<>Max. <span className="text-red-600 dark:text-red-500 overline">Payment</span></>}
+          labelProps={{ className: "ml-auto" }}
+        >
+          {() => (
+            <Input
+              type="number"
+              value={parseInt(paymentRange.paymentMax || '') || ''}
+              onChange={(e) => setPaymentRange((prev) => ({ ...prev, paymentMax: e.target.value }))}
+            />
+          )}
+        </FilterInput>
+      </div>
 
       <FilterInput
-        label={<>Filter by <span className="text-red-600 dark:text-red-500 overline">Last Updated</span></>}
+        label={<>Select <span className="text-red-600 dark:text-red-500 overline">Date Range</span></>}
       >
         {() => (
           <DateRangePicker
