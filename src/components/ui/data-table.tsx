@@ -178,7 +178,7 @@ function DataTablePagination<D>({ table, className, ...props }: DataTablePaginat
       <PaginationContent>
         <PaginationItem>
           <PaginationFirst
-            onClick={() => setPageIndex(0)}
+            onClick={() => setPageIndex(1)}
             disabled={!getCanPreviousPage()}
           />
         </PaginationItem>
@@ -197,7 +197,7 @@ function DataTablePagination<D>({ table, className, ...props }: DataTablePaginat
         </PaginationItem>
         <PaginationItem>
           <PaginationLast
-            onClick={() => setPageIndex(getPageCount() - 1)}
+            onClick={() => setPageIndex(getPageCount())}
             disabled={!getCanNextPage()}
           />
         </PaginationItem>
