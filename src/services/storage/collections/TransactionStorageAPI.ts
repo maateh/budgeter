@@ -111,7 +111,10 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     const transaction: Transaction = { ...doc, budgetId, payment, type, processed }
     if (type === 'borrow') {
-      await updateBalance(budgetId, payment, 'execute')
+      await updateBalance(budgetId, payment, {
+        action: 'execute',
+        ignoreTrackingDeltas: true
+      })
     }
 
     if (!processed) return transaction

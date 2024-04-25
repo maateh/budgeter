@@ -5,6 +5,11 @@ import { BudgetStorageAPI, TransactionStorageAPI } from "@/services/storage/coll
 import { Budget, Payment } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
 
+type BalanceUpdaterOptions = {
+  action: 'execute' | 'undo'
+  ignoreTrackingDeltas?: boolean
+}
+
 /**
  * Handles payment by updating the budget balance based on the given payment and action.
  * 
@@ -13,8 +18,9 @@ import { StorageCollection } from "@/services/storage/types"
  * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
  * @returns The updated balance after handling the payment action.
  */
-function handlePayment(balance: Budget['balance'], payment: Payment, action: 'execute' | 'undo'): Budget['balance'] {
+function handlePayment(balance: Budget['balance'], payment: Payment, options: BalanceUpdaterOptions): Budget['balance'] {
   const { current, income, loss } = balance
+  const { action, ignoreTrackingDeltas = false } = options
 
   const { type, processedAmount = 0, isSubpayment } = payment
   let { amount } = payment
@@ -36,17 +42,8 @@ function handlePayment(balance: Budget['balance'], payment: Payment, action: 'ex
   const update: 1 | -1 = action === 'execute' ? 1 : -1
   
   const currentDelta = type === '+' ? amount * update : -amount * update
-  const incomeDelta = type === '+' ? amount * update : isSubpayment ? -amount * update : 0
-  const lossDelta = type === '-' ? amount * update : isSubpayment ? -amount * update : 0
-
-  // FIXME: There is still a problem with income & loss deltas
-  // when creating an already paid back borrow transaction.
-  // -> The starter base payment isn't calculated because it isn't a subpayment.
-
-  // FIXME: There is another problem with income & loss deltas
-  // when deleting transactions those can have subpayments.
-  // -> The income & loss isn't calculated because it is reverting
-  //    only based on the base payment's processedAmount field.
+  const incomeDelta = !ignoreTrackingDeltas && type === '+' ? amount * update : 0
+  const lossDelta = !ignoreTrackingDeltas && type === '-' ? amount * update : 0
 
   return {
     ...balance,
@@ -64,13 +61,13 @@ function handlePayment(balance: Budget['balance'], payment: Payment, action: 'ex
  * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
  * @returns A Promise resolving to the updated budget after updating the balance.
  */
-async function updateBalance(budgetId: string, payment: Payment, action: 'execute' | 'undo'): Promise<Budget> {
+async function updateBalance(budgetId: string, payment: Payment, options: BalanceUpdaterOptions): Promise<Budget> {
   const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
   const budget = await budgetStorage.findById(budgetId)
 
   return await budgetStorage.save({
     ...budget,
-    balance: handlePayment(budget.balance, payment, action)
+    balance: handlePayment(budget.balance, payment, options)
   })
 }
 
@@ -104,7 +101,7 @@ async function revertPaymentsOnBalance(payments: Payment[]): Promise<void> {
       payment.processedAmount = payment.amount - (payment.processedAmount || 0)
     }
 
-    budget.balance = handlePayment(budget.balance, payment, 'undo')
+    budget.balance = handlePayment(budget.balance, payment, { action: 'undo' })
 
     return [...budgets, budget]
   }, [] as Budget[])
