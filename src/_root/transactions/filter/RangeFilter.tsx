@@ -6,11 +6,11 @@ import { SearchX, TextSearch } from "lucide-react"
 // shadcn
 import { Button, ButtonTooltip } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 
 // components
 import DateRangePicker from "@/components/input/DateRangePicker"
 import FilterInput from "@/components/input/FilterInput"
+import FilterLayout from "./FilterLayout"
 
 // hooks
 import { useFilter } from "@/hooks"
@@ -21,8 +21,9 @@ import { SearchPaymentRange, TransactionSearchParams } from "@/_root/transaction
 
 const RangeFilter = () => {
   const [paymentRange, setPaymentRange] = useState<SearchPaymentRange>({})
-
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({ from: undefined })
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: undefined
+  })
 
   const { setFilterEntry, removeFilterEntries } = useFilter<TransactionSearchParams>()
 
@@ -48,14 +49,10 @@ const RangeFilter = () => {
   }
 
   return (
-    <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
-      <h2 className="indent-border">
-        <span className="text-red-600 dark:text-red-500">Filter</span> by ranges
-      </h2>
-
-      <Separator className="my-4 mx-auto w-11/12" />
-
-      <div className="flex flex-wrap justify-between gap-x-4 gap-y-2.5">
+    <FilterLayout
+      title={<><span className="text-red-600 dark:text-red-500">Filter</span> by ranges</>}
+    >
+      <div className="flex flex-wrap justify-around gap-x-5 gap-y-2.5">
         <FilterInput className="flex-1 min-w-40"
           label={<>Min. <span className="text-red-600 dark:text-red-500 overline">Payment</span></>}
           labelProps={{ htmlFor: 'minPayment' }}
@@ -63,6 +60,7 @@ const RangeFilter = () => {
           {() => (
             <Input id="minPayment"
               type="number"
+              placeholder="e.g. $15"
               value={parseInt(paymentRange.paymentMin as string) || ''}
               onChange={(e) => setPaymentRange((prev) => ({ ...prev, paymentMin: e.target.value }))}
             />
@@ -76,6 +74,7 @@ const RangeFilter = () => {
           {() => (
             <Input id="maxPayment"
               type="number"
+              placeholder="e.g. $500"
               value={parseInt(paymentRange.paymentMax as string) || ''}
               onChange={(e) => setPaymentRange((prev) => ({ ...prev, paymentMax: e.target.value }))}
             />
@@ -113,7 +112,7 @@ const RangeFilter = () => {
           <span>Search</span>
         </Button>
       </div>
-    </div>
+    </FilterLayout>
   )
 }
 

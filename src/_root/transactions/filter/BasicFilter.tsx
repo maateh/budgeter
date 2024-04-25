@@ -1,9 +1,7 @@
-// shadcn
-import { Separator } from "@/components/ui/separator"
-
 // components
 import BudgetSelect from "@/components/input/BudgetSelect"
 import FilterInput from "@/components/input/FilterInput"
+import FilterLayout from "./FilterLayout"
 
 // hooks
 import { useFilter } from "@/hooks"
@@ -19,13 +17,9 @@ const BasicFilter = () => {
   } = useFilter<TransactionSearchParams>()
 
   return (
-    <div className="h-fit px-6 py-5 space-y-3.5 bg-primary rounded-[2rem]">
-      <h2 className="indent-border">
-        <span className="text-orange-600 dark:text-orange-400">Filter</span> Transactions
-      </h2>
-
-      <Separator className="my-4 mx-auto w-11/12" />
-
+    <FilterLayout
+      title={<><span className="text-orange-600 dark:text-orange-400">Filter</span> Transactions</>}
+    >
       <FilterInput
         label={<>Filter by <span className="text-accent overline">Budgets</span></>}
         labelProps={{ htmlFor: 'budgetId' }}
@@ -71,7 +65,7 @@ const BasicFilter = () => {
         onReset={(filterKey) => removeFilterEntries(filterKey, ['processed'])}
         key={filterEntries.processed as string}
       />
-    </div>
+    </FilterLayout>
   )
 }
 
