@@ -41,7 +41,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
 
       searchParams.set('page', pageIndex.toString())
       return searchParams
-    })
+    }, { replace: true })
   }
 
   /**
@@ -66,7 +66,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
        */
       if (!param) searchParams.delete(filterKey)
       return searchParams
-    })
+    }, { replace: true })
   }
 
   /**
@@ -87,7 +87,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
 
       if (!param) searchParams.delete(filterKey)
       return searchParams
-    })
+    }, { replace: true })
   }
 
   /**
@@ -111,7 +111,7 @@ function useFilter<T extends object>({ pageSize = 10 }: FilterHookOptions = {}):
       removeFilterEntries(anotherFilterKey, [entryKey])
 
       return searchParams
-    })
+    }, { replace: true })
   }
 
   const pageOffsetIndex = getCurrentPage(searchParams) - 1

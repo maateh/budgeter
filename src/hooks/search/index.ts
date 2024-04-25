@@ -88,7 +88,7 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
   
       if (!searchParam) searchParams.delete(paramKey)
       return searchParams
-    })
+    }, { replace: true })
   }
 
   /**
@@ -100,7 +100,7 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
     setSearchParams((searchParams) => {
       searchParams.delete(paramKey)
       return searchParams
-    })
+    }, { replace: true })
   }
 
   /**
@@ -130,7 +130,7 @@ function useSearch<ParamKeys extends string, T extends object>(): SearchReturn<P
 
       if (!searchParam) searchParams.delete(paramKey)
       return searchParams
-    })
+    }, { replace: true })
   }
 
   return {
