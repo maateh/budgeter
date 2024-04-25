@@ -41,11 +41,6 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
     },
     sortBy: { createdAt: -1 }
   })
-  
-  const handleTransactionNavigate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation()
-    openDialog(`/transactions/create/${budget.id}`)
-  }
 
   return (
     <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/55 border cursor-pointer"
@@ -76,7 +71,10 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             <Badge className="flex items-center gap-x-1 cursor-pointer"
               variant="outline"
               size="xs"
-              onClick={handleTransactionNavigate}
+              onClick={(e) => {
+                e.stopPropagation()
+                openDialog(`/transactions/create/${budget.id}`)
+              }}
             >
               <BadgePlus size={16} />
               <span className="font-bold">New</span>
@@ -97,6 +95,10 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               payment={payment}
               currency={budget.balance.currency}
               processed
+              onClick={(e) => {
+                e.stopPropagation()
+                openDialog(`/transactions/details/${payment.transactionId}`)
+              }}
             />
           )}
         </PaymentList>
