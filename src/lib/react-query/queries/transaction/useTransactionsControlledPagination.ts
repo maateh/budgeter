@@ -3,9 +3,11 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
+// hooks
+import { useDebounce } from "@/hooks"
+
 // types
 import { QueryOptions, Transaction } from "@/services/api/types"
-import { useDebounce } from "@/hooks"
 
 const useTransactionsControlledPagination = ({ params, filter, sortBy }: QueryOptions<Transaction> = {}) => {
   const { api } = useAPI()
@@ -21,7 +23,7 @@ const useTransactionsControlledPagination = ({ params, filter, sortBy }: QueryOp
   excludeBy = { ...excludeBy, name: excludeBy?.name ? debouncedName : undefined}
 
   return useQuery({
-    queryKey: ['transactions', filterBy, excludeBy, rangeBy, sortBy, params],
+    queryKey: ['transactions', 'controlled', filterBy, excludeBy, rangeBy, sortBy, params],
     queryFn: async () => await api.transaction.getWithBudget({ params, filter, sortBy }),
     placeholderData: keepPreviousData
   })

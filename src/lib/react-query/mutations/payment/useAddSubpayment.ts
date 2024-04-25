@@ -24,6 +24,7 @@ const useAddSubpayment = (transactionId: string) => {
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
       queryClient.invalidateQueries({ queryKey: ['transactions', { type }] })
+      queryClient.invalidateQueries({ queryKey: ['transactions', 'controlled'] })
 
       // payment
       queryClient.invalidateQueries({ queryKey: ['payments', { budgetId }] })

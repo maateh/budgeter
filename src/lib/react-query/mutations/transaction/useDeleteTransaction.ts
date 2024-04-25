@@ -21,6 +21,7 @@ const useDeleteTransaction = (transactionId: string) => {
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
       queryClient.invalidateQueries({ queryKey: ['transactions', { type, processed }] })
+      queryClient.invalidateQueries({ queryKey: ['transactions', 'controlled'] })
       
       // payment
       queryClient.invalidateQueries({ queryKey: ['payments', { budgetId }] })
