@@ -2,15 +2,18 @@ export type Currencies = {
   [key: string]: string
 }
 
+export type Balance = {
+  currency: string
+  current: number
+  income: number
+  loss: number
+  borrowment: number
+}
+
 export type Budget = {
   id: string
   name: string
-  balance: {
-    currency: string
-    current: number
-    income: number
-    loss: number
-  }
+  balance: Balance
   theme: string
 }
 

@@ -52,7 +52,8 @@ class BudgetStorageAPI implements IBudgetAPI {
       balance: {
         ...data.balance,
         income: 0,
-        loss: 0
+        loss: 0,
+        borrowment: 0
       },
       theme: data.theme
     })

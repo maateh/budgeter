@@ -102,7 +102,7 @@ async function updateTransaction(transactionId: string, executionPayment: Paymen
     processedAmount: type === 'borrow' && action === 'undo'
       ? payment.amount - (executionPayment.processedAmount || 0)
       : executionPayment.processedAmount
-  }, { action, ignoreTrackingDeltas: type === 'borrow' })
+  }, { action, isBorrowment: type === 'borrow' })
 
   /**
    * Update transaction and its payment based on 'executionPayment'

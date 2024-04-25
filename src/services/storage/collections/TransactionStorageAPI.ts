@@ -98,22 +98,21 @@ class TransactionStorageAPI implements ITransactionAPI {
       relatedIds: data.relatedIds || []
     })
 
-    const payment = await paymentApi.getStorage()
-      .save({
-        ...data.payment,
-        id: paymentId,
-        budgetId,
-        transactionId,
-        processedAmount: 0,
-        createdAt: date,
-        isSubpayment: false
-      })
+    const payment = await paymentApi.getStorage().save({
+      ...data.payment,
+      id: paymentId,
+      budgetId,
+      transactionId,
+      processedAmount: 0,
+      createdAt: date,
+      isSubpayment: false
+    })
 
     const transaction: Transaction = { ...doc, budgetId, payment, type, processed }
     if (type === 'borrow') {
       await updateBalance(budgetId, payment, {
         action: 'execute',
-        ignoreTrackingDeltas: true
+        isBorrowment: true
       })
     }
 

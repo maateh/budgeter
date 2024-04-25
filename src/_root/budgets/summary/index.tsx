@@ -1,3 +1,6 @@
+// icons
+import { HandCoins } from 'lucide-react'
+
 // shadcn
 import { Separator } from '@/components/ui/separator'
 
@@ -32,19 +35,17 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
       <Separator className="w-11/12 mx-auto my-1.5" />
 
       <div className="flex flex-wrap justify-around gap-x-6 gap-y-4 small-caps">
-        <BalanceBadge className="flex-1 max-w-72 min-w-40"
+        <BalanceBadge className="flex-1 max-w-72 min-w-48"
           size="lg"
           balance={budget.balance}
           showLabel
         />
 
-        {/* TODO: instead of ceiling might be better to show something else
-          e.g. costs this month, expected balance based on unprocessed transactions */}
-        {/* <InfoBadge className="flex-1 max-w-72 min-w-40"
-          label="Ceiling"
-          value={formatWithCurrency(budget.balance.ceiling, budget.balance.currency)}
-          icon={<ArrowUpToLine strokeWidth={2.25} />}
-        /> */}
+        <InfoBadge className="flex-1 max-w-72 min-w-48"
+          label="Under Borrowment"
+          value={formatWithCurrency(budget.balance.borrowment, budget.balance.currency)}
+          icon={<HandCoins strokeWidth={2.25} />}
+        />
       </div>
 
       <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2">

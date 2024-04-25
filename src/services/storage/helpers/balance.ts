@@ -2,12 +2,12 @@
 import { BudgetStorageAPI, TransactionStorageAPI } from "@/services/storage/collections"
 
 // types
-import { Budget, Payment } from "@/services/api/types"
+import { Balance, Budget, Payment } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
 
 type BalanceUpdaterOptions = {
   action: 'execute' | 'undo'
-  ignoreTrackingDeltas?: boolean
+  isBorrowment?: boolean
 }
 
 /**
@@ -18,9 +18,9 @@ type BalanceUpdaterOptions = {
  * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
  * @returns The updated balance after handling the payment action.
  */
-function handlePayment(balance: Budget['balance'], payment: Payment, options: BalanceUpdaterOptions): Budget['balance'] {
-  const { current, income, loss } = balance
-  const { action, ignoreTrackingDeltas = false } = options
+function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdaterOptions): Balance {
+  const { current, income, loss, borrowment } = balance
+  const { action, isBorrowment = false } = options
 
   const { type, processedAmount = 0, isSubpayment } = payment
   let { amount } = payment
@@ -42,14 +42,16 @@ function handlePayment(balance: Budget['balance'], payment: Payment, options: Ba
   const update: 1 | -1 = action === 'execute' ? 1 : -1
   
   const currentDelta = type === '+' ? amount * update : -amount * update
-  const incomeDelta = !ignoreTrackingDeltas && type === '+' ? amount * update : 0
-  const lossDelta = !ignoreTrackingDeltas && type === '-' ? amount * update : 0
+  const incomeDelta = !isBorrowment && type === '+' ? amount * update : 0
+  const lossDelta = !isBorrowment && type === '-' ? amount * update : 0
+  const borrowmentDelta = isBorrowment ? currentDelta : 0
 
   return {
     ...balance,
     current: current + currentDelta,
     income: income + incomeDelta,
-    loss: loss + lossDelta
+    loss: loss + lossDelta,
+    borrowment: borrowment + borrowmentDelta
   }
 }
 
