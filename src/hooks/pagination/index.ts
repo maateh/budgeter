@@ -17,8 +17,8 @@ function usePagination<D>({
    * Note: 'maxItemLimit' can be given for the pagination which
    * limits the maximum amount of items even if more items are available.
    */
-  const isLimitExceeded = !!maxItemLimit &&
-    !!lastPage?.nextPageOffset && lastPage.nextPageOffset >= maxItemLimit
+  const isLimitExceeded = !!maxItemLimit && !!lastPage
+    && (lastPage.nextPageOffset || lastPage.total) >= maxItemLimit
 
   /**
    * Handles infinite manual pagination.

@@ -17,11 +17,10 @@ import { usePagination } from "@/hooks"
 import { Budget, QueryOptions, Transaction } from "@/services/api/types"
 
 type TransactionListProps = {
-  maxItemLimit?: number
   children: (transaction: Transaction, budget: Budget) => React.ReactNode
 } & QueryOptions<Transaction>
 
-const TransactionList = ({ params, filter, maxItemLimit, children }: TransactionListProps) => {
+const TransactionList = ({ params, filter, children }: TransactionListProps) => {
   const navigate = useNavigate()
 
   const {
@@ -29,7 +28,7 @@ const TransactionList = ({ params, filter, maxItemLimit, children }: Transaction
   } = useTransactionsPagination({ filter, params, sortBy: { updatedAt: -1 } })
 
   const { isLimitExceeded, manualPagination } = usePagination({
-    data, fetchNextPage, maxItemLimit,
+    data, fetchNextPage, maxItemLimit: params?.maxItemLimit,
     actionAfterLimitExceeded: () => navigate('/transactions')
   })
 
@@ -39,7 +38,7 @@ const TransactionList = ({ params, filter, maxItemLimit, children }: Transaction
         {({ budget, ...transaction }) => children(transaction, budget)}
       </PaginationList>
 
-      {hasNextPage && (
+      {(hasNextPage || isLimitExceeded) && (
         <Button className="w-fit mt-1 mx-auto icon-wrapper"
           size="sm"
           onClick={manualPagination}
