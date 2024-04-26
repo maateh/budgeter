@@ -10,13 +10,14 @@ export type TabItem<T extends string> = {
 
 type TabsSelectProps<T extends string> = {
   tabItems: TabItem<T>[]
+  defaultValue?: T
   setValue: React.Dispatch<React.SetStateAction<T>>
   ref?: React.Ref<HTMLDivElement>
 } & TabsListProps
 
-function TabsSelect<T extends string>({ tabItems, setValue, children, ref, ...props }: TabsSelectProps<T>) {
+function TabsSelect<T extends string>({ tabItems, defaultValue, setValue, children, ref, ...props }: TabsSelectProps<T>) {
   return (
-    <Tabs defaultValue={tabItems[0].value}>
+    <Tabs defaultValue={defaultValue || tabItems[0].value}>
       <TabsList {...props} ref={ref}>
         {tabItems.map(({ value, Icon }) => (
           <TabsTrigger className="icon-wrapper"

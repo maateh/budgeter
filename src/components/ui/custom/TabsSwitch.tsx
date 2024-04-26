@@ -18,6 +18,7 @@ function TabsSwitch <T extends string>({ tabItems, children, ref, ...props }: Ta
   return (
     <TabsSelector<T> {...props}
       tabItems={tabItems}
+      defaultValue={value}
       setValue={setValue}
       ref={ref}
     >
