@@ -4,6 +4,9 @@ import { NavLink } from "react-router-dom"
 // icons
 import { Menu, PiggyBank } from "lucide-react"
 
+// shadcn
+import { Separator } from "@/components/ui/separator"
+
 // components
 import ThemeSwitch from "@/components/theme/ThemeSwitch"
 
@@ -15,37 +18,36 @@ const Navbar = () => {
 
   return (
     <header className="max-container py-4">
-      <nav className="mx-5 px-6 py-3 relative flex flex-col bg-secondary rounded-[2rem] md:flex-row md:justify-between md:items-center">
-        <div className="w-full flex justify-between items-center">
-          <NavLink to="/" className="icon-wrapper !items-end">
-            <PiggyBank size={40} strokeWidth={1} />
-            <span className="text-3xl font-bold font-heading small-caps overline tracking-wider">
+      <nav className="mx-5 px-6 py-3 relative flex flex-col bg-secondary/80 rounded-[2rem] lg:flex-row lg:justify-between lg:items-center">
+        <div className="flex justify-between items-center">
+          <NavLink to="/" className="flex gap-x-1.5 items-end md:gap-x-2.5">
+            <PiggyBank className="w-8 h-8 md:w-10 md:h-10" strokeWidth={1} />
+            <span className="text-2xl font-bold font-heading small-caps overline tracking-wider md:text-3xl">
               MyBudget
             </span>
           </NavLink>
 
-          <Menu
+          <Menu className="mr-8 cursor-pointer lg:hidden"
+            size={30}
             onClick={() => linksRef.current?.classList.toggle('mobile-closed')}
-            className="md:hidden cursor-pointer mr-8"
-            size={28}
           />
         </div>
 
-        <ul ref={linksRef} className="w-full md:w-1/2 max-md:mt-2 md:mr-8 flex flex-col md:flex-row justify-center md:justify-end items-center gap-1 md:gap-4 max-md:[&.mobile-closed]:hidden mobile-closed">
+        <ul ref={linksRef} className="flex flex-wrap justify-around items-center gap-x-5 gap-y-2 mobile-closed max-lg:[&.mobile-closed]:hidden lg:w-1/2 lg:mr-8 lg:flex-row lg:flex-nowrap lg:gap-x-6 lg:justify-end">
+          <Separator className="w-5/6 my-3 bg-foreground/15 lg:hidden" />
           {navLinks.map((link) => (
             <li key={link.label}>
-              <NavLink
+              <NavLink className="py-2 px-4 icon-wrapper border-md [&.active]:bg-accent/65 [&.active]:shadow-lg drop-shadow-md"
                 to={link.link}
-                className="py-2 px-4 text-lg font-medium tracking-wide icon-wrapper border-md [&.active]:bg-primary"
               >
-                <link.Icon size={24} />
-                <span>{link.label}</span>
+                <link.Icon size={22} />
+                <span className="text-base font-heading font-medium tracking-wide">{link.label}</span>
               </NavLink>
             </li>
           ))}
         </ul>
 
-        <div className="absolute pl-1 right-1.5 border-l border-l-background/60 max-md:top-[1.175rem]">
+        <div className="absolute pl-1.5 right-1.5 border-l-2 border-l-background/60 max-lg:top-4">
           <ThemeSwitch />
         </div>
       </nav>

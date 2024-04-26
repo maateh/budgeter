@@ -41,7 +41,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           showLabel
         />
 
-        <InfoBadge className="flex-1 max-w-72 min-w-48"
+        <InfoBadge className="flex-1 max-w-64 min-w-48"
           label="Under Borrowment"
           value={formatWithCurrency(budget.balance.borrowment, budget.balance.currency)}
           icon={<HandCoins strokeWidth={2.25} />}
@@ -56,6 +56,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           label="Income"
           value={formatWithCurrency(budget.balance.income, budget.balance.currency)}
         />
+
         <InfoBadge className="text-destructive border-destructive bg-background/65"
           separatorProps={{ className: 'h-4' }}
           size="sm"

@@ -30,7 +30,7 @@ const SortingButton = ({
   }
   
   return (
-    <Button className={cn("rounded-md shadow-none icon-wrapper", className)}
+    <Button className={cn("-mx-2 px-2 rounded-lg shadow-none icon-wrapper", className)}
       variant={variant}
       size={size}
       onClick={() => toggleSort(sortingKey)}
