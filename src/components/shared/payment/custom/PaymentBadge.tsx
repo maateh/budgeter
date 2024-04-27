@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
+import { useToast } from "@/components/ui/use-toast"
 import { useRemoveSubpayment } from "@/lib/react-query/mutations"
 
 // types
@@ -56,6 +57,8 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
   showProgress, transaction, budget,
   className, size = 'sm', ...props
 }, ref) => {
+  const { toast } = useToast()
+
   const { mutateAsync: removeSubpayment, isPending } = useRemoveSubpayment(payment.transactionId)
 
   const handleRemove = async () => {
@@ -65,9 +68,21 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
         paymentId: payment.id
       })
 
-      // TODO: show toast
+      toast({
+        title: `Removed payment: ${formatWithCurrency(
+          getPaymentAmount(payment, processed),
+          currency
+        )}`,
+        description: transaction ? `Affected transaction: ${transaction.name}` : ''
+      })
     } catch (err) {
       console.error(err)
+
+      toast({
+        variant: 'destructive',
+        title: 'Oops! Deletion failed.',
+        description: 'Please try again.'
+      })
     }
   }
 

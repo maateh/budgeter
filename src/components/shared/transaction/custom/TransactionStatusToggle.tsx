@@ -8,6 +8,7 @@ import StateToggle from "@/components/ui/custom/StateToggle"
 import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
+import { useToast } from "@/components/ui/use-toast"
 import { useUpdateTransactionStatus } from "@/lib/react-query/mutations"
 
 // types
@@ -61,6 +62,7 @@ type TransactionStatusToggleProps = {
 const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusToggleProps>(({
   transaction, budget, iconProps
 }, ref) => {
+  const { toast } = useToast()
   const { mutateAsync: updateTransactionStatus } = useUpdateTransactionStatus(transaction.id)
 
   const handleUpdateStatus = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -74,9 +76,19 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
         processed: !transaction.processed
       })
 
-      // TODO: add toast message
+      toast({
+        variant: 'accent',
+        title: 'Updated: Transaction status',
+        description: `Status of the "${transaction.name}" transaction has been successfully updated!`
+      })
     } catch (err) {
       console.error(err)
+      
+      toast({
+        variant: 'destructive',
+        title: 'Oops! Failed to update transaction status.',
+        description: 'Please try again.'
+      })
     }
   }
 

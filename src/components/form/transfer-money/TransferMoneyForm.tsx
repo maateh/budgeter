@@ -6,7 +6,7 @@ import TransferMoneyFormFields from "@/components/form/transfer-money/TransferMo
 import { useTransferMoneySubmit } from "@/components/form/transfer-money/hooks"
 
 // types
-import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
+import { TransferMoneyFieldValues, TransferMoneySubmitProps } from "@/components/form/transfer-money/types"
 
 // validations
 import { transferMoneyFormSchema } from "@/lib/validations"
@@ -17,7 +17,7 @@ type TransferMoneyFormProps = {
 
 const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
   return (
-    <Form<TransferMoneyFieldValues, typeof transferMoneyFormSchema>
+    <Form<TransferMoneyFieldValues, typeof transferMoneyFormSchema, TransferMoneySubmitProps>
       type="create"
       validationSchema={transferMoneyFormSchema}
       defaultValues={{
@@ -31,6 +31,7 @@ const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
         }
       }}
       useSubmit={useTransferMoneySubmit}
+      submitProps={{ budgetId }}
       customButtonRequired
     >
       {(form, isPending) => (

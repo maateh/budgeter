@@ -4,3 +4,7 @@ import { z } from "zod"
 import { transferMoneyFormSchema } from "@/lib/validations"
 
 export type TransferMoneyFieldValues = z.infer<typeof transferMoneyFormSchema>
+
+export type TransferMoneySubmitProps = {
+  budgetId: string
+}

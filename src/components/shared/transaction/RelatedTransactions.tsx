@@ -12,6 +12,7 @@ import TransactionPreview from "@/components/shared/transaction/TransactionPrevi
 import RelatedTransactionsForm from "@/components/form/related-transactions/RelatedTransactionsForm"
 
 // hooks
+import { useToast } from "@/components/ui/use-toast"
 import { useDialog } from "@/hooks"
 import { useRemoveRelatedTransaction } from "@/lib/react-query/mutations"
 
@@ -24,6 +25,7 @@ type RelatedTransactionsProps = {
 }
 
 const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
+  const { toast } = useToast()
   const { openDialog } = useDialog()
 
   const { mutateAsync: removeRelated, isPending } = useRemoveRelatedTransaction(transaction.id)
@@ -35,9 +37,18 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
         relatedId
       })
 
-      // TODO: show toast
+      toast({
+        title: 'Removed as related',
+        description: `The selected transaction has been removed as related from: ${transaction.name}`
+      })
     } catch (err) {
       console.error(err)
+
+      toast({
+        variant: 'destructive',
+        title: 'Oops! Failed to remove the transaction as related.',
+        description: 'Please try again.'
+      })
     }
   }
 
