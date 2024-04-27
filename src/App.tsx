@@ -10,6 +10,9 @@ import { Budgets, CreateTransaction, SaveBudget, TransactionDetails, TransferMon
 import AlertLayout from "@/_alerts/AlertLayout"
 import { DeleteBudget, DeleteNote, DeleteTransaction, RestoreBackup } from "@/_alerts"
 
+// shadcn
+import { Toaster } from "@/components/ui/toaster"
+
 // hooks
 import { useDialog } from "@/hooks"
 
@@ -63,6 +66,8 @@ const App = () => {
           </Route>
         </Routes>
       )}
+
+      <Toaster />
     </>
   )
 }
