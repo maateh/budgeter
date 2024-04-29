@@ -53,7 +53,7 @@ const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
               </li>
             </PopoverTrigger>
             <PopoverContent>
-              <SubpaymentForm transactionId={transaction.id} />
+              <SubpaymentForm budgetId={budget.id} transactionId={transaction.id} />
             </PopoverContent>
           </Popover>
         )}

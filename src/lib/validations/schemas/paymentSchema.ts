@@ -9,6 +9,10 @@ const paymentFormSchema = z.object({
     .gt(0, { message: 'Amount must be a positive number.' })
 })
 
+const subpaymentFormSchema = paymentFormSchema.extend({
+  budgetId: z.string().uuid({ message: 'Budget ID is invalid!' })
+})
+
 const paymentSchema = paymentFormSchema.extend({
   id: z.string().uuid({ message: 'Payment ID is invalid!' }),
   budgetId: z.string().uuid({ message: 'Budget ID is invalid!' }),
@@ -20,4 +24,4 @@ const paymentSchema = paymentFormSchema.extend({
 
 const paymentDocumentSchema = paymentSchema
 
-export { paymentSchema, paymentDocumentSchema, paymentFormSchema }
+export { paymentSchema, subpaymentFormSchema, paymentDocumentSchema, paymentFormSchema }

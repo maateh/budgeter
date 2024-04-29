@@ -8,11 +8,10 @@ import { Pagination, Payment, QueryOptions, Transaction } from "@/services/api/t
 import { PaymentDocument } from "@/services/storage/types"
 
 // validations
-import { paymentFormSchema } from "@/lib/validations"
+import { subpaymentFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import { TransactionStorageAPI } from "@/services/storage/collections"
 
 // helpers
 import { updateTransaction } from "@/services/storage/helpers/transaction"
@@ -42,14 +41,11 @@ class PaymentStorageAPI implements IPaymentAPI {
     return paginate(payments, params, sortBy)
   }
 
-  public async addSubpayment(transactionId: string, data: z.infer<typeof paymentFormSchema>): Promise<Transaction> {
-    const { budgetId } = await TransactionStorageAPI.getInstance()
-      .getStorage().findById(transactionId)
-    
+  public async addSubpayment(transactionId: string, data: z.infer<typeof subpaymentFormSchema>): Promise<Transaction> {  
+    console.log({data})
     const subpayment: Payment = {
       ...data,
       id: crypto.randomUUID(),
-      budgetId,
       transactionId,
       createdAt: new Date(),
       isSubpayment: true

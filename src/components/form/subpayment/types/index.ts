@@ -1,8 +1,8 @@
 import { z } from "zod"
 
-import { paymentFormSchema } from "@/lib/validations"
+import { subpaymentFormSchema } from "@/lib/validations"
 
-export type SubpaymentFieldValues = z.infer<typeof paymentFormSchema>
+export type SubpaymentFieldValues = z.infer<typeof subpaymentFormSchema>
 
 export type SubpaymentSubmitProps = {
   transactionId: string

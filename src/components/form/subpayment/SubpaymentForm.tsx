@@ -9,18 +9,20 @@ import { useSubpaymentSubmit } from "@/components/form/subpayment/hooks"
 import { SubpaymentFieldValues, SubpaymentSubmitProps } from "@/components/form/subpayment/types"
 
 // validations
-import { paymentFormSchema } from "@/lib/validations"
+import { subpaymentFormSchema } from "@/lib/validations"
 
 type SubpaymentFormProps = {
   transactionId: string
+  budgetId: string
 }
 
-const SubpaymentForm = ({ transactionId }: SubpaymentFormProps) => {
+const SubpaymentForm = ({ budgetId, transactionId }: SubpaymentFormProps) => {
   return (
-    <Form<SubpaymentFieldValues, typeof paymentFormSchema, SubpaymentSubmitProps>
+    <Form<SubpaymentFieldValues, typeof subpaymentFormSchema, SubpaymentSubmitProps>
       type="create"
-      validationSchema={paymentFormSchema}
+      validationSchema={subpaymentFormSchema}
       defaultValues={{
+        budgetId,
         type: '+',
         amount: 0
       }}
@@ -28,7 +30,7 @@ const SubpaymentForm = ({ transactionId }: SubpaymentFormProps) => {
       submitProps={{ transactionId }}
       customButtonRequired
     >
-      {(form, isPending) => <SubpaymentFormFields {...form} isPending={isPending} />}
+      {(form, isPending) => <SubpaymentFormFields {...form} isPending={isPending}/>}
     </Form>
   )
 }
