@@ -14,10 +14,11 @@ import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
 import { useToast } from "@/components/ui/use-toast"
+import { useBudget, useTransaction } from "@/lib/react-query/queries"
 import { useRemoveSubpayment } from "@/lib/react-query/mutations"
 
 // types
-import { Budget, Payment, Transaction } from "@/services/api/types"
+import { Payment, Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
@@ -42,22 +43,24 @@ type PaymentBadgeProps = {
   isNeutral?: boolean
   iconSize?: number
   showRemoveButton?: boolean
-} & BadgeProps & ({
-  showProgress: boolean
-  transaction: Transaction
-  budget: Budget
-} | {
-  showProgress?: never
-  transaction?: never
-  budget?: never
-})
+  showProgress?: boolean
+} & BadgeProps
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
-  payment, processed, currency, isNeutral, iconSize = 16, showRemoveButton,
-  showProgress, transaction, budget,
+  payment, processed, currency, isNeutral, iconSize = 16, showRemoveButton, showProgress = false,
   className, size = 'sm', ...props
 }, ref) => {
   const { toast } = useToast()
+
+  const {
+    data: budget,
+    isLoading: isBudgetLoading
+  } = useBudget(payment.budgetId, { enabled: showProgress })
+
+  const {
+    data: transaction,
+    isLoading: isTransactionLoading
+  } = useTransaction(payment.transactionId, { enabled: showProgress })
 
   const { mutateAsync: removeSubpayment, isPending } = useRemoveSubpayment(payment.transactionId)
 
@@ -130,21 +133,23 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       <PopoverContent className="max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
-        {transaction.type === 'borrow' && !payment.isSubpayment ? (
-          <PaymentProgress
-            transaction={transaction}
-            budget={budget}
-          />
-        ) : (
-          <div className="icon-wrapper">
-            <BadgeInfo size={18} />
-            <span className="text-sm">
-              {transaction.processed
-                ? `Payment has been credited to "${budget.name}" budget.`
-                : "Payment hasn't been credited yet."}
-            </span>
-          </div>
-        )}
+        {!isTransactionLoading && !isBudgetLoading && transaction && budget ? (          
+          transaction.type === 'borrow' && !payment.isSubpayment ? (
+            <PaymentProgress
+              transaction={transaction}
+              budget={budget}
+            />
+          ) : (
+            <div className="icon-wrapper">
+              <BadgeInfo size={18} />
+              <span className="text-sm">
+                {transaction.processed
+                  ? `Payment has been credited to "${budget.name}" budget.`
+                  : "Payment hasn't been credited yet."}
+              </span>
+            </div>
+          )
+        ) : <>Loading...</>} {/* TODO: skeleton */}
       </PopoverContent>
     </Popover>
   )

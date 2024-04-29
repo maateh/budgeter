@@ -63,10 +63,8 @@ const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
             payment={payment}
             processed={true}
             currency={budget.balance.currency}
-            transaction={transaction}
-            budget={budget}
-            showProgress
             showRemoveButton
+            showProgress
           />
         )}
       </PaymentList>

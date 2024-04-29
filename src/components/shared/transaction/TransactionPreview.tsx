@@ -45,8 +45,6 @@ const TransactionPreview = ({ transaction, budget, onClick }: TransactionPreview
           processed={transaction.processed}
           currency={budget.balance.currency}
           isNeutral={isNeutral(transaction.type, transaction.processed)}
-          transaction={transaction}
-          budget={budget}
           showProgress
         />
 

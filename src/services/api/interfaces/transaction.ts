@@ -7,6 +7,7 @@ import { Budget, Pagination, QueryOptions, Transaction } from "@/services/api/ty
 import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyFormSchema } from "@/lib/validations"
 
 interface ITransactionAPI {
+  getById(id: string): Promise<Transaction>
   getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }>
   get(options?: QueryOptions<Transaction>): Promise<Pagination<Transaction>>
   getWithBudget(options?: QueryOptions<Transaction>): Promise<Pagination<Transaction & { budget: Budget }>>

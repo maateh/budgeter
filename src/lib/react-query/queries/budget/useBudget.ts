@@ -1,15 +1,18 @@
-import { useQuery } from "@tanstack/react-query"
+import { UseQueryOptions, useQuery } from "@tanstack/react-query"
 
 // api
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
-const useBudget = (budgetId?: string) => {
+// types
+import { Budget } from "@/services/api/types"
+
+const useBudget = (budgetId?: string, options?: Omit<UseQueryOptions<Budget>, 'queryKey' | 'queryFn'>) => {
   const { api } = useAPI()
 
   return useQuery({
     queryKey: ['budget', { id: budgetId }],
     queryFn: async () => await api.budget.getById(budgetId!),
-    enabled: !!budgetId
+    ...options
   })
 }
 

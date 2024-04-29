@@ -11,6 +11,7 @@ export { default as useNoteWithBudget } from './buget-note/useNoteWithBudget'
 export { default as useNotesPagination } from './buget-note/useNotesPagination'
 
 // transaction
+export { default as useTransaction } from './transaction/useTransaction'
 export { default as useTransactionWithBudget } from './transaction/useTransactionWithBudget'
 export { default as useTransactions } from './transaction/useTransactions'
 export { default as useTransactionsPagination } from './transaction/useTransactionsPagination'

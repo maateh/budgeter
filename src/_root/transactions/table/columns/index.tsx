@@ -53,8 +53,6 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
         payment={row.original.payment}
         currency={row.original.budget.balance.currency}
         processed={row.original.processed}
-        transaction={row.original}
-        budget={row.original.budget}
         showProgress
       />
     )

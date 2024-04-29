@@ -37,6 +37,15 @@ class TransactionStorageAPI implements ITransactionAPI {
     return this._instance
   }
 
+  public async getById(id: string): Promise<Transaction> {
+    const { budgetId, paymentId, ...doc } = await this.storage.findById(id)
+
+    const payment = await PaymentStorageAPI.getInstance()
+      .getStorage().findById(paymentId)
+
+    return { ...doc, budgetId, payment }
+  }
+
   public async getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }> {
     const { budgetId, paymentId, ...doc } = await this.storage.findById(id)
 
