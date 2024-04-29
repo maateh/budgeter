@@ -88,6 +88,7 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
 
   const element: React.ReactNode = (
     <Badge className={cn("font-heading font-bold gap-x-1",
+        showProgress ? 'cursor-pointer' : '',
         isNeutral ? 'text-muted-foreground opacity-75'
           : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
       size={size}
@@ -129,7 +130,7 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       <PopoverContent className="max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
-        {transaction.type === 'borrow' ? (
+        {transaction.type === 'borrow' && !payment.isSubpayment ? (
           <PaymentProgress
             transaction={transaction}
             budget={budget}
@@ -139,8 +140,8 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
             <BadgeInfo size={18} />
             <span className="text-sm">
               {transaction.processed
-                ? 'Payment has already been processed.'
-                : "Payment hasn't been processed yet."}
+                ? `Payment has been credited to "${budget.name}" budget.`
+                : "Payment hasn't been credited yet."}
             </span>
           </div>
         )}

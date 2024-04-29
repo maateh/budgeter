@@ -24,7 +24,7 @@ const useSubpaymentSubmit = (form: UseFormReturn<SubpaymentFieldValues>, { trans
       toast({
         variant: 'accent',
         title: 'Added: Subpayment',
-        description: 'Subpayment has been successfully added to the selected transaction.'
+        description: 'Subpayment has been successfully credited.'
       })
     } catch (err) {
       console.error(err)
