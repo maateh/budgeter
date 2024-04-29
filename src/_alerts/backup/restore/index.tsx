@@ -38,8 +38,13 @@ const RestoreBackup = () => {
 
       toast({
         variant: 'accent',
-        title: 'Backup has been successfully restored!',
-        description: format(backup.fileContent.backup_date, 'yyyy. MM. dd. - HH:mm')
+        title: 'Restored: Backup',
+        description: (
+          <>
+            <p>Backup has been successfully restored!</p>
+            <p className="text-xs font-heading font-semibold">{format(backup.fileContent.backup_date, 'yyyy. MM. dd. - HH:mm')}</p>
+          </>
+        )
       })
       navigate('/')
     } catch (err) {

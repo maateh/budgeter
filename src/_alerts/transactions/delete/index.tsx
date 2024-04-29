@@ -7,7 +7,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 
 // hooks
-import { useTransactionWithBudget } from "@/lib/react-query/queries"
+import { useToast } from "@/components/ui/use-toast"
+import { useTransaction } from "@/lib/react-query/queries"
 import { useDeleteTransaction } from "@/lib/react-query/mutations"
 
 const DeleteTransaction = () => {
@@ -16,7 +17,9 @@ const DeleteTransaction = () => {
 
   const [removeRelated, setRemoveRelated] = useState(false)
 
-  const { data: transaction, isLoading } = useTransactionWithBudget(id)
+  const { toast } = useToast()
+
+  const { data: transaction, isLoading } = useTransaction(id)
   const { mutateAsync: deleteTransaction, isPending: isDeletePending } = useDeleteTransaction(id)
 
   const deleteConfirm = async () => {
@@ -24,8 +27,19 @@ const DeleteTransaction = () => {
       await deleteTransaction({ id, removeRelated })
 
       navigate(-1)
+      toast({
+        variant: 'destructive',
+        title: `Deleted: Transaction - ${transaction!.name}`,
+        description: 'Transaction has been successfully deleted.'
+      })
     } catch (err) {
       console.error(err)
+      
+      toast({
+        variant: 'destructive',
+        title: `Oops! Failed to delete transaction.`,
+        description: 'Please try again.'
+      })
     }
   }
 
