@@ -6,7 +6,7 @@ import { useAPI } from "@/services/providers/api/APIContext.hooks"
 // types
 import { Transaction } from "@/services/api/types"
 
-const useTransactionWithBudget = (transactionId: string, options?: Omit<UseQueryOptions<Transaction>, 'queryKey' | 'queryFn'>) => {
+const useTransaction = (transactionId: string, options?: Omit<UseQueryOptions<Transaction>, 'queryKey' | 'queryFn'>) => {
   const { api } = useAPI()
 
   return useQuery({
@@ -16,4 +16,4 @@ const useTransactionWithBudget = (transactionId: string, options?: Omit<UseQuery
   })
 }
 
-export default useTransactionWithBudget
+export default useTransaction
