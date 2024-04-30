@@ -26,7 +26,7 @@ const BudgetDetails = () => {
     <div className="page-wrapper">
       <div className="flex flex-wrap-reverse items-center justify-between gap-x-12">
         <h1>
-          Budget <span className="text-green-600/85 dark:text-green-400">Details</span>
+          Budget <span className="text-emerald-600 dark:text-emerald-400">Details</span>
         </h1>
 
         <Button className="ml-auto icon-wrapper"

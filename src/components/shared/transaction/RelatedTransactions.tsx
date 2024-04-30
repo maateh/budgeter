@@ -30,16 +30,16 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
 
   const { mutateAsync: removeRelated, isPending } = useRemoveRelatedTransaction(transaction.id)
 
-  const handleRemove = async (relatedId: string) => {
+  const handleRemove = async (relatedTransaction: Transaction) => {
     try {
       await removeRelated({
         id: transaction.id,
-        relatedId
+        relatedId: relatedTransaction.id
       })
 
       toast({
-        title: 'Removed as related',
-        description: `The selected transaction has been removed as related from: ${transaction.name}`
+        title: 'Removed: Transaction as related',
+        description: `The selected transaction ("${relatedTransaction.name}") has been removed as related from "${transaction.name}" transaction.`
       })
     } catch (err) {
       console.error(err)
@@ -76,7 +76,7 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
               <ButtonTooltip className="p-0.5"
                 variant="icon"
                 size="icon"
-                onClick={() => handleRemove(transaction.id)}
+                onClick={() => handleRemove(transaction)}
                 disabled={isPending}
                 tooltip="Remove as related"
                 tooltipProps={{ className: "bg-background/85 border-muted-foreground/50 text-muted-foreground text-xs font-heading" }}

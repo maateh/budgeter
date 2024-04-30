@@ -16,8 +16,8 @@ const Budgets = () => {
   return (
     <>
       <div className="mb-5 flex flex-wrap justify-between items-center gap-x-4 gap-y-2.5">
-        <h2 className="indent-border">
-          Recent <span className="text-blue-600 dark:text-blue-500 overline">Budgets</span>
+        <h2 className="border-emerald-600 dark:border-emerald-400 indent-border">
+          Your <span className="text-emerald-600 dark:text-emerald-400 overline">Budgets</span>
         </h2>
 
         <Button className="ml-auto icon-wrapper"

@@ -33,8 +33,8 @@ const BudgetPayments = ({ budget }: BudgetPaymentsProps) => {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <h2>
-        Recent <span className="overline text-amber-600 dark:text-amber-500">Payments</span>
+      <h2 className="border-amber-600 dark:border-amber-500 indent-border">
+        Recent <span className="text-amber-600 dark:text-amber-500 overline">Payments</span>
       </h2>
 
       {!isLoading && data ? (

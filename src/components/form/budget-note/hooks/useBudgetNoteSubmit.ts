@@ -27,7 +27,7 @@ const useBudgetNoteSubmit = (form: UseFormReturn<BudgetNoteFieldValues>, props: 
       
       toast({
         title: 'Created: Budget note',
-        description: 'A note has been successfully added for your budget.'
+        description: 'A note has been successfully added to your budget.'
       })
     } catch (err) {
       console.error(err)

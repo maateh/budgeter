@@ -18,7 +18,7 @@ type BalanceUpdaterOptions = {
  * 
  * @param balance - The current balance of the budget.
  * @param payment - The payment object to handle.
- * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
+ * @param options - Options that can affect the update calculations of the balance.
  * @returns The updated balance after handling the payment action.
  */
 function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdaterOptions): Balance {
@@ -68,7 +68,7 @@ function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdat
  * 
  * @param budgetId - The ID of the budget to update the balance for.
  * @param payment - The payment object used to update the balance.
- * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
+ * @param options - Options that can affect the update calculations of the balance.
  * @returns A Promise resolving to the updated budget after updating the balance.
  */
 async function updateBalance(budgetId: string, payment: Payment, options: BalanceUpdaterOptions): Promise<Budget> {
