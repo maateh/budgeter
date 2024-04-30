@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
-import PaymentList from "@/components/shared/payment/PaymentList"
+import Listing from "@/components/ui/custom/Listing"
 import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
 import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
@@ -28,7 +28,7 @@ type PaymentProgressProps = {
 }
 
 const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
-  const { data: subpayments } = usePayments({
+  const { data: subpayments, isLoading: isSubpaymentsLoading } = usePayments({
     filter: {
       filterBy: { transactionId: transaction.id, isSubpayment: true }
     },
@@ -37,37 +37,42 @@ const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
 
   return (
     <>
-      <PaymentList className="mb-2.5"
-        payments={subpayments}
-        firstElement={(
-          <Popover>
-            <PopoverTrigger>
-              <li>
-                <Badge className="cursor-pointer icon-wrapper"
-                  variant="outline"
-                  size="sm"
-                >
-                  <BadgePlus size={20} />
-                  <span>New</span>
-                </Badge>
-              </li>
-            </PopoverTrigger>
-            <PopoverContent>
-              <SubpaymentForm budgetId={budget.id} transactionId={transaction.id} />
-            </PopoverContent>
-          </Popover>
-        )}
-      >
-        {(payment) => (
-          <PaymentBadge
-            payment={payment}
-            processed={true}
-            currency={budget.balance.currency}
-            showRemoveButton
-            showProgress
-          />
-        )}
-      </PaymentList>
+      {!isSubpaymentsLoading && subpayments ? (
+        <Listing className="mb-2.5 flex flex-wrap flex-row gap-x-1.5 gap-y-1"
+          items={subpayments}
+          fallbackProps={{ size: "xs", value: 'No payments to show.' }}
+          firstElement={(
+            <Popover>
+              <PopoverTrigger>
+                <li>
+                  <Badge className="cursor-pointer icon-wrapper"
+                    variant="outline"
+                    size="sm"
+                  >
+                    <BadgePlus size={20} />
+                    <span>New</span>
+                  </Badge>
+                </li>
+              </PopoverTrigger>
+              <PopoverContent>
+                <SubpaymentForm budgetId={budget.id} transactionId={transaction.id} />
+              </PopoverContent>
+            </Popover>
+          )}
+        >
+          {(payment) => (
+            <PaymentBadge
+              payment={payment}
+              processed={true}
+              currency={budget.balance.currency}
+              showRemoveButton
+              showProgress
+            />
+          )}
+        </Listing>
+      ) : (
+        <>Loading...</> // TODO: skeleton
+      )}
 
       <p className="text-base text-center font-heading">
         Progress of subpayments

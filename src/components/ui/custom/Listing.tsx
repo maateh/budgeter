@@ -19,7 +19,7 @@ type ListingData<T> = {
 }
 
 type ListingFallback = {
-  fallbackProps?: InfoBadgeProps
+  fallbackProps?: Partial<InfoBadgeProps>
   customFallback?: never
 } | {
   customFallback?: React.ReactNode

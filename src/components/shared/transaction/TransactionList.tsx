@@ -7,11 +7,11 @@ import { ChevronRightCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import PaginationList from "@/components/ui/custom/PaginationList"
+import Listing from "@/components/ui/custom/Listing"
 
 // hooks
-import { useTransactionsPagination } from "@/lib/react-query/queries"
 import { usePagination } from "@/hooks"
+import { useTransactionsPagination } from "@/lib/react-query/queries"
 
 // types
 import { Budget, QueryOptions, Transaction } from "@/services/api/types"
@@ -34,9 +34,15 @@ const TransactionList = ({ params, filter, children }: TransactionListProps) => 
 
   return !isLoading && data ? (
     <>
-      <PaginationList pages={data.pages}>
+      <Listing pages={data.pages}
+        fallbackProps={{
+          className: 'w-fit mx-auto mt-2',
+          value: 'There is no transaction to display.',
+          size: 'lg'
+        }}
+      >
         {({ budget, ...transaction }) => children(transaction, budget)}
-      </PaginationList>
+      </Listing>
 
       {(hasNextPage || isLimitExceeded) && (
         <Button className="w-fit mt-1 mx-auto icon-wrapper"

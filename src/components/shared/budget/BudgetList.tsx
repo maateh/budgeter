@@ -5,7 +5,7 @@ import { WalletCards } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // components
-import PaginationList from "@/components/ui/custom/PaginationList"
+import Listing from "@/components/ui/custom/Listing"
 import BudgetPreview from "@/components/shared/budget/BudgetPreview"
 
 // hooks
@@ -32,12 +32,13 @@ const BudgetList = ({ filter, params, disableScrolling = false }: BudgetListProp
 
   return !isLoading && data ? (
     <>
-      <PaginationList className="flex flex-row flex-wrap justify-around gap-x-6 gap-y-4"
+      <Listing className="flex flex-row flex-wrap justify-around gap-x-6 gap-y-4"
+        fallbackProps={{ value: "There isn't any budget to display.", size: 'lg' }}
         itemProps={{ className: "flex-1 w-full max-w-md sm:min-w-72 max-sm:min-w-56" }}
         pages={data.pages}
       >
         {(budget) => <BudgetPreview budget={budget} />}
-      </PaginationList>
+      </Listing>
 
       <div ref={observerRef}>
         {isFetchingNextPage && <>Loading...</>} {/* TODO: skeleton */}

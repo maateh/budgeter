@@ -9,10 +9,10 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
+import Listing from "@/components/ui/custom/Listing"
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
-import PaymentList from "@/components/shared/payment/PaymentList"
 
 // hooks
 import { usePayments } from "@/lib/react-query/queries"
@@ -64,9 +64,9 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       <Separator className="mx-auto w-5/6" />
 
       {!isPaymentsLoading && payments ? (
-        <PaymentList className="mb-auto"
-          payments={payments}
-          infoBadgeProps={{ size: "xs" }}
+        <Listing className="mb-auto flex flex-row flex-wrap items-center gap-x-1.5 gap-y-1"
+          items={payments}
+          fallbackProps={{ size: "xs", value: 'No payments to show.' }}
           firstElement={(
             <Badge className="flex items-center gap-x-1 cursor-pointer"
               variant="outline"
@@ -101,7 +101,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               }}
             />
           )}
-        </PaymentList>
+        </Listing>
       ) : (
         <>Loading...</> // TODO: skeleton
       )}
