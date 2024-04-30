@@ -32,7 +32,7 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
         <BudgetActions budget={budget} />
       </div>
 
-      <Separator className="w-11/12 mx-auto my-1.5" />
+      <Separator className="w-5/6 mx-auto my-1.5" />
 
       <div className="flex flex-wrap justify-around gap-x-6 gap-y-4 small-caps">
         <BalanceBadge className="flex-1 max-w-72 min-w-48"
@@ -65,8 +65,6 @@ const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
           value={formatWithCurrency(budget.balance.loss, budget.balance.currency)}
         />
       </div>
-
-      <Separator className="w-11/12 mx-auto my-1.5" />
     </div>
   )
 }

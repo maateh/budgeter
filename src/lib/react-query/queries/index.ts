@@ -19,3 +19,4 @@ export { default as useTransactionsControlledPagination } from './transaction/us
 
 // payments
 export { default as usePayments } from './payment/usePayments'
+export { default as usePaymentsPagination } from './payment/usePaymentsPagination'
