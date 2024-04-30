@@ -8,6 +8,9 @@ import { StorageCollection } from "@/services/storage/types"
 type BalanceUpdaterOptions = {
   action: 'execute' | 'undo'
   isBorrowment?: boolean
+  skipCurrentDelta?: boolean
+  skipExtraDeltas?: boolean
+  borrowmentTargetBudgetId?: string
 }
 
 /**
@@ -19,9 +22,14 @@ type BalanceUpdaterOptions = {
  * @returns The updated balance after handling the payment action.
  */
 function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdaterOptions): Balance {
+  const {
+    action,
+    isBorrowment = false,
+    skipCurrentDelta = false,
+    skipExtraDeltas = false
+  } = options
+  
   const { current, income, loss, borrowment } = balance
-  const { action, isBorrowment = false } = options
-
   const { type, processedAmount = 0, isSubpayment } = payment
   let { amount } = payment
 
@@ -42,13 +50,13 @@ function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdat
   const update: 1 | -1 = action === 'execute' ? 1 : -1
   
   const currentDelta = type === '+' ? amount * update : -amount * update
-  const incomeDelta = !isBorrowment && type === '+' ? amount * update : 0
-  const lossDelta = !isBorrowment && type === '-' ? amount * update : 0
-  const borrowmentDelta = isBorrowment ? currentDelta : 0
+  const incomeDelta = !isBorrowment && !skipExtraDeltas && type === '+' ? amount * update : 0
+  const lossDelta = !isBorrowment && !skipExtraDeltas && type === '-' ? amount * update : 0
+  const borrowmentDelta = isBorrowment && !skipExtraDeltas ? currentDelta : 0
 
   return {
     ...balance,
-    current: current + currentDelta,
+    current: current + (!skipCurrentDelta ? currentDelta : 0),
     income: income + incomeDelta,
     loss: loss + lossDelta,
     borrowment: borrowment + borrowmentDelta
@@ -66,10 +74,21 @@ function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdat
 async function updateBalance(budgetId: string, payment: Payment, options: BalanceUpdaterOptions): Promise<Budget> {
   const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
   const budget = await budgetStorage.findById(budgetId)
+  
+  if (options.isBorrowment && options.borrowmentTargetBudgetId) {
+    const targetBudget = await budgetStorage.findById(options.borrowmentTargetBudgetId)
+    await budgetStorage.save({
+      ...targetBudget,
+      balance: handlePayment(targetBudget.balance, payment, { ...options, skipExtraDeltas: true })
+    })
+  }
 
   return await budgetStorage.save({
     ...budget,
-    balance: handlePayment(budget.balance, payment, options)
+    balance: handlePayment(budget.balance, payment, {
+      ...options,
+      skipCurrentDelta: options.isBorrowment && !!options.borrowmentTargetBudgetId
+    })
   })
 }
 

@@ -42,7 +42,6 @@ class PaymentStorageAPI implements IPaymentAPI {
   }
 
   public async addSubpayment(transactionId: string, data: z.infer<typeof subpaymentFormSchema>): Promise<Transaction> {  
-    console.log({data})
     const subpayment: Payment = {
       ...data,
       id: crypto.randomUUID(),

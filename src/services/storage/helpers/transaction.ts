@@ -85,7 +85,7 @@ async function updateTransaction(transactionId: string, executionPayment: Paymen
   const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
   const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-  const { paymentId, type, ...document } = await transactionStorage.findById(transactionId)
+  const { paymentId, budgetId, type, ...document } = await transactionStorage.findById(transactionId)
   const payment = await paymentStorage.findById(paymentId)
 
   /**
@@ -97,17 +97,24 @@ async function updateTransaction(transactionId: string, executionPayment: Paymen
    * because the withdrawal amount will be the difference of the base payment
    * amount minus the current progress of the execution payment.
    */
-  await updateBalance(executionPayment.budgetId, {
+  await updateBalance(budgetId, {
     ...executionPayment,
     processedAmount: type === 'borrow' && action === 'undo'
       ? payment.amount - (executionPayment.processedAmount || 0)
       : executionPayment.processedAmount
-  }, { action, isBorrowment: type === 'borrow' })
+  }, {
+    action,
+    isBorrowment: type === 'borrow',
+    skipExtraDeltas: type !== 'default',
+    borrowmentTargetBudgetId: type === 'borrow' && budgetId !== executionPayment.budgetId
+      ? executionPayment.budgetId
+      : undefined
+  })
 
   /**
    * Update transaction and its payment based on 'executionPayment'
    */
-  const transaction: Transaction = { ...document, type, payment }
+  const transaction: Transaction = { ...document, budgetId, type, payment }
   const { payment: updatedPayment, ...updatedTransaction } = handlePayment(
     transaction, executionPayment, action
   )
