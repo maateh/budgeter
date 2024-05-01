@@ -66,7 +66,7 @@ const BudgetPayments = ({ budget }: BudgetPaymentsProps) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <PaymentBadge className={`py-0.5 border cursor-pointer ${payment.type === '+' ? 'border-accent/30' : 'border-destructive/30'}`}
+                  <PaymentBadge className="bg-primary/35 py-0.5 border-2 cursor-pointer"
                     payment={payment}
                     currency={budget.balance.currency}
                     processed

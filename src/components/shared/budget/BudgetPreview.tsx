@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 // icons
-import { BadgePlus } from "lucide-react"
+import { BadgePlus, ChevronRightCircle, HandCoins } from "lucide-react"
 
 // shadcn
 import { Badge } from "@/components/ui/badge"
@@ -15,16 +15,15 @@ import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
 
 // hooks
-import { usePayments } from "@/lib/react-query/queries"
-
-// hooks
 import { useDialog } from "@/hooks"
+import { usePayments } from "@/lib/react-query/queries"
 
 // types
 import { Budget } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 type BudgetPreviewProps = {
   budget: Budget
@@ -32,19 +31,17 @@ type BudgetPreviewProps = {
 
 const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   const navigate = useNavigate()
+
   const { openDialog } = useDialog()
 
   const { data: payments, isLoading: isPaymentsLoading } = usePayments({
-    params: { offset: 0, limit: 7 },
-    filter: {
-      filterBy: { budgetId: budget.id }
-    },
+    params: { offset: 0, limit: 8 },
+    filter: { filterBy: { budgetId: budget.id }},
     sortBy: { createdAt: -1 }
   })
 
   return (
-    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/55 border cursor-pointer"
-      style={{ borderColor: budget.theme }}
+    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/55 border-2 shadow-lg drop-shadow-sm cursor-pointer"
       onClick={() => navigate(`/budgets/${budget.id}`)}
     >
       <div className="w-full flex flex-wrap justify-between items-center gap-x-3.5 gap-y-2">
@@ -52,13 +49,38 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           budget={budget}
         />
 
-        <BalanceBadge className="min-w-32 ml-auto px-3"
-          separatorProps={{ className: "h-3" }}
-          orientation="vertical"
-          size="sm"
-          iconSize={18}
-          balance={budget.balance}
-        />
+        <div className="flex items-center gap-x-2">
+          {budget.balance.borrowment ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Badge
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <HandCoins size={16} />
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent asChild>
+                  <InfoBadge className="py-3.5 px-5 bg-primary border-2 rounded-full hover:bg-primary"
+                    size="sm"
+                    label="Under Borrowment"
+                    value={formatWithCurrency(budget.balance.borrowment, budget.balance.currency)}
+                    icon={<HandCoins size={20} strokeWidth={2.25} />}
+                  />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : <></>}
+
+          <BalanceBadge className="min-w-32 ml-auto px-3"
+            separatorProps={{ className: "h-3" }}
+            orientation="vertical"
+            size="sm"
+            iconSize={18}
+            balance={budget.balance}
+          />
+        </div>
       </div>
       
       <Separator className="mx-auto w-5/6" />
@@ -68,7 +90,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           items={payments}
           fallbackProps={{ size: "xs", value: 'No payments to show.' }}
           firstElement={(
-            <Badge className="flex items-center gap-x-1 cursor-pointer"
+            <Badge className="py-1 px-2.5 flex items-center gap-x-1.5 font-heading font-medium cursor-pointer"
               variant="outline"
               size="xs"
               onClick={(e) => {
@@ -77,20 +99,21 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
               }}
             >
               <BadgePlus size={16} />
-              <span className="font-bold">New</span>
+              New
             </Badge>
           )}
           lastElement={payments.length ? (
-            <Badge className="font-semibold cursor-pointer"
+            <Badge className="py-1 px-2.5 flex items-center gap-x-1.5 font-heading font-medium cursor-pointer"
               variant="outline"
               size="xs"
             >
               View all
+              <ChevronRightCircle size={14} />
             </Badge>
           ) : undefined}
         >
           {(payment) => (
-            <PaymentBadge className="font-semibold border dark:bg-secondary/35"
+            <PaymentBadge className="flex px-2.5 font-semibold border-2"
               size="xs"
               payment={payment}
               currency={budget.balance.currency}
