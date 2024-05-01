@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { Location, useLocation, useNavigate, useParams } from "react-router-dom"
 
 // shadcn
 import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
@@ -6,16 +6,22 @@ import { Separator } from "@/components/ui/separator"
 
 // hooks
 import { useToast } from "@/components/ui/use-toast"
-import { useBudget } from "@/lib/react-query/queries"
 import { useDeleteBudget } from "@/lib/react-query/mutations"
+
+// types
+import { Budget } from "@/services/api/types"
+
+type DeleteBudgetState = {
+  budget: Budget
+}
 
 const DeleteBudget = () => {
   const { id } = useParams() as { id: string }
+  const { state: { budget }} = useLocation() as Location<DeleteBudgetState>
   const navigate = useNavigate()
 
   const { toast } = useToast()
 
-  const { data: budget, isLoading } = useBudget(id)
   const { mutateAsync: deleteBudget } = useDeleteBudget(id)
 
   const deleteConfirm = async () => {
@@ -43,7 +49,7 @@ const DeleteBudget = () => {
     <AlertDialogContent variant="negative">
       <AlertDialogHeader>
         <AlertDialogTitle>
-          Delete Budget - {!isLoading && budget ? budget.name : <>Loading...</> /*TODO: skeleton*/}
+          Delete Budget - {budget.name}
         </AlertDialogTitle>
       </AlertDialogHeader>
 

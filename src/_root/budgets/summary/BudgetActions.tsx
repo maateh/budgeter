@@ -22,7 +22,7 @@ const BudgetActions = ({ budget }: BudgetActionsProps) => {
       <Button className="icon-wrapper"
         variant="destructive"
         size="sm"
-        onClick={() => openDialog(`/budgets/delete/${budget.id}`)}
+        onClick={() => openDialog(`/budgets/delete/${budget.id}`, {}, { budget })}
       >
         <Trash2 size={18} />
         <span>Delete</span>

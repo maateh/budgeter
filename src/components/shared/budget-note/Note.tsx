@@ -103,7 +103,9 @@ const Note = ({ budget, note }: NoteProps) => {
           <Button className="bg-primary p-2 hover:bg-primary/75"
             variant="icon"
             size="icon"
-            onClick={() => openDialog(`/budgets/${budget.id}/notes/delete/${note.id}`)}
+            onClick={() => {
+              openDialog(`/budgets/${budget.id}/notes/delete/${note.id}`, {}, { note, budget })
+            }}
           >
             <Trash2 className="text-destructive"
               size={16}

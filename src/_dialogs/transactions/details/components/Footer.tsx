@@ -43,7 +43,9 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
         <Button className="ml-auto flex items-center gap-x-1.5"
           variant="destructive"
           size="sm"
-          onClick={() => openDialog(`/transactions/delete/${transaction.id}`, { replace: true })}
+          onClick={() => {
+            openDialog(`/transactions/delete/${transaction.id}`, { replace: true }, { transaction })
+          }}
         >
           <Trash2 size={18} />
           <span>Delete</span>

@@ -42,7 +42,7 @@ const Actions = ({ transaction }: ActionsProps) => {
         </DropdownMenuItem>
         
         <DropdownMenuItem className="text-destructive font-bold icon-wrapper hover:cursor-pointer focus:bg-destructive"
-          onClick={() => openDialog(`/transactions/delete/${transaction.id}`)}
+          onClick={() => openDialog(`/transactions/delete/${transaction.id}`, {}, { transaction })}
         >
           <Trash2 size={14} strokeWidth={3} />
           <span>Delete</span>

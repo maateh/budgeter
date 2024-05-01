@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Location, useLocation, useNavigate, useParams } from "react-router-dom"
 
 // shadcn
 import { AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
@@ -8,18 +8,24 @@ import { Separator } from "@/components/ui/separator"
 
 // hooks
 import { useToast } from "@/components/ui/use-toast"
-import { useTransaction } from "@/lib/react-query/queries"
 import { useDeleteTransaction } from "@/lib/react-query/mutations"
 
+// types
+import { Transaction } from "@/services/api/types"
+
+type DeleteTransactionState = {
+  transaction: Transaction
+}
+
 const DeleteTransaction = () => {
-  const navigate = useNavigate()
   const { id } = useParams() as { id: string }
+  const { state: { transaction }} = useLocation() as Location<DeleteTransactionState>
+  const navigate = useNavigate()
 
   const [removeRelated, setRemoveRelated] = useState(false)
 
   const { toast } = useToast()
 
-  const { data: transaction, isLoading } = useTransaction(id)
   const { mutateAsync: deleteTransaction, isPending: isDeletePending } = useDeleteTransaction(id)
 
   const deleteConfirm = async () => {
@@ -29,7 +35,7 @@ const DeleteTransaction = () => {
       navigate(-1)
       toast({
         variant: 'destructive',
-        title: `Deleted: Transaction - ${transaction!.name}`,
+        title: `Deleted: Transaction - ${transaction.name}`,
         description: 'Transaction has been successfully deleted.'
       })
     } catch (err) {
@@ -47,7 +53,7 @@ const DeleteTransaction = () => {
     <AlertDialogContent variant="negative">
       <AlertDialogHeader>
         <AlertDialogTitle>
-          Delete Transaction - {!isLoading && transaction ? transaction.name : <>Loading...</> /*TODO: skeleton*/}
+          Delete Transaction - {transaction.name}
         </AlertDialogTitle>
       </AlertDialogHeader>
 
@@ -57,16 +63,17 @@ const DeleteTransaction = () => {
         This action cannot be undone. This will permanently delete this transaction and withdraw the payment within the budget if it has already been processed.
       </AlertDialogDescription>
 
-      {transaction?.relatedIds.length ? (
+      {transaction.relatedIds.length ? (
         <div className="icon-wrapper">
-          <Checkbox className="size-5 border-2 data-[state=checked]:border-accent" id="removeRelated"
+          <Checkbox className="size-5 border-2 data-[state=checked]:border-accent"
+            id="removeRelated"
             checked={removeRelated}
             onCheckedChange={() => setRemoveRelated((removeRelated) => !removeRelated)}
           />
           <label className="text-accent font-semibold capitalize small-caps"
             htmlFor="removeRelated"
           >
-            Delete related transactions
+            Remove related transactions
           </label>
         </div>
       ) : <></>}
