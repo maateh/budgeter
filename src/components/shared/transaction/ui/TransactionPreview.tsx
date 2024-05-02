@@ -1,7 +1,7 @@
 import { formatDistance } from "date-fns"
 
 // components
-import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
+import TransactionStatusToggle from "@/components/shared/transaction/ui/TransactionStatusToggle"
 import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
@@ -10,18 +10,18 @@ import { Budget, Transaction } from "@/services/api/types"
 
 // utils
 import { isNeutral } from "@/components/shared/payment/utils"
+import { cn } from "@/lib/utils"
 
 type TransactionPreviewProps = {
   transaction: Transaction
   budget: Budget
-  onClick?: () => void
-}
+} & React.HTMLAttributes<HTMLDivElement>
 
-const TransactionPreview = ({ transaction, budget, onClick }: TransactionPreviewProps) => {
+const TransactionPreview = ({ transaction, budget, className, ...props }: TransactionPreviewProps) => {
   return (
     <div
-      className="w-full pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer"
-      onClick={onClick}
+      className={cn("w-full pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer", className)}
+      {...props}
     >
       <div className="flex items-center gap-x-1">
         <TransactionStatusToggle

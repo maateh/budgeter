@@ -32,7 +32,11 @@ const TransactionList = ({ params, filter, children }: TransactionListProps) => 
     actionAfterLimitExceeded: () => navigate('/transactions')
   })
 
-  return !isLoading && data ? (
+  if (isLoading || !data) {
+    return <>Loading...</> // TODO: skeleton
+  }
+
+  return (
     <>
       <Listing pages={data.pages}
         fallbackProps={{
@@ -55,7 +59,7 @@ const TransactionList = ({ params, filter, children }: TransactionListProps) => 
         </Button>
       )}
     </>
-  ) : <>Loading...</> // TODO: skeleton - preview
+  )
 }
 
 export default TransactionList

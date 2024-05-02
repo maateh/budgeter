@@ -4,7 +4,7 @@ import { format } from "date-fns"
 import { Calendar, CalendarCheck, CalendarClock } from "lucide-react"
 
 // components
-import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
+import TransactionStatusToggle from "@/components/shared/transaction/ui/TransactionStatusToggle"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"

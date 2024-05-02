@@ -8,12 +8,12 @@ import { Separator } from "@/components/ui/separator"
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import TransactionList from "@/components/shared/transaction/TransactionList"
-import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
+import TransactionPreview from "@/components/shared/transaction/ui/TransactionPreview"
 import RelatedTransactionsForm from "@/components/form/related-transactions/RelatedTransactionsForm"
 
 // hooks
-import { useToast } from "@/components/ui/use-toast"
 import { useDialog } from "@/hooks"
+import { useToast } from "@/components/ui/use-toast"
 import { useRemoveRelatedTransaction } from "@/lib/react-query/mutations"
 
 // types
@@ -25,8 +25,9 @@ type RelatedTransactionsProps = {
 }
 
 const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
-  const { toast } = useToast()
   const { openDialog } = useDialog()
+
+  const { toast } = useToast()
 
   const { mutateAsync: removeRelated, isPending } = useRemoveRelatedTransaction(transaction.id)
 
@@ -39,6 +40,7 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
 
       toast({
         title: 'Removed: Transaction as related',
+        // TODO: add undo
         description: `The selected transaction ("${relatedTransaction.name}") has been removed as related from "${transaction.name}" transaction.`
       })
     } catch (err) {
@@ -94,7 +96,7 @@ const RelatedTransactions = ({ transaction }: RelatedTransactionsProps) => {
           variant="destructive"
           size="sm"
           icon={<BadgeInfo className="text-destructive" size={20} />}
-          value="There are no related transactions to show."
+          value="There is no related transaction to show."
         />
       )}
     </>

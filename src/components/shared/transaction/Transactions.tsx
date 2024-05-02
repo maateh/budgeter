@@ -10,7 +10,7 @@ import { Switch, SwitchThumb } from "@/components/ui/switch"
 // components
 import TabsSwitch from "@/components/ui/custom/TabsSwitch"
 import TransactionList from "@/components/shared/transaction/TransactionList"
-import TransactionPreview from "@/components/shared/transaction/TransactionPreview"
+import TransactionPreview from "@/components/shared/transaction/ui/TransactionPreview"
 
 // hooks
 import { useDialog } from "@/hooks"

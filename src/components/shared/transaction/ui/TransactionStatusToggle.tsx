@@ -3,9 +3,12 @@ import { forwardRef } from "react"
 // icons
 import { BadgeCheck, Banknote, Coins, LucideProps, XCircle } from "lucide-react"
 
+// shadcn
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
-import PaymentProgress from "@/components/shared/payment/progress/PaymentProgress"
+import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
 import { useToast } from "@/components/ui/use-toast"
@@ -13,7 +16,6 @@ import { useUpdateTransactionStatus } from "@/lib/react-query/mutations"
 
 // types
 import { Transaction } from "@/services/api/types"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 const getIcon = (type: Transaction['type'], iconProps?: LucideProps): { on: React.ReactNode; off: React.ReactNode } => {
   return {
@@ -62,9 +64,10 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
   transaction, iconProps
 }, ref) => {
   const { toast } = useToast()
-  const { mutateAsync: updateTransactionStatus } = useUpdateTransactionStatus(transaction.id)
+  
+  const { mutateAsync: updateTransactionStatus, isPending } = useUpdateTransactionStatus(transaction.id)
 
-  const handleUpdateStatus = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
 
     if (transaction.type !== 'default') return
@@ -96,7 +99,8 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
       status={transaction.processed ? 'on' : 'off'}
       icon={getIcon(transaction.type, iconProps)}
       tooltip={getTooltip(transaction.type)}
-      onClick={transaction.type === 'default' ? handleUpdateStatus : undefined}
+      onClick={transaction.type === 'default' ? handleUpdate : undefined}
+      disabled={isPending}
       toggleOnHover={transaction.type === 'default'}
       ref={ref}
     />

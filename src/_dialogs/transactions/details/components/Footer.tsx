@@ -7,7 +7,7 @@ import { DialogFooter } from "@/components/ui/dialog"
 
 // components
 import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
-import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
+import TransactionStatusToggle from "@/components/shared/transaction/ui/TransactionStatusToggle"
 
 // hooks
 import { useDialog } from "@/hooks"
