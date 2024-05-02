@@ -1,5 +1,5 @@
 // components
-import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
+import BudgetNameBadge from "@/components/shared/budget/ui/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/ui/TransactionStatusToggle"
 import SortingButton from "@/components/ui/custom/SortingButton"

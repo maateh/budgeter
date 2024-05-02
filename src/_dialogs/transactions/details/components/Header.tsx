@@ -6,7 +6,7 @@ import { DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
-import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
+import BudgetMarker from "@/components/shared/budget/ui/BudgetMarker"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"

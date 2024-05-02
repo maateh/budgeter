@@ -5,8 +5,8 @@ import { AlertTriangle, ArrowDown } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 
 // components
-import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
-import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
+import BalanceBadge from "@/components/shared/budget/ui/BalanceBadge"
+import BudgetNameBadge from "@/components/shared/budget/ui/BudgetNameBadge"
 import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 

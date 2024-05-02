@@ -4,7 +4,7 @@ import { forwardRef } from "react"
 import { Badge, BadgeProps } from "@/components/ui/badge"
 
 // components
-import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
+import BudgetMarker from "@/components/shared/budget/ui/BudgetMarker"
 
 // types
 import { Budget } from "@/services/api/types"

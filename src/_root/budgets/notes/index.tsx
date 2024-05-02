@@ -27,8 +27,7 @@ const BudgetNotes = ({ budget }: BudgetNotesProps) => {
           Budget <span className="overline text-blue-500">Notes</span>
         </h2>
 
-        <Button
-          className="border-md icon-wrapper"
+        <Button className="border-md icon-wrapper"
           onClick={() => setEditingMode((mode) => !mode)}
         >
           {editingMode ? (

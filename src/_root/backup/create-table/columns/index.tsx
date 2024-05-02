@@ -2,8 +2,8 @@
 import { getSelectionColumn } from "@/components/ui/data-table"
 
 // components
-import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
-import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
+import BalanceBadge from "@/components/shared/budget/ui/BalanceBadge"
+import BudgetNameBadge from "@/components/shared/budget/ui/BudgetNameBadge"
 
 // types
 import { ColumnDef } from "@tanstack/react-table"

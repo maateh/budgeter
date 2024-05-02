@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 // components
 import Listing from "@/components/ui/custom/Listing"
-import BudgetPreview from "@/components/shared/budget/BudgetPreview"
+import BudgetPreview from "@/components/shared/budget/ui/BudgetPreview"
 
 // hooks
 import { useBudgetsPagination } from "@/lib/react-query/queries"
@@ -30,7 +30,11 @@ const BudgetList = ({ filter, params, disableScrolling = false }: BudgetListProp
     data, fetchNextPage, disableScrolling
   })
 
-  return !isLoading && data ? (
+  if (isLoading || !data) {
+    return <>Loading...</> // TODO: skeleton
+  }
+
+  return (
     <>
       <Listing className="flex flex-row flex-wrap justify-around gap-x-6 gap-y-4"
         fallbackProps={{ value: "There isn't any budget to display.", size: 'lg' }}
@@ -54,7 +58,7 @@ const BudgetList = ({ filter, params, disableScrolling = false }: BudgetListProp
         </Button>
       )}
     </>
-  ) : <>Loading...</> // TODO: skeleton
+  )
 }
 
 export default BudgetList

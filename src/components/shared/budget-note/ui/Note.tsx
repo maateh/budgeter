@@ -12,8 +12,8 @@ import { Separator } from "@/components/ui/separator"
 import BudgetNoteForm from "@/components/form/budget-note/BudgetNoteForm"
 
 // hooks
-import { useUpdateNoteStatus } from "@/lib/react-query/mutations"
 import { useDialog } from "@/hooks"
+import { useUpdateNoteStatus } from "@/lib/react-query/mutations"
 
 // types
 import { Budget, BudgetNote } from "@/services/api/types"
@@ -24,9 +24,9 @@ type NoteProps = {
 }
 
 const Note = ({ budget, note }: NoteProps) => {
-  const { openDialog } = useDialog()
-
   const [editingMode, setEditingMode] = useState(false)
+
+  const { openDialog } = useDialog()
 
   const { mutateAsync: updateNoteStatus } = useUpdateNoteStatus(budget.id, note.id)
 

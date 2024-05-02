@@ -7,7 +7,7 @@ import { FileWarning, Rocket, Save } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 
 // components
-import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
+import BudgetNameBadge from "@/components/shared/budget/ui/BudgetNameBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
