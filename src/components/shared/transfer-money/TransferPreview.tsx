@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator"
 // components
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
-import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
@@ -40,8 +40,8 @@ const TransferElement = ({ budget, payment, isRoot }: TransferElementProps) => (
 
       <PaymentBadge
         payment={payment}
-        processed={true}
         currency={budget.balance.currency}
+        processed
       />
 
       <ArrowDown className={payment.type === '+' ? 'text-accent' : 'text-destructive'}

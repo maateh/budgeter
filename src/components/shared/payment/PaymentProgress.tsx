@@ -3,37 +3,62 @@ import { BadgePlus, Banknote, Handshake } from "lucide-react"
 
 // shadcn
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import Listing from "@/components/ui/custom/Listing"
-import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
 // hooks
-import { usePayments } from "@/lib/react-query/queries"
+import { useBudget, usePayments, useTransaction } from "@/lib/react-query/queries"
 
 // types
-import { Budget, Transaction } from "@/services/api/types"
+import { Payment } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 
 type PaymentProgressProps = {
-  transaction: Transaction
-  budget: Budget
+  payment: Payment
+  transactionId?: never
+  budgetId?: never
+} | {
+  transactionId: string
+  budgetId: string
+  payment?: never
 }
 
-const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
-  const { data: subpayments, isLoading: isSubpaymentsLoading } = usePayments({
+const PaymentProgress = ({ payment, transactionId, budgetId }: PaymentProgressProps) => {
+  const {
+    data: budget,
+    isLoading: isBudgetLoading
+  } = useBudget(payment ? payment.budgetId : budgetId)
+
+  const {
+    data: transaction,
+    isLoading: isTransactionLoading
+  } = useTransaction(payment ? payment.transactionId : transactionId)
+
+  const {
+    data: subpayments,
+    isLoading: isSubpaymentsLoading
+  } = usePayments({
     filter: {
-      filterBy: { transactionId: transaction.id, isSubpayment: true }
+      filterBy: {
+        transactionId: payment ? payment.transactionId : transactionId,
+        isSubpayment: true
+      }
     },
     sortBy: { createdAt: -1 }
   })
+
+  if (isBudgetLoading || isTransactionLoading || !budget || !transaction) {
+    return <>Loading...</> // TODO: skeleton
+  }
 
   return (
     <>
@@ -44,15 +69,13 @@ const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
           firstElement={(
             <Popover>
               <PopoverTrigger>
-                <li>
-                  <Badge className="cursor-pointer icon-wrapper"
-                    variant="outline"
-                    size="sm"
-                  >
-                    <BadgePlus size={20} />
-                    <span>New</span>
-                  </Badge>
-                </li>
+                <Badge className="cursor-pointer icon-wrapper"
+                  variant="outline"
+                  size="sm"
+                >
+                  <BadgePlus size={20} />
+                  <span>New</span>
+                </Badge>
               </PopoverTrigger>
               <PopoverContent>
                 <SubpaymentForm budgetId={budget.id} transactionId={transaction.id} />
@@ -67,6 +90,8 @@ const PaymentProgress = ({ transaction, budget }: PaymentProgressProps) => {
               currency={budget.balance.currency}
               showRemoveButton
               showProgress
+              transaction={transaction}
+              budgetName={budget.name}
             />
           )}
         </Listing>

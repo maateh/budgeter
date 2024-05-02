@@ -12,7 +12,7 @@ import InfoBadge from "@/components/ui/custom/InfoBadge"
 import Listing from "@/components/ui/custom/Listing"
 import BalanceBadge from "@/components/shared/budget/custom/BalanceBadge"
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
-import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 
 // hooks
 import { useDialog } from "@/hooks"

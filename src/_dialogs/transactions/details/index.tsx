@@ -61,8 +61,8 @@ const TransactionDetails = () => {
             </AccordionTrigger>
             <AccordionContent className="mx-3">
               <PaymentProgress
-                transaction={transaction}
-                budget={transaction.budget}
+                transactionId={transaction.id}
+                budgetId={transaction.budgetId}
               />
             </AccordionContent>
           </AccordionItem>

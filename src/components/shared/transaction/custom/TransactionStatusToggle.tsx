@@ -5,14 +5,14 @@ import { BadgeCheck, Banknote, Coins, LucideProps, XCircle } from "lucide-react"
 
 // components
 import StateToggle from "@/components/ui/custom/StateToggle"
-import PaymentProgress from "@/components/shared/payment/PaymentProgress"
+import PaymentProgress from "@/components/shared/payment/progress/PaymentProgress"
 
 // hooks
 import { useToast } from "@/components/ui/use-toast"
 import { useUpdateTransactionStatus } from "@/lib/react-query/mutations"
 
 // types
-import { Budget, Transaction } from "@/services/api/types"
+import { Transaction } from "@/services/api/types"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 const getIcon = (type: Transaction['type'], iconProps?: LucideProps): { on: React.ReactNode; off: React.ReactNode } => {
@@ -55,12 +55,11 @@ const getTooltip = (type: Transaction['type']): { on: string; off: string } => {
 
 type TransactionStatusToggleProps = {
   transaction: Transaction
-  budget: Budget
   iconProps?: LucideProps
 }
 
 const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusToggleProps>(({
-  transaction, budget, iconProps
+  transaction, iconProps
 }, ref) => {
   const { toast } = useToast()
   const { mutateAsync: updateTransactionStatus } = useUpdateTransactionStatus(transaction.id)
@@ -112,8 +111,8 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
         onClick={(e) => e.stopPropagation()}
       >
         <PaymentProgress
-          transaction={transaction}
-          budget={budget}
+          transactionId={transaction.id}
+          budgetId={transaction.budgetId}
         />
       </PopoverContent>
     </Popover>

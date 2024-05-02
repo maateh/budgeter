@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { forwardRef } from "react"
 
 // icons
@@ -14,55 +13,49 @@ import PaymentProgress from "@/components/shared/payment/PaymentProgress"
 
 // hooks
 import { useToast } from "@/components/ui/use-toast"
-import { useBudget, useTransaction } from "@/lib/react-query/queries"
 import { useRemoveSubpayment } from "@/lib/react-query/mutations"
 
 // types
 import { Payment, Transaction } from "@/services/api/types"
 
 // utils
+import { getPaymentAmount } from "@/components/shared/payment/utils"
 import { formatWithCurrency } from "@/utils"
 import { cn } from "@/lib/utils"
 
-function isNeutral(type: Transaction['type'], processed: boolean): boolean {
-  return ((type === 'default' && !processed) || (type === 'borrow' && processed))
-}
-
-function getPaymentAmount(payment: Payment, processed: boolean): number {
-  const { processedAmount = 0, amount } = payment
-  const difference = amount - processedAmount
-  
-  return processed ? amount
-    : difference > 0 ? difference : amount
-}
-
-type PaymentBadgeProps = {
+type PaymentBadgeProps = BadgeProps & {
   payment: Payment
   processed: boolean
   currency: string
   isNeutral?: boolean
   iconSize?: number
-  showRemoveButton?: boolean
-  showProgress?: boolean
-} & BadgeProps
+} & ({
+  showProgress?: true
+  transaction: Transaction
+  budgetName?: string
+} | {
+  showProgress?: never
+  transaction?: never
+  budgetName?: never
+}) & ({
+  showRemoveButton?: true
+  transaction: Transaction
+} | {
+  showRemoveButton?: never
+  transaction?: never
+})
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
-  payment, processed, currency, isNeutral, iconSize = 16, showRemoveButton, showProgress = false,
+  payment, processed, currency, isNeutral, iconSize = 16,
+  showRemoveButton, showProgress, transaction, budgetName,
   className, size = 'sm', ...props
 }, ref) => {
   const { toast } = useToast()
 
   const {
-    data: budget,
-    isLoading: isBudgetLoading
-  } = useBudget(payment.budgetId, { enabled: showProgress })
-
-  const {
-    data: transaction,
-    isLoading: isTransactionLoading
-  } = useTransaction(payment.transactionId, { enabled: showProgress })
-
-  const { mutateAsync: removeSubpayment, isPending } = useRemoveSubpayment(payment.transactionId)
+    mutateAsync: removeSubpayment,
+    isPending
+  } = useRemoveSubpayment(payment.transactionId)
 
   const handleRemove = async () => {
     try {
@@ -76,7 +69,8 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
           getPaymentAmount(payment, processed),
           currency
         )}`,
-        description: transaction ? `Affected transaction: ${transaction.name}` : ''
+        // TODO: add undo
+        description: `Affected transaction: ${transaction!.name}`
       })
     } catch (err) {
       console.error(err)
@@ -131,30 +125,22 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
         {element}
       </PopoverTrigger>
-      <PopoverContent className="max-w-md"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {!isTransactionLoading && !isBudgetLoading && transaction && budget ? (          
-          transaction.type === 'borrow' && !payment.isSubpayment ? (
-            <PaymentProgress
-              transaction={transaction}
-              budget={budget}
-            />
-          ) : (
-            <div className="icon-wrapper">
-              <BadgeInfo size={18} />
-              <span className="text-sm">
-                {transaction.processed
-                  ? `Payment has been credited to "${budget.name}" budget.`
-                  : "Payment hasn't been credited yet."}
-              </span>
-            </div>
-          )
-        ) : <>Loading...</>} {/* TODO: skeleton */}
+      <PopoverContent className="max-w-md" onClick={(e) => e.stopPropagation()}>
+        {transaction.type === 'borrow' && !payment.isSubpayment ? (
+          <PaymentProgress payment={payment} />
+        ) : (
+          <div className="icon-wrapper">
+            <BadgeInfo size={18} />
+            <span className="text-sm">
+              {transaction.processed
+                ? `Payment has been credited to "${budgetName}" budget.`
+                : "Payment hasn't been credited yet."}
+            </span>
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   )
 })
 
-export { isNeutral }
 export default PaymentBadge

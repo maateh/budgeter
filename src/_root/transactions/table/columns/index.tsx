@@ -1,6 +1,6 @@
 // components
 import BudgetNameBadge from "@/components/shared/budget/custom/BudgetNameBadge"
-import PaymentBadge, { isNeutral } from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 import SortingButton from "@/components/ui/custom/SortingButton"
 
@@ -13,6 +13,7 @@ import { Budget, Transaction } from "@/services/api/types"
 
 // utils
 import { format } from "date-fns"
+import { isNeutral } from "@/components/shared/payment/utils"
 
 export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
   {
@@ -24,7 +25,6 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
       <TransactionStatusToggle
         iconProps={{ size: 20 }}
         transaction={row.original}
-        budget={row.original.budget}
       />
     )
   },
@@ -55,6 +55,8 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
         processed={row.original.processed}
         isNeutral={isNeutral(row.original.type, row.original.processed)}
         showProgress
+        transaction={row.original}
+        budgetName={row.original.budget.name}
       />
     )
   },

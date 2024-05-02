@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 // components
 import Listing from "@/components/ui/custom/Listing"
-import PaymentBadge from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 
 // hooks
 import { useDialog, usePagination } from "@/hooks"

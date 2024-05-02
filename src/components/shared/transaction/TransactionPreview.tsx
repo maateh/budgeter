@@ -2,11 +2,14 @@ import { formatDistance } from "date-fns"
 
 // components
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
-import PaymentBadge, { isNeutral } from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import BudgetMarker from "@/components/shared/budget/custom/BudgetMarker"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
+
+// utils
+import { isNeutral } from "@/components/shared/payment/utils"
 
 type TransactionPreviewProps = {
   transaction: Transaction
@@ -22,9 +25,8 @@ const TransactionPreview = ({ transaction, budget, onClick }: TransactionPreview
     >
       <div className="flex items-center gap-x-1">
         <TransactionStatusToggle
-          transaction={transaction}
-          budget={budget}
           iconProps={{ size: 20, strokeWidth: 2.5 }}
+          transaction={transaction}
         />
 
         <div className="grid">
@@ -46,6 +48,8 @@ const TransactionPreview = ({ transaction, budget, onClick }: TransactionPreview
           currency={budget.balance.currency}
           isNeutral={isNeutral(transaction.type, transaction.processed)}
           showProgress
+          transaction={transaction}
+          budgetName={budget.name}
         />
 
         <BudgetMarker

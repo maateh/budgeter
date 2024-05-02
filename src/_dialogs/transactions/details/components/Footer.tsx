@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
 
 // components
-import PaymentBadge, { isNeutral } from "@/components/shared/payment/custom/PaymentBadge"
+import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import TransactionStatusToggle from "@/components/shared/transaction/custom/TransactionStatusToggle"
 
 // hooks
@@ -14,6 +14,9 @@ import { useDialog } from "@/hooks"
 
 // types
 import { Budget, Transaction } from "@/services/api/types"
+
+// utils
+import { isNeutral } from "@/components/shared/payment/utils"
 
 type TransactionDetailsFooterProps = {
   transaction: Transaction & { budget: Budget }
@@ -26,17 +29,17 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
     <DialogFooter className="block">
       <div className="flex flex-wrap flex-row justify-between items-center gap-4 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-x-2.5">
-          <TransactionStatusToggle
-            transaction={transaction}
-            budget={transaction.budget}
-          />
+          <TransactionStatusToggle transaction={transaction} />
 
-          <PaymentBadge
+          <PaymentBadge className="bg-foreground/10"
             size="lg"
             payment={transaction.payment}
             processed={transaction.processed}
             currency={transaction.budget.balance.currency}
             isNeutral={isNeutral(transaction.type, transaction.processed)}
+            showProgress
+            transaction={transaction}
+            budgetName={transaction.budget.name}
           />
         </div>
 
