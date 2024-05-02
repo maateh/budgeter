@@ -7,6 +7,7 @@ import { PackageCheck, PackageOpen, X } from "lucide-react"
 // shadcn
 import { Button } from "@/components/ui/button"
 import { DataTable, DataTablePagination, DataTableSelectionInfo, getDefaultSelectedRows } from "@/components/ui/data-table"
+import { Spinner } from "@/components/ui/skeleton"
 
 // components
 import BackupInfo from "@/components/shared/backup/BackupInfo"
@@ -26,8 +27,10 @@ const BackupCreateTable = () => {
 
   const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
   const {
-    data: backup, isPending: isBackupPending,
-    mutateAsync: createBackup, reset: resetBackup
+    data: backup,
+    isPending: isBackupPending,
+    mutateAsync: createBackup,
+    reset: resetBackup
   } = useCreateBackup()
 
   const handleCreate = async (table: RTable<Budget>) => {
@@ -93,7 +96,10 @@ const BackupCreateTable = () => {
               </a>
             </>
           ) : (
-            <>Generating the backup...</> // TODO: skeleton
+            <div className="my-2 flex flex-col justify-center items-center gap-y-4">
+              <p className="text-xl font-heading font-medium small-caps">Generating the backup...</p>
+              <Spinner size={32} />
+            </div>
           )}
         </div>
       )}

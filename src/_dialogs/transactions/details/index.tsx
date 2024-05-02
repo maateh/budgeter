@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { Receipt, Banknote } from "lucide-react"
 
 // shadcn
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { DialogContent } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 
@@ -13,19 +14,21 @@ import RelatedTransactions from "@/components/shared/transaction/RelatedTransact
 import Header from "./components/Header"
 import Info from "./components/Info"
 import Footer from "./components/Footer"
+import TransactionDetailsSkeleton from "./skeleton"
 
 // hooks
 import { useTransactionWithBudget } from "@/lib/react-query/queries"
-
-// utils
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 const TransactionDetails = () => {
   const { id } = useParams() as { id: string }
 
   const { data: transaction, isLoading } = useTransactionWithBudget(id)
 
-  return !isLoading && transaction ? (
+  if (isLoading || !transaction) {
+    return <TransactionDetailsSkeleton />
+  }
+
+  return (
     <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
       <Header transaction={transaction} />
 
@@ -73,7 +76,7 @@ const TransactionDetails = () => {
 
       <Footer transaction={transaction} />
     </DialogContent>
-  ) : <>Loading...</> // TODO: skeleton
+  )
 }
 
 export default TransactionDetails

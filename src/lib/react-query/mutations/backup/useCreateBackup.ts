@@ -11,7 +11,7 @@ const useCreateBackup = () => {
     mutationFn: async ({ complete, budgetIds }: {
       complete: boolean
       budgetIds: string[]
-    }) => api.backup.create(complete, budgetIds)
+    }) => await api.backup.create(complete, budgetIds)
   })
 }
 

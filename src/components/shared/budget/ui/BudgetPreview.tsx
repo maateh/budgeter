@@ -6,6 +6,8 @@ import { BadgePlus, ChevronRightCircle, HandCoins } from "lucide-react"
 // shadcn
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { SkeletonList } from "@/components/ui/skeleton"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
@@ -23,7 +25,6 @@ import { Budget } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 type BudgetPreviewProps = {
   budget: Budget
@@ -126,7 +127,10 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           )}
         </Listing>
       ) : (
-        <>Loading...</> // TODO: skeleton
+        <SkeletonList className="mb-auto flex flex-row flex-wrap justify-center items-center gap-x-2.5 gap-y-1.5"
+          itemProps={{ className: "w-20 h-5" }}
+          amount={7}
+        />
       )}
 
       <div className="flex flex-wrap justify-end items-center gap-x-3.5 gap-y-2">

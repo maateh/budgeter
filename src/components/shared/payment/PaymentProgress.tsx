@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
+import { SkeletonList } from "@/components/ui/skeleton"
 
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
@@ -63,7 +64,7 @@ const PaymentProgress = ({ payment, transactionId, budgetId }: PaymentProgressPr
   return (
     <>
       {!isSubpaymentsLoading && subpayments ? (
-        <Listing className="mb-2.5 flex flex-wrap flex-row gap-x-1.5 gap-y-1"
+        <Listing className="mb-2.5 flex flex-wrap flex-row items-center gap-x-1.5 gap-y-1"
           items={subpayments}
           fallbackProps={{ size: "xs", value: 'No payments to show.' }}
           firstElement={(
@@ -74,7 +75,7 @@ const PaymentProgress = ({ payment, transactionId, budgetId }: PaymentProgressPr
                   size="sm"
                 >
                   <BadgePlus size={20} />
-                  <span>New</span>
+                  New
                 </Badge>
               </PopoverTrigger>
               <PopoverContent>
@@ -84,7 +85,7 @@ const PaymentProgress = ({ payment, transactionId, budgetId }: PaymentProgressPr
           )}
         >
           {(payment) => (
-            <PaymentBadge
+            <PaymentBadge className="flex bg-secondary/30"
               payment={payment}
               processed={true}
               currency={budget.balance.currency}
@@ -96,7 +97,10 @@ const PaymentProgress = ({ payment, transactionId, budgetId }: PaymentProgressPr
           )}
         </Listing>
       ) : (
-        <>Loading...</> // TODO: skeleton
+        <SkeletonList className="mb-2.5 flex flex-row flex-wrap justify-center items-center gap-x-2.5 gap-y-1.5"
+          itemProps={{ className: "w-20 h-5" }}
+          amount={7}
+        />
       )}
 
       <p className="text-base text-center font-heading">

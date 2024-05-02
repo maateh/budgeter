@@ -5,6 +5,7 @@ import { ChevronRightCircle } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
+import { SkeletonList } from "@/components/ui/skeleton"
 
 // components
 import Listing from "@/components/ui/custom/Listing"
@@ -33,7 +34,7 @@ const TransactionList = ({ params, filter, children }: TransactionListProps) => 
   })
 
   if (isLoading || !data) {
-    return <>Loading...</> // TODO: skeleton
+    return <SkeletonList amount={5} />
   }
 
   return (
@@ -47,6 +48,8 @@ const TransactionList = ({ params, filter, children }: TransactionListProps) => 
       >
         {({ budget, ...transaction }) => children(transaction, budget)}
       </Listing>
+
+      {isFetchingNextPage && <SkeletonList amount={3} />}
 
       {(hasNextPage || isLimitExceeded) && (
         <Button className="w-fit mt-1 mx-auto icon-wrapper"
