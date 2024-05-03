@@ -9,7 +9,8 @@ type BalanceUpdaterOptions = {
   action: 'execute' | 'undo'
   isBorrowment?: boolean
   skipCurrentDelta?: boolean
-  skipExtraDeltas?: boolean
+  skipIncomeAndLossDeltas?: boolean
+  skipBorrowmentDelta?: boolean
   borrowmentTargetBudgetId?: string
 }
 
@@ -26,7 +27,8 @@ function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdat
     action,
     isBorrowment = false,
     skipCurrentDelta = false,
-    skipExtraDeltas = false
+    skipIncomeAndLossDeltas = false,
+    skipBorrowmentDelta = false
   } = options
   
   const { current, income, loss, borrowment } = balance
@@ -50,9 +52,9 @@ function handlePayment(balance: Balance, payment: Payment, options: BalanceUpdat
   const update: 1 | -1 = action === 'execute' ? 1 : -1
   
   const currentDelta = type === '+' ? amount * update : -amount * update
-  const incomeDelta = !isBorrowment && !skipExtraDeltas && type === '+' ? amount * update : 0
-  const lossDelta = !isBorrowment && !skipExtraDeltas && type === '-' ? amount * update : 0
-  const borrowmentDelta = isBorrowment && !skipExtraDeltas ? currentDelta : 0
+  const incomeDelta = !isBorrowment && !skipIncomeAndLossDeltas && type === '+' ? amount * update : 0
+  const lossDelta = !isBorrowment && !skipIncomeAndLossDeltas && type === '-' ? amount * update : 0
+  const borrowmentDelta = isBorrowment && !skipBorrowmentDelta ? currentDelta : 0
 
   return {
     ...balance,
@@ -79,7 +81,11 @@ async function updateBalance(budgetId: string, payment: Payment, options: Balanc
     const targetBudget = await budgetStorage.findById(options.borrowmentTargetBudgetId)
     await budgetStorage.save({
       ...targetBudget,
-      balance: handlePayment(targetBudget.balance, payment, { ...options, skipExtraDeltas: true })
+      balance: handlePayment(targetBudget.balance, payment, {
+        ...options,
+        skipIncomeAndLossDeltas: true,
+        skipBorrowmentDelta: true
+      })
     })
   }
 

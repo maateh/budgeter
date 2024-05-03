@@ -105,7 +105,7 @@ async function updateTransaction(transactionId: string, executionPayment: Paymen
   }, {
     action,
     isBorrowment: type === 'borrow',
-    skipExtraDeltas: type !== 'default',
+    skipIncomeAndLossDeltas: type !== 'default',
     borrowmentTargetBudgetId: type === 'borrow' && budgetId !== executionPayment.budgetId
       ? executionPayment.budgetId
       : undefined
