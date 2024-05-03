@@ -50,7 +50,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           budget={budget}
         />
 
-        <div className="flex items-center gap-x-2">
+        <div className="ml-auto flex items-center gap-x-2">
           {budget.balance.borrowment ? (
             <TooltipProvider>
               <Tooltip>
@@ -74,7 +74,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             </TooltipProvider>
           ) : <></>}
 
-          <BalanceBadge className="min-w-32 ml-auto px-3"
+          <BalanceBadge className="min-w-32 px-3"
             separatorProps={{ className: "h-3" }}
             orientation="vertical"
             size="sm"
