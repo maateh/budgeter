@@ -42,7 +42,7 @@ class BudgetStorageAPI implements IBudgetAPI {
 
   public async get({ params, filter, sortBy }: QueryOptions<Budget> = {}): Promise<Pagination<Budget>> {
     const budgets = await this.storage.find(filter)
-    return paginate(budgets, params, sortBy)
+    return paginate(budgets, { params, sortBy })
   }
 
   public async create(data: z.infer<typeof budgetFormSchema>): Promise<Budget> {

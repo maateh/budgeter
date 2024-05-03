@@ -23,7 +23,7 @@ function rangeFilter<T>(documents: T[], ranges?: RangeFilter): T[] {
          * Extract the entry value corresponding to the 
          * key reference from the document.
          */
-        const entryValue = getNestedValue<T>(document, keyRef)
+        const entryValue = getNestedValue<T>(document, keyRef) as string | number
 
         /** Check if the extracted value falls within the specified range. */
         return inRange && isInRange(entryValue, range)

@@ -59,7 +59,7 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async get({ params, filter, sortBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction>> {
     const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
 
-    const documents = await this.storage.find(filter)
+    const documents = await this.storage.find()
     const payments = await paymentStorage.fetchFromStorage()
 
     const transactions: Transaction[] = documents.map((doc) => ({
@@ -67,19 +67,17 @@ class TransactionStorageAPI implements ITransactionAPI {
       payment: payments[doc.paymentId]
     }))
 
-    return paginate(transactions, params, sortBy)
+    return paginate(transactions, { params, filter, sortBy })
   }
 
   public async getWithBudget({ params, filter, sortBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction & { budget: Budget }>> {
     const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
 
-    const { data: transactions } = await this.get({ filter })
+    let { data: transactions } = await this.get()
     const budgets = await budgetStorage.find()
 
-    const { data, ...pagination } = paginate(
-      rangeFilter(transactions, filter?.rangeBy),
-      params, sortBy
-    )
+    transactions = rangeFilter(transactions, filter?.rangeBy)
+    const { data, ...pagination } = paginate(transactions, { params, filter, sortBy })
 
     return {
       ...pagination,

@@ -37,8 +37,7 @@ class PaymentStorageAPI implements IPaymentAPI {
 
   public async get({ params, filter, sortBy }: QueryOptions<Payment> = {}): Promise<Pagination<Payment>> {
     const payments = await this.storage.find(filter)
-
-    return paginate(payments, params, sortBy)
+    return paginate(payments, { params, sortBy })
   }
 
   public async addSubpayment(transactionId: string, data: z.infer<typeof subpaymentFormSchema>): Promise<Transaction> {  

@@ -10,10 +10,11 @@ function convertSearchToFilter(searchFilter?: FilterSearchParams<TransactionSear
   const convertFilter = (filterEntries?: SearchFilter<TransactionSearchParams>): Filter<Transaction> | undefined => {
     if (!filterEntries) return undefined
 
-    const { name, budgetId, type, processed } = filterEntries
+    const { name, budgetId, type, processed, paymentType } = filterEntries
     
     return {
       name, budgetId, type,
+      ['payment.type']: paymentType,
       processed: processed === 'true'
         ? true
         : processed === 'false'

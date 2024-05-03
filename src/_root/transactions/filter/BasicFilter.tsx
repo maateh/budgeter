@@ -65,6 +65,21 @@ const BasicFilter = () => {
         onReset={(filterKey) => removeFilterEntries(filterKey, ['processed'])}
         key={filterEntries.processed as string}
       />
+
+      <FilterInput
+        label={<>Filter by <span className="text-accent overline">Payment Type</span></>}
+        labelProps={{ htmlFor: 'paymentType' }}
+        triggerProps={{ id: 'paymentType' }}
+        value={filterEntries.paymentType as string}
+        setValue={(paymentType, filterKey) => setFilterEntry(filterKey, { paymentType })}
+        options={[
+          { label: '+', value: '+' as TransactionSearchParams['paymentType'] },
+          { label: '-', value: '-' as TransactionSearchParams['paymentType'] },
+        ]}
+        onTypeChange={(filterKey) => toggleFilterType(filterKey, 'paymentType')}
+        onReset={(filterKey) => removeFilterEntries(filterKey, ['paymentType'])}
+        key={filterEntries.paymentType as string}
+      />
     </FilterLayout>
   )
 }

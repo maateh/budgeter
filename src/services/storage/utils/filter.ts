@@ -1,6 +1,9 @@
 // types
 import { Filter, FilterOptions } from "@/services/api/types"
 
+// utils
+import { getNestedValue } from "@/services/storage/utils"
+
 /**
  * Filters an array of documents based on the provided filter and exclusion criteria.
  * 
@@ -33,8 +36,8 @@ function filter<D>(documents: D[], filter?: FilterOptions<D>): D[] {
  * @param {boolean} partialMatch - Indicates whether partial string matching is enabled.
  * @returns {boolean} True if the entry should be included, otherwise false.
  */
-function shouldInclude<D>(entry: D, criteria: Filter<D> | undefined, inclusion: boolean, partialMatch: boolean) {
-  return !criteria || Object.entries(criteria).every(([key, value]) => {
+function shouldInclude<D>(entry: D, criteria: Filter<D> | undefined, inclusion: boolean, partialMatch: boolean): boolean {
+  return !criteria || Object.entries(criteria).every(([keyRef, value]) => {
     /** If the filter value is not defined, it is ignored */
     if (value === undefined) return true
 
@@ -42,7 +45,7 @@ function shouldInclude<D>(entry: D, criteria: Filter<D> | undefined, inclusion: 
      * Value of the property corresponding
      * to the key from the document entry.
      */
-    const entryValue = entry[key as keyof D]
+    const entryValue = getNestedValue<D>(entry, keyRef)
 
     /** 
      * Performs partial string matching if enabled, by checking if the

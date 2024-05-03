@@ -8,12 +8,12 @@ const KEY_REF_SPLITTER = '.'
  * @param {string} keyRef - The reference to the nested value, using dot notation.
  * @returns {(string | number | undefined)} The extracted nested value.
  */
-function getNestedValue<T>(document: T, keyRef: string): string | number | undefined {
-  let entryValue: string | number | undefined
+function getNestedValue<T>(document: T, keyRef: string): string | number | boolean | undefined {
+  let entryValue: string | number | boolean | undefined
   keyRef.split(KEY_REF_SPLITTER)
     .reduce((doc, key) => {
-      const nestedValue = doc[key as keyof T] as (T | number | string)
-      if (typeof nestedValue === 'number' || typeof nestedValue === 'string') {
+      const nestedValue = doc[key as keyof T] as (T | number | string | boolean)
+      if (typeof nestedValue === 'number' || typeof nestedValue === 'string' || typeof nestedValue === 'boolean') {
         entryValue = nestedValue
         return doc
       }
