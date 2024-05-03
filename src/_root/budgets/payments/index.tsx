@@ -1,36 +1,42 @@
+import { useParams } from "react-router-dom"
+
 // icons
 import { BadgeInfo, BadgePlus, ChevronRightCircle } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { SkeletonList } from "@/components/ui/skeleton"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // components
 import Listing from "@/components/ui/custom/Listing"
 import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
+import BudgetPaymentsSkeleton from "./skeleton"
 
 // hooks
 import { useDialog, usePagination } from "@/hooks"
-import { usePaymentsPagination } from "@/lib/react-query/queries"
+import { useBudget, usePaymentsPagination } from "@/lib/react-query/queries"
 
-// types
-import { Budget } from "@/services/api/types"
-
-type BudgetPaymentsProps = {
-  budget: Budget
-}
-
-const BudgetPayments = ({ budget }: BudgetPaymentsProps) => {
+const BudgetPayments = () => {
+  const { id } = useParams() as { id: string }
   const { openDialog } = useDialog()
 
-  const { data, isLoading, hasNextPage, fetchNextPage } = usePaymentsPagination({
+  const { data: budget, isLoading: isBudgetLoading } = useBudget(id)
+
+  const {
+    data: payments,
+    isLoading: isPaymentsLoading,
+    hasNextPage, fetchNextPage
+  } = usePaymentsPagination({
     params: { offset: 0, limit: 15 },
-    filter: { filterBy: { budgetId: budget.id }},
+    filter: { filterBy: { budgetId: id }},
     sortBy: { createdAt: -1 }
   })
 
-  const { manualPagination } = usePagination({ data, fetchNextPage, disableScrolling: true })
+  const { manualPagination } = usePagination({
+    data: payments,
+    fetchNextPage,
+    disableScrolling: true
+  })
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -38,15 +44,15 @@ const BudgetPayments = ({ budget }: BudgetPaymentsProps) => {
         Recent <span className="text-amber-600 dark:text-amber-500 overline">Payments</span>
       </h2>
 
-      {!isLoading && data ? (
+      {!isPaymentsLoading && !isBudgetLoading && payments && budget ? (
         <Listing className="mx-2.5 flex flex-wrap flex-row justify-center items-center gap-1.5"
-          pages={data.pages}
+          pages={payments.pages}
           fallbackProps={{ value: 'No payments to show.' }}
           firstElement={(
             <Button className="h-fit px-5 py-1 icon-wrapper"
               variant="outline"
               size="sm"
-              onClick={() => openDialog(`/transactions/create/${budget.id}`)}
+              onClick={() => openDialog(`/transactions/create/${id}`)}
             >
               <BadgePlus size={20} />
               New
@@ -83,12 +89,7 @@ const BudgetPayments = ({ budget }: BudgetPaymentsProps) => {
             </TooltipProvider>
           )}
         </Listing>
-      ) : (
-        <SkeletonList className="mx-4 flex flex-wrap flex-row justify-center items-center gap-x-2.5 gap-y-1.5"
-          itemProps={{ className: "h-8 w-32" }}
-          amount={9}
-        />
-      )}
+      ) : <BudgetPaymentsSkeleton />}
     </div>
   )
 }

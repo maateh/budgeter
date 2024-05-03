@@ -7,7 +7,7 @@ import { PackageCheck, PackageOpen, X } from "lucide-react"
 // shadcn
 import { Button } from "@/components/ui/button"
 import { DataTable, DataTablePagination, DataTableSelectionInfo, getDefaultSelectedRows } from "@/components/ui/data-table"
-import { Spinner } from "@/components/ui/skeleton"
+import { SkeletonTable, Spinner } from "@/components/ui/skeleton"
 
 // components
 import BackupInfo from "@/components/shared/backup/BackupInfo"
@@ -45,7 +45,11 @@ const BackupCreateTable = () => {
     }
   }
 
-  return !isBudgetsLoading && budgets && (
+  if (isBudgetsLoading || !budgets) {
+    return <SkeletonTable />
+  }
+
+  return (
     <DataTable
       columns={columns}
       data={budgets}

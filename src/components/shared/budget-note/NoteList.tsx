@@ -1,6 +1,7 @@
 // components
 import Listing from "@/components/ui/custom/Listing"
 import Note from "@/components/shared/budget-note/ui/Note"
+import NoteListSkeleton from "@/components/shared/budget-note/NoteList.skeleton"
 
 // hooks
 import { useNotesPagination } from "@/lib/react-query/queries"
@@ -21,7 +22,7 @@ const NoteList = ({ budget, status }: NoteListProps) => {
   })
 
   if (isLoading || !data) {
-    return <>Loading...</> // TODO: skeleton
+    return <NoteListSkeleton />
   }
 
   return (

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { DataTable, DataTableColumnToggle, DataTablePagination } from "@/components/ui/data-table"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { SkeletonTable } from "@/components/ui/skeleton"
 
 // components
 import FilterInput from "@/components/input/FilterInput"
@@ -96,9 +97,7 @@ const TransactionsTable = () => {
             </div>
           )}
         </DataTable>
-      ) : (
-        <>Loading...</> // TODO: skeleton
-      )}
+      ) : <SkeletonTable />}
     </>
   )
 }

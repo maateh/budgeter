@@ -3,11 +3,11 @@ import { WalletCards } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { SkeletonList } from "@/components/ui/skeleton"
 
 // components
 import Listing from "@/components/ui/custom/Listing"
 import BudgetPreview from "@/components/shared/budget/ui/BudgetPreview"
+import BudgetListSkeleton from "@/components/shared/budget/BudgetList.skeleton"
 
 // hooks
 import { useBudgetsPagination } from "@/lib/react-query/queries"
@@ -61,12 +61,5 @@ const BudgetList = ({ filter, params, disableScrolling = false }: BudgetListProp
     </>
   )
 }
-
-const BudgetListSkeleton = () => (
-  <SkeletonList className="flex flex-row flex-wrap justify-around gap-x-6 gap-y-4"
-    itemProps={{ className: "flex-1 w-full h-48 max-w-md rounded-3xl sm:min-w-72 max-sm:min-w-56" }}
-    amount={3}
-  />
-)
 
 export default BudgetList

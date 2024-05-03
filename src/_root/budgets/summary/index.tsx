@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom'
+
 // icons
 import { HandCoins } from 'lucide-react'
 
@@ -9,18 +11,23 @@ import BalanceBadge from '@/components/shared/budget/ui/BalanceBadge'
 import BudgetNameBadge from '@/components/shared/budget/ui/BudgetNameBadge'
 import InfoBadge from '@/components/ui/custom/InfoBadge'
 import BudgetActions from './BudgetActions'
+import BudgetSummarySkeleton from './skeleton'
 
-// types
-import { Budget } from '@/services/api/types'
+// hooks
+import { useBudget } from '@/lib/react-query/queries'
 
 // utils
 import { formatWithCurrency } from '@/utils'
 
-type BudgetSummaryProps = {
-  budget: Budget
-}
+const BudgetSummary = () => {
+  const { id } = useParams() as { id: string }
 
-const BudgetSummary = ({ budget }: BudgetSummaryProps) => {
+  const { data: budget, isLoading: isBudgetLoading } = useBudget(id)
+
+  if (isBudgetLoading || !budget) {
+    return <BudgetSummarySkeleton />
+  }
+
   return (
     <div className="flex flex-col gap-y-3.5">
       <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
