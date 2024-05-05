@@ -1,10 +1,10 @@
-import { BudgetDocument, BudgetNoteDocument, PaymentDocument, TransactionDocument } from "@/services/storage/types"
+import { BudgetDocument, BudgetNoteDocument, SubpaymentDocument, TransactionDocument } from "@/services/storage/types"
 
 export type BackupData = {
   budgets: Record<string, BudgetDocument>
   notes: Record<string, BudgetNoteDocument>
   transactions: Record<string, TransactionDocument>
-  payments: Record<string, PaymentDocument>
+  subpayments: Record<string, SubpaymentDocument>
 }
 
 export type BackupInfo = {

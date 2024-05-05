@@ -5,7 +5,7 @@ import StorageHelper from "@/services/storage/StorageHelper"
 import { BudgetStorageAPI, BudgetNoteStorageAPI, SubpaymentStorageAPI, TransactionStorageAPI } from '@/services/storage/collections'
 
 // types
-import { BudgetDocument, BudgetNoteDocument, PaymentDocument, TransactionDocument } from "@/services/storage/types"
+import { BudgetDocument, BudgetNoteDocument, SubpaymentDocument, TransactionDocument } from "@/services/storage/types"
 import { BackupData, BackupFileContent } from "@/services/backup/types"
 
 // interfaces
@@ -23,13 +23,13 @@ class BackupHelper implements IBackupAPI {
   private budgetStorage: StorageHelper<BudgetDocument>
   private budgetNoteStorage: StorageHelper<BudgetNoteDocument>
   private transactionStorage: StorageHelper<TransactionDocument>
-  private paymentStorage: StorageHelper<PaymentDocument>
+  private subpaymentStorage: StorageHelper<SubpaymentDocument>
 
   private constructor() {
     this.budgetStorage = BudgetStorageAPI.getInstance().getStorage()
     this.budgetNoteStorage = BudgetNoteStorageAPI.getInstance().getStorage()
     this.transactionStorage = TransactionStorageAPI.getInstance().getStorage()
-    this.paymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
+    this.subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
   }
 
   public static getInstance() {
@@ -52,13 +52,13 @@ class BackupHelper implements IBackupAPI {
 
   public async restore({ fileContent }: z.infer<typeof backupSchema>): Promise<void> {
     const { data, complete } = fileContent
-    const { budgets, transactions, payments, notes } = data
+    const { budgets, transactions, subpayments, notes } = data
 
     if (complete) {
       await this.budgetStorage.saveToStorage(budgets)
       await this.budgetNoteStorage.saveToStorage(notes)
       await this.transactionStorage.saveToStorage(transactions)
-      await this.paymentStorage.saveToStorage(payments)
+      await this.subpaymentStorage.saveToStorage(subpayments)
       return
     }
 
@@ -74,7 +74,7 @@ class BackupHelper implements IBackupAPI {
       filterBy: { budgetId: Object.keys(budgets) }
     })
 
-    await this.paymentStorage.restore(payments, {
+    await this.subpaymentStorage.restore(subpayments, {
       filterBy: { budgetId: Object.keys(budgets) }
     })
   }
@@ -84,17 +84,17 @@ class BackupHelper implements IBackupAPI {
     const budgets = await this.budgetStorage.fetchFromStorage()
     const notes = await this.budgetNoteStorage.fetchFromStorage()
     const transactions = await this.transactionStorage.fetchFromStorage()
-    const payments = await this.paymentStorage.fetchFromStorage()
+    const subpayments = await this.subpaymentStorage.fetchFromStorage()
 
     if (complete) {
-      return { budgets, notes, transactions, payments }
+      return { budgets, notes, transactions, subpayments }
     }
 
     return {
       budgets: filterObject(budgets, (budget) => budgetIds.includes(budget.id)),
       notes: filterObject(notes, (note) => budgetIds.includes(note.budgetId)),
       transactions: filterObject(transactions, (tr) => budgetIds.includes(tr.budgetId)),
-      payments: filterObject(payments, (payment) => budgetIds.includes(payment.budgetId))
+      subpayments: filterObject(subpayments, (subpayment) => budgetIds.includes(subpayment.budgetId))
     }
   }
 
