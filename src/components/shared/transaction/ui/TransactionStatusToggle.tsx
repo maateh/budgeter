@@ -60,6 +60,7 @@ type TransactionStatusToggleProps = {
   iconProps?: LucideProps
 }
 
+// FIXME: rename to PaymentStatusToggle
 const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusToggleProps>(({
   transaction, iconProps
 }, ref) => {
@@ -75,7 +76,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
     try {
       await updateTransactionStatus({
         id: transaction.id,
-        processed: !transaction.processed
+        processed: !transaction.payment.processed
       })
 
       toast({
@@ -96,7 +97,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
 
   const toggleElement = (
     <StateToggle
-      status={transaction.processed ? 'on' : 'off'}
+      status={transaction.payment.processed ? 'on' : 'off'}
       icon={getIcon(transaction.type, iconProps)}
       tooltip={getTooltip(transaction.type)}
       onClick={transaction.type === 'default' ? handleUpdate : undefined}
@@ -114,10 +115,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
       <PopoverContent className="max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
-        <PaymentProgress
-          transactionId={transaction.id}
-          budgetId={transaction.budgetId}
-        />
+        <PaymentProgress transaction={transaction} />
       </PopoverContent>
     </Popover>
   )

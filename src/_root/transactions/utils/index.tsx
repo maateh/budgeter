@@ -15,7 +15,7 @@ function convertSearchToFilter(searchFilter?: FilterSearchParams<TransactionSear
     return {
       name, budgetId, type,
       ['payment.type']: paymentType,
-      processed: processed === 'true'
+      ['payment.processed']: processed === 'true'
         ? true
         : processed === 'false'
           ? false

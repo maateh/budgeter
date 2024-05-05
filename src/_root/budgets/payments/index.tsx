@@ -14,7 +14,7 @@ import BudgetPaymentsSkeleton from "./skeleton"
 
 // hooks
 import { useDialog, usePagination } from "@/hooks"
-import { useBudget, usePaymentsPagination } from "@/lib/react-query/queries"
+import { useBudget, useSubpaymentsPagination } from "@/lib/react-query/queries"
 
 const BudgetPayments = () => {
   const { id } = useParams() as { id: string }
@@ -26,7 +26,7 @@ const BudgetPayments = () => {
     data: payments,
     isLoading: isPaymentsLoading,
     hasNextPage, fetchNextPage
-  } = usePaymentsPagination({
+  } = useSubpaymentsPagination({
     params: { offset: 0, limit: 15 },
     filter: { filterBy: { budgetId: id }},
     sortBy: { createdAt: -1 }

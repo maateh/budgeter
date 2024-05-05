@@ -18,5 +18,5 @@ export { default as useTransactionsPagination } from './transaction/useTransacti
 export { default as useTransactionsControlledPagination } from './transaction/useTransactionsControlledPagination'
 
 // payments
-export { default as usePayments } from './payment/usePayments'
-export { default as usePaymentsPagination } from './payment/usePaymentsPagination'
+export { default as useSubpayments } from './payment/useSubpayments'
+export { default as useSubpaymentsPagination } from './payment/useSubpaymentsPagination'

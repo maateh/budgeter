@@ -10,6 +10,8 @@ export type FilterOptions<T> = {
 // basic filter
 export type Filter<T> = {
   [K in keyof T]?: T[K] | T[K][]
+} | {
+  [keyRef: string]: unknown
 }
 
 // range filter

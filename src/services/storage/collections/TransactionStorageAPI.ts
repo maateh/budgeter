@@ -12,14 +12,14 @@ import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyForm
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import { BudgetStorageAPI, PaymentStorageAPI } from "@/services/storage/collections"
+import { BudgetStorageAPI, SubpaymentStorageAPI } from "@/services/storage/collections"
 
 // helpers
 import { updateBalance } from "@/services/storage/helpers/balance"
 import { deleteTransactions, manageRelatedTransactions, updateTransaction } from "@/services/storage/helpers/transaction"
 
 // utils
-import { paginate, rangeFilter } from "@/services/storage/utils"
+import { paginate } from "@/services/storage/utils"
 
 class TransactionStorageAPI implements ITransactionAPI {
   private static _instance: TransactionStorageAPI
@@ -38,58 +38,41 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   public async getById(id: string): Promise<Transaction> {
-    const { budgetId, paymentId, ...doc } = await this.storage.findById(id)
-
-    const payment = await PaymentStorageAPI.getInstance()
-      .getStorage().findById(paymentId)
-
-    return { ...doc, budgetId, payment }
+    return await this.storage.findById(id)
   }
 
   public async getByIdWithBudget(id: string): Promise<Transaction & { budget: Budget }> {
-    const { budgetId, paymentId, ...doc } = await this.storage.findById(id)
+    const budgetApi = BudgetStorageAPI.getInstance()
 
-    const budget = await BudgetStorageAPI.getInstance().getById(budgetId)
-    const payment = await PaymentStorageAPI.getInstance()
-      .getStorage().findById(paymentId)
+    const { budgetId, ...transaction } = await this.storage.findById(id)
+    const budget = await budgetApi.getById(budgetId)
 
-    return { ...doc, budgetId, payment, budget }
+    return { ...transaction, budgetId, budget }
   }
 
   public async get({ params, filter, sortBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction>> {
-    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
-
-    const documents = await this.storage.find()
-    const payments = await paymentStorage.fetchFromStorage()
-
-    const transactions: Transaction[] = documents.map((doc) => ({
-      ...doc,
-      payment: payments[doc.paymentId]
-    }))
-
-    return paginate(transactions, { params, filter, sortBy })
+    const transactions = await this.storage.find(filter)
+    return paginate(transactions, { params, sortBy })
   }
 
   public async getWithBudget({ params, filter, sortBy }: QueryOptions<Transaction> = {}): Promise<Pagination<Transaction & { budget: Budget }>> {
     const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
 
-    let { data: transactions } = await this.get()
-    const budgets = await budgetStorage.find()
+    const transactions = await this.storage.find()
+    const budgets = await budgetStorage.fetchFromStorage()
 
-    transactions = rangeFilter(transactions, filter?.rangeBy)
     const { data, ...pagination } = paginate(transactions, { params, filter, sortBy })
-
     return {
       ...pagination,
       data: data.reduce((trs, tr) => ([
         ...trs,
-        { ...tr, budget: budgets.find(b => b.id === tr.budgetId)! }
+        { ...tr, budget: budgets[tr.budgetId] }
       ]), [] as (Transaction & { budget: Budget })[])
     }
   }
 
   public async create(data: z.infer<typeof transactionFormSchema | typeof transferMoneyFormSchema>): Promise<Transaction> {
-    const paymentApi = PaymentStorageAPI.getInstance()
+    const subpaymentApi = SubpaymentStorageAPI.getInstance()
 
     const transactionId = crypto.randomUUID()
     const paymentId = crypto.randomUUID()
@@ -105,7 +88,7 @@ class TransactionStorageAPI implements ITransactionAPI {
       relatedIds: data.relatedIds || []
     })
 
-    const payment = await paymentApi.getStorage().save({
+    const payment = await subpaymentApi.getStorage().save({
       ...data.payment,
       id: paymentId,
       budgetId,
@@ -139,10 +122,10 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   public async delete(id: string, removeRelated: boolean = false): Promise<Transaction> {
-    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+    const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
     const { paymentId, ...transaction } = await this.storage.findById(id)
-    const payment = await paymentStorage.findById(paymentId)
+    const payment = await subpaymentStorage.findById(paymentId)
 
     /**
      * If related transactions need to be removed, we have
@@ -165,13 +148,13 @@ class TransactionStorageAPI implements ITransactionAPI {
       
     /** Remove transaction and its payments/subpayments */
     await this.storage.deleteById(id)
-    await paymentStorage.bulkDelete({ filterBy: { transactionId: id }})
+    await subpaymentStorage.bulkDelete({ filterBy: { transactionId: id }})
 
     return { ...transaction, payment }
   }
 
   public async updateStatus(id: string, processed: boolean): Promise<Transaction> {
-    const paymentApi = PaymentStorageAPI.getInstance()
+    const subpaymentApi = SubpaymentStorageAPI.getInstance()
 
     const { paymentId, type } = await this.storage.findById(id)
 
@@ -179,29 +162,29 @@ class TransactionStorageAPI implements ITransactionAPI {
       throw new Error('You can only update transactions of the default type.')
     }
 
-    const payment = await paymentApi.getStorage().findById(paymentId)
+    const payment = await subpaymentApi.getStorage().findById(paymentId)
     return await updateTransaction(id, payment, processed ? 'execute' : 'undo')
   }
 
   public async addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction> {
-    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+    const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
     const { paymentId, ...transaction } = await manageRelatedTransactions(
       id, data.relatedIds, 'add'
     )
 
-    const payment = await paymentStorage.findById(paymentId)
+    const payment = await subpaymentStorage.findById(paymentId)
     return { ...transaction, payment }
   }
 
   public async removeRelated(id: string, relatedId: string): Promise<Transaction> {
-    const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+    const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
     const { paymentId, ...transaction } = await manageRelatedTransactions(
       id, [relatedId], 'remove'
     )
 
-    const payment = await paymentStorage.findById(paymentId)
+    const payment = await subpaymentStorage.findById(paymentId)
     return { ...transaction, payment }
   }
 

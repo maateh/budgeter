@@ -23,7 +23,7 @@ const useCreateTransaction = () => {
       queryClient.invalidateQueries({ queryKey: ['transactions', 'controlled'] })
 
       // payment
-      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['subpayments', { budgetId }] })
     }
   })
 }

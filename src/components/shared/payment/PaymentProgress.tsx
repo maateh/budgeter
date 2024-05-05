@@ -15,49 +15,33 @@ import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
 // hooks
-import { useBudget, usePayments, useTransaction } from "@/lib/react-query/queries"
+import { useBudget, useSubpayments } from "@/lib/react-query/queries"
 
 // types
-import { Payment } from "@/services/api/types"
+import { Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 
 type PaymentProgressProps = {
-  payment: Payment
-  transactionId?: never
-  budgetId?: never
-} | {
-  transactionId: string
-  budgetId: string
-  payment?: never
+  transaction: Transaction
 }
 
-const PaymentProgress = ({ payment, transactionId, budgetId }: PaymentProgressProps) => {
+const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
   const {
     data: budget,
     isLoading: isBudgetLoading
-  } = useBudget(payment ? payment.budgetId : budgetId)
-
-  const {
-    data: transaction,
-    isLoading: isTransactionLoading
-  } = useTransaction(payment ? payment.transactionId : transactionId)
+  } = useBudget(transaction.budgetId)
 
   const {
     data: subpayments,
     isLoading: isSubpaymentsLoading
-  } = usePayments({
-    filter: {
-      filterBy: {
-        transactionId: payment ? payment.transactionId : transactionId,
-        isSubpayment: true
-      }
-    },
+  } = useSubpayments({
+    filter: { filterBy: { transactionId: transaction.id }},
     sortBy: { createdAt: -1 }
   })
 
-  if (isBudgetLoading || isTransactionLoading || !budget || !transaction) {
+  if (isBudgetLoading || !budget) {
     return (
       <>
         <SkeletonList className="mb-3.5 flex flex-row flex-wrap justify-center gap-x-2.5 gap-y-1.5"
