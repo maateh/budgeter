@@ -2,7 +2,7 @@ import { z } from "zod"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import { BudgetStorageAPI, BudgetNoteStorageAPI, PaymentStorageAPI, TransactionStorageAPI } from '@/services/storage/collections'
+import { BudgetStorageAPI, BudgetNoteStorageAPI, SubpaymentStorageAPI, TransactionStorageAPI } from '@/services/storage/collections'
 
 // types
 import { BudgetDocument, BudgetNoteDocument, PaymentDocument, TransactionDocument } from "@/services/storage/types"
@@ -29,7 +29,7 @@ class BackupHelper implements IBackupAPI {
     this.budgetStorage = BudgetStorageAPI.getInstance().getStorage()
     this.budgetNoteStorage = BudgetNoteStorageAPI.getInstance().getStorage()
     this.transactionStorage = TransactionStorageAPI.getInstance().getStorage()
-    this.paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+    this.paymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
   }
 
   public static getInstance() {

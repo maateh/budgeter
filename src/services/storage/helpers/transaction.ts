@@ -1,5 +1,5 @@
 // storage
-import { PaymentStorageAPI, TransactionStorageAPI } from "@/services/storage/collections"
+import { SubpaymentStorageAPI, TransactionStorageAPI } from "@/services/storage/collections"
 
 // helpers
 import { revertPaymentsOnBalance, updateBalance } from "@/services/storage/helpers/balance"
@@ -83,7 +83,7 @@ function handlePayment(transaction: Transaction, executionPayment: Payment, acti
  */
 async function updateTransaction(transactionId: string, executionPayment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
   const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
-  const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+  const paymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
   const { paymentId, budgetId, type, ...document } = await transactionStorage.findById(transactionId)
   const payment = await paymentStorage.findById(paymentId)
@@ -147,7 +147,7 @@ async function updateTransaction(transactionId: string, executionPayment: Paymen
  */
 async function deleteTransactions(filter: FilterOptions<Transaction>, revertPayments: boolean = true): Promise<void> {
   const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
-  const paymentStorage = PaymentStorageAPI.getInstance().getStorage()
+  const paymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
   const transactions = await transactionStorage.find(filter)
   const ids = transactions.map((tr) => tr.id)

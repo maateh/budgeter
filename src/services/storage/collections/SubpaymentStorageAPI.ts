@@ -1,11 +1,11 @@
 import { z } from "zod"
 
 // interfaces
-import { IPaymentAPI } from "@/services/api/interfaces"
+import { ISubpaymentAPI } from "@/services/api/interfaces"
 
 // types
-import { Pagination, Payment, QueryOptions, Transaction } from "@/services/api/types"
-import { PaymentDocument } from "@/services/storage/types"
+import { Pagination, QueryOptions, Subpayment, Transaction } from "@/services/api/types"
+import { SubpaymentDocument } from "@/services/storage/types"
 
 // validations
 import { subpaymentFormSchema } from "@/lib/validations"
@@ -19,34 +19,33 @@ import { updateTransaction } from "@/services/storage/helpers/transaction"
 // utils
 import { paginate } from "@/services/storage/utils"
 
-class PaymentStorageAPI implements IPaymentAPI {
-  private static _instance: PaymentStorageAPI
+class SubpaymentStorageAPI implements ISubpaymentAPI {
+  private static _instance: SubpaymentStorageAPI
 
-  private storage: StorageHelper<PaymentDocument>
+  private storage: StorageHelper<SubpaymentDocument>
 
   private constructor() {
-    this.storage = new StorageHelper('payments')
+    this.storage = new StorageHelper('subpayments')
   }
 
   public static getInstance() {
     if (!this._instance) {
-      this._instance = new PaymentStorageAPI()
+      this._instance = new SubpaymentStorageAPI()
     }
     return this._instance
   }
 
-  public async get({ params, filter, sortBy }: QueryOptions<Payment> = {}): Promise<Pagination<Payment>> {
+  public async get({ params, filter, sortBy }: QueryOptions<Subpayment> = {}): Promise<Pagination<Subpayment>> {
     const payments = await this.storage.find(filter)
     return paginate(payments, { params, sortBy })
   }
 
   public async addSubpayment(transactionId: string, data: z.infer<typeof subpaymentFormSchema>): Promise<Transaction> {  
-    const subpayment: Payment = {
+    const subpayment: Subpayment = {
       ...data,
       id: crypto.randomUUID(),
       transactionId,
-      createdAt: new Date(),
-      isSubpayment: true
+      createdAt: new Date()
     }
 
     return await updateTransaction(transactionId, subpayment, 'execute')
@@ -67,4 +66,4 @@ class PaymentStorageAPI implements IPaymentAPI {
   }
 }
 
-export default PaymentStorageAPI
+export default SubpaymentStorageAPI
