@@ -47,11 +47,7 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
           targetBudget={targetBudget}
           payment={{
             ...paymentField,
-            id: '',
-            budgetId: '',
-            transactionId: '',
-            createdAt: new Date(),
-            isSubpayment: false
+            createdAt: new Date()
           }}
         />
       )}
