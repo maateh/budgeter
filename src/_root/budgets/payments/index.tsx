@@ -74,11 +74,11 @@ const BudgetPayments = () => {
               <Tooltip>
                 <TooltipTrigger>
                   <PaymentBadge className="bg-primary/35 py-0.5 border-2 cursor-pointer"
+                    size="default"
+                    onClick={() => openDialog(`/transactions/details/${payment.transactionId}`)}
                     payment={payment}
                     currency={budget.balance.currency}
                     processed
-                    size="default"
-                    onClick={() => openDialog(`/transactions/details/${payment.transactionId}`)}
                   />
                 </TooltipTrigger>
                 <TooltipContent className="font-heading icon-wrapper">

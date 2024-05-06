@@ -44,9 +44,9 @@ const TransactionPreview = ({ transaction, budget, className, ...props }: Transa
       <div className="flex gap-x-1.5 justify-between items-center">
         <PaymentBadge
           payment={transaction.payment}
-          processed={transaction.processed}
+          processed={transaction.payment.processed}
           currency={budget.balance.currency}
-          isNeutral={isNeutral(transaction.type, transaction.processed)}
+          isNeutral={isNeutral(transaction.type, transaction.payment.processed)}
           showProgress
           transaction={transaction}
           budgetName={budget.name}

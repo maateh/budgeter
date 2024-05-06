@@ -113,13 +113,13 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           {(payment) => (
             <PaymentBadge className="flex px-2.5 font-semibold border-2"
               size="xs"
-              payment={payment}
-              currency={budget.balance.currency}
-              processed
               onClick={(e) => {
                 e.stopPropagation()
                 openDialog(`/transactions/details/${payment.transactionId}`)
               }}
+              payment={payment}
+              currency={budget.balance.currency}
+              processed
             />
           )}
         </Listing>

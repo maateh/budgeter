@@ -9,10 +9,10 @@ const useRemoveSubpayment = (transactionId: string) => {
 
   return useMutation({
     mutationKey: ['removeSubpayment', transactionId],
-    mutationFn: async ({ transactionId, paymentId }: {
+    mutationFn: async ({ transactionId, subpaymentId }: {
       transactionId: string
-      paymentId: string
-    }) => api.payment.removeSubpayment(transactionId, paymentId),
+      subpaymentId: string
+    }) => api.payment.removeSubpayment(transactionId, subpaymentId),
     onSuccess: ({ id, budgetId, type }) => {
       // budget
       queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })

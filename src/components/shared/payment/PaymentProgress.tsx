@@ -15,34 +15,64 @@ import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 import SubpaymentForm from "@/components/form/subpayment/SubpaymentForm"
 
 // hooks
+import { useToast } from "@/components/ui/use-toast"
 import { useBudget, useSubpayments } from "@/lib/react-query/queries"
+import { useRemoveSubpayment } from "@/lib/react-query/mutations"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { Subpayment, Transaction } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
+import { getPaymentAmount } from "@/components/shared/payment/utils"
 
 type PaymentProgressProps = {
   transaction: Transaction
 }
 
 const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
-  const {
-    data: budget,
-    isLoading: isBudgetLoading
-  } = useBudget(transaction.budgetId)
+  const { toast } = useToast()
 
-  const {
-    data: subpayments,
-    isLoading: isSubpaymentsLoading
-  } = useSubpayments({
+  const { data: budget, isLoading: isBudgetLoading } = useBudget(transaction.budgetId)
+
+  const { data: subpayments, isLoading: isSubpaymentsLoading } = useSubpayments({
     filter: {
       filterBy: { transactionId: transaction.id },
       excludeBy: { isBorrowmentRoot: true }
     },
     sortBy: { createdAt: -1 }
   })
+
+  const {
+    mutateAsync: removeSubpayment,
+    isPending: isSubpaymentRemovePending
+  } = useRemoveSubpayment(transaction.id)
+
+  const handleRemove = async (subpayment: Subpayment) => {
+    try {
+      await removeSubpayment({
+        transactionId: transaction.id,
+        subpaymentId: subpayment.id
+      })
+
+      toast({
+        title: `Removed subpayment: ${formatWithCurrency(
+          getPaymentAmount(subpayment, transaction.payment.processed),
+          budget!.balance.currency
+        )}`,
+        // TODO: add undo
+        description: `Affected transaction: ${transaction!.name}`
+      })
+    } catch (err) {
+      console.error(err)
+
+      toast({
+        variant: 'destructive',
+        title: 'Oops! Deletion failed.',
+        description: 'Please try again.'
+      })
+    }
+  }
 
   if (isBudgetLoading || !budget) {
     return (
@@ -87,15 +117,17 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
             </Popover>
           )}
         >
-          {(payment) => (
+          {(subpayment) => (
             <PaymentBadge className="flex bg-secondary/30"
-              payment={payment}
-              processed={true}
+              payment={subpayment}
+              processed
               currency={budget.balance.currency}
-              showRemoveButton
               showProgress
               transaction={transaction}
               budgetName={budget.name}
+              showRemoveButton
+              onRemove={() => handleRemove(subpayment)}
+              removeButtonProps={{ disabled: isSubpaymentRemovePending }}
             />
           )}
         </Listing>

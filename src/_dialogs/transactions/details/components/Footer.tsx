@@ -34,9 +34,9 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
           <PaymentBadge className="bg-foreground/10"
             size="lg"
             payment={transaction.payment}
-            processed={transaction.processed}
+            processed={transaction.payment.processed}
             currency={transaction.budget.balance.currency}
-            isNeutral={isNeutral(transaction.type, transaction.processed)}
+            isNeutral={isNeutral(transaction.type, transaction.payment.processed)}
             showProgress
             transaction={transaction}
             budgetName={transaction.budget.name}

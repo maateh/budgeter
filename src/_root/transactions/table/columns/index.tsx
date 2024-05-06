@@ -48,12 +48,12 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
       <SortingButton sortingKey="payment.amount">{column.id}</SortingButton>
     ),
     cell: ({ row }) => (
-      <PaymentBadge
+      <PaymentBadge className="border-2"
         size="sm"
         payment={row.original.payment}
         currency={row.original.budget.balance.currency}
-        processed={row.original.processed}
-        isNeutral={isNeutral(row.original.type, row.original.processed)}
+        processed={row.original.payment.processed}
+        isNeutral={isNeutral(row.original.type, row.original.payment.processed)}
         showProgress
         transaction={row.original}
         budgetName={row.original.budget.name}
