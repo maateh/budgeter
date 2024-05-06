@@ -60,7 +60,6 @@ type TransactionStatusToggleProps = {
   iconProps?: LucideProps
 }
 
-// FIXME: rename to PaymentStatusToggle
 const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusToggleProps>(({
   transaction, iconProps
 }, ref) => {
@@ -71,9 +70,11 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
   const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
 
-    if (transaction.type !== 'default') return
-
     try {
+      if (transaction.type !== 'default') {
+        throw new Error('You can only update transactions of the default type.')
+      }
+
       await updateTransactionStatus({
         id: transaction.id,
         processed: !transaction.payment.processed
@@ -81,7 +82,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
 
       toast({
         variant: 'accent',
-        title: 'Updated: Transaction status',
+        title: 'Updated: Transaction payment status',
         description: `Status of the "${transaction.name}" transaction has been successfully updated!`
       })
     } catch (err) {
@@ -89,7 +90,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
       
       toast({
         variant: 'destructive',
-        title: 'Oops! Failed to update transaction status.',
+        title: 'Oops! Failed to update payment status.',
         description: 'Please try again.'
       })
     }
