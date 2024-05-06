@@ -12,7 +12,7 @@ import { budgetFormSchema } from "@/lib/validations"
 
 // storage
 import StorageHelper from "@/services/storage/StorageHelper"
-import { BudgetNoteStorageAPI } from "@/services/storage/collections"
+import { BudgetNoteStorageAPI, SubpaymentStorageAPI } from "@/services/storage/collections"
 
 // helpers
 import { deleteTransactions } from "@/services/storage/helpers/transaction"
@@ -71,12 +71,16 @@ class BudgetStorageAPI implements IBudgetAPI {
 
   public async delete(id: string): Promise<Budget> {
     const noteStorage = BudgetNoteStorageAPI.getInstance().getStorage()
+    const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
     /** Delete affected notes from the storage */
     await noteStorage.bulkDelete({ filterBy: { budgetId: id }})
 
-    /** Delete affected transactions & payments from the storage */
-    await deleteTransactions({ filterBy: { budgetId: id } })
+    /** Delete affected transactions from the storage */
+    await deleteTransactions({ filterBy: { budgetId: id } }, false)
+
+    /** Delete affected subpayments from the storage */
+    await subpaymentStorage.bulkDelete({ filterBy: { budgetId: id }})
 
     /** Delete budget from the storage */
     const budget = await this.storage.findById(id)

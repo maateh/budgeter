@@ -2,7 +2,7 @@
 import { Pagination, QueryOptions } from "@/services/api/types"
 
 // utils
-import { filter, sort } from "@/services/storage/utils"
+import { filter, rangeFilter, sort } from "@/services/storage/utils"
 
 /**
  * Paginates the given data based on the provided offset and limit.
@@ -13,9 +13,11 @@ import { filter, sort } from "@/services/storage/utils"
  */
 export function paginate<D>(data: D[], { params, filter: filterOptions, sortBy }: QueryOptions<D> = {}): Pagination<D> {
   const { offset = 0, limit = -1, maxItemLimit } = params || {}
+  const { rangeBy } = filterOptions || {}
 
   /** Filter out data before paginate */
   data = filter(data, filterOptions)
+  data = rangeFilter(data, rangeBy)
 
   /**
    * If 'maxItemLimit' is specified we have to override the current

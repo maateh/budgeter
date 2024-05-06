@@ -70,17 +70,19 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
   const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
 
-    if (transaction.type !== 'default') return
-
     try {
+      if (transaction.type !== 'default') {
+        throw new Error('You can only update transactions of the default type.')
+      }
+
       await updateTransactionStatus({
         id: transaction.id,
-        processed: !transaction.processed
+        processed: !transaction.payment.processed
       })
 
       toast({
         variant: 'accent',
-        title: 'Updated: Transaction status',
+        title: 'Updated: Transaction payment status',
         description: `Status of the "${transaction.name}" transaction has been successfully updated!`
       })
     } catch (err) {
@@ -88,7 +90,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
       
       toast({
         variant: 'destructive',
-        title: 'Oops! Failed to update transaction status.',
+        title: 'Oops! Failed to update payment status.',
         description: 'Please try again.'
       })
     }
@@ -96,7 +98,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
 
   const toggleElement = (
     <StateToggle
-      status={transaction.processed ? 'on' : 'off'}
+      status={transaction.payment.processed ? 'on' : 'off'}
       icon={getIcon(transaction.type, iconProps)}
       tooltip={getTooltip(transaction.type)}
       onClick={transaction.type === 'default' ? handleUpdate : undefined}
@@ -114,10 +116,7 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
       <PopoverContent className="max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
-        <PaymentProgress
-          transactionId={transaction.id}
-          budgetId={transaction.budgetId}
-        />
+        <PaymentProgress transaction={transaction} />
       </PopoverContent>
     </Popover>
   )

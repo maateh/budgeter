@@ -14,7 +14,7 @@ import BudgetPaymentsSkeleton from "./skeleton"
 
 // hooks
 import { useDialog, usePagination } from "@/hooks"
-import { useBudget, usePaymentsPagination } from "@/lib/react-query/queries"
+import { useBudget, useSubpaymentsPagination } from "@/lib/react-query/queries"
 
 const BudgetPayments = () => {
   const { id } = useParams() as { id: string }
@@ -26,7 +26,7 @@ const BudgetPayments = () => {
     data: payments,
     isLoading: isPaymentsLoading,
     hasNextPage, fetchNextPage
-  } = usePaymentsPagination({
+  } = useSubpaymentsPagination({
     params: { offset: 0, limit: 15 },
     filter: { filterBy: { budgetId: id }},
     sortBy: { createdAt: -1 }
@@ -73,12 +73,12 @@ const BudgetPayments = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <PaymentBadge className="bg-primary/35 py-0.5 border-2 cursor-pointer"
+                  <PaymentBadge className="py-0.5 border-2 cursor-pointer"
+                    size="default"
+                    onClick={() => openDialog(`/transactions/details/${payment.transactionId}`)}
                     payment={payment}
                     currency={budget.balance.currency}
                     processed
-                    size="default"
-                    onClick={() => openDialog(`/transactions/details/${payment.transactionId}`)}
                   />
                 </TooltipTrigger>
                 <TooltipContent className="font-heading icon-wrapper">

@@ -11,7 +11,7 @@ export type { default as IBudgetNoteAPI } from "./budget-note"
 export type { default as ITransactionAPI } from "./transaction"
 
 // payment
-export type { default as IPaymentAPI } from "./payment"
+export type { default as ISubpaymentAPI } from "./subpayment"
 
 // backup
 export type { default as IBackupAPI } from "./backup"

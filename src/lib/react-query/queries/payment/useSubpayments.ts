@@ -4,15 +4,15 @@ import { useQuery } from "@tanstack/react-query"
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
-import { Payment, QueryOptions } from "@/services/api/types"
+import { QueryOptions, Subpayment } from "@/services/api/types"
 
-const usePayments = ({ params, filter, sortBy }: QueryOptions<Payment> = {}) => {
+const useSubpayments = ({ params, filter, sortBy }: QueryOptions<Subpayment> = {}) => {
   const { api } = useAPI()
 
   const { filterBy, excludeBy } = filter || {}
 
   return useQuery({
-    queryKey: ['payments', filterBy, excludeBy, sortBy],
+    queryKey: ['subpayments', filterBy, excludeBy, sortBy],
     queryFn: async () => {
       const { data } = await api.payment.get({ params, filter, sortBy })
       return data
@@ -20,4 +20,4 @@ const usePayments = ({ params, filter, sortBy }: QueryOptions<Payment> = {}) => 
   })
 }
 
-export default usePayments
+export default useSubpayments

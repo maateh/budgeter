@@ -16,14 +16,14 @@ import TransactionPreview from "@/components/shared/transaction/ui/TransactionPr
 import { useDialog } from "@/hooks"
 
 // types
-import { Transaction } from "@/services/api/types"
+import { BasePayment, Transaction } from "@/services/api/types"
 
 type TransactionsProps = {
   budgetId?: string
 }
 
 const Transactions = ({ budgetId }: TransactionsProps) => {
-  const [processed, setProcessed] = useState<Transaction['processed']>(true)
+  const [processed, setProcessed] = useState<BasePayment['processed']>(true)
 
   const { openDialog } = useDialog()
 
@@ -75,9 +75,8 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
             <TransactionList
               filter={{
                 filterBy: {
-                  type,
-                  processed: type === 'transfer' || processed,
-                  budgetId
+                  budgetId, type,
+                  ['payment.processed']: type === 'transfer' || processed,
                 }
               }}
               params={{ limit: 5, offset: 0, maxItemLimit: 10 }}

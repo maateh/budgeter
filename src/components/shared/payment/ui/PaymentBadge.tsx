@@ -1,19 +1,15 @@
 import { forwardRef } from "react"
 
 // icons
-import { BadgeInfo, Minus, Plus, X } from "lucide-react"
+import { BadgeInfo, Minus, Plus, Trash2, X } from "lucide-react"
 
 // shadcn
 import { Badge, BadgeProps } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { ButtonTooltip, ButtonProps } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // components
 import PaymentProgress from "@/components/shared/payment/PaymentProgress"
-
-// hooks
-import { useToast } from "@/components/ui/use-toast"
-import { useRemoveSubpayment } from "@/lib/react-query/mutations"
 
 // types
 import { Payment, Transaction } from "@/services/api/types"
@@ -38,56 +34,26 @@ type PaymentBadgeProps = BadgeProps & {
   transaction?: never
   budgetName?: never
 }) & ({
-  showRemoveButton?: true
-  transaction: Transaction
+  showRemoveButton: true
+  onRemove: () => void
+  removeButtonProps?: Omit<ButtonProps, 'onClick'>
 } | {
   showRemoveButton?: never
-  transaction?: never
+  onRemove?: never
+  removeButtonProps?: never
 })
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
   payment, processed, currency, isNeutral, iconSize = 16,
-  showRemoveButton, showProgress, transaction, budgetName,
+  showProgress, transaction, budgetName,
+  showRemoveButton, onRemove, removeButtonProps,
   className, size = 'sm', ...props
 }, ref) => {
-  const { toast } = useToast()
-
-  const {
-    mutateAsync: removeSubpayment,
-    isPending
-  } = useRemoveSubpayment(payment.transactionId)
-
-  const handleRemove = async () => {
-    try {
-      await removeSubpayment({
-        transactionId: payment.transactionId,
-        paymentId: payment.id
-      })
-
-      toast({
-        title: `Removed payment: ${formatWithCurrency(
-          getPaymentAmount(payment, processed),
-          currency
-        )}`,
-        // TODO: add undo
-        description: `Affected transaction: ${transaction!.name}`
-      })
-    } catch (err) {
-      console.error(err)
-
-      toast({
-        variant: 'destructive',
-        title: 'Oops! Deletion failed.',
-        description: 'Please try again.'
-      })
-    }
-  }
-
   const element: React.ReactNode = (
     <Badge className={cn("bg-background/60 font-heading font-bold gap-x-1 hover:bg-primary/90",
-        payment.type === '+' ? 'border-accent/30' : 'border-destructive/30',
+        payment.type === '+' ? 'bg-accent/10 border-accent/25' : 'bg-destructive/10 border-destructive/25',
         showProgress ? 'cursor-pointer' : '',
-        isNeutral ? 'text-muted-foreground opacity-75'
+        isNeutral ? 'text-muted-foreground bg-muted/10 border-muted/25 opacity-75'
           : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
       size={size}
       ref={ref}
@@ -108,14 +74,21 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       </div>
 
       {showRemoveButton && (
-        <Button className="ml-1 -mr-0.5 p-0.5"
-          variant="outline"
-          size="icon"
-          onClick={handleRemove}
-          disabled={isPending}
+        <ButtonTooltip {...removeButtonProps}
+          className={cn("ml-1 -mr-0.5 p-0.5", removeButtonProps?.className)}
+          variant={removeButtonProps?.variant || 'outline'}
+          size={removeButtonProps?.size || 'icon'}
+          onClick={onRemove}
+          tooltip={(
+            <div className="icon-wrapper">
+              <Trash2 className="text-destructive" size={18} strokeWidth={2.35} />
+              Click to remove subpayment
+            </div>
+          )}
+          tooltipProps={{ className: 'font-normal' }}
         >
           <X size={12} />
-        </Button>
+        </ButtonTooltip>
       )}
     </Badge>
   )
@@ -126,13 +99,13 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
         {element}
       </PopoverTrigger>
       <PopoverContent className="max-w-md" onClick={(e) => e.stopPropagation()}>
-        {transaction.type === 'borrow' && !payment.isSubpayment ? (
-          <PaymentProgress payment={payment} />
+        {transaction.type === 'borrow' ? (
+          <PaymentProgress transaction={transaction} />
         ) : (
           <div className="icon-wrapper">
             <BadgeInfo size={18} />
             <span className="text-sm">
-              {transaction.processed
+              {transaction.payment.processed
                 ? `Payment has been credited to "${budgetName}" budget.`
                 : "Payment hasn't been credited yet."}
             </span>

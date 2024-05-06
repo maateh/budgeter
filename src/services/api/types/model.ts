@@ -13,8 +13,8 @@ export type Balance = {
 export type Budget = {
   id: string
   name: string
-  balance: Balance
   theme: string
+  balance: Balance
 }
 
 export type BudgetNote = {
@@ -28,25 +28,31 @@ export type BudgetNote = {
 }
 
 export type Payment = {
-  id: string
-  budgetId: string
-  transactionId: string
   type: '+' | '-',
   amount: number
   createdAt: Date
-  processedAmount?: number
-  isSubpayment: boolean
+}
+
+export type BasePayment = Payment & {
+  processedAmount: number
+  processed: boolean
+  processedAt?: Date
+}
+
+export type Subpayment = Payment & {
+  id: string
+  budgetId: string
+  transactionId: string
+  isBorrowmentRoot?: boolean
 }
 
 export type Transaction = {
   id: string
   budgetId: string
-  payment: Payment
   type: 'default' | 'borrow' | 'transfer'
   name: string
   createdAt: Date
   updatedAt: Date
-  processed: boolean
-  processedAt?: Date
   relatedIds: string[]
+  payment: BasePayment
 }

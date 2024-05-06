@@ -24,7 +24,7 @@ const useDeleteBudget = (budgetId: string) => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       
       // payment
-      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId: id }] })
+      queryClient.invalidateQueries({ queryKey: ['subpayments', { budgetId: id }] })
     }
   })
 }

@@ -24,8 +24,8 @@ const useTransferMoney = () => {
       queryClient.invalidateQueries({ queryKey: ['transactions', 'controlled'] })
 
       // payment
-      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId: rootTransaction.budgetId }] })
-      queryClient.invalidateQueries({ queryKey: ['payments', { budgetId: targetTransaction.budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['subpayments', { budgetId: rootTransaction.budgetId }] })
+      queryClient.invalidateQueries({ queryKey: ['subpayments', { budgetId: targetTransaction.budgetId }] })
     }
   })
 }

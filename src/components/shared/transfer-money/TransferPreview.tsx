@@ -38,7 +38,7 @@ const TransferElement = ({ budget, payment, isRoot }: TransferElementProps) => (
         balance={budget.balance}
       />
 
-      <PaymentBadge
+      <PaymentBadge className="border-2"
         payment={payment}
         currency={budget.balance.currency}
         processed

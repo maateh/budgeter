@@ -30,7 +30,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
   
   const processedField = useWatch({
     control,
-    name: 'processed'
+    name: 'payment.processed'
   })
 
   return (
@@ -151,7 +151,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
       <div className="flex flex-col gap-y-1.5">
         <FormField
           control={control}
-          name="processed"
+          name="payment.processed"
           render={({ field }) => (
             <FormItem className="flex items-center gap-x-2.5">
               <FormLabel>
@@ -180,7 +180,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
 
         <FormField
           control={control}
-          name="processedAt"
+          name="payment.processedAt"
           render={({ field }) => processedField ? (
             <FormItem className="max-w-80">
               <FormControl>

@@ -18,7 +18,7 @@ import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
 
 // hooks
 import { useDialog } from "@/hooks"
-import { usePayments } from "@/lib/react-query/queries"
+import { useSubpayments } from "@/lib/react-query/queries"
 
 // types
 import { Budget } from "@/services/api/types"
@@ -35,7 +35,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
 
   const { openDialog } = useDialog()
 
-  const { data: payments, isLoading: isPaymentsLoading } = usePayments({
+  const { data: payments, isLoading: isPaymentsLoading } = useSubpayments({
     params: { offset: 0, limit: 8 },
     filter: { filterBy: { budgetId: budget.id }},
     sortBy: { createdAt: -1 }
@@ -55,10 +55,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Badge
-                    variant="ghost"
-                    size="icon"
-                  >
+                  <Badge variant="ghost" size="icon">
                     <HandCoins size={16} />
                   </Badge>
                 </TooltipTrigger>
@@ -116,13 +113,13 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           {(payment) => (
             <PaymentBadge className="flex px-2.5 font-semibold border-2"
               size="xs"
-              payment={payment}
-              currency={budget.balance.currency}
-              processed
               onClick={(e) => {
                 e.stopPropagation()
                 openDialog(`/transactions/details/${payment.transactionId}`)
               }}
+              payment={payment}
+              currency={budget.balance.currency}
+              processed
             />
           )}
         </Listing>

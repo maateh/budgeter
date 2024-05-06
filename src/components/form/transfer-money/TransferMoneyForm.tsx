@@ -22,12 +22,12 @@ const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
       validationSchema={transferMoneyFormSchema}
       defaultValues={{
         budgetId,
-        processed: true,
         type: 'transfer',
         name: '',
         payment: {
           amount: 0,
-          type: '+'
+          type: '+',
+          processed: true
         }
       }}
       useSubmit={useTransferMoneySubmit}

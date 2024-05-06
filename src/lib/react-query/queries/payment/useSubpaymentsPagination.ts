@@ -4,15 +4,15 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
-import { Payment, QueryOptions } from "@/services/api/types"
+import { QueryOptions, Subpayment } from "@/services/api/types"
 
-const usePaymentsPagination = ({ params, filter, sortBy }: QueryOptions<Payment> = {}) => {
+const useSubpaymentsPagination = ({ params, filter, sortBy }: QueryOptions<Subpayment> = {}) => {
   const { api } = useAPI()
 
   const { filterBy, excludeBy } = filter || {}
 
   return useInfiniteQuery({
-    queryKey: ['payments', filterBy, excludeBy, sortBy, 'pagination'],
+    queryKey: ['subpayments', filterBy, excludeBy, sortBy, 'pagination'],
     queryFn: async ({ pageParam: offset }) => {
       return await api.payment.get({
         params: { ...params, limit: params?.limit || 20, offset },
@@ -24,4 +24,4 @@ const usePaymentsPagination = ({ params, filter, sortBy }: QueryOptions<Payment>
   })
 }
 
-export default usePaymentsPagination
+export default useSubpaymentsPagination

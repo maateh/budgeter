@@ -37,7 +37,7 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
   })
 
   const { data: rootBudget, isLoading: isRootBudgetLoading } = useBudget(budgetId)
-  const { data: targetBudget } = useBudget(targetBudgetIdField)
+  const { data: targetBudget } = useBudget(targetBudgetIdField, { enabled: !!targetBudgetIdField })
 
   return (
     <>
@@ -47,11 +47,7 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
           targetBudget={targetBudget}
           payment={{
             ...paymentField,
-            id: '',
-            budgetId: '',
-            transactionId: '',
-            createdAt: new Date(),
-            isSubpayment: false
+            createdAt: new Date()
           }}
         />
       )}

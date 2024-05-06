@@ -9,7 +9,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 
 // components
 import FileInput from "@/components/input/FileInput"
-import BackupFileInfo from "@/components/shared/backup/BackupInfo"
+import BackupInfo from "@/components/shared/backup/BackupInfo"
 
 // types
 import { RestoreBackupFieldValues } from "@/components/form/backup/types"
@@ -42,7 +42,7 @@ const RestoreBackupFormFields = ({ control }: RestoreBackupFormFieldsProps) => {
         )}
       />
 
-      {content && <BackupFileInfo {...content} />}
+      {content && <BackupInfo {...content} />}
 
       <Button className="w-fit ml-auto icon-wrapper"
         type="submit"
