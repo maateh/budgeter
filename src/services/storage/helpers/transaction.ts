@@ -9,7 +9,16 @@ import { FilterOptions, Subpayment, Transaction } from "@/services/api/types"
 import { StorageCollection, TransactionDocument } from "@/services/storage/types"
 
 /**
- * TODO: documentation
+ * Updates a transaction's payment based on the provided subpayment and action.
+ * 
+ * @param {Transaction} transaction - The transaction to update.
+ * @param {Subpayment} subpayment - The subpayment applied to the transaction.
+ * @param {'execute' | 'undo'} action - The action to perform ('execute' to apply the subpayment, 'undo' to revert it).
+ * @returns {Transaction} The updated transaction with the modified payment.
+ * 
+ * This function updates the base payment of the given transaction based on the provided subpayment and action.
+ * If the action is 'execute', it applies the subpayment to the transaction. If the action is 'undo',
+ * it reverts the effect of the subpayment. The function returns the updated transaction.
  */
 function handlePaymentOnTransaction(
   transaction: Transaction,
@@ -20,23 +29,10 @@ function handlePaymentOnTransaction(
   const { amount, type } = subpayment
 
   /**
-   * Handle different actions on the base payment
-   * 
-   * NOTE: 'processedAmount' value depends on:
-   * - Transaction type is borrow && execution payment is a subpayment
-   *   - Delta amount will be calculated by the type of the payments
-   * 
-   * - By default the delta amount will be:
-   *   - action === 'execute' -> amount of the executional payment
-   *   - action === 'undo' -> current progress of the executional payment
-   * 
-   * note: do not touch a running system
+   * Adjust 'processedAmount' and 'processed' state
+   * based on the action and payment type.
    */
 
-  /**
-   * Need to swap the sign of the delta amount if
-   * the transaction is a borrow transaction.
-   */
   const borrowDelta = basePayment.type === '-'
     ? type === '+' ? amount : -amount
     : type === '+' ? -amount : amount
@@ -53,10 +49,7 @@ function handlePaymentOnTransaction(
       : amount
   }
 
-  /**
-   * Update base payment processed status. If 'processedAmount' has reached
-   * the base payment amount, the status will be updated to processed.
-   */
+  /** Check if the transaction's base payment is fully processed. */
   const processed = basePayment.processedAmount >= basePayment.amount
   const date = new Date()
 
@@ -72,7 +65,15 @@ function handlePaymentOnTransaction(
 }
 
 /**
- * TODO: documentation
+ * Updates a transaction based on the provided subpayment and action.
+ * 
+ * This function updates the transaction's processed amount, processed state, and processed at date based on the subpayment and action.
+ * Additionally, it updates the affected budget balance.
+ * 
+ * @param {string} transactionId - The ID of the transaction to update.
+ * @param {Subpayment} subpayment - The subpayment applied to the transaction.
+ * @param {'execute' | 'undo'} action - The action to perform on the transaction ('execute' or 'undo').
+ * @returns {Promise<Transaction>} The updated transaction.
  */
 async function updateTransaction(transactionId: string, subpayment: Subpayment, action: 'execute' | 'undo'): Promise<Transaction> {
   const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
@@ -82,6 +83,10 @@ async function updateTransaction(transactionId: string, subpayment: Subpayment, 
   /** Update affected budget balance */
   await updateBalance(transaction, subpayment, { action })
 
+  /**
+   * Update transaction's processed amount, processed state,
+   * and processed at date based on the subpayment and action.
+   */
   const updatedTransaction = handlePaymentOnTransaction(transaction, subpayment, action)
   return await transactionStorage.save(updatedTransaction)
 }

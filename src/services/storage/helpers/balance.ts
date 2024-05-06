@@ -11,7 +11,15 @@ type BalanceUpdaterOptions = {
 }
 
 /**
- * TODO: documentation
+ * Updates the balance based on the provided subpayment and transaction details.
+ * 
+ * @param {Balance} balance - The current balance.
+ * @param {Transaction} transaction - The transaction associated with the payment.
+ * @param {Subpayment} subpayment - The subpayment to apply to the balance.
+ * @param {BalanceUpdaterOptions} options - Additional options to control the balance update.
+ * @param {'execute' | 'undo'} options.action - The action to perform on the balance ('execute' or 'undo').
+ * @param {boolean} [options.skipCurrentDelta=false] - Whether to skip the current delta calculation.
+ * @returns {Balance} The updated balance.
  */
 function handlePaymentOnBalance(
   balance: Balance,
@@ -24,11 +32,21 @@ function handlePaymentOnBalance(
   const { current, income, loss, borrowment } = balance
   const { type, amount } = subpayment
 
-  /**
-   * TODO: comment
-   */
+  /** Determines if the transaction is a borrowment. */
   const isBorrowment = transaction.type === 'borrow'
+
+  /**
+   * Skips income and loss delta calculation if:
+   * - Transaction type is not 'default' or
+   * - 'skipCurrentDelta' is set to true.
+   */
   const skipIncomeAndLossDeltas = transaction.type !== 'default' || skipCurrentDelta
+
+  /**
+   * Skips borrowment delta calculation if:
+   * - Transaction is a borrowment and
+   * - Subpayment's budgetId is different from the transaction's budgetId.
+   */
   const skipBorrowmentDelta = isBorrowment && subpayment.budgetId !== transaction.budgetId
 
 
@@ -57,7 +75,12 @@ function handlePaymentOnBalance(
 /**
  * Updates the balance of a budget based on the provided payment and action.
  * 
- * TODO: documentation
+ * @param {Transaction} transaction - The transaction associated with the payment.
+ * @param {Subpayment} subpayment - The subpayment to apply to the balance.
+ * @param {BalanceUpdaterOptions} options - Additional options to control the balance update.
+ * @param {'execute' | 'undo'} options.action - The action to perform on the balance ('execute' or 'undo').
+ * @param {boolean} [options.skipCurrentDelta=false] - Whether to skip the current delta calculation.
+ * @returns {Promise<Budget>} The updated budget.
  */
 async function updateBalance(
   transaction: Transaction,
@@ -67,6 +90,10 @@ async function updateBalance(
   const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
   const budget = await budgetStorage.findById(transaction.budgetId)
   
+  /**
+   * If the subpayment belongs to a different budget than the transaction,
+   * adjust the balance of both budgets accordingly.
+   */
   if (subpayment.budgetId !== transaction.budgetId) {
     const targetBudget = await budgetStorage.findById(subpayment.budgetId)
 
@@ -76,6 +103,12 @@ async function updateBalance(
     })
   }
 
+  /**
+   * Update the balance of the budget associated with the transaction.
+   * 
+   * If the subpayment is associated with a different budget,
+   * skip the current delta calculation.
+   */
   return await budgetStorage.save({
     ...budget,
     balance: handlePaymentOnBalance(budget.balance, transaction, subpayment, {
@@ -86,10 +119,14 @@ async function updateBalance(
 }
 
 /**
- * Reverts subpayments on balances and saves the updated budgets.
+ * Reverts subpayments from budgets and updates budget balances accordingly.
  * 
- * @param subpayments - The array of subpayments to revert on balances.
- * @returns A Promise resolving once the subpayments have been reverted on balances.
+ * @param {Subpayment[]} subpayments - The subpayments to revert.
+ * @returns {Promise<void>} A promise that resolves once the subpayments are reverted.
+ * 
+ * This function reverts the specified subpayments from budgets and updates the budget balances accordingly.
+ * It adjusts the balance of each affected budget by undoing the effect of the subpayment.
+ * Finally, it removes the reverted subpayments from the storage.
  */
 async function revertSubpaymentsOnBalance(subpayments: Subpayment[]): Promise<void> {
   const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
@@ -99,9 +136,7 @@ async function revertSubpaymentsOnBalance(subpayments: Subpayment[]): Promise<vo
   const budgetCollection = await budgetStorage.fetchFromStorage()
   const transactionCollection = await transactionStorage.fetchFromStorage()
 
-  /**
-   * TODO: comment
-   */
+  /** Prepare updated budgets by reverting the subpayments. */
   const budgets: StorageCollection<Budget> = subpayments.reduce((budgets, subpayment) => {
     const budget = budgetCollection[subpayment.budgetId]
     const transaction = transactionCollection[subpayment.transactionId]
@@ -114,13 +149,12 @@ async function revertSubpaymentsOnBalance(subpayments: Subpayment[]): Promise<vo
     }
   }, {} as StorageCollection<Budget>)
 
-  /**
-   * TODO: comment
-   */
+  /** Remove the reverted subpayments from the storage. */
   await subpaymentStorage.bulkDelete({
     filterBy: { id: subpayments.map((subpayment) => subpayment.id) }
   })
 
+  /** Update budgets with the reverted balances. */
   await budgetStorage.bulkSave(budgets)
 }
 

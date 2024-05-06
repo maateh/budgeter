@@ -10,7 +10,14 @@ import { Budget, Subpayment, Transaction } from "@/services/api/types"
 import { StorageCollection } from "@/services/storage/types"
 
 /**
- * TODO: documentation
+ * Reverts subpayments and updates budgets and transactions accordingly.
+ * 
+ * @param {Subpayment[]} subpayments - The subpayments to revert.
+ * @returns {Promise<void>} A promise that resolves once the subpayments are reverted.
+ * 
+ * This function reverts the specified subpayments and updates the balances of affected budgets and transactions accordingly.
+ * It adjusts the balance of each affected budget and transaction by undoing the effect of the subpayment.
+ * Finally, it removes the reverted subpayments from the storage.
  */
 async function revertSubpayments(subpayments: Subpayment[]): Promise<void> {
   const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
@@ -21,7 +28,8 @@ async function revertSubpayments(subpayments: Subpayment[]): Promise<void> {
   const transactionCollection = await transactionStorage.fetchFromStorage()
 
   /**
-   * TODO: comment
+   * Prepare updated budgets and transactions by
+   * reverting the subpayments.
    */
   const { budgets, transactions } = subpayments.reduce(({ budgets, transactions }, subpayment) => {
     const budget = budgetCollection[subpayment.budgetId]
@@ -42,13 +50,12 @@ async function revertSubpayments(subpayments: Subpayment[]): Promise<void> {
     }
   }, {} as { budgets: StorageCollection<Budget>, transactions: StorageCollection<Transaction> })
 
-  /**
-   * TODO: comment
-   */
+  /** Remove the reverted subpayments from the storage. */
   await subpaymentStorage.bulkDelete({
     filterBy: { id: subpayments.map((subpayment) => subpayment.id) }
   })
 
+  /** Update budgets and transactions with the reverted balances. */
   await budgetStorage.bulkSave(budgets)
   await transactionStorage.bulkSave(transactions)
 }
