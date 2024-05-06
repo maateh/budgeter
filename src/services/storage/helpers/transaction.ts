@@ -91,22 +91,22 @@ async function updateTransaction(transactionId: string, subpayment: Subpayment, 
   return await transactionStorage.save(updatedTransaction)
 }
 
-/** FIXME:
+/**
  * Deletes transactions from storage based on the provided filter and
  * optionally reverts associated payments on the affected budgets.
  * 
- * @param filter - Filter options to select transactions to delete.
- * @param revertPayments - A boolean indicating whether to revert associated payments on budget balances before deletion. Default is true.
+ * @param {FilterOptions<Transaction>} filter - Filter options to select transactions to delete.
+ * @param {boolean} revertPayments - A boolean indicating whether to revert associated payments on budget balances before deletion. Default is true.
  * @returns A Promise resolving once the transactions are deleted and associated payments (if reverted) are removed.
  */
 async function deleteTransactions(filter: FilterOptions<Transaction>, revertPayments: boolean = true): Promise<void> {
   const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
-  const paymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
+  const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
   const transactions = await transactionStorage.find(filter)
   const ids = transactions.map((tr) => tr.id)
   
-  /** Remove affected transaction ids from relatedIds */
+  /** Remove affected transaction ids from other transactions relatedIds */
   const relatedTransactions = await transactionStorage.find({
     filterBy: { id: transactions.flatMap((tr) => tr.relatedIds) }
   })
@@ -121,26 +121,25 @@ async function deleteTransactions(filter: FilterOptions<Transaction>, revertPaym
     }), {} as StorageCollection<TransactionDocument>)
   )
 
-  /** Revert affected payments on budget balance */
+  /** Revert subpayments on the affected budgets */
   if (revertPayments) {
-    const payments = await paymentStorage.find({
-      filterBy: { transactionId: ids, isSubpayment: false }
+    const subpayments = await subpaymentStorage.find({
+      filterBy: { transactionId: ids }
     })
-
-    await revertSubpaymentsOnBalance(payments)
+    
+    await revertSubpaymentsOnBalance(subpayments)
   }
 
-  /** Delete affected payments & transactions from the storage */
-  await paymentStorage.bulkDelete({ filterBy: { transactionId: ids }})
+  /** Delete affected transactions from the storage */
   await transactionStorage.bulkDelete(filter)
 }
 
-/** FIXME:
+/**
  * Manages related transaction IDs for a given transaction by adding or removing related IDs.
  * 
- * @param id - The ID of the transaction to manage related IDs for.
- * @param relatedIds - An array of related transaction IDs to add or remove.
- * @param action - The action to perform: 'add' to add related IDs or 'remove' to remove them.
+ * @param {string} id - The ID of the transaction to manage related IDs for.
+ * @param {string[]} relatedIds - An array of related transaction IDs to add or remove.
+ * @param {'add' | 'remove'} action - The action to perform: 'add' to add related IDs or 'remove' to remove them.
  * @returns A Promise resolving to the updated transaction document after managing related IDs.
  */
 async function manageRelatedTransactions(id: string, relatedIds: string[], action: 'add' | 'remove'): Promise<TransactionDocument> {

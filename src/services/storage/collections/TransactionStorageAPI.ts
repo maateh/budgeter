@@ -179,27 +179,11 @@ class TransactionStorageAPI implements ITransactionAPI {
   }
 
   public async addRelated(id: string, data: z.infer<typeof relatedTransactionsFormSchema>): Promise<Transaction> {
-    const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
-
-    // FIXME:
-    const { paymentId, ...transaction } = await manageRelatedTransactions(
-      id, data.relatedIds, 'add'
-    )
-
-    const payment = await subpaymentStorage.findById(paymentId)
-    return { ...transaction, payment }
+    return await manageRelatedTransactions(id, data.relatedIds, 'add')
   }
 
   public async removeRelated(id: string, relatedId: string): Promise<Transaction> {
-    const subpaymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
-
-    // FIXME:
-    const { paymentId, ...transaction } = await manageRelatedTransactions(
-      id, [relatedId], 'remove'
-    )
-
-    const payment = await subpaymentStorage.findById(paymentId)
-    return { ...transaction, payment }
+    return await manageRelatedTransactions(id, [relatedId], 'remove')
   }
 
   public async transferMoney(
