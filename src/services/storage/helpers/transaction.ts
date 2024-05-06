@@ -2,26 +2,22 @@
 import { SubpaymentStorageAPI, TransactionStorageAPI } from "@/services/storage/collections"
 
 // helpers
-import { revertPaymentsOnBalance, updateBalance } from "@/services/storage/helpers/balance"
+import { revertSubpaymentsOnBalance, updateBalance } from "@/services/storage/helpers/balance"
 
 // types
-import { FilterOptions, Payment, Transaction } from "@/services/api/types"
+import { FilterOptions, Subpayment, Transaction } from "@/services/api/types"
 import { StorageCollection, TransactionDocument } from "@/services/storage/types"
 
 /**
- * Handles the execution or undoing of a payment within a transaction, updating the transaction accordingly.
- * 
- * @param transaction - The transaction object to handle the payment for.
- * @param executionPayment - The payment object representing the executional payment.
- * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
- * @returns The updated transaction after handling the payment action.
+ * TODO: documentation
  */
-function handlePayment(transaction: Transaction, executionPayment: Payment, action: 'execute' | 'undo'): Transaction {
-  /** Destructure & initalize of the necessary fields from payments */
-  const { amount, processedAmount = 0, type, isSubpayment } = executionPayment
-
-  const { payment } = transaction
-  payment.processedAmount = payment.processedAmount || 0
+function handlePaymentOnTransaction(
+  transaction: Transaction,
+  subpayment: Subpayment,
+  action: 'execute' | 'undo'
+): Transaction {
+  const { payment: basePayment } = transaction
+  const { amount, type } = subpayment
 
   /**
    * Handle different actions on the base payment
@@ -38,106 +34,59 @@ function handlePayment(transaction: Transaction, executionPayment: Payment, acti
    */
 
   /**
-   * Need to swap the sign of the delta amount based on
-   * the type of the base and executional payments.
+   * Need to swap the sign of the delta amount if
+   * the transaction is a borrow transaction.
    */
-  const borrowDelta = payment.type === '-'
+  const borrowDelta = basePayment.type === '-'
     ? type === '+' ? amount : -amount
     : type === '+' ? -amount : amount
 
   if (action === 'execute') {
-    payment.processedAmount += transaction.type === 'borrow' && isSubpayment
+    basePayment.processedAmount += transaction.type === 'borrow'
       ? borrowDelta
       : amount
   }
 
   if (action === 'undo') {
-    payment.processedAmount -= transaction.type === 'borrow' && isSubpayment
+    basePayment.processedAmount -= transaction.type === 'borrow'
       ? borrowDelta
-      : processedAmount
+      : amount
   }
 
   /**
-   * Update processed state of the transaction based on 'processedAmount'
-   * whether it has reached the base payment amount or not.
+   * Update base payment processed status. If 'processedAmount' has reached
+   * the base payment amount, the status will be updated to processed.
    */
-  const processed = payment.processedAmount >= payment.amount
+  const processed = basePayment.processedAmount >= basePayment.amount
   const date = new Date()
 
   return {
     ...transaction,
-    payment,
-    processed,
-    processedAt: processed ? date : undefined,
-    updatedAt: date
+    updatedAt: date,
+    payment: {
+      ...basePayment,
+      processed,
+      processedAt: processed ? date : undefined,
+    }
   }
 }
 
 /**
- * Updates a transaction and its associated payment based on the provided execution payment and action.
- * 
- * @param transactionId - The ID of the transaction to update.
- * @param executionPayment - The payment object representing the executional payment.
- * @param action - The action to perform: 'execute' to apply the payment or 'undo' to revert it.
- * @returns A Promise resolving to the updated transaction after updating it and its payment.
+ * TODO: documentation
  */
-async function updateTransaction(transactionId: string, executionPayment: Payment, action: 'execute' | 'undo'): Promise<Transaction> {
+async function updateTransaction(transactionId: string, subpayment: Subpayment, action: 'execute' | 'undo'): Promise<Transaction> {
   const transactionStorage = TransactionStorageAPI.getInstance().getStorage()
-  const paymentStorage = SubpaymentStorageAPI.getInstance().getStorage()
 
-  const { paymentId, budgetId, type, ...document } = await transactionStorage.findById(transactionId)
-  const payment = await paymentStorage.findById(paymentId)
+  const transaction = await transactionStorage.findById(transactionId)
 
-  /**
-   * Update affected budget's balance
-   * 
-   * NOTE: Need to update the 'processedAmount' field manually when:
-   * - transaction type is borrow
-   * - action is undo
-   * because the withdrawal amount will be the difference of the base payment
-   * amount minus the current progress of the execution payment.
-   */
-  await updateBalance(budgetId, {
-    ...executionPayment,
-    processedAmount: type === 'borrow' && action === 'undo'
-      ? payment.amount - (executionPayment.processedAmount || 0)
-      : executionPayment.processedAmount
-  }, {
-    action,
-    isBorrowment: type === 'borrow',
-    skipIncomeAndLossDeltas: type !== 'default',
-    borrowmentTargetBudgetId: type === 'borrow' && budgetId !== executionPayment.budgetId
-      ? executionPayment.budgetId
-      : undefined
-  })
+  /** Update affected budget balance */
+  await updateBalance(transaction, subpayment, { action })
 
-  /**
-   * Update transaction and its payment based on 'executionPayment'
-   */
-  const transaction: Transaction = { ...document, budgetId, type, payment }
-  const { payment: updatedPayment, ...updatedTransaction } = handlePayment(
-    transaction, executionPayment, action
-  )
-
-  /**
-   * Need to store/remove subpayments that
-   * affects process of the base payment
-   */
-  if (executionPayment.isSubpayment) {
-    if (action === 'execute') await paymentStorage.save(executionPayment)
-    if (action === 'undo') await paymentStorage.deleteById(executionPayment.id)
-  }
-
-  /**
-   * Save updated transaction and its payment to storage
-   */
-  await transactionStorage.save({ ...updatedTransaction, paymentId: updatedPayment.id })
-  await paymentStorage.save(updatedPayment)
-
-  return { ...updatedTransaction, payment: updatedPayment }
+  const updatedTransaction = handlePaymentOnTransaction(transaction, subpayment, action)
+  return await transactionStorage.save(updatedTransaction)
 }
 
-/**
+/** FIXME:
  * Deletes transactions from storage based on the provided filter and
  * optionally reverts associated payments on the affected budgets.
  * 
@@ -173,7 +122,7 @@ async function deleteTransactions(filter: FilterOptions<Transaction>, revertPaym
       filterBy: { transactionId: ids, isSubpayment: false }
     })
 
-    await revertPaymentsOnBalance(payments)
+    await revertSubpaymentsOnBalance(payments)
   }
 
   /** Delete affected payments & transactions from the storage */
@@ -181,7 +130,7 @@ async function deleteTransactions(filter: FilterOptions<Transaction>, revertPaym
   await transactionStorage.bulkDelete(filter)
 }
 
-/**
+/** FIXME:
  * Manages related transaction IDs for a given transaction by adding or removing related IDs.
  * 
  * @param id - The ID of the transaction to manage related IDs for.
@@ -228,4 +177,4 @@ async function manageRelatedTransactions(id: string, relatedIds: string[], actio
   })
 }
 
-export { updateTransaction, deleteTransactions, manageRelatedTransactions }
+export { handlePaymentOnTransaction, updateTransaction, deleteTransactions, manageRelatedTransactions }

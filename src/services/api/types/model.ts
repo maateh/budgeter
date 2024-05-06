@@ -44,6 +44,7 @@ export type Subpayment = Payment & {
   id: string
   budgetId: string
   transactionId: string
+  // TODO: isRoot?: boolean
 }
 
 export type Transaction = {

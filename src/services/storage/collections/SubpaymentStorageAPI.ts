@@ -41,12 +41,16 @@ class SubpaymentStorageAPI implements ISubpaymentAPI {
   }
 
   public async addSubpayment(transactionId: string, data: z.infer<typeof subpaymentFormSchema>): Promise<Transaction> {  
-    const subpayment: Subpayment = {
-      ...data,
+    const { budgetId, type, amount } = data
+
+    const subpayment = await this.storage.save({
       id: crypto.randomUUID(),
+      budgetId,
       transactionId,
+      type,
+      amount,
       createdAt: new Date()
-    }
+    })
 
     return await updateTransaction(transactionId, subpayment, 'execute')
   }
@@ -58,6 +62,12 @@ class SubpaymentStorageAPI implements ISubpaymentAPI {
       throw new Error('Subpayment not found!')
     }
 
+    // TODO: add isRoot field -> can't be removed
+    // if (subpayment.isRoot) {
+    //   throw new Error('You cannot remove a root subpayment.')
+    // }
+
+    await this.storage.deleteById(subpaymentId)
     return await updateTransaction(transactionId, subpayment, 'undo')
   }
 
