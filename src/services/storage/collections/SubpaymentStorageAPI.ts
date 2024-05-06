@@ -62,10 +62,9 @@ class SubpaymentStorageAPI implements ISubpaymentAPI {
       throw new Error('Subpayment not found!')
     }
 
-    // TODO: add isRoot field -> can't be removed
-    // if (subpayment.isRoot) {
-    //   throw new Error('You cannot remove a root subpayment.')
-    // }
+    if (subpayment.isBorrowmentRoot) {
+      throw new Error('You cannot remove a root subpayment.')
+    }
 
     await this.storage.deleteById(subpaymentId)
     return await updateTransaction(transactionId, subpayment, 'undo')

@@ -17,10 +17,7 @@ const basePaymentFormSchema = paymentFormSchema.extend({
 
 const basePaymentSchema = basePaymentFormSchema.extend({
   processedAmount: z.coerce.number(),
-  createdAt: z.coerce.date(),
-  subpaymentIds: z.array(
-    z.string().uuid({ message: 'One of Subpayment IDs is invalid!' })
-  )
+  createdAt: z.coerce.date()
 })
 
 const basePaymentDocumentSchema = basePaymentSchema
@@ -33,7 +30,8 @@ const subpaymentFormSchema = paymentFormSchema.extend({
 const subpaymentSchema = subpaymentFormSchema.extend({
   id: z.string().uuid({ message: 'Payment ID is invalid!' }),
   transactionId: z.string().uuid({ message: 'Transaction ID is invalid!' }),
-  createdAt: z.coerce.date()
+  createdAt: z.coerce.date(),
+  isBorrowmentRoot: z.coerce.boolean().optional()
 })
 
 const subpaymentDocumentSchema = subpaymentSchema

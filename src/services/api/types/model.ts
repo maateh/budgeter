@@ -37,14 +37,13 @@ export type BasePayment = Payment & {
   processedAmount: number
   processed: boolean
   processedAt?: Date
-  subpaymentIds: string[]
 }
 
 export type Subpayment = Payment & {
   id: string
   budgetId: string
   transactionId: string
-  // TODO: isRoot?: boolean
+  isBorrowmentRoot?: boolean
 }
 
 export type Transaction = {

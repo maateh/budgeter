@@ -90,11 +90,9 @@ class TransactionStorageAPI implements ITransactionAPI {
         ...payment,
         processedAmount: 0,
         processedAt: payment.processed ? payment.processedAt || date : undefined,
-        createdAt: date,
-        subpaymentIds: []
+        createdAt: date
       }
     })
-    console.log({relids: transaction.relatedIds})
 
 
     let subpayment: Subpayment = {
@@ -107,7 +105,7 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     if (type === 'borrow') {
-      await subpaymentStorage.save({ ...subpayment/*TODO:, isRoot: true*/ })
+      await subpaymentStorage.save({ ...subpayment, isBorrowmentRoot: true })
       await updateBalance(transaction, subpayment, { action: 'execute' })
     }
 
