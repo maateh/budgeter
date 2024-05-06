@@ -51,9 +51,9 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
 }, ref) => {
   const element: React.ReactNode = (
     <Badge className={cn("bg-background/60 font-heading font-bold gap-x-1 hover:bg-primary/90",
-        payment.type === '+' ? 'border-accent/30' : 'border-destructive/30',
+        payment.type === '+' ? 'bg-accent/10 border-accent/25' : 'bg-destructive/10 border-destructive/25',
         showProgress ? 'cursor-pointer' : '',
-        isNeutral ? 'border-muted-foreground/30 text-muted-foreground opacity-75'
+        isNeutral ? 'text-muted-foreground bg-muted/10 border-muted/25 opacity-75'
           : payment.type === '+' ? 'text-accent' : 'text-destructive', className)}
       size={size}
       ref={ref}

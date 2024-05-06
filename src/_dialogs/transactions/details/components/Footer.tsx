@@ -31,7 +31,7 @@ const TransactionDetailsFooter = ({ transaction }: TransactionDetailsFooterProps
         <div className="flex items-center gap-x-2.5">
           <TransactionStatusToggle transaction={transaction} />
 
-          <PaymentBadge className="bg-foreground/10"
+          <PaymentBadge className="py-1.5 border-2"
             size="lg"
             payment={transaction.payment}
             processed={transaction.payment.processed}

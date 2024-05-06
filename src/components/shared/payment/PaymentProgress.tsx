@@ -118,7 +118,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           )}
         >
           {(subpayment) => (
-            <PaymentBadge className="flex bg-secondary/30"
+            <PaymentBadge
               payment={subpayment}
               processed
               currency={budget.balance.currency}

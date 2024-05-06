@@ -73,7 +73,7 @@ const BudgetPayments = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <PaymentBadge className="bg-primary/35 py-0.5 border-2 cursor-pointer"
+                  <PaymentBadge className="py-0.5 border-2 cursor-pointer"
                     size="default"
                     onClick={() => openDialog(`/transactions/details/${payment.transactionId}`)}
                     payment={payment}
