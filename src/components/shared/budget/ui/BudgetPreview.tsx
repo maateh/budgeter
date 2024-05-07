@@ -84,7 +84,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       <Separator className="mx-auto w-5/6" />
 
       {!isPaymentsLoading && payments ? (
-        <Listing className="mb-auto flex flex-row flex-wrap items-center gap-x-1.5 gap-y-1"
+        <Listing className="mb-auto flex flex-row flex-wrap justify-center items-center gap-x-2 gap-y-1"
           items={payments}
           fallbackProps={{ size: "xs", value: 'No payments to show.' }}
           firstElement={(
@@ -111,7 +111,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
           ) : undefined}
         >
           {(payment) => (
-            <PaymentBadge className="flex px-2.5 font-semibold border-2"
+            <PaymentBadge className="px-2.5 flex font-semibold bg-background/50 border-2"
               size="xs"
               onClick={(e) => {
                 e.stopPropagation()
