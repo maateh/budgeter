@@ -16,8 +16,8 @@ export { default as useRemoveRelatedTransaction } from './transaction/useRemoveR
 export { default as useTransferMoney } from './transaction/useTransferMoney'
 
 // payment
-export { default as useAddSubpayment } from './payment/useAddSubpayment'
-export { default as useRemoveSubpayment } from './payment/useRemoveSubpayment'
+export { default as useAddSubpayment } from './subpayment/useAddSubpayment'
+export { default as useRemoveSubpayment } from './subpayment/useRemoveSubpayment'
 
 // backup
 export { default as useCreateBackup } from './backup/useCreateBackup'

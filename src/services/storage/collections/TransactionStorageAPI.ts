@@ -169,7 +169,8 @@ class TransactionStorageAPI implements ITransactionAPI {
 
     if (processed) {
       const { type, amount } = payment
-      return await subpaymentApi.addSubpayment(id, { budgetId, type, amount })
+      await subpaymentApi.addSubpayment(id, { budgetId, type, amount })
+      return await this.storage.findById(id)
     }
 
     const subpayments = await subpaymentStorage.find({ filterBy: { transactionId: id }})

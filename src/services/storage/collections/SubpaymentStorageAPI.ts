@@ -40,7 +40,10 @@ class SubpaymentStorageAPI implements ISubpaymentAPI {
     return paginate(payments, { params, sortBy })
   }
 
-  public async addSubpayment(transactionId: string, data: z.infer<typeof subpaymentFormSchema>): Promise<Transaction> {  
+  public async addSubpayment(
+    transactionId: string,
+    data: z.infer<typeof subpaymentFormSchema>
+  ): Promise<Subpayment & { transaction: Transaction }> {  
     const { budgetId, type, amount } = data
 
     const subpayment = await this.storage.save({
@@ -52,10 +55,14 @@ class SubpaymentStorageAPI implements ISubpaymentAPI {
       createdAt: new Date()
     })
 
-    return await updateTransaction(transactionId, subpayment, 'execute')
+    const transaction = await updateTransaction(transactionId, subpayment, 'execute')
+    return { ...subpayment, transaction }
   }
 
-  public async removeSubpayment(transactionId: string, subpaymentId: string): Promise<Transaction> {
+  public async removeSubpayment(
+    transactionId: string,
+    subpaymentId: string
+  ): Promise<Subpayment & { transaction: Transaction }> {
     const subpayment = await this.storage.findById(subpaymentId)
 
     if (!subpayment) {
@@ -67,7 +74,9 @@ class SubpaymentStorageAPI implements ISubpaymentAPI {
     }
 
     await this.storage.deleteById(subpaymentId)
-    return await updateTransaction(transactionId, subpayment, 'undo')
+
+    const transaction = await updateTransaction(transactionId, subpayment, 'undo')
+    return { ...subpayment, transaction }
   }
 
   public getStorage() {

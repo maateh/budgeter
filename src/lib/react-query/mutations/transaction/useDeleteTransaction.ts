@@ -13,14 +13,14 @@ const useDeleteTransaction = (transactionId: string) => {
       id: string
       removeRelated?: boolean
     }) => await api.transaction.delete(id, removeRelated),
-    onSuccess: ({ id ,type, processed, budgetId }) => {
+    onSuccess: ({ id, type, budgetId }) => {
       // budget
       queryClient.invalidateQueries({ queryKey: ['budget', { id: budgetId }] })
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
 
       // transaction
       queryClient.invalidateQueries({ queryKey: ['transaction', { id }] })
-      queryClient.invalidateQueries({ queryKey: ['transactions', { type, processed }] })
+      queryClient.invalidateQueries({ queryKey: ['transactions', { type }] })
       queryClient.invalidateQueries({ queryKey: ['transactions', 'controlled'] })
       
       // payment
