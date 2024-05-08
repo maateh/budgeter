@@ -10,7 +10,10 @@ const balanceFormSchema = z.object({
 const balanceSchema = balanceFormSchema.extend({
   income: z.coerce.number().gte(0),
   loss: z.coerce.number().gte(0),
-  borrowment: z.coerce.number()
+  borrowment: z.object({
+    plus: z.coerce.number(),
+    minus: z.coerce.number()
+  })
 })
 
 const balanceDocumentSchema = balanceSchema

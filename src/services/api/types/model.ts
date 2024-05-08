@@ -7,7 +7,10 @@ export type Balance = {
   current: number
   income: number
   loss: number
-  borrowment: number
+  borrowment: {
+    plus: number
+    minus: number
+  }
 }
 
 export type Budget = {

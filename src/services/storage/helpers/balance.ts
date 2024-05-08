@@ -30,10 +30,8 @@ function handlePaymentOnBalance(
   const { action, skipCurrentDelta = false } = options
   
   const { current, income, loss, borrowment } = balance
-  const { type, amount } = subpayment
-
-  /** Determines if the transaction is a borrowment. */
-  const isBorrowment = transaction.type === 'borrow'
+  const { payment: basePayment } = transaction
+  const { type, amount, isBorrowmentRoot } = subpayment
 
   /**
    * Skips income and loss delta calculation if:
@@ -47,28 +45,40 @@ function handlePaymentOnBalance(
    * - Transaction is a borrowment and
    * - Subpayment's budgetId is different from the transaction's budgetId.
    */
+  const isBorrowment = transaction.type === 'borrow'
   const skipBorrowmentDelta = isBorrowment && subpayment.budgetId !== transaction.budgetId
 
 
   /**
    * Calculate balance deltas based on the given action
    * 
-   * NOTE: 'update' is the multiplier to swap the sign of
+   * NOTE: 'updater' is the multiplier to swap the sign of
    * the amount based on the payment type
    */
-  const update: 1 | -1 = action === 'execute' ? 1 : -1
+  const updater: 1 | -1 = action === 'execute' ? 1 : -1
+  const delta = amount * updater
   
-  const currentDelta = type === '+' ? amount * update : -amount * update
-  const incomeDelta = !isBorrowment && !skipIncomeAndLossDeltas && type === '+' ? amount * update : 0
-  const lossDelta = !isBorrowment && !skipIncomeAndLossDeltas && type === '-' ? amount * update : 0
-  const borrowmentDelta = isBorrowment && !skipBorrowmentDelta ? currentDelta : 0
+  const currentDelta = !skipCurrentDelta ? type === '+' ? delta : -delta : 0
+  const incomeDelta = !isBorrowment && !skipIncomeAndLossDeltas && type === '+' ? delta : 0
+  const lossDelta = !isBorrowment && !skipIncomeAndLossDeltas && type === '-' ? delta : 0
+
+  const borrowmentUpdater = isBorrowmentRoot ? 1 : type === '+'
+    ? basePayment.type === '+' ? 1 : -1
+    : basePayment.type === '-' ? 1 : -1
+  const borrowmentDelta = delta * borrowmentUpdater
+
+  const borrowmentPlusDelta = !skipBorrowmentDelta && basePayment.type === '+' ? borrowmentDelta : 0
+  const borrowmentMinusDelta = !skipBorrowmentDelta && basePayment.type === '-' ? borrowmentDelta : 0
 
   return {
     ...balance,
-    current: current + (!skipCurrentDelta ? currentDelta : 0),
+    current: current + currentDelta,
     income: income + incomeDelta,
     loss: loss + lossDelta,
-    borrowment: borrowment + borrowmentDelta
+    borrowment: {
+      plus: borrowment.plus + borrowmentPlusDelta,
+      minus: borrowment.minus + borrowmentMinusDelta
+    }
   }
 }
 

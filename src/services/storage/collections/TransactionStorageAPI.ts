@@ -105,8 +105,8 @@ class TransactionStorageAPI implements ITransactionAPI {
     }
 
     if (type === 'borrow') {
-      await subpaymentStorage.save({ ...subpayment, isBorrowmentRoot: true })
-      await updateBalance(transaction, subpayment, { action: 'execute' })
+      const rootSubpayment = await subpaymentStorage.save({ ...subpayment, isBorrowmentRoot: true })
+      await updateBalance(transaction, rootSubpayment, { action: 'execute' })
     }
 
     if (!payment.processed) return transaction
