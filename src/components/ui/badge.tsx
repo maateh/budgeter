@@ -1,7 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Tooltip, TooltipContent, TooltipContentProps, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -10,6 +12,7 @@ const badgeVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        accent: "bg-accent/15 text-muted-foreground border border-accent hover:bg-accent/20",
         destructive: "bg-destructive/15 text-muted-foreground border border-destructive hover:bg-destructive/20",
         outline: "border text-foreground hover:bg-foreground/5",
         ghost: "text-foreground hover:bg-foreground/5",
@@ -45,4 +48,24 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   }
 )
 
-export { Badge, badgeVariants }
+export interface BadgeTooltipProps extends BadgeProps {
+  tooltip: React.ReactNode
+  tooltipProps?: TooltipContentProps
+}
+
+const BadgeTooltip = React.forwardRef<HTMLDivElement, BadgeTooltipProps>(
+  ({ tooltip, tooltipProps, children, ...props }, ref) => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge ref={ref} {...props}>{children}</Badge>
+        </TooltipTrigger>
+        <TooltipContent {...tooltipProps}>
+          {tooltip}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+)
+
+export { Badge, BadgeTooltip, badgeVariants }

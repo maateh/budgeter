@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 // icons
-import { BadgePlus, ChevronRightCircle, HandCoins } from "lucide-react"
+import { BadgePlus, ChevronRightCircle, HandCoins, Minus, Plus } from "lucide-react"
 
 // shadcn
 import { Badge } from "@/components/ui/badge"
@@ -51,7 +51,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
         />
 
         <div className="ml-auto flex items-center gap-x-2">
-          {budget.balance.borrowment ? (
+          {budget.balance.borrowment.plus || budget.balance.borrowment.minus ? (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
@@ -59,12 +59,35 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
                     <HandCoins size={16} />
                   </Badge>
                 </TooltipTrigger>
-                <TooltipContent asChild>
-                  <InfoBadge className="py-3.5 px-5 bg-primary border-2 rounded-full hover:bg-primary"
+                <TooltipContent className="px-4 py-3 space-y-2 text-sm font-heading rounded-3xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-base indent-border">
+                    Money <span className="text-muted-foreground overline">under borrowment</span>
+                  </p>
+
+                  <InfoBadge className="w-full px-4 py-1.5 mx-auto"
+                    valueProps={{ className: "text-sm" }}
+                    separatorProps={{ className: "h-4" }}
+                    orientation="vertical"
                     size="sm"
-                    label="Under Borrowment"
-                    value={formatWithCurrency(budget.balance.borrowment, budget.balance.currency)}
-                    icon={<HandCoins size={20} strokeWidth={2.25} />}
+                    variant="accent"
+                    label="Borrowments"
+                    value={formatWithCurrency(budget.balance.borrowment.plus, budget.balance.currency)}
+                    icon={<Plus className="text-accent" size={20} strokeWidth={5} />}
+                  />
+
+                  <Separator className="w-2/3 mx-auto" />
+
+                  <InfoBadge className="w-full px-4 py-1.5 mx-auto"
+                    valueProps={{ className: "text-sm" }}
+                    separatorProps={{ className: "h-4" }}
+                    orientation="vertical"
+                    size="sm"
+                    variant="destructive"
+                    label="Borrowments"
+                    value={formatWithCurrency(budget.balance.borrowment.minus, budget.balance.currency)}
+                    icon={<Minus className="text-destructive" size={20} strokeWidth={5} />}
                   />
                 </TooltipContent>
               </Tooltip>
