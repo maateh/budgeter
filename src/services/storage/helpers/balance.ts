@@ -50,7 +50,9 @@ function handlePaymentOnBalance(
    * - Subpayment's budgetId is different from the transaction's budgetId.
    */
   const isBorrowment = transaction.type === 'borrow'
-  const skipBorrowmentDelta = isBorrowment && subpayment.budgetId === budgetId
+  const skipBorrowmentDelta = isBorrowment && 
+    subpayment.budgetId === budgetId && 
+    subpayment.budgetId !== transaction.budgetId
 
   /**
    * Calculate balance deltas based on the given action
@@ -70,8 +72,10 @@ function handlePaymentOnBalance(
     : basePayment.type === '-' ? 1 : -1
   const borrowmentDelta = delta * borrowmentUpdater
 
-  const borrowmentPlusDelta = !skipBorrowmentDelta && basePayment.type === '+' ? borrowmentDelta : 0
-  const borrowmentMinusDelta = !skipBorrowmentDelta && basePayment.type === '-' ? borrowmentDelta : 0
+  const borrowmentPlusDelta = isBorrowment &&
+    !skipBorrowmentDelta && basePayment.type === '+' ? borrowmentDelta : 0
+  const borrowmentMinusDelta = isBorrowment &&
+    !skipBorrowmentDelta && basePayment.type === '-' ? borrowmentDelta : 0
 
   budget.balance = {
     ...budget.balance,
