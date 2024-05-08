@@ -33,19 +33,16 @@ async function revertSubpayments(subpayments: Subpayment[]): Promise<void> {
    */
   const { budgets, transactions } = subpayments.reduce(({ budgets, transactions }, subpayment) => {
     const budget = budgetCollection[subpayment.budgetId]
-    let transaction = transactionCollection[subpayment.transactionId]
-
-    budget.balance = handlePaymentOnBalance(budget.balance, transaction, subpayment, { action: 'undo' })
-    transaction = handlePaymentOnTransaction(transaction, subpayment, 'undo')
+    const transaction = transactionCollection[subpayment.transactionId]
 
     return {
       budgets: {
         ...budgets,
-        [budget.id]: budget
+        [budget.id]: handlePaymentOnBalance(budget, transaction, subpayment, { action: 'undo' })
       },
       transactions: {
         ...transactions,
-        [transaction.id]: transaction
+        [transaction.id]: handlePaymentOnTransaction(transaction, subpayment, 'undo')
       }
     }
   }, {} as { budgets: StorageCollection<Budget>, transactions: StorageCollection<Transaction> })
