@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom"
 import { MessageCirclePlus, Undo2 } from "lucide-react"
 
 // shadcn
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 
 // components
@@ -23,24 +24,25 @@ const BudgetNotes = () => {
   const { data: budget, isLoading: isBudgetLoading } = useBudget(id)
 
   return (
-    <div className="flex flex-col gap-y-7">
-      <div className="flex justify-between items-center gap-x-4">
-        <h2>
-          Budget <span className="overline text-blue-500">Notes</span>
+    <div className="space-y-6">
+      <div className="flex flex-wrap justify-between items-center gap-x-4 gap-y-2.5">
+        <h2 className="border-blue-600 dark:border-blue-500 indent-border">
+          Budget <span className="text-blue-600 dark:text-blue-500 overline">Notes</span>
         </h2>
 
-        <Button className="border-md icon-wrapper"
+        <Button className="ml-auto px-4 icon-wrapper"
+          size="sm"
           onClick={() => setEditingMode((mode) => !mode)}
         >
           {editingMode ? (
             <>
               <Undo2 size={20} />
-              <span>Cancel</span>
+              Cancel
             </>
           ) : (
             <>
               <MessageCirclePlus size={20} />
-              <span>Add a Note</span>
+              Add a Note
             </>
           )}
         </Button>
@@ -55,25 +57,33 @@ const BudgetNotes = () => {
         />
       )}
 
-        <div className="flex flex-col gap-y-10">
-          <div className="flex flex-col gap-y-3.5">
-            <h3 className="pl-2 border-l-2 border-green-800 dark:border-green-500">
+      <Accordion className="w-[95%] mx-auto space-y-4" type="multiple">
+        <AccordionItem value="open">
+          <AccordionTrigger className="bg-primary/15 px-3.5 mb-2">
+            <h3 className="indent-border border-green-800 dark:border-green-500">
               <span className="text-green-700 dark:text-green-400">Open</span> Notes
             </h3>
+          </AccordionTrigger>
+          <AccordionContent>
             {!isBudgetLoading && budget ? (
               <NoteList budget={budget} status="open" />
             ) : <NoteListSkeleton />}
-          </div>
-  
-          <div className="flex flex-col gap-y-3.5">
-            <h3 className="pl-2 border-l-2 border-red-700 dark:border-red-500">
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="closed">
+          <AccordionTrigger className="bg-primary/15 px-3.5 mb-2">
+            <h3 className="indent-border border-red-700 dark:border-red-500">
               <span className="text-red-600 dark:text-red-400">Closed</span> Notes
             </h3>
+          </AccordionTrigger>
+          <AccordionContent>
             {!isBudgetLoading && budget ? (
               <NoteList budget={budget} status="closed" />
             ) : <NoteListSkeleton />}
-          </div>
-        </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   )
 }

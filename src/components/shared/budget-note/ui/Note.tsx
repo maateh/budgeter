@@ -43,8 +43,7 @@ const Note = ({ budget, note }: NoteProps) => {
   }
 
   return (
-    <div
-      className="my-1 px-7 pt-6 pb-3 flex flex-col gap-y-2 bg-foreground/15 border-xl border-b-2 border-r-4 hover:opacity-95"
+    <div className="px-6 pt-5 pb-3 flex flex-col gap-y-2 bg-primary/80 rounded-3xl border-b-2 shadow-md shadow-primary/55"
       style={{
         borderColor: budget.theme,
         opacity: note.status === 'closed' ? 0.65 : 1
@@ -60,18 +59,18 @@ const Note = ({ budget, note }: NoteProps) => {
             onCancel={() => setEditingMode(false)}
           />
         ) : (
-          <p className="break-words whitespace-break-spaces tracking-wide">
+          <p className="font-semibold break-words whitespace-break-spaces tracking-wide">
             {note.text}
           </p>
         )}
       </div>
 
-      <Separator />
+      <Separator className="w-11/12 mx-auto" />
 
       <div className="flex justify-between items-center gap-x-4">
-        <div className="flex items-center gap-x-2">
-          <Button className="bg-primary p-2 hover:bg-primary/75"
-            variant="icon"
+        <div className="flex flex-wrap justify-center items-center gap-x-2.5 gap-y-1.5">
+          <Button className="p-2 hover:bg-secondary/35"
+            variant="ghost"
             size="icon"
             onClick={handleClose}
           >
@@ -88,8 +87,8 @@ const Note = ({ budget, note }: NoteProps) => {
             )}
           </Button>
           
-          <Button className="bg-primary p-2 hover:bg-primary/75"
-            variant="icon"
+          <Button className="p-2 hover:bg-secondary/35"
+            variant="ghost"
             size="icon"
             onClick={() => setEditingMode(prev => !prev)}
             disabled={note.status === 'closed'}
@@ -100,8 +99,8 @@ const Note = ({ budget, note }: NoteProps) => {
             />
           </Button>
 
-          <Button className="bg-primary p-2 hover:bg-primary/75"
-            variant="icon"
+          <Button className="p-2 hover:bg-secondary/35"
+            variant="ghost"
             size="icon"
             onClick={() => {
               openDialog(`/budgets/${budget.id}/notes/delete/${note.id}`, {}, { note, budget })
@@ -114,21 +113,21 @@ const Note = ({ budget, note }: NoteProps) => {
           </Button>
         </div>
 
-        <div className="font-heading all-small-caps icon-wrapper">
+        <div className="font-heading text-xs text-end icon-wrapper">
           {note.closedAt ? (
             <>
               <p>{format(note.closedAt, 'PPP')}</p>
-              <CalendarCheck size={16} strokeWidth={1.7} />
+              <CalendarCheck size={16} strokeWidth={1.85} />
             </>
           ) : note.editedAt ? (
             <>
               <p>{format(note.editedAt, 'PPP')}</p>
-              <PenLine size={16} strokeWidth={1.7} />
+              <PenLine size={16} strokeWidth={1.85} />
             </>
           ) : (
             <>
               <p>{format(note.createdAt, 'PPP')}</p>
-              <CalendarPlus size={16} strokeWidth={1.7} />
+              <CalendarPlus size={16} strokeWidth={1.85} />
             </>
           )}
         </div>

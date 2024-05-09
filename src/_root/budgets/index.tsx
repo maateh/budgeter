@@ -34,7 +34,7 @@ const BudgetDetails = () => {
       </div>
       
       <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
-        <div className="flex-1 w-full min-w-64 flex flex-col gap-y-2.5 md:min-w-80 md:max-w-4xl">
+        <div className="flex-1 w-full min-w-60 flex flex-col gap-y-2.5 md:min-w-80 md:max-w-4xl">
           <section className="w-full section-wrapper">
             <BudgetSummary />
           </section>
@@ -43,14 +43,14 @@ const BudgetDetails = () => {
             <BudgetPayments />
           </section>
 
-          <Separator className="w-11/12 mx-auto my-1.5" />
+          <Separator className="w-11/12 mx-auto my-4" />
 
-          <section className="w-full bg-primary rounded-[2rem] section-wrapper">
+          <section className="w-full section-wrapper">
             <BudgetNotes />
           </section>
         </div>
     
-        <section className="flex-1 w-full min-w-64 md:w-1/3 md:max-w-lg">
+        <section className="flex-1 w-full min-w-60 md:w-1/3 md:max-w-lg">
           <Transactions budgetId={id} />
         </section>
       </div>

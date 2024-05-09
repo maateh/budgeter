@@ -41,9 +41,8 @@ const BudgetNoteFormFields = ({ control, isPending, onCancel }: BudgetNoteFormFi
         >
           Cancel
         </Button>
-        <Button className="border-md"
+        <Button type="submit"
           size="sm"
-          type="submit"
           disabled={isPending}
         >
           Save
