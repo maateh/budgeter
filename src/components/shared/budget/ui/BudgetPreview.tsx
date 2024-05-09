@@ -42,7 +42,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
   })
 
   return (
-    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/55 border-2 shadow-lg drop-shadow-sm cursor-pointer"
+    <div className="h-full px-3.5 py-3 flex flex-col justify-between gap-y-2.5 rounded-3xl bg-secondary/55 border-2 shadow-border/10 shadow-lg drop-shadow-sm cursor-pointer"
       onClick={() => navigate(`/budgets/${budget.id}`)}
     >
       <div className="w-full flex flex-wrap justify-between items-center gap-x-3.5 gap-y-2">

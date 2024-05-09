@@ -20,7 +20,7 @@ type TransactionPreviewProps = {
 const TransactionPreview = ({ transaction, budget, className, ...props }: TransactionPreviewProps) => {
   return (
     <div
-      className={cn("w-full pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 hover:opacity-95 hover:cursor-pointer", className)}
+      className={cn("w-full pl-2.5 pr-3.5 py-1.5 flex justify-between items-center gap-x-1.5 rounded-3xl bg-secondary/90 shadow-foreground/5 shadow-md drop-shadow-md hover:opacity-95 hover:cursor-pointer", className)}
       {...props}
     >
       <div className="flex items-center gap-x-1">
