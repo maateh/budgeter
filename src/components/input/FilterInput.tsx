@@ -67,14 +67,47 @@ function FilterInput({
   return (
     <div className={cn("flex flex-col gap-y-0.5", className)} {...props}>
       {label && (
-        <Label {...labelProps}
-          className={cn("text-base font-heading font-normal", labelProps?.className)}
-        >
-          {label}
-        </Label>
+        <div className="flex justify-between items-end">
+          <Label {...labelProps}
+            className={cn("text-base font-heading font-normal", labelProps?.className)}
+          >
+            {label}
+          </Label>
+
+          {(onReset || onTypeChange) && (
+            <div className="ml-2.5 flex justify-center items-center gap-x-1">
+              {onReset && (
+                <ButtonTooltip className="p-1.5 hover:bg-foreground/5"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onReset(type)}
+                  tooltip="Clear filter"
+                >
+                  <Eraser size={14} strokeWidth={2.5} />
+                </ButtonTooltip>
+              )}
+              {onTypeChange && (
+                <StateToggle
+                  status={type === 'filterBy' ? 'on' : 'off'}
+                  onClick={handleTypeChange}
+                  icon={{
+                    on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
+                    off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
+                  }}
+                  tooltip={{
+                    on: "Switch to exclude",
+                    off: "Switch to filter"
+                  }}
+                  toggleOnHover
+                />
+              )}
+            </div>
+          )}
+        
+        </div>
       )}
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap-reverse justify-end items-center">
         {children ? children(type) : (
           <Select
             value={value}
@@ -93,37 +126,6 @@ function FilterInput({
               ))}
             </SelectContent>
           </Select>
-        )}
-
-        {(onReset || onTypeChange) && (
-          <div className="ml-2.5 flex justify-center items-center gap-x-1">
-            {onTypeChange && (
-              <StateToggle
-                status={type === 'filterBy' ? 'on' : 'off'}
-                onClick={handleTypeChange}
-                icon={{
-                  on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
-                  off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
-                }}
-                tooltip={{
-                  on: "Switch to exclude",
-                  off: "Switch to filter"
-                }}
-                toggleOnHover
-              />
-            )}
-  
-            {onReset && (
-              <ButtonTooltip className="p-1.5 hover:bg-foreground/5"
-                variant="ghost"
-                size="icon"
-                onClick={() => onReset(type)}
-                tooltip="Clear filter"
-              >
-                <Eraser size={14} strokeWidth={2.5} />
-              </ButtonTooltip>
-            )}
-          </div>
         )}
       </div>
     </div>

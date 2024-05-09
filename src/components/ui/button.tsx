@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipContentProps, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-full whitespace-nowrap text-md font-medium font-heading ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center rounded-full whitespace-nowrap font-medium font-heading ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -20,10 +20,10 @@ const buttonVariants = cva(
         icon: "border-2 text-foreground/90 hover:bg-foreground/5"
       },
       size: {
-        default: "h-10 px-4 py-3 tracking-wide shadow-md",
-        sm: "h-9 px-3 text-sm shadow-sm",
-        lg: "h-11 px-4 text-lg tracking-wide shadow-md",
-        xl: "h-12 px-5 text-lg tracking-wide shadow-lg",
+        default: "h-9 px-3 py-3 text-sm tracking-wide shadow-md sm:h-10 sm:px-4 sm:text-base",
+        sm: "h-8 px-2.5 text-sm shadow-sm sm:h-9 sm:px-3",
+        lg: "h-10 px-3.5 text-base tracking-wide shadow-md sm:h-11 sm:px-4 sm:text-lg",
+        xl: "h-11 px-4 text-base tracking-wide shadow-lg sm:h-12 sm:px-5 sm:text-lg",
         icon: "w-fit h-fit p-1.5"
       },
     },

@@ -46,7 +46,7 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
       onClick={() => navigate(`/budgets/${budget.id}`)}
     >
       <div className="w-full flex flex-wrap justify-between items-center gap-x-3.5 gap-y-2">
-        <BudgetNameBadge className="h-fit text-sm text-center sm:text-md"
+        <BudgetNameBadge className="h-fit text-sm text-center sm:text-base"
           budget={budget}
         />
 

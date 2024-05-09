@@ -1,7 +1,7 @@
 import { forwardRef } from "react"
 
 // icons
-import { BadgeInfo, Minus, Plus, Trash2, X } from "lucide-react"
+import { BadgeInfo, LucideProps, Minus, Plus, Trash2, X } from "lucide-react"
 
 // shadcn
 import { Badge, BadgeProps } from "@/components/ui/badge"
@@ -24,7 +24,7 @@ type PaymentBadgeProps = BadgeProps & {
   processed: boolean
   currency: string
   isNeutral?: boolean
-  iconSize?: number
+  iconProps?: LucideProps
 } & ({
   showProgress?: true
   transaction: Transaction
@@ -44,7 +44,7 @@ type PaymentBadgeProps = BadgeProps & {
 })
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
-  payment, processed, currency, isNeutral, iconSize = 16,
+  payment, processed, currency, isNeutral, iconProps,
   showProgress, transaction, budgetName,
   showRemoveButton, onRemove, removeButtonProps,
   className, size = 'sm', ...props
@@ -59,11 +59,17 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       ref={ref}
       {...props}
     >
-      <div className="flex gap-x-1.5 items-center">
+      <div className="icon-wrapper">
         {payment.type === '+' ? (
-          <Plus size={iconSize} strokeWidth={7.5} />
+          <Plus {...iconProps}
+            className="size-2.5 sm:size-4"
+            strokeWidth={iconProps?.strokeWidth || 7.5}
+          />
         ) : (
-          <Minus size={iconSize} strokeWidth={7.5} />
+          <Minus {...iconProps}
+            className="size-2.5 sm:size-4"
+            strokeWidth={iconProps?.strokeWidth || 7.5}
+          />
         )}
         <span>
           {formatWithCurrency(

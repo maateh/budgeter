@@ -28,7 +28,7 @@ const BudgetDetails = () => {
           variant="outline"
           onClick={() => navigate(`/backup/${id}`)}
         >
-          <Archive />
+          <Archive className="size-5" />
           Manage Backups
         </Button>
       </div>

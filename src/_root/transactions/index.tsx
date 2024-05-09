@@ -15,7 +15,7 @@ const Transactions = () => {
       <Separator className="my-6" />
 
       <div className="flex flex-col justify-between gap-x-8 gap-y-6 xl:flex-row">
-        <section className="h-fit min-w-64 flex flex-wrap justify-around gap-12 xl:flex-col xl:w-2/6 xl:max-w-md max-sm:flex-col">
+        <section className="h-fit min-w-60 flex flex-wrap justify-around gap-12 xl:flex-col xl:w-2/6 xl:max-w-md max-sm:flex-col">
           <div className="flex-1 w-full mx-auto max-w-lg sm:min-w-80">
             <BasicFilter />
           </div>

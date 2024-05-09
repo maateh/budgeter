@@ -25,8 +25,8 @@ const Budgets = () => {
           size="lg"
           onClick={() => openDialog('/budgets/create')}
         >
-          <PackagePlus />
-          <span>New Budget</span>
+          <PackagePlus className="size-5" />
+          New Budget
         </Button>
       </div>
 

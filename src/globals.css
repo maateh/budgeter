@@ -59,13 +59,13 @@
     @apply bg-background text-foreground font-body font-normal min-h-screen;
   }
   h1 {
-    @apply text-4xl font-heading font-bold small-caps mt-2 mb-3.5;
+    @apply text-3xl sm:text-4xl font-heading font-bold small-caps mt-2 mb-3.5;
   }
   h2 {
-    @apply text-2xl font-heading font-medium capitalize;
+    @apply text-xl sm:text-2xl font-heading font-medium capitalize;
   }
   h3 {
-    @apply text-xl font-heading font-medium small-caps;
+    @apply text-lg sm:text-xl font-heading font-medium small-caps;
   }
   a {
     @apply no-underline hover:underline active:underline;
@@ -102,7 +102,7 @@
 
   /* ICONS */
   .icon-wrapper {
-    @apply flex items-center gap-x-2;
+    @apply flex items-center gap-x-1.5 sm:gap-x-2;
   }
   .icon-wrapper > svg {
     @apply flex-none;

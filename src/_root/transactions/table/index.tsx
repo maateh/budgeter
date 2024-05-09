@@ -45,7 +45,7 @@ const TransactionsTable = () => {
   return (
     <>
       <div className="flex flex-wrap-reverse justify-between items-center gap-x-14 gap-y-4">
-        <FilterInput className="flex-1 max-w-md"
+        <FilterInput className="flex-1 flex flex-wrap max-w-md"
           label={<>Search by <span className="text-accent overline">Name</span></>}
           labelProps={{ htmlFor: 'name' }}
           onTypeChange={(filterKey) => toggleFilterType(filterKey, 'name')}
@@ -86,7 +86,7 @@ const TransactionsTable = () => {
           state={{ pagination }}
         >
           {(table) => (
-            <div className="min-w-64 py-3.5 px-3.5 flex flex-wrap justify-between items-center gap-x-2.5 gap-y-3 bg-primary rounded-3xl">
+            <div className="w-full py-3.5 px-3.5 flex flex-wrap justify-between items-center gap-x-2.5 gap-y-3 bg-primary rounded-3xl">
               <DataTableColumnToggle className="w-fit"
                 table={table}
               />

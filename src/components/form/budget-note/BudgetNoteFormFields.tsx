@@ -21,7 +21,7 @@ const BudgetNoteFormFields = ({ control, isPending, onCancel }: BudgetNoteFormFi
         name="text"
         render={({ field }) => (
           <FormItem className="flex flex-col gap-y-1.5">
-            <FormLabel className="text-md">Note Message</FormLabel>
+            <FormLabel className="text-base">Note Message</FormLabel>
             <FormControl>
               <Textarea
                 placeholder="Type your note here."

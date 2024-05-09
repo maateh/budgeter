@@ -28,9 +28,9 @@ const Transactions = ({ budgetId }: TransactionsProps) => {
   const { openDialog } = useDialog()
 
   return (
-    <div className="h-fit px-6 py-5 bg-primary rounded-[2rem] shadow-border/15 shadow-lg drop-shadow-md">
+    <div className="h-fit max-w-xl mx-auto px-6 py-5 bg-primary rounded-[2rem] shadow-border/15 shadow-lg drop-shadow-md">
       <div className="mb-5 flex justify-between items-center gap-x-4">
-        <h2 className="indent-border">
+        <h2 className="border-yellow-600 dark:border-yellow-300 indent-border">
           Recent <span className="text-yellow-600 dark:text-yellow-300 overline">Transactions</span>
         </h2>
         

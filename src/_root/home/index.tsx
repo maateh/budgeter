@@ -26,13 +26,13 @@ const Home = () => {
           variant="outline"
           onClick={() => navigate('/backup')}
         >
-          <Archive />
+          <Archive className="size-5" strokeWidth={2.25} />
           Manage Backups
         </Button>
       </div>
 
       <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
-        <div className="flex-1 w-full min-w-64 flex flex-col gap-y-4 md:min-w-80 md:max-w-4xl">
+        <div className="flex-1 w-full min-w-60 flex flex-col gap-y-4 md:min-w-80 md:max-w-4xl">
           <section className="w-full section-wrapper">
             <Summary />
           </section>
@@ -44,7 +44,7 @@ const Home = () => {
           </section>
         </div>
 
-        <section className="flex-1 w-full min-w-64 md:w-1/3 md:max-w-lg">
+        <section className="flex-1 w-full min-w-60 md:w-1/3 md:max-w-lg">
           <Transactions />
         </section>
       </div>

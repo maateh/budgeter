@@ -20,16 +20,16 @@ import { Transaction } from "@/services/api/types"
 const getIcon = (type: Transaction['type'], iconProps?: LucideProps): { on: React.ReactNode; off: React.ReactNode } => {
   return {
     on: type === 'default' ? (
-      <BadgeCheck className="text-green-700 dark:text-green-400" {...iconProps} />
+      <BadgeCheck className="size-4 sm:size-5 text-green-700 dark:text-green-400" {...iconProps} />
     ) : type === 'borrow' ? (
-      <Banknote className="text-green-700 dark:text-green-400" {...iconProps} />
+      <Banknote className="size-4 sm:size-5 text-green-700 dark:text-green-400" {...iconProps} />
     ) : (
-      <Coins className="text-blue-600 dark:text-blue-400" {...iconProps} />
+      <Coins className="size-4 sm:size-5 text-blue-600 dark:text-blue-400" {...iconProps} />
     ),
     off: type === 'borrow' ? (
-      <Banknote className="text-destructive" {...iconProps} />
+      <Banknote className="size-4 sm:size-5 text-destructive" {...iconProps} />
     ) : (
-      <XCircle className="text-destructive" {...iconProps} />
+      <XCircle className="size-4 sm:size-5 text-destructive" {...iconProps} />
     )
   }
 }
@@ -108,7 +108,11 @@ const TransactionStatusToggle = forwardRef<HTMLButtonElement, TransactionStatusT
     />
   )
 
-  return transaction.type !== 'borrow' ? toggleElement : (
+  if (transaction.type !== 'borrow') {
+    return toggleElement
+  }
+
+  return (
     <Popover>
       <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
         {toggleElement}

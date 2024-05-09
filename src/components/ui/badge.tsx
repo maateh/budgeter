@@ -18,10 +18,10 @@ const badgeVariants = cva(
         ghost: "text-foreground hover:bg-foreground/5",
       },
       size: {
-        default: "px-5 py-1.5 text-md font-medium shadow-sm",
-        xs: "px-2 py-0.5 text-xs font-medium shadow-sm",
-        sm: "px-4 py-1 text-sm shadow-sm",
-        lg: "px-6 py-2 text-lg font-semibold shadow-md",
+        default: "px-4 py-1.5 text-sm font-medium shadow-sm sm:px-5",
+        xs: "px-1.5 py-0.5 text-xs font-medium shadow-sm sm:px-2",
+        sm: "px-3 py-1 text-sm shadow-sm sm:px-4",
+        lg: "px-5 py-2 text-base font-semibold shadow-md sm:px-6 sm:text-lg",
         icon: "p-1.5",
       }
     },

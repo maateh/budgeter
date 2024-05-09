@@ -30,7 +30,7 @@ const TransactionPreview = ({ transaction, budget, className, ...props }: Transa
         />
 
         <div className="grid">
-          <p className="text-md font-heading font-medium truncate">{transaction.name}</p>
+          <p className="text-sm font-heading font-medium truncate sm:text-base">{transaction.name}</p>
           <p className="text-xs max-sm:truncate sm:text-ellipsis">
             {formatDistance(
               transaction.updatedAt, Date.now(), {
