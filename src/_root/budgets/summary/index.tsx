@@ -77,7 +77,7 @@ const BudgetSummary = () => {
         <div className="mx-2.5 flex flex-wrap justify-around items-center gap-y-2 gap-x-4 font-semibold sm:gap-x-12">
           <div className="flex-1 flex justify-center gap-x-1.5">
             <BadgeTooltip className="cursor-pointer"
-              tooltipProps={{ className: "max-w-sm", asChild: true }}
+              tooltipProps={{ className: "max-w-sm hover:bg-background", asChild: true }}
               variant="ghost"
               size="icon"
               tooltip={(
@@ -115,7 +115,7 @@ const BudgetSummary = () => {
             />
 
             <BadgeTooltip className="cursor-pointer"
-              tooltipProps={{ className: "max-w-sm", asChild: true }}
+              tooltipProps={{ className: "max-w-sm hover:bg-background", asChild: true }}
               variant="ghost"
               size="icon"
               tooltip={(

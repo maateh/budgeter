@@ -77,7 +77,7 @@
     @apply w-full max-w-[1728px] my-0 mx-auto;
   }
   .page-wrapper {
-    @apply mx-5 my-4;
+    @apply mx-2.5 my-4 sm:mx-5;
   }
   .section-wrapper {
     @apply h-fit px-1 py-5 sm:px-3;
@@ -104,22 +104,25 @@
   .icon-wrapper {
     @apply flex items-center gap-x-2;
   }
+  .icon-wrapper > svg {
+    @apply flex-none;
+  }
 
   /* CUSTOM BORDERS */
   .indent-border {
     @apply pl-2.5 border-l-4 rounded;
   }
   .border-sm {
-    @apply rounded-sm rounded-tl-[18px] rounded-br-[12px];
+    @apply rounded-sm rounded-tl-[14px] rounded-br-[12px];
   }
   .border-md {
-    @apply rounded-md rounded-tl-[28px] rounded-br-[18px];
+    @apply rounded-md rounded-tl-[20px] rounded-br-[18px];
   }
   .border-lg {
-    @apply rounded-md rounded-tl-[40px] rounded-br-[24px];
+    @apply rounded-lg rounded-tl-[28px] rounded-br-[24px];
   }
   .border-xl {
-    @apply rounded-md rounded-tl-[56px] rounded-br-[32px];
+    @apply rounded-xl rounded-tl-[40px] rounded-br-[32px];
   }
 
   /* TYPOGRAPHY */
