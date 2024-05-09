@@ -71,7 +71,7 @@ const BudgetSummary = () => {
 
       <div className="space-y-2.5">
         <h3 className="mt-3.5 mx-auto px-3.5 indent-border">
-          Money <span className="text-muted-foreground/65 overline">Under Borrowment</span>
+          Money <span className="text-muted-foreground/75 overline">Under Borrowment</span>
         </h3>
 
         <div className="mx-2.5 flex flex-wrap justify-around items-center gap-y-2 gap-x-4 font-semibold sm:gap-x-12">

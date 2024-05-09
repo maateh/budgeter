@@ -11,19 +11,19 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary-foreground text-primary hover:bg-primary-foreground/85",
-        destructive: "bg-destructive text-destructive-foreground/90 font-semibold hover:bg-destructive/90",
-        outline: "text-foreground border hover:bg-primary-foreground/5 hover:text-foreground/90",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        default: "bg-primary-foreground text-primary shadow-border/35 dark:shadow-border/15 hover:bg-primary-foreground/85",
+        destructive: "font-semibold bg-destructive text-destructive-foreground/90 shadow-destructive/35 dark:shadow-destructive/20 hover:bg-destructive/90",
+        outline: "text-foreground border shadow-border/20 dark:shadow-border/5 hover:bg-primary-foreground/5 hover:text-foreground/90",
+        secondary: "bg-secondary text-secondary-foreground shadow-border/35 dark:shadow-border/20 hover:bg-secondary/80",
         ghost: "hover:bg-primary/40",
         link: "text-primary underline-offset-4 hover:underline",
         icon: "border-2 text-foreground/90 hover:bg-foreground/5"
       },
       size: {
-        default: "h-10 px-4 py-3 tracking-wide shadow-lg",
-        sm: "h-9 px-3 text-sm shadow-md",
-        lg: "h-11 px-4 text-lg tracking-wide shadow-xl",
-        xl: "h-12 px-5 text-lg tracking-wide shadow-md",
+        default: "h-10 px-4 py-3 tracking-wide shadow-md",
+        sm: "h-9 px-3 text-sm shadow-sm",
+        lg: "h-11 px-4 text-lg tracking-wide shadow-md",
+        xl: "h-12 px-5 text-lg tracking-wide shadow-lg",
         icon: "w-fit h-fit p-1.5"
       },
     },
