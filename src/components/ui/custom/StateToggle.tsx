@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 
 export type ToggleStatus = 'on' | 'off'
 
-type StateToggleProps = {
+export type StateToggleProps = {
   status: 'on' | 'off'
   icon: { [key in ToggleStatus]: React.ReactNode }
   tooltip?: { [key in ToggleStatus]: string }
