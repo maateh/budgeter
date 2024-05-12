@@ -3,7 +3,10 @@ import { SkeletonList } from "@/components/ui/skeleton"
 
 const NoteListSkeleton = () => {
   return (
-    <>Loading...</> // TODO: skeleton
+    <SkeletonList className="w-11/12 mx-auto"
+      itemProps={{ className: "h-24 rounded-3xl" }}
+      amount={3}
+    />
   )
 }
 
