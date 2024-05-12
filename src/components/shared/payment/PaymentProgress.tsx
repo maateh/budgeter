@@ -100,7 +100,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
   return (
     <>
       {!isSubpaymentsLoading && subpayments ? (
-        <Listing className="mb-2.5 flex flex-wrap flex-row items-center gap-x-1.5 gap-y-1"
+        <Listing className="mb-2.5 flex flex-wrap flex-row justify-center items-center gap-x-1.5 gap-y-1"
           items={subpayments}
           fallbackProps={{ size: "xs", value: 'No payments to show.' }}
           firstElement={(
@@ -145,7 +145,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
         Progress of subpayments
       </p>
 
-      <Separator className="w-3/5 mx-auto mt-1 mb-1.5 sm:w-2/5" />
+      <Separator className="w-3/5 mx-auto mt-1 mb-1.5" />
 
       {/* TODO: redesign progress ui component */}
       <Progress className="min-w-32 max-w-sm mx-auto"
@@ -153,8 +153,8 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
         value={transaction.payment.processedAmount}
       />
 
-      <div className="mx-0.5 mt-2.5 flex justify-around gap-x-1.5 sm:mx-6 sm:gap-x-2.5">
-        <InfoBadge className="min-w-24 px-6"
+      <div className="mx-0.5 mt-2.5 flex flex-wrap justify-around gap-x-4 gap-y-2 sm:mx-6 sm:gap-x-2.5">
+        <InfoBadge className="flex-1 min-w-32 max-w-48 px-8"
           variant="outline"
           size="sm"
           icon={<Banknote size={18} />}
@@ -165,7 +165,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
           )}
         />
 
-        <InfoBadge className="min-w-24 px-6"
+        <InfoBadge className="flex-1 min-w-32 max-w-48 px-8"
           variant="outline"
           size="sm"
           icon={<Handshake size={18} />}
