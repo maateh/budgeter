@@ -62,18 +62,22 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
       <div className="icon-wrapper">
         {payment.type === '+' ? (
           <Plus {...iconProps}
-            className="size-2.5 sm:size-4"
+            className={cn("size-2.5 sm:size-4", iconProps?.className)}
             strokeWidth={iconProps?.strokeWidth || 7.5}
           />
         ) : (
           <Minus {...iconProps}
-            className="size-2.5 sm:size-4"
+            className={cn("size-2.5 sm:size-4", iconProps?.className)}
             strokeWidth={iconProps?.strokeWidth || 7.5}
           />
         )}
         <span>
           {formatWithCurrency(
-            getPaymentAmount(payment, processed),
+            getPaymentAmount({
+              amount: payment.amount,
+              processedAmount: transaction ? transaction.payment.processedAmount : undefined,
+              processed
+            }),
             currency
           )}
         </span>
@@ -101,7 +105,7 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
 
   return !showProgress ? element : (
     <Popover>
-      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+      <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
         {element}
       </PopoverTrigger>
       <PopoverContent className="max-w-md" onClick={(e) => e.stopPropagation()}>

@@ -57,7 +57,10 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
 
       toast({
         title: `Removed subpayment: ${formatWithCurrency(
-          getPaymentAmount(subpayment, transaction.payment.processed),
+          getPaymentAmount({
+            amount: subpayment.amount,
+            processed: transaction.payment.processed
+          }),
           budget!.balance.currency
         )}`,
         // TODO: add undo
