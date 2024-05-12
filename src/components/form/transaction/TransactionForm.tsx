@@ -27,9 +27,9 @@ const TransactionForm = ({ budgetId }: TransactionFormProps) => {
         name: '',
         payment: {
           type: '+',
-          amount: 0
-        },
-        processed: false
+          amount: 0,
+          processed: false
+        }
       }}
       useSubmit={useTransactionSubmit}
     >

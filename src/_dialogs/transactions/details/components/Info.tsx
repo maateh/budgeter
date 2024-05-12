@@ -21,7 +21,7 @@ const TransactionDetailsInfo = ({ transaction }: TransactionDetailsInfoProps) =>
 
         {transaction.type === 'transfer' ? (
           <p>This is a <span className="text-blue-600 dark:text-blue-400 overline">transfer</span> transaction.</p>
-        ) : transaction.processed ? (
+        ) : transaction.payment.processed ? (
           <p>This transaction is <span className="text-accent overline">processed</span>.</p>
         ) : (
           <p>This transaction <span className="text-destructive overline">hasn't been processed</span> yet.</p>
@@ -51,14 +51,14 @@ const TransactionDetailsInfo = ({ transaction }: TransactionDetailsInfoProps) =>
           </p>
         </div>
 
-        {transaction.processedAt && (
+        {transaction.payment.processedAt && (
           <div className="icon-wrapper">
             <CalendarCheck size={20} strokeWidth={2.5} className="text-accent" />
             <p>
               Processed at
               <span className="px-1 text-foreground/35">»</span>
               <span className="pl-1 text-accent font-medium">
-                {format(transaction.processedAt, 'yyyy. MM. dd. - hh:mm')}
+                {format(transaction.payment.processedAt, 'yyyy. MM. dd. - hh:mm')}
               </span>
             </p>
           </div>
