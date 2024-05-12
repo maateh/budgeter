@@ -25,7 +25,7 @@ const DateRangePicker = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className={cn("w-full h-fit p-2 flex flex-col font-normal", className)}
+        <Button className={cn("w-full h-fit p-2 flex flex-col font-normal sm:h-fit", className)}
           variant={variant}
           size={size}
           {...props}

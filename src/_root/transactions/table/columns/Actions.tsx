@@ -21,12 +21,12 @@ const Actions = ({ transaction }: ActionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="h-8 w-8 p-0"
+        <Button
           variant="ghost"
-          size="sm"
+          size="icon"
         >
           <span className="sr-only">Open actions</span>
-          <MoreHorizontal className="h-4 w-4" />
+          <MoreHorizontal className="size-3.5 sm:size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="space-y-0.5" align="end">
@@ -37,14 +37,14 @@ const Actions = ({ transaction }: ActionsProps) => {
         <DropdownMenuItem className="icon-wrapper hover:cursor-pointer"
           onClick={() => openDialog(`/transactions/details/${transaction.id}`)}
         >
-          <BadgeInfo size={14} strokeWidth={3} />
+          <BadgeInfo className="size-4" strokeWidth={3} />
           <span>Details</span>
         </DropdownMenuItem>
         
         <DropdownMenuItem className="text-destructive font-bold icon-wrapper hover:cursor-pointer focus:bg-destructive"
           onClick={() => openDialog(`/transactions/delete/${transaction.id}`, {}, { transaction })}
         >
-          <Trash2 size={14} strokeWidth={3} />
+          <Trash2 className="size-4" strokeWidth={3} />
           <span>Delete</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
