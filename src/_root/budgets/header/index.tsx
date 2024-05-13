@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 
 // components
 import BudgetNameBadge from "@/components/shared/budget/ui/BudgetNameBadge"
-import BudgetActions from "./BudgetActions"
+import BudgetActions from "@/components/shared/budget/ui/BudgetActions"
 import BudgetHeaderSkeleton from "./skeleton"
 
 // hooks
@@ -18,13 +18,12 @@ const BudgetHeader = () => {
   }
 
   return (
-    <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
+    <div className="flex flex-wrap justify-between items-center gap-x-2 gap-y-5">
       <BudgetNameBadge className="py-3.5 text-xl sm:text-2xl"
         size="lg"
         budget={budget}
       />
 
-      {/* TODO: add dropdown actions menu */}
       <BudgetActions budget={budget} />
     </div>
   )
