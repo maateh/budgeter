@@ -1,47 +1,33 @@
-import { useParams } from 'react-router-dom'
-
 // icons
-import { AlertTriangle, BadgeInfo, Minus, Plus } from 'lucide-react'
+import { AlertTriangle, BadgeInfo, Minus, Plus } from "lucide-react"
 
 // shadcn
-import { BadgeTooltip } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { BadgeTooltip } from "@/components/ui/badge"
 
 // components
-import BalanceBadge from '@/components/shared/budget/ui/BalanceBadge'
-import BudgetNameBadge from '@/components/shared/budget/ui/BudgetNameBadge'
-import InfoBadge from '@/components/ui/custom/InfoBadge'
-import BudgetActions from './BudgetActions'
-import BudgetSummarySkeleton from './skeleton'
+import InfoBadge from "@/components/ui/custom/InfoBadge"
+import BalanceBadge from "@/components/shared/budget/ui/BalanceBadge"
+import BudgetSummarySkeleton from "@/components/shared/budget/BudgetSummary.skeleton"
 
 // hooks
-import { useBudget } from '@/lib/react-query/queries'
+import { useBudget } from "@/lib/react-query/queries"
 
 // utils
-import { formatWithCurrency } from '@/utils'
+import { formatWithCurrency } from "@/utils"
 
-const BudgetSummary = () => {
-  const { id } = useParams() as { id: string }
+type BudgetSummaryProps = {
+  budgetId: string
+}
 
-  const { data: budget, isLoading: isBudgetLoading } = useBudget(id)
+const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
+  const { data: budget, isLoading } = useBudget(budgetId)
 
-  if (isBudgetLoading || !budget) {
+  if (isLoading || !budget) {
     return <BudgetSummarySkeleton />
   }
 
   return (
     <div className="flex flex-col gap-y-3.5">
-      <div className="flex flex-wrap justify-between gap-x-2 gap-y-5">
-        <BudgetNameBadge className="py-3.5 text-xl sm:text-2xl"
-          size="lg"
-          budget={budget}
-        />
-
-        <BudgetActions budget={budget} />
-      </div>
-
-      <Separator className="w-5/6 mx-auto my-1.5" />
-
       <div className="flex flex-col items-center gap-5 small-caps">
         <BalanceBadge className="w-full px-8 py-3 max-w-72 min-w-48"
           size="lg"

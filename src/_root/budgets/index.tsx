@@ -9,7 +9,8 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import Transactions from "@/components/shared/transaction/Transactions"
-import BudgetSummary from "./summary"
+import BudgetSummary from "@/components/shared/budget/BudgetSummary"
+import BudgetHeader from "./header"
 import BudgetPayments from "./payments"
 import BudgetNotes from "./notes"
 
@@ -36,7 +37,11 @@ const BudgetDetails = () => {
       <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
         <div className="flex-1 w-full min-w-60 flex flex-col gap-y-2.5 md:min-w-80 md:max-w-4xl">
           <section className="w-full section-wrapper">
-            <BudgetSummary />
+            <BudgetHeader />
+
+            <Separator className="w-5/6 mx-auto my-5" />
+
+            <BudgetSummary budgetId={id} />
           </section>
 
           <section className="w-full section-wrapper">
