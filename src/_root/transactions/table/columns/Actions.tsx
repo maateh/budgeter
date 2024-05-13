@@ -1,9 +1,8 @@
 // icons
-import { BadgeInfo, MoreHorizontal, Trash2 } from "lucide-react"
+import { BadgeInfo, Trash2 } from "lucide-react"
 
-// shadcn
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+// components
+import DropdownActions from "@/components/ui/custom/DropdownActions"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -19,36 +18,21 @@ const Actions = ({ transaction }: ActionsProps) => {
   const { openDialog } = useDialog()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-        >
-          <span className="sr-only">Open actions</span>
-          <MoreHorizontal className="size-3.5 sm:size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="space-y-0.5" align="end">
-        <DropdownMenuLabel className="text-base font-heading small-caps">
-          Actions
-        </DropdownMenuLabel>
-
-        <DropdownMenuItem className="icon-wrapper hover:cursor-pointer"
-          onClick={() => openDialog(`/transactions/details/${transaction.id}`)}
-        >
-          <BadgeInfo className="size-4" strokeWidth={3} />
-          <span>Details</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem className="text-destructive font-bold icon-wrapper hover:cursor-pointer focus:bg-destructive"
-          onClick={() => openDialog(`/transactions/delete/${transaction.id}`, {}, { transaction })}
-        >
-          <Trash2 className="size-4" strokeWidth={3} />
-          <span>Delete</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <DropdownActions
+      actions={[
+        {
+          name: 'Details',
+          Icon: BadgeInfo,
+          onClick: () => openDialog(`/transactions/details/${transaction.id}`)
+        },
+        {
+          name: 'Delete',
+          Icon: Trash2,
+          variant: 'destructive',
+          onClick: () => openDialog(`/transactions/delete/${transaction.id}`, {}, { transaction })
+        }
+      ]}
+    />
   )
 }
 
