@@ -8,15 +8,20 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
 // components
+import { BalanceSummary, BalanceSummarySkeleton } from "@/components/shared/budget/BalanceSummary"
 import Transactions from "@/components/shared/transaction/Transactions"
-import BudgetSummary from "@/components/shared/budget/BudgetSummary"
 import BudgetHeader from "./header"
 import BudgetPayments from "./payments"
 import BudgetNotes from "./notes"
 
+// hooks
+import { useBudget } from "@/lib/react-query/queries"
+
 const BudgetDetails = () => {
   const { id } = useParams() as { id: string }
   const navigate = useNavigate()
+
+  const { data: budget, isLoading: isBudgetLoading } = useBudget(id)
 
   return (
     <div className="page-wrapper">
@@ -41,7 +46,11 @@ const BudgetDetails = () => {
 
             <Separator className="w-5/6 mx-auto my-5" />
 
-            <BudgetSummary budgetId={id} />
+            {!isBudgetLoading && budget ? (
+              <BalanceSummary balance={budget.balance} />
+            ) : (
+              <BalanceSummarySkeleton />
+            )}
           </section>
 
           <section className="w-full section-wrapper">

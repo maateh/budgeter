@@ -1,7 +1,7 @@
 // shadcn
 import { Skeleton } from "@/components/ui/skeleton"
 
-const BudgetSummarySkeleton = () => {
+const BalanceSummarySkeleton = () => {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap justify-around gap-x-6 gap-y-4">
@@ -22,4 +22,4 @@ const BudgetSummarySkeleton = () => {
   )
 }
 
-export default BudgetSummarySkeleton
+export default BalanceSummarySkeleton

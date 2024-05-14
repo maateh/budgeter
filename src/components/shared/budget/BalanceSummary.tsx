@@ -7,32 +7,25 @@ import { BadgeTooltip } from "@/components/ui/badge"
 // components
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 import BalanceBadge from "@/components/shared/budget/ui/BalanceBadge"
-import BudgetSummarySkeleton from "@/components/shared/budget/BudgetSummary.skeleton"
 
-// hooks
-import { useBudget } from "@/lib/react-query/queries"
+// types
+import { Balance } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
 
-type BudgetSummaryProps = {
-  budgetId: string
+type BalanceSummaryProps = {
+  balance: Balance
 }
 
-const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
-  const { data: budget, isLoading } = useBudget(budgetId)
-
-  if (isLoading || !budget) {
-    return <BudgetSummarySkeleton />
-  }
-
+const BalanceSummary = ({ balance }: BalanceSummaryProps) => {
   return (
     <div className="flex flex-col gap-y-3.5">
       <div className="flex flex-col items-center gap-5 small-caps">
         <BalanceBadge className="w-full px-8 py-3 max-w-72 min-w-48"
           size="lg"
           iconSize={22}
-          balance={budget.balance}
+          balance={balance}
           showLabel
         />
       </div>
@@ -43,7 +36,7 @@ const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
           size="sm"
           orientation="vertical"
           label="Income"
-          value={formatWithCurrency(budget.balance.income, budget.balance.currency)}
+          value={formatWithCurrency(balance.income, balance.currency)}
         />
 
         <InfoBadge className="text-destructive border-destructive bg-background/65"
@@ -51,7 +44,7 @@ const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
           size="sm"
           orientation="vertical"
           label="Loss"
-          value={formatWithCurrency(budget.balance.loss, budget.balance.currency)}
+          value={formatWithCurrency(balance.loss, balance.currency)}
         />
       </div>
 
@@ -84,7 +77,7 @@ const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
               size="sm"
               variant="accent"
               label="Borrowments"
-              value={formatWithCurrency(budget.balance.borrowment.plus, budget.balance.currency)}
+              value={formatWithCurrency(balance.borrowment.plus, balance.currency)}
               icon={<Plus className="text-accent" size={20} strokeWidth={5} />}
             />
           </div>
@@ -96,7 +89,7 @@ const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
               size="sm"
               variant="destructive"
               label="Borrowments"
-              value={formatWithCurrency(budget.balance.borrowment.minus, budget.balance.currency)}
+              value={formatWithCurrency(balance.borrowment.minus, balance.currency)}
               icon={<Minus className="text-destructive" size={20} strokeWidth={5} />}
             />
 
@@ -122,4 +115,5 @@ const BudgetSummary = ({ budgetId }: BudgetSummaryProps) => {
   )
 }
 
-export default BudgetSummary
+export { BalanceSummary }
+export { default as BalanceSummarySkeleton } from './BalanceSummary.skeleton'
