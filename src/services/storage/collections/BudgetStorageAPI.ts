@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Budget, Pagination, QueryOptions } from "@/services/api/types"
+import { Balance, Budget, Pagination, QueryOptions } from "@/services/api/types"
 import { BudgetDocument } from "@/services/storage/types"
 
 // validations
@@ -43,6 +43,33 @@ class BudgetStorageAPI implements IBudgetAPI {
   public async get({ params, filter, sortBy }: QueryOptions<Budget> = {}): Promise<Pagination<Budget>> {
     const budgets = await this.storage.find(filter)
     return paginate(budgets, { params, sortBy })
+  }
+
+  public async getSummarizedBalance(currency: string): Promise<Balance> {
+    const budgets = await this.storage.find()
+
+    return budgets.reduce((summarizedBalance, { balance }) => {
+      const {
+        current = 0,
+        income = 0,
+        loss = 0,
+        borrowment = { plus: 0, minus: 0 }
+      } = summarizedBalance
+  
+      // TODO: multiply values based on the given currency
+      // This might be an option: https://www.exchangerate-api.com/docs/free
+  
+      return {
+        currency,
+        current: current + balance.current,
+        income: income + balance.income,
+        loss: loss + balance.loss,
+        borrowment: {
+          plus: borrowment.plus + balance.borrowment.plus,
+          minus: borrowment.minus + balance.borrowment.minus,
+        }
+      }
+    }, {} as Balance)
   }
 
   public async create(data: z.infer<typeof budgetFormSchema>): Promise<Budget> {

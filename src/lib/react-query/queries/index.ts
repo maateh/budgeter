@@ -4,6 +4,7 @@ export { default as useCurrencies } from './currency/useCurrencies'
 // budget
 export { default as useBudget } from './budget/useBudget'
 export { default as useBudgets } from './budget/useBudgets'
+export { default as useSummarizedBalance } from './budget/useSummarizedBalance'
 export { default as useBudgetsPagination } from './budget/useBudgetsPagination'
 
 // budget-note
