@@ -5,10 +5,10 @@ import CacheHelper from "@/services/storage/cache"
 import { IExchangeAPI } from "@/services/api/interfaces"
 
 // types
-import { Currency } from "@/services/api/types"
+import { Currency, ExchangeRate } from "@/services/api/types"
 
 // utils
-import { getCurrencies } from "@/services/api/requests/exchange"
+import { getCurrencies, getRates } from "@/services/api/requests/exchange"
 
 class ExchangeAPI implements IExchangeAPI {
   private static _instance: ExchangeAPI
@@ -22,9 +22,11 @@ class ExchangeAPI implements IExchangeAPI {
   public static BASE_URL = `https://v6.exchangerate-api.com/v6/${this.API_KEY}`
 
   private currencies: CacheHelper<Currency[]>
+  private rates: CacheHelper<ExchangeRate>
 
   private constructor() {
     this.currencies = new CacheHelper('currencies')
+    this.rates = new CacheHelper('rates')
   }
 
   public static getInstance() {
@@ -35,10 +37,11 @@ class ExchangeAPI implements IExchangeAPI {
   }
 
   public async getCurrencies(): Promise<Currency[]> {
-    const expired = await this.currencies.isExpired()
+    const cacheKey = 'currencies'
+    const expired = await this.currencies.isExpired(cacheKey)
 
     if (!expired) {
-      return await this.currencies.getCachedData()
+      return await this.currencies.getCachedData(cacheKey)
     }
 
     const response = await getCurrencies()
@@ -54,9 +57,35 @@ class ExchangeAPI implements IExchangeAPI {
      */
     const cacheTime = 30 * 24 * 60 * 60 * 1000
     const { data: currencies } = await this.currencies.saveToCache(
-      response.data.supported_codes, cacheTime
+      cacheKey, response.data.supported_codes, { cacheTime }
     )
+
     return currencies
+  }
+
+  public async getRates(currency: string): Promise<ExchangeRate> {
+    const expired = await this.rates.isExpired(currency)
+
+    if (!expired) {
+      return await this.rates.getCachedData(currency)
+    }
+
+    const response = await getRates({ code: currency })
+
+    if (response.code === 'error') {
+      throw new Error(response.error.message)
+    }
+
+    const {
+      conversion_rates,
+      time_next_update_unix
+    } = response.data
+
+    const { data: rates } = await this.rates.saveToCache(
+      currency, conversion_rates, { expire: time_next_update_unix * 1000 }
+    )
+
+    return rates
   }
 }
 

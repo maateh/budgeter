@@ -1,7 +1,16 @@
 import { Budget, BudgetNote, Subpayment, Transaction } from "@/services/api/types"
 
-// collections
-export type StorageCollections = 'budgets' | 'notes' | 'transactions' | 'subpayments' | 'cache'
+// cache
+export type CacheCollections = 'currencies' | 'rates'
+
+export type CacheData<D> = {
+  id: string
+  expire: number
+  data: D
+}
+
+// storage
+export type StorageCollections = 'budgets' | 'notes' | 'transactions' | 'subpayments' | 'currencies' | 'rates'
 
 export type StorageCollection<T> = Record<string, T>
 
@@ -13,12 +22,3 @@ export type BudgetNoteDocument = BudgetNote
 export type TransactionDocument = Transaction
 
 export type SubpaymentDocument = Subpayment
-
-// cache
-export type CacheKeys = 'currencies'
-
-export type CacheData<D> = {
-  id: CacheKeys
-  expire: number
-  data: D
-}

@@ -2,16 +2,16 @@
 import { IStorageHelper } from "@/services/storage/interfaces"
 
 // types
-import { StorageCollection, StorageCollections } from "@/services/storage/types"
+import { CacheCollections, StorageCollection, StorageCollections } from "@/services/storage/types"
 import { FilterOptions } from "@/services/api/types"
 
 // utils
 import { filter } from "@/services/storage/utils"
 
 class StorageHelper<D extends { id: string }> implements IStorageHelper<D> {
-  private collection: StorageCollections
+  private collection: StorageCollections | CacheCollections
 
-  public constructor(collection: StorageCollections) {
+  public constructor(collection: StorageCollections | CacheCollections) {
     this.collection = collection
   }
 

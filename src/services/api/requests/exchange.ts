@@ -4,7 +4,7 @@ import axios from "axios"
 import { ExchangeAPI } from "@/services/api/endpoints"
 
 // types
-import { Currency } from "@/services/api/types"
+import { Currency, ExchangeRate } from "@/services/api/types"
 
 // utils
 import { requestHandler } from "@/services/api/utils"
@@ -18,4 +18,19 @@ const getCurrencies = requestHandler<CurrenciesResponse>(() => {
   return axios.get(ExchangeAPI.BASE_URL + route)
 })
 
-export { getCurrencies }
+type RateParams = { code: string }
+
+type ExchangeRateResponse = {
+  base_code: string
+  conversion_rates: ExchangeRate
+  time_next_update_unix: number
+}
+
+const getRates = requestHandler<ExchangeRateResponse, RateParams>((params) => {
+  const { code } = params || {}
+  
+  const route = `/latest/${code}`
+  return axios.get(ExchangeAPI.BASE_URL + route)
+})
+
+export { getCurrencies, getRates }

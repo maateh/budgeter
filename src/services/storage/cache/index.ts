@@ -2,7 +2,12 @@
 import StorageHelper from "@/services/storage/StorageHelper"
 
 // types
-import { CacheData, CacheKeys } from "@/services/storage/types"
+import { CacheCollections, CacheData } from "@/services/storage/types"
+
+type CacheExpireOptions = {
+  cacheTime?: number
+  expire?: number
+}
 
 /**
  * NOTE: This cache mechanism exists only because the application
@@ -11,28 +16,29 @@ import { CacheData, CacheKeys } from "@/services/storage/types"
  * But for now it's okay.
  */
 class CacheHelper<D> extends StorageHelper<CacheData<D>> {
-  private key: CacheKeys
-
-  public constructor(key: CacheKeys) {
-    super('cache')
-    this.key = key
+  public constructor(collectionKey: CacheCollections) {
+    super(collectionKey)
   }
 
-  public async getCachedData(): Promise<D> {
-    const { data } = await this.findById(this.key)
+  public async getCachedData(cacheKey: string): Promise<D> {
+    const { data } = await this.findById(cacheKey)
     return data
   }
 
-  public async isExpired(): Promise<boolean> {
-    const cache = await this.findById(this.key)
-
+  public async isExpired(cacheKey: string): Promise<boolean> {
+    const cache = await this.findById(cacheKey)
     return !cache || Date.now() > cache.expire
   }
 
-  public async saveToCache(data: D, cacheTime: number = 24 * 60 * 60 * 1000): Promise<CacheData<D>> {
+  public async saveToCache(cacheKey: string, data: D, expireOptions: CacheExpireOptions): Promise<CacheData<D>> {
+    const {
+      cacheTime = 24 * 60 * 60 * 1000,
+      expire
+    } = expireOptions
+
     return await this.save({
-      id: this.key,
-      expire: Date.now() + cacheTime,
+      id: cacheKey,
+      expire: expire || Date.now() + cacheTime,
       data
     })
   }

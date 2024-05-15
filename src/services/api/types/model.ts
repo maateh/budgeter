@@ -1,8 +1,12 @@
+// exchange
 export type Currency = [
   key: 'string',
   value: 'string'
 ]
 
+export type ExchangeRate = Record<string, number>
+
+// app
 export type Balance = {
   currency: string
   current: number
