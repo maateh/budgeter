@@ -1,3 +1,6 @@
+// exchange
+export type { default as IExchangeAPI } from "./exchange"
+
 // currency
 export type { default as ICurrencyAPI } from "./currency"
 

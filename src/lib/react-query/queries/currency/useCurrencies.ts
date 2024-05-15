@@ -8,7 +8,7 @@ const useCurrencies = () => {
 
   return useQuery({
     queryKey: ['currencies'],
-    queryFn: api.currency.get
+    queryFn: async () => await api.exchange.getCurrencies()
   })
 }
 

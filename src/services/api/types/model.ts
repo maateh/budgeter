@@ -1,6 +1,7 @@
-export type Currencies = {
-  [key: string]: string
-}
+export type Currency = [
+  key: 'string',
+  value: 'string'
+]
 
 export type Balance = {
   currency: string

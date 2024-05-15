@@ -63,7 +63,7 @@ const BudgetFormFields = ({ control, disabled }: BudgetFormFieldsProps) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {currencies && Object.entries(currencies).map(([key, currency]) => (
+                    {currencies && currencies.map(([key, currency]) => (
                       <SelectItem key={key} value={key}>
                         <span className="font-semibold mr-2 pr-2 border-r">{key}</span>
                         <span className="font-medium">{currency}</span>
