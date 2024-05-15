@@ -7,7 +7,7 @@ export type * from "./filter"
 // sort
 export type * from "./sort"
 
-// options
+// query
 export type * from "./query"
 
 // data models

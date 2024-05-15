@@ -1,5 +1,3 @@
-import axios from "axios"
-
 // storage - cache
 import CacheHelper from "@/services/storage/cache"
 
@@ -8,6 +6,9 @@ import { IExchangeAPI } from "@/services/api/interfaces"
 
 // types
 import { Currency } from "@/services/api/types"
+
+// utils
+import { getCurrencies } from "@/services/api/requests/exchange"
 
 class ExchangeAPI implements IExchangeAPI {
   private static _instance: ExchangeAPI
@@ -18,8 +19,7 @@ class ExchangeAPI implements IExchangeAPI {
    * but now it's okay especially that it's a free accessible API key.
    */
   private static API_KEY = import.meta.env.VITE_EXCHANGE_API_KEY
-
-  private static BASE_URL = `https://v6.exchangerate-api.com/v6/${this.API_KEY}`
+  public static BASE_URL = `https://v6.exchangerate-api.com/v6/${this.API_KEY}`
 
   private currencies: CacheHelper<Currency[]>
 
@@ -37,17 +37,26 @@ class ExchangeAPI implements IExchangeAPI {
   public async getCurrencies(): Promise<Currency[]> {
     const expired = await this.currencies.isExpired()
 
-    if (expired) {
-      const url = ExchangeAPI.BASE_URL + '/codes'
-
-      // TODO: implement type safe generic requestHandler
-      const { data } = await axios.get(url)
-      await this.currencies.saveToCache(data.supported_codes)
-
-      return data.supported_codes
+    if (!expired) {
+      return await this.currencies.getCachedData()
     }
 
-    return await this.currencies.getCachedData()
+    const response = await getCurrencies()
+    if (response.code === 'error') {
+      throw new Error(response.error.message)
+    }
+    
+    /**
+     * Currencies are not expected to change frequently
+     * so it could be stored in cache for a long time.
+     * 
+     * Cache time: 30 days
+     */
+    const cacheTime = 30 * 24 * 60 * 60 * 1000
+    const { data: currencies } = await this.currencies.saveToCache(
+      response.data.supported_codes, cacheTime
+    )
+    return currencies
   }
 }
 
