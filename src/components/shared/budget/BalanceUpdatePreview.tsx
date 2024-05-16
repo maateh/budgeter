@@ -58,4 +58,5 @@ const BalanceUpdatePreview = ({ budget, payment }: BalanceUpdatePreviewProps) =>
   )
 }
 
-export default BalanceUpdatePreview
+export { BalanceUpdatePreview }
+export { default as BalanceUpdatePreviewSkeleton } from './BalanceUpdatePreview.skeleton'

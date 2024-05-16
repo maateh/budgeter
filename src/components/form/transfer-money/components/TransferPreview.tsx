@@ -2,7 +2,7 @@
 import { AlertTriangle } from "lucide-react"
 
 // components
-import BalanceUpdatePreview from "@/components/shared/budget/BalanceUpdatePreview"
+import { BalanceUpdatePreview, BalanceUpdatePreviewSkeleton } from "@/components/shared/budget/BalanceUpdatePreview"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // hooks
@@ -54,7 +54,7 @@ const TransferPreview = ({ rootBudgetId, targetBudgetId, payment, customExchange
             }}
           />
         ) : (
-          <>TODO: skeleton</>
+          <BalanceUpdatePreviewSkeleton />
         )}
       </div>
 
@@ -82,7 +82,7 @@ const TransferPreview = ({ rootBudgetId, targetBudgetId, payment, customExchange
             />
           )
         ) : (
-          <>TODO: skeleton</>
+          <BalanceUpdatePreviewSkeleton />
         )}
       </div>
     </div>
