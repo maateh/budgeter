@@ -64,10 +64,13 @@ class ExchangeAPI implements IExchangeAPI {
   }
 
   public async getExchangeRate(baseCurrency: string, targetCurrency: string): Promise<number> {
-    const expired = await this.rates.isExpired(baseCurrency)
-    const rates = await this.rates.getCachedData(baseCurrency)
+    if (baseCurrency === targetCurrency) return 1
 
-    if (!expired && rates[targetCurrency]) {
+    const cacheKey = `${baseCurrency}-${targetCurrency}`
+    const expired = await this.rates.isExpired(cacheKey)
+    
+    if (!expired) {
+      const rates = await this.rates.getCachedData(cacheKey)
       return rates[targetCurrency]
     }
 
@@ -78,14 +81,12 @@ class ExchangeAPI implements IExchangeAPI {
     }
 
     const {
-      base_code,
-      target_code,
       conversion_rate,
       time_next_update_unix
     } = response.data
 
-    const rate: ExchangeRate = { [target_code]: conversion_rate }
-    await this.rates.saveToCache(base_code, rate, {
+    const rate: ExchangeRate = { [targetCurrency]: conversion_rate }
+    await this.rates.saveToCache(cacheKey, rate, {
       expire: time_next_update_unix * 1000
     })
 
@@ -106,13 +107,12 @@ class ExchangeAPI implements IExchangeAPI {
     }
 
     const {
-      base_code,
       conversion_rates,
       time_next_update_unix
     } = response.data
 
     const { data: rates } = await this.rates.saveToCache(
-      base_code, conversion_rates, { expire: time_next_update_unix * 1000 }
+      currency, conversion_rates, { expire: time_next_update_unix * 1000 }
     )
 
     return rates
