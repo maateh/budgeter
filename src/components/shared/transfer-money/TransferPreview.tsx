@@ -1,66 +1,12 @@
 // icons
-import { AlertTriangle, ArrowDown } from "lucide-react"
-
-// shadcn
-import { Separator } from "@/components/ui/separator"
+import { AlertTriangle } from "lucide-react"
 
 // components
-import BalanceBadge from "@/components/shared/budget/ui/BalanceBadge"
-import BudgetNameBadge from "@/components/shared/budget/ui/BudgetNameBadge"
-import PaymentBadge from "@/components/shared/payment/ui/PaymentBadge"
+import BalanceUpdatePreview from "@/components/shared/budget/BalanceUpdatePreview"
 import InfoBadge from "@/components/ui/custom/InfoBadge"
 
 // types
 import { Budget, Payment } from "@/services/api/types"
-
-type TransferElementProps = {
-  budget: Budget
-  payment: Payment
-  isRoot?: boolean
-}
-
-const TransferElement = ({ budget, payment, isRoot }: TransferElementProps) => (
-  <div className="min-w-40 flex flex-col items-center gap-y-1.5">
-    <p className="text-muted-foreground font-heading font-medium overline">
-      {isRoot ? 'Root' : 'Target'} Budget
-    </p>
-
-    <BudgetNameBadge budget={budget} size="sm" />
-
-    <Separator className="w-1/3" />
-
-    <div className="flex flex-col justify-center items-center gap-y-1">
-      <BalanceBadge
-        separatorProps={{ className: "h-4" }}
-        orientation="vertical"
-        size="sm"
-        iconSize={18}
-        balance={budget.balance}
-      />
-
-      <PaymentBadge className="border-2"
-        payment={payment}
-        currency={budget.balance.currency}
-        processed
-      />
-
-      <ArrowDown className={payment.type === '+' ? 'text-accent' : 'text-destructive'}
-        strokeWidth={7}
-      />
-
-      <BalanceBadge
-        separatorProps={{ className: "h-4" }}
-        orientation="vertical"
-        size="sm"
-        iconSize={18}
-        balance={{
-          ...budget.balance,
-          current: budget.balance.current - (payment.type === '+' ? -payment.amount : payment.amount)
-        }}
-      />
-    </div>
-  </div>
-)
 
 type TransferPreviewProps = {
   rootBudget: Budget
@@ -72,19 +18,25 @@ const TransferPreview = ({ rootBudget, targetBudget, payment }: TransferPreviewP
   return (
     <div className="w-full flex flex-wrap justify-around items-center gap-x-4 gap-y-8">
       <div className="flex-1">
-        <TransferElement
+        <p className="mb-1.5 text-center text-muted-foreground font-heading font-medium overline">
+          Root Budget
+        </p>
+
+        <BalanceUpdatePreview
           budget={rootBudget}
           payment={{
             ...payment,
             type: payment.type === '+' ? '-' : '+'
           }}
-          isRoot
         />
       </div>
 
       <div className="flex-1">
+        <p className="mb-1.5 text-center text-muted-foreground font-heading font-medium overline">
+          Target Budget
+        </p>
         {targetBudget ? (
-          <TransferElement
+          <BalanceUpdatePreview
             budget={targetBudget}
             payment={payment}
           />
