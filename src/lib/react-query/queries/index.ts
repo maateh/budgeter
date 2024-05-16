@@ -1,5 +1,7 @@
 // 3rd party API queries
-export { default as useCurrencies } from './currency/useCurrencies'
+export { default as useCurrencies } from './exchange/useCurrencies'
+export { default as useExchangeRate } from './exchange/useExchangeRate'
+export { default as useExchangeRates } from './exchange/useExchangeRates'
 
 // budget
 export { default as useBudget } from './budget/useBudget'
