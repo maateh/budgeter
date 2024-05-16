@@ -14,6 +14,9 @@ import { relatedTransactionsFormSchema, transactionFormSchema, transferMoneyForm
 import StorageHelper from "@/services/storage/StorageHelper"
 import { BudgetStorageAPI, SubpaymentStorageAPI } from "@/services/storage/collections"
 
+// api
+import { ExchangeAPI } from "@/services/api/endpoints"
+
 // helpers
 import { revertSubpaymentsOnBalance, updateBalance } from "@/services/storage/helpers/balance"
 import { deleteTransactions, manageRelatedTransactions, updateTransaction } from "@/services/storage/helpers/transaction"
@@ -190,6 +193,22 @@ class TransactionStorageAPI implements ITransactionAPI {
   public async transferMoney(
     data: z.infer<typeof transferMoneyFormSchema>
   ): Promise<{ rootTransaction: Transaction; targetTransaction: Transaction }> {
+    const budgetStorage = BudgetStorageAPI.getInstance().getStorage()
+    const exchangeApi = ExchangeAPI.getInstance()
+
+    const rootBudget = await budgetStorage.findById(data.budgetId)
+    const targetBudget = await budgetStorage.findById(data.targetBudgetId)
+
+    let targetPayment = data.payment
+    if (rootBudget.balance.currency !== targetBudget.balance.currency) {
+      const rate = data.customExchangeRate || await exchangeApi.getExchangeRate(
+        rootBudget.balance.currency,
+        targetBudget.balance.currency
+      )
+
+      targetPayment = { ...targetPayment, amount: targetPayment.amount * rate }
+    }
+
     let rootTransaction = await this.create({
       ...data,
       payment: {
@@ -201,7 +220,8 @@ class TransactionStorageAPI implements ITransactionAPI {
     const targetTransaction = await this.create({
       ...data,
       budgetId: data.targetBudgetId,
-      relatedIds: [rootTransaction.id]
+      relatedIds: [rootTransaction.id],
+      payment: targetPayment
     })
 
     rootTransaction = await this.storage.save({

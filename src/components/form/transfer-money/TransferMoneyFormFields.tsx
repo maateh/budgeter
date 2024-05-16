@@ -10,12 +10,9 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 
 // components
-import StateToggle from "@/components/ui/custom/StateToggle"
 import BudgetSelect from "@/components/input/BudgetSelect"
-import TransferPreview from "@/components/shared/transfer-money/TransferPreview"
-
-// hooks
-import { useBudget } from "@/lib/react-query/queries"
+import StateToggle from "@/components/ui/custom/StateToggle"
+import TransferPreview from "@/components/form/transfer-money/components/TransferPreview"
 
 // types
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
@@ -26,31 +23,21 @@ type TransferMoneyFormFieldsProps = UseFormReturn<TransferMoneyFieldValues> & {
 }
 
 const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoneyFormFieldsProps) => {
-  const targetBudgetIdField = useWatch({
-    control,
-    name: 'targetBudgetId'
-  })
-
-  const paymentField = useWatch({
-    control,
-    name: 'payment'
-  })
-
-  const { data: rootBudget, isLoading: isRootBudgetLoading } = useBudget(budgetId)
-  const { data: targetBudget } = useBudget(targetBudgetIdField, { enabled: !!targetBudgetIdField })
+  const targetBudgetIdField = useWatch({ control, name: 'targetBudgetId' })
+  const paymentField = useWatch({ control, name: 'payment' })
+  const customExchangeRateField = useWatch({ control, name: 'customExchangeRate' })
 
   return (
     <>
-      {!isRootBudgetLoading && rootBudget && (
-        <TransferPreview
-          rootBudget={rootBudget}
-          targetBudget={targetBudget}
-          payment={{
-            ...paymentField,
-            createdAt: new Date()
-          }}
-        />
-      )}
+      <TransferPreview
+        rootBudgetId={budgetId}
+        targetBudgetId={targetBudgetIdField}
+        customExchangeRate={customExchangeRateField}
+        payment={{
+          ...paymentField,
+          createdAt: new Date()
+        }}
+      />
 
       <Separator className="w-2/3 mx-auto" />
 
@@ -65,7 +52,7 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
                 <BudgetSelect
                   value={field.value}
                   setValue={field.onChange}
-                  excludeBy={{ id: rootBudget?.id }}
+                  excludeBy={{ id: budgetId }}
                 />
               </FormControl>
               <FormMessage />
@@ -93,9 +80,10 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
       </div>
 
       <div>
-        <FormLabel>
+        <FormLabel htmlFor="amount">
           Transfer Amount
         </FormLabel>
+
         <div className="flex items-center gap-x-2.5">
           <FormField
             control={control}
@@ -129,9 +117,9 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
             render={({ field }) => (
               <FormItem className="min-w-[40%]">
                 <FormControl>
-                  <Input
+                  <Input id="amount"
                     type="number"
-                    placeholder="e.g. $50"
+                    placeholder="e.g. $8"
                     {...field}
                   />
                 </FormControl>
@@ -142,11 +130,13 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
         </div>
       </div>
 
+      {/* TODO: add custom exchange rate input */}
+
       <Button className="sm:ml-auto sm:w-fit"
         type="submit"
         disabled={isPending}
       >
-        Transfer {targetBudget && `to "${targetBudget.name}"`} 
+        Transfer
       </Button>
     </>
   )
