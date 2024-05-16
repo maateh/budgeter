@@ -18,19 +18,38 @@ const getCurrencies = requestHandler<CurrenciesResponse>(() => {
   return axios.get(ExchangeAPI.BASE_URL + route)
 })
 
-type RateParams = { code: string }
+type ExchangeRateParams = {
+  baseCurrency: string
+  targetCurrency: string
+}
 
 type ExchangeRateResponse = {
+  base_code: string
+  target_code: string
+  conversion_rate: number
+  time_next_update_unix: number
+}
+
+const getExchangeRate = requestHandler<ExchangeRateResponse, ExchangeRateParams>((params) => {
+  const { baseCurrency, targetCurrency } = params || {}
+
+  const route = `/pair/${baseCurrency}/${targetCurrency}`
+  return axios.get(ExchangeAPI.BASE_URL + route)
+})
+
+type ExchangeRatesParams = { code: string }
+
+type ExchangeRatesResponse = {
   base_code: string
   conversion_rates: ExchangeRate
   time_next_update_unix: number
 }
 
-const getRates = requestHandler<ExchangeRateResponse, RateParams>((params) => {
+const getExchangeRates = requestHandler<ExchangeRatesResponse, ExchangeRatesParams>((params) => {
   const { code } = params || {}
   
   const route = `/latest/${code}`
   return axios.get(ExchangeAPI.BASE_URL + route)
 })
 
-export { getCurrencies, getRates }
+export { getCurrencies, getExchangeRate, getExchangeRates }
