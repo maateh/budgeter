@@ -12,7 +12,7 @@ const useTransactionsPagination = ({ params, filter, sortBy }: QueryOptions<Tran
   const { filterBy, excludeBy } = filter || {}
 
   return useInfiniteQuery({
-    queryKey: ['transactions', filterBy, excludeBy, sortBy],
+    queryKey: ['transactions', filterBy, excludeBy, sortBy, 'pagination'],
     queryFn: async ({ pageParam: offset }) => {
       return await api.transaction.getWithBudget({
         params: { ...params, limit: params?.limit || 20, offset },

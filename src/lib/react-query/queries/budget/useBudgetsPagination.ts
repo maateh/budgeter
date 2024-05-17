@@ -12,7 +12,7 @@ const useBudgetsPagination = ({ params, filter, sortBy }: QueryOptions<Budget>) 
   const { filterBy, excludeBy } = filter || {}
 
   return useInfiniteQuery({
-    queryKey: ['budgets', filterBy, excludeBy, sortBy],
+    queryKey: ['budgets', filterBy, excludeBy, sortBy, 'pagination'],
     queryFn: async ({ pageParam: offset }) => {
       return await api.budget.get({
         params: { ...params, limit: params?.limit || 20, offset },
