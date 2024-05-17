@@ -30,7 +30,7 @@ const Budgets = () => {
         </Button>
       </div>
 
-      <BudgetList params={{ limit: 4, offset: 0 }} disableScrolling />
+      <BudgetList params={{ limit: 8, offset: 0 }} />
     </>
   )
 }

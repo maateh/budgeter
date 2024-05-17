@@ -12,7 +12,7 @@ const useRestoreBackup = () => {
 
   return useMutation({
     mutationKey: ['restoreBackup'],
-    mutationFn: (backupFile: RestoreBackupFieldValues) => api.backup.restore(backupFile),
+    mutationFn: async (backupFile: RestoreBackupFieldValues) => await api.backup.restore(backupFile),
     onSuccess: () => queryClient.invalidateQueries()
   })
 }

@@ -1,5 +1,4 @@
 // budget
-export { default as Budgets } from './budgets'
 export { default as SaveBudget } from './budgets/create-edit'
 export { default as TransferMoney } from './budgets/transfer'
 

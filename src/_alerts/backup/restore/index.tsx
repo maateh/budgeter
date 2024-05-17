@@ -42,7 +42,9 @@ const RestoreBackup = () => {
         description: (
           <>
             <p>Backup has been successfully restored!</p>
-            <p className="text-xs font-heading font-semibold">{format(backup.fileContent.backup_date, 'yyyy. MM. dd. - HH:mm')}</p>
+            <p className="text-xs font-heading font-semibold">
+              {format(backup.fileContent.backup_date, 'yyyy. MM. dd. - HH:mm')}
+            </p>
           </>
         )
       })
