@@ -27,10 +27,12 @@ type PaymentBadgeProps = BadgeProps & {
   iconProps?: LucideProps
 } & ({
   showProgress?: true
+  showDetailsOnly?: boolean
   transaction: Transaction
   budgetName?: string
 } | {
   showProgress?: never
+  showDetailsOnly?: never
   transaction?: never
   budgetName?: never
 }) & ({
@@ -45,7 +47,7 @@ type PaymentBadgeProps = BadgeProps & {
 
 const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
   payment, processed, currency, isNeutral, iconProps,
-  showProgress, transaction, budgetName,
+  showProgress, showDetailsOnly, transaction, budgetName,
   showRemoveButton, onRemove, removeButtonProps,
   className, size = 'sm', ...props
 }, ref) => {
@@ -103,13 +105,13 @@ const PaymentBadge = forwardRef<HTMLDivElement, PaymentBadgeProps>(({
     </Badge>
   )
 
-  return !showProgress ? element : (
+  return !showProgress && !showDetailsOnly ? element : (
     <Popover>
       <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
         {element}
       </PopoverTrigger>
       <PopoverContent className="max-w-md" onClick={(e) => e.stopPropagation()}>
-        {transaction.type === 'borrow' ? (
+        {transaction.type === 'borrow' && !showDetailsOnly ? (
           <PaymentProgress transaction={transaction} />
         ) : (
           <div className="icon-wrapper">

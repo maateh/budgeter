@@ -111,6 +111,7 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
               processed
               currency={budget.balance.currency}
               showProgress
+              showDetailsOnly
               transaction={transaction}
               budgetName={budget.name}
               showRemoveButton
