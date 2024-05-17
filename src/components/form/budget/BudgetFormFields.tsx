@@ -15,10 +15,11 @@ import { useCurrencies } from "@/lib/react-query/queries"
 import { BudgetFieldValues } from "@/components/form/budget/types"
 
 type BudgetFormFieldsProps = UseFormReturn<BudgetFieldValues> & {
+  type: 'create' | 'edit'
   disabled?: boolean
 }
 
-const BudgetFormFields = ({ control, disabled }: BudgetFormFieldsProps) => {  
+const BudgetFormFields = ({ type, disabled, control }: BudgetFormFieldsProps) => {  
   const {
     data: currencies,
     isLoading: currenciesIsLoading
@@ -32,7 +33,7 @@ const BudgetFormFields = ({ control, disabled }: BudgetFormFieldsProps) => {
           name="name"
           disabled={disabled}
           render={({ field }) => (
-            <FormItem className="min-w-56 flex-1">
+            <FormItem className="min-w-56 max-w-sm flex-1">
               <FormLabel>Budget Name</FormLabel>
               <FormControl>
                 <Input
@@ -46,35 +47,37 @@ const BudgetFormFields = ({ control, disabled }: BudgetFormFieldsProps) => {
           )}
         />
 
-        <FormField
-          control={control}
-          name="balance.currency"
-          disabled={!currencies || currenciesIsLoading}
-          render={({ field }) => (
-            <FormItem className="min-w-36 flex-1">
-              <FormLabel>Currency</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose..." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {currencies && currencies.map(([key, currency]) => (
-                      <SelectItem key={key} value={key}>
-                        <span className="font-semibold mr-2 pr-2 border-r">{key}</span>
-                        <span className="font-medium">{currency}</span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {type === 'create' && (
+          <FormField
+            control={control}
+            name="balance.currency"
+            disabled={!currencies || currenciesIsLoading}
+            render={({ field }) => (
+              <FormItem className="min-w-36 flex-1">
+                <FormLabel>Currency</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {currencies && currencies.map(([key, currency]) => (
+                        <SelectItem key={key} value={key}>
+                          <span className="font-semibold mr-2 pr-2 border-r">{key}</span>
+                          <span className="font-medium">{currency}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
       </div>
 
       <FormField

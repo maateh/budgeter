@@ -17,7 +17,7 @@ type BudgetFormProps = {
 }
 
 const BudgetForm = ({ id }: BudgetFormProps) => {
-  const { data: budget, isLoading } = useBudget(id || '', { enabled: !!id })
+  const { data: budget, isLoading } = useBudget(id!, { enabled: !!id })
   
   return (
     <Form<BudgetFieldValues, typeof budgetFormSchema, BudgetSubmitProps>
@@ -35,7 +35,11 @@ const BudgetForm = ({ id }: BudgetFormProps) => {
       submitProps={{ budgetId: budget?.id, type: id ? 'edit' : 'create' }}
     >
       {(form) => (
-        <BudgetFormFields {...form} disabled={!!id && isLoading} />
+        <BudgetFormFields
+          type={id ? 'edit' : 'create'}
+          disabled={!!id && isLoading}
+          {...form}
+        />
       )}
     </Form>
   )

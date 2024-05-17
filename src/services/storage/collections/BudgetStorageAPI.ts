@@ -100,8 +100,8 @@ class BudgetStorageAPI implements IBudgetAPI {
 
     return await this.storage.save({
       ...budget,
-      ...data,
-      balance: { ...budget.balance, ...data.balance }
+      name: data.name,
+      theme: data.theme
     })
   }
 
