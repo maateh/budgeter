@@ -19,6 +19,7 @@ import { deleteTransactions } from "@/services/storage/helpers/transaction"
 
 // utils
 import { paginate } from "@/services/storage/utils"
+import { ExchangeAPI } from "@/services/api/endpoints"
 
 class BudgetStorageAPI implements IBudgetAPI {
   private static _instance: BudgetStorageAPI
@@ -46,7 +47,10 @@ class BudgetStorageAPI implements IBudgetAPI {
   }
 
   public async getSummarizedBalance(currency: string): Promise<Balance> {
+    const exchangeApi = ExchangeAPI.getInstance()
+
     const budgets = await this.storage.find()
+    const exchangeRates = await exchangeApi.getExchangeRates(currency)
 
     return budgets.reduce((summarizedBalance, { balance }) => {
       const {
@@ -56,9 +60,14 @@ class BudgetStorageAPI implements IBudgetAPI {
         borrowment = { plus: 0, minus: 0 }
       } = summarizedBalance
   
-      // TODO: multiply values based on the given currency
-      // This might be an option: https://www.exchangerate-api.com/docs/free
-  
+      if (currency !== balance.currency) {
+        balance.current /= exchangeRates[balance.currency]
+        balance.income /= exchangeRates[balance.currency]
+        balance.loss /= exchangeRates[balance.currency]
+        balance.borrowment.plus /= exchangeRates[balance.currency]
+        balance.borrowment.minus /= exchangeRates[balance.currency]
+      }
+
       return {
         currency,
         current: current + balance.current,
