@@ -50,6 +50,10 @@ class BudgetStorageAPI implements IBudgetAPI {
     const exchangeApi = ExchangeAPI.getInstance()
 
     const budgets = await this.storage.find()
+    if (!budgets || !budgets.length) {
+      throw new Error('There is no budget to summarize.')
+    }
+
     const exchangeRates = await exchangeApi.getExchangeRates(currency)
 
     return budgets.reduce((summarizedBalance, { balance }) => {
