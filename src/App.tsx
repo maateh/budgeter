@@ -9,7 +9,7 @@ const { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } = lazily
 import { DialogLayout, DialogSkeleton } from "@/_dialogs/DialogLayout"
 const { CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } = lazily(() => import('@/_dialogs'))
 
-import { AlertLayout } from "@/_alerts/AlertLayout"
+import { AlertLayout, AlertSkeleton } from "@/_alerts/AlertLayout"
 const { DeleteBudget, DeleteNote, DeleteTransaction, RestoreBackup } = lazily(() => import('@/_alerts'))
 
 // shadcn
@@ -108,13 +108,13 @@ const App = () => {
           <Route path="/" element={<AlertLayout />}>
             <Route path="/budgets">
               <Route path="delete/:id" element={(
-                <Suspense fallback={<DialogSkeleton />}>
+                <Suspense fallback={<AlertSkeleton />}>
                   <DeleteBudget />
                 </Suspense>
               )} />
 
               <Route path=":budgetId/notes/delete/:id" element={(
-                <Suspense fallback={<DialogSkeleton />}>
+                <Suspense fallback={<AlertSkeleton />}>
                   <DeleteNote />
                 </Suspense>
               )} />
@@ -122,7 +122,7 @@ const App = () => {
 
             <Route path="/transactions">
               <Route path="delete/:id" element={(
-                <Suspense fallback={<DialogSkeleton />}>
+                <Suspense fallback={<AlertSkeleton />}>
                   <DeleteTransaction />
                 </Suspense>
               )} />
@@ -130,7 +130,7 @@ const App = () => {
 
             <Route path="/backup">
               <Route path="restore" element={(
-                <Suspense fallback={<DialogSkeleton />}>
+                <Suspense fallback={<AlertSkeleton />}>
                   <RestoreBackup />
                 </Suspense>
               )} />

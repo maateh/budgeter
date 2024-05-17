@@ -12,3 +12,4 @@ const AlertLayout = () => {
 }
 
 export { AlertLayout }
+export { default as AlertSkeleton } from './AlertSkeleton'
