@@ -11,4 +11,4 @@ const AlertLayout = () => {
   )
 }
 
-export default AlertLayout
+export { AlertLayout }

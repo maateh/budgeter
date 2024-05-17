@@ -3,16 +3,17 @@ import { Route, Routes } from "react-router-dom"
 import { lazily } from "react-lazily"
 
 // layouts
-import RootLayout from "@/_root/RootLayout"
+import { RootLayout } from "@/_root/RootLayout"
 const { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } = lazily(() => import('@/_root'))
 
-import DialogLayout from "@/_dialogs/DialogLayout"
+import { DialogLayout, DialogSkeleton } from "@/_dialogs/DialogLayout"
 const { CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } = lazily(() => import('@/_dialogs'))
 
-import AlertLayout from "@/_alerts/AlertLayout"
+import { AlertLayout } from "@/_alerts/AlertLayout"
 const { DeleteBudget, DeleteNote, DeleteTransaction, RestoreBackup } = lazily(() => import('@/_alerts'))
 
 // shadcn
+import { PageLoader } from "@/components/ui/skeleton"
 const { Toaster } = lazily(() => import('@/components/ui/toaster'))
 
 // hooks
@@ -27,37 +28,37 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<RootLayout />}>
           <Route index element={(
-            <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+            <Suspense fallback={<PageLoader />}>
               <Home />
             </Suspense>
           )} />
 
           <Route path="/budgets/:id" element={(
-            <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+            <Suspense fallback={<PageLoader />}>
               <BudgetDetails />
             </Suspense>
           )} />
 
           <Route path="/transactions" element={(
-            <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+            <Suspense fallback={<PageLoader />}>
               <Transactions />
             </Suspense>
           )} />
 
           <Route path="/wishlist" element={(
-            <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+            <Suspense fallback={<PageLoader />}>
               <Wishlist />
             </Suspense>
           )} />
 
           <Route path="/splitter" element={(
-            <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+            <Suspense fallback={<PageLoader />}>
               <Splitter />
             </Suspense>
           )} />
 
           <Route path="/backup/:budgetId?" element={(
-            <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+            <Suspense fallback={<PageLoader />}>
               <Backup />
             </Suspense>
           )} />
@@ -71,19 +72,19 @@ const App = () => {
           <Route path="/" element={<DialogLayout />}>
             <Route path="/budgets">
               <Route path="create" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <SaveBudget />
                 </Suspense>
               )} />
 
               <Route path="edit/:id" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <SaveBudget />
                 </Suspense>
               )} />
 
               <Route path="transfer/:id" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <TransferMoney />
                 </Suspense>
               )} />
@@ -91,13 +92,13 @@ const App = () => {
 
             <Route path="/transactions">
               <Route path="create/:budgetId?" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <CreateTransaction />
                 </Suspense>
               )} />
 
               <Route path="details/:id" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <TransactionDetails />
                 </Suspense>
               )} />
@@ -107,13 +108,13 @@ const App = () => {
           <Route path="/" element={<AlertLayout />}>
             <Route path="/budgets">
               <Route path="delete/:id" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <DeleteBudget />
                 </Suspense>
               )} />
 
               <Route path=":budgetId/notes/delete/:id" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <DeleteNote />
                 </Suspense>
               )} />
@@ -121,7 +122,7 @@ const App = () => {
 
             <Route path="/transactions">
               <Route path="delete/:id" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <DeleteTransaction />
                 </Suspense>
               )} />
@@ -129,7 +130,7 @@ const App = () => {
 
             <Route path="/backup">
               <Route path="restore" element={(
-                <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
+                <Suspense fallback={<DialogSkeleton />}>
                   <RestoreBackup />
                 </Suspense>
               )} />

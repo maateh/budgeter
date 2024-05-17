@@ -78,4 +78,14 @@ const Spinner = ({ size = 28, className, ...props }: SpinnerProps) => {
   )
 }
 
-export { Skeleton, SkeletonList, SkeletonTable, Spinner }
+const PageLoader = () => (
+  <Spinner className="absolute m-auto inset-0" size={48} />
+)
+
+export {
+  Skeleton,
+  SkeletonList,
+  SkeletonTable,
+  Spinner,
+  PageLoader
+}

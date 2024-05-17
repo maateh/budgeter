@@ -13,4 +13,5 @@ const DialogLayout = () => {
   )
 }
 
-export default DialogLayout
+export { DialogLayout }
+export { default as DialogSkeleton } from './DialogSkeleton'
