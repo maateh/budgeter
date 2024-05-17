@@ -13,16 +13,17 @@ import { Separator } from "@/components/ui/separator"
 import BudgetSelect from "@/components/input/BudgetSelect"
 import StateToggle from "@/components/ui/custom/StateToggle"
 import TransferPreview from "@/components/form/transfer-money/components/TransferPreview"
+import ExchangeRateInput from "@/components/form/transfer-money/components/ExchangeRateInput"
 
 // types
 import { TransferMoneyFieldValues } from "@/components/form/transfer-money/types"
 
-type TransferMoneyFormFieldsProps = UseFormReturn<TransferMoneyFieldValues> & {
+type TransferMoneyFormFieldsProps = {
   isPending: boolean
   budgetId: string
-}
+} & UseFormReturn<TransferMoneyFieldValues>
 
-const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoneyFormFieldsProps) => {
+const TransferMoneyFormFields = ({ isPending, budgetId, control, resetField }: TransferMoneyFormFieldsProps) => {
   const targetBudgetIdField = useWatch({ control, name: 'targetBudgetId' })
   const paymentField = useWatch({ control, name: 'payment' })
   const customExchangeRateField = useWatch({ control, name: 'customExchangeRate' })
@@ -47,11 +48,14 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
           name="targetBudgetId"
           render={({ field }) => (
             <FormItem className="min-w-48 flex-1">
-              <FormLabel>Select Target Budget</FormLabel>
+              <FormLabel>Target Budget</FormLabel>
               <FormControl>
                 <BudgetSelect
                   value={field.value}
-                  setValue={field.onChange}
+                  setValue={(id) => {
+                    resetField('customExchangeRate')
+                    field.onChange(id)
+                  }}
                   excludeBy={{ id: budgetId }}
                 />
               </FormControl>
@@ -130,7 +134,11 @@ const TransferMoneyFormFields = ({ control, isPending, budgetId }: TransferMoney
         </div>
       </div>
 
-      {/* TODO: add custom exchange rate input */}
+      <ExchangeRateInput
+        rootBudgetId={budgetId}
+        targetBudgetId={targetBudgetIdField}
+        control={control}
+      />
 
       <Button className="sm:ml-auto sm:w-fit"
         type="submit"

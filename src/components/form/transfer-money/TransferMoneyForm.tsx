@@ -28,7 +28,8 @@ const TransferMoneyForm = ({ budgetId }: TransferMoneyFormProps) => {
           amount: 0,
           type: '+',
           processed: true
-        }
+        },
+        customExchangeRate: 0
       }}
       useSubmit={useTransferMoneySubmit}
       submitProps={{ budgetId }}
