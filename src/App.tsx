@@ -1,20 +1,19 @@
 import { Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
-import { lazily } from "react-lazily"
 
 // layouts
 import { RootLayout } from "@/_root/RootLayout"
-const { Home, Transactions, Wishlist, Splitter, BudgetDetails, Backup } = lazily(() => import('@/_root'))
+import { Home, BudgetDetails, Transactions, Wishlist, Splitter, Backup } from "@/_root"
 
 import { DialogLayout, DialogSkeleton } from "@/_dialogs/DialogLayout"
-const { CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } = lazily(() => import('@/_dialogs'))
+import { CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"
 
 import { AlertLayout, AlertSkeleton } from "@/_alerts/AlertLayout"
-const { DeleteBudget, DeleteNote, DeleteTransaction, RestoreBackup } = lazily(() => import('@/_alerts'))
+import { DeleteBudget, DeleteNote, DeleteTransaction, RestoreBackup } from "@/_alerts"
 
 // shadcn
 import { PageLoader } from "@/components/ui/skeleton"
-const { Toaster } = lazily(() => import('@/components/ui/toaster'))
+import { Toaster } from "@/components/ui/toaster"
 
 // hooks
 import { useDialog } from "@/hooks"
@@ -139,9 +138,7 @@ const App = () => {
         </Routes>
       )}
 
-      <Suspense fallback={<>Loading...</>}> {/* TODO: add skeleton */}
-        <Toaster />
-      </Suspense>
+      <Toaster />
     </>
   )
 }

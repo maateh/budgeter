@@ -1,6 +1,8 @@
-export { default as Backup } from './backup'
-export { default as BudgetDetails } from './budgets'
-export { default as Home } from './home'
-export { default as Splitter } from './splitter'
-export { default as Transactions } from './transactions'
-export { default as Wishlist } from './wishlist'
+import { lazy } from 'react'
+
+export const Backup = lazy(() => import('./backup'))
+export const BudgetDetails = lazy(() => import('./budgets'))
+export const Home = lazy(() => import('./home'))
+export const Splitter = lazy(() => import('./splitter'))
+export const Transactions = lazy(() => import('./transactions'))
+export const Wishlist = lazy(() => import('./wishlist'))

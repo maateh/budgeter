@@ -1,11 +1,13 @@
+import { lazy } from "react"
+
 // budgets
-export { default as DeleteBudget } from './budgets/delete'
+export const DeleteBudget = lazy(() => import('./budgets/delete'))
 
 // budget-note
-export { default as DeleteNote } from './budgets/notes/delete'
+export const DeleteNote = lazy(() => import('./budgets/notes/delete'))
 
 // transactions
-export { default as DeleteTransaction } from './transactions/delete'
+export const DeleteTransaction = lazy(() => import('./transactions/delete'))
 
 // backup
-export { default as RestoreBackup } from './backup/restore'
+export const RestoreBackup = lazy(() => import('./backup/restore'))

@@ -1,7 +1,9 @@
+import { lazy } from "react"
+
 // budget
-export { default as SaveBudget } from './budgets/create-edit'
-export { default as TransferMoney } from './budgets/transfer'
+export const SaveBudget = lazy(() => import('./budgets/create-edit'))
+export const TransferMoney = lazy(() => import('./budgets/transfer'))
 
 // transaction
-export { default as TransactionDetails } from './transactions/details'
-export { default as CreateTransaction } from './transactions/create'
+export const TransactionDetails = lazy(() => import('./transactions/details'))
+export const CreateTransaction = lazy(() => import('./transactions/create'))
