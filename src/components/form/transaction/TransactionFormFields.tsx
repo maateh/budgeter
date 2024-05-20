@@ -6,6 +6,7 @@ import { Handshake, Minus, Plus, Receipt, Verified, XCircle } from "lucide-react
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 import { Switch, SwitchThumb } from "@/components/ui/switch"
 
 // components
@@ -13,6 +14,7 @@ import TabsSelect from "@/components/input/TabsSelect"
 import BudgetSelect from "@/components/input/BudgetSelect"
 import DateTimePicker from "@/components/input/DateTimePicker"
 import StateToggle from "@/components/ui/custom/StateToggle"
+import CreateTransactionPreview from "./components/CreateTransactionPreview"
 
 // types
 import { TransactionFieldValues } from "@/components/form/transaction/types"
@@ -23,15 +25,9 @@ type TransactionFormFieldsProps = UseFormReturn<TransactionFieldValues> & {
 }
 
 const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps) => {
-  const typeField = useWatch({
-    control,
-    name: 'type'
-  })
-  
-  const processedField = useWatch({
-    control,
-    name: 'payment.processed'
-  })
+  const typeField = useWatch({ control, name: 'type' })
+  const budgetIdField = useWatch({ control, name: 'budgetId' })
+  const paymentFields = useWatch({ control, name: 'payment' })
 
   return (
     <>
@@ -56,6 +52,19 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
           </FormItem>
         )}
       />
+
+      <CreateTransactionPreview
+        budgetId={budgetIdField}
+        payment={{
+          ...paymentFields,
+          amount: typeField === 'default'
+            ? paymentFields.processed ? paymentFields.amount : 0
+            : paymentFields.processed ? 0 : paymentFields.amount,
+          createdAt: new Date()
+        }}
+      />
+
+      <Separator className="w-2/3 h-0.5 mx-auto rounded-full" />
 
       <div className="w-full flex flex-wrap justify-around gap-x-8 gap-y-5">
         {!budgetId && (
@@ -181,7 +190,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
         <FormField
           control={control}
           name="payment.processedAt"
-          render={({ field }) => processedField ? (
+          render={({ field }) => paymentFields.processed ? (
             <FormItem className="max-w-80">
               <FormControl>
                 <DateTimePicker
