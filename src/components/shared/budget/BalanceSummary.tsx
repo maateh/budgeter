@@ -5,48 +5,62 @@ import { AlertTriangle, BadgeInfo, Minus, Plus } from "lucide-react"
 import { BadgeTooltip } from "@/components/ui/badge"
 
 // components
-import InfoBadge from "@/components/ui/custom/InfoBadge"
-import BalanceBadge from "@/components/shared/budget/ui/BalanceBadge"
+import InfoBadge, { InfoBadgeProps } from "@/components/ui/custom/InfoBadge"
+import BalanceBadge, { BalanceBadgeProps } from "@/components/shared/budget/ui/BalanceBadge"
 
 // types
 import { Balance } from "@/services/api/types"
 
 // utils
 import { formatWithCurrency } from "@/utils"
+import { cn } from "@/lib/utils"
 
 type BalanceSummaryProps = {
   balance: Balance
+  showIncomeAndLoss?: boolean
+  balanceBadgeProps?: Omit<BalanceBadgeProps, 'balance'>
+  incomeAndLossBadgeProps?: Omit<InfoBadgeProps, 'label' | 'value' | 'icon'>
+  borrowmentsBadgeProps?: Omit<InfoBadgeProps, 'variant' | 'label' | 'value' | 'icon'>
 }
 
-const BalanceSummary = ({ balance }: BalanceSummaryProps) => {
+const BalanceSummary = ({
+  balance, showIncomeAndLoss = false,
+  balanceBadgeProps,
+  incomeAndLossBadgeProps,
+  borrowmentsBadgeProps
+}: BalanceSummaryProps) => {
   return (
     <div className="flex flex-col gap-y-3.5">
       <div className="flex flex-col items-center gap-5 small-caps">
-        <BalanceBadge className="w-full px-8 py-3 max-w-72 min-w-48"
-          size="lg"
-          iconSize={22}
+        <BalanceBadge {...balanceBadgeProps}
+          className={cn("w-full px-8 py-3 max-w-72 min-w-48", balanceBadgeProps?.className)}
+          size={balanceBadgeProps?.size || 'lg'}
+          iconProps={{ size: 22, strokeWidth: 2.5 }}
           balance={balance}
-          showLabel
         />
       </div>
 
-      <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2">
-        <InfoBadge className="text-accent border-accent bg-background/65"
-          separatorProps={{ className: "h-4" }}
-          size="sm"
-          orientation="vertical"
-          label="Income"
-          value={formatWithCurrency(balance.income, balance.currency)}
-        />
-
-        <InfoBadge className="text-destructive border-destructive bg-background/65"
-          separatorProps={{ className: "h-4" }}
-          size="sm"
-          orientation="vertical"
-          label="Loss"
-          value={formatWithCurrency(balance.loss, balance.currency)}
-        />
-      </div>
+      {showIncomeAndLoss && (
+        <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2">
+          <InfoBadge {...incomeAndLossBadgeProps}
+            className={cn("text-accent border-accent bg-background/65", incomeAndLossBadgeProps?.className)}
+            separatorProps={incomeAndLossBadgeProps?.separatorProps || { className: "h-4" }}
+            size={incomeAndLossBadgeProps?.size || 'sm'}
+            orientation={incomeAndLossBadgeProps?.orientation || 'vertical'}
+            label="Income"
+            value={formatWithCurrency(balance.income, balance.currency)}
+          />
+  
+          <InfoBadge {...incomeAndLossBadgeProps}
+            className={cn("text-destructive border-destructive bg-background/65", incomeAndLossBadgeProps?.className)}
+            separatorProps={incomeAndLossBadgeProps?.separatorProps || { className: "h-4" }}
+            size={incomeAndLossBadgeProps?.size || 'sm'}
+            orientation={incomeAndLossBadgeProps?.orientation || 'vertical'}
+            label="Loss"
+            value={formatWithCurrency(balance.loss, balance.currency)}
+          />
+        </div>
+      )}
 
       <div className="space-y-2.5">
         <h3 className="mt-3.5 mx-auto px-3.5 indent-border">
@@ -71,10 +85,11 @@ const BalanceSummary = ({ balance }: BalanceSummaryProps) => {
               <BadgeInfo className="text-muted-foreground" size={20} />
             </BadgeTooltip>
 
-            <InfoBadge className="flex-1 h-fit px-6 py-2 min-w-36 max-w-80"
-              separatorProps={{ className: "h-5" }}
-              orientation="vertical"
-              size="sm"
+            <InfoBadge {...borrowmentsBadgeProps}
+              className={cn("flex-1 h-fit px-6 py-2 min-w-36 max-w-80", borrowmentsBadgeProps?.className)}
+              separatorProps={borrowmentsBadgeProps?.separatorProps || { className: "h-5" }}
+              orientation={borrowmentsBadgeProps?.orientation || 'vertical'}
+              size={borrowmentsBadgeProps?.size || 'sm'}
               variant="accent"
               label="Borrowments"
               value={formatWithCurrency(balance.borrowment.plus, balance.currency)}
@@ -83,10 +98,11 @@ const BalanceSummary = ({ balance }: BalanceSummaryProps) => {
           </div>
 
           <div className="flex-1 flex justify-center gap-x-1.5">
-            <InfoBadge className="flex-1 h-fit px-6 py-2 min-w-36 max-w-80"
-              separatorProps={{ className: "h-5" }}
-              orientation="vertical"
-              size="sm"
+            <InfoBadge {...borrowmentsBadgeProps}
+              className={cn("flex-1 h-fit px-6 py-2 min-w-36 max-w-80", borrowmentsBadgeProps?.className)}
+              separatorProps={borrowmentsBadgeProps?.separatorProps || { className: "h-5" }}
+              orientation={borrowmentsBadgeProps?.orientation || 'vertical'}
+              size={borrowmentsBadgeProps?.size || 'sm'}
               variant="destructive"
               label="Borrowments"
               value={formatWithCurrency(balance.borrowment.minus, balance.currency)}

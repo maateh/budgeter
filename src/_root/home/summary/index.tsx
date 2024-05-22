@@ -1,5 +1,9 @@
+// shadcn
+import { Separator } from "@/components/ui/separator"
+
 // components
 import { BalanceSummary, BalanceSummarySkeleton } from "@/components/shared/budget/BalanceSummary"
+import SummaryFilter from "./filter"
 
 // hooks
 import { useSummarizedBalance } from "@/lib/react-query/queries"
@@ -15,14 +19,26 @@ const Summary = () => {
         </h2>
       </div>
 
-      {/* TODO: option to multiply balance by a given currency */}
-      {/* TODO: option to filter summary by a given currency */}
+      <div className="px-4 py-5 bg-primary/40 rounded-[2rem] shadow-border/15 shadow-lg drop-shadow-md">
+        <SummaryFilter />
 
-      {!isBalanceLoading && balance ? (
-        <BalanceSummary balance={balance} />
-      ) : (
-        <BalanceSummarySkeleton />
-      )}
+        <Separator className="w-4/5 h-0.5 mx-auto my-4 rounded-full" />
+
+        {!isBalanceLoading && balance ? (
+          <BalanceSummary balance={balance}
+            balanceBadgeProps={{
+              className: 'w-full px-5 py-2 max-w-56 min-w-32',
+              size: 'default',
+              customLabel: 'Total Balance'
+            }}
+            borrowmentsBadgeProps={{
+              className: 'max-w-72 py-1.5',
+              size: 'sm',
+              valueProps: { className: 'text-sm font-medium' }
+            }}
+          />
+        ) : <BalanceSummarySkeleton />}
+      </div>
     </>
   )
 }

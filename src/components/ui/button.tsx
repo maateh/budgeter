@@ -21,6 +21,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-9 px-3 py-3 text-sm tracking-wide shadow-md sm:h-10 sm:px-4 sm:text-base",
+        xs: "w-fit h-fit px-2 py-1 text-xs",
         sm: "h-8 px-2.5 text-sm shadow-sm sm:h-9 sm:px-3",
         lg: "h-10 px-3.5 text-base tracking-wide shadow-md sm:h-11 sm:px-4 sm:text-lg",
         xl: "h-11 px-4 text-base tracking-wide shadow-lg sm:h-12 sm:px-5 sm:text-lg",
