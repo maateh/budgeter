@@ -2,14 +2,11 @@ import { UseFormReturn } from "react-hook-form"
 
 // shadcn
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 
 // components
+import CurrencySelect from "@/components/input/CurrencySelect"
 import ColorPicker from "@/components/input/ColorPicker"
-
-// hooks
-import { useCurrencies } from "@/lib/react-query/queries"
 
 // types
 import { BudgetFieldValues } from "@/components/form/budget/types"
@@ -20,11 +17,6 @@ type BudgetFormFieldsProps = UseFormReturn<BudgetFieldValues> & {
 }
 
 const BudgetFormFields = ({ type, disabled, control }: BudgetFormFieldsProps) => {  
-  const {
-    data: currencies,
-    isLoading: currenciesIsLoading
-  } = useCurrencies()
-
   return (
     <>
       <div className="w-full flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
@@ -51,28 +43,12 @@ const BudgetFormFields = ({ type, disabled, control }: BudgetFormFieldsProps) =>
           <FormField
             control={control}
             name="balance.currency"
-            disabled={!currencies || currenciesIsLoading}
             render={({ field }) => (
               <FormItem className="min-w-36 flex-1">
                 <FormLabel>Currency</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {currencies && currencies.map(([key, currency]) => (
-                        <SelectItem key={key} value={key}>
-                          <span className="font-semibold mr-2 pr-2 border-r">{key}</span>
-                          <span className="font-medium">{currency}</span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <FormControl>
+                  <CurrencySelect {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
