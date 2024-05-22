@@ -31,7 +31,7 @@ const RelatedTransactionsFormFields = ({ control, isPending, transaction }: Rela
             <FormControl>
               <TransactionMultiSelect
                 selected={field.value}
-                setSelected={field.onChange}
+                onSelect={field.onChange}
                 filter={{ excludeBy: { id: [transaction.id, ...transaction.relatedIds] }}}
               />
             </FormControl>

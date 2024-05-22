@@ -14,15 +14,15 @@ export type OptionType = {
   value: string
 }
 
-export interface MultiSelectProps extends ButtonProps {
+export interface MultiSelectProps extends Omit<ButtonProps, 'onSelect'> {
   options: OptionType[]
   selected: string[]
-  setSelected: (value: string[]) => void
+  onSelect: (value: string[]) => void
   commandProps?: CommandProps
 }
 
 function MultiSelect({
-  options, selected, setSelected, commandProps,
+  options, selected, onSelect, commandProps,
   className, variant = "outline", ...props
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
@@ -32,12 +32,12 @@ function MultiSelect({
       ? selected.filter((item) => item !== option.value)
       : [...selected, option.value]
 
-    setSelected(values)
+    onSelect(values)
     setOpen(true)
   }
 
   const handleUnselect = (item: string) => {
-    setSelected(selected.filter((i) => i !== item))
+    onSelect(selected.filter((i) => i !== item))
   }
 
   const getLabel = (value: string): string => {

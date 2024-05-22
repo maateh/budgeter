@@ -3,15 +3,15 @@ import { Input, InputProps } from "@/components/ui/input"
 import { forwardRef } from "react"
 
 type FileInputProps = {
-  setFileContent: React.Dispatch<React.SetStateAction<string | null>>
+  onFileChange: React.Dispatch<React.SetStateAction<string | null>>
 } & InputProps
 
-const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ setFileContent, ...props }, ref) => {
+const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ onFileChange, ...props }, ref) => {
   const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0]
 
     if (!selectedFile) {
-      setFileContent(null)
+      onFileChange(null)
       return
     }
     
@@ -19,7 +19,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ setFileContent
     reader.readAsText(selectedFile)
     reader.onload = (e) => {
       const content = e.target?.result
-      setFileContent(content as string)
+      onFileChange(content as string)
     }
   }
 

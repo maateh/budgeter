@@ -1,3 +1,5 @@
+import { forwardRef } from "react"
+
 // shadcn
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectTriggerProps, SelectValue } from "@/components/ui/select"
 
@@ -10,10 +12,12 @@ import { Budget, FilterOptions } from "@/services/api/types"
 
 type BudgetSelectProps = {
   value?: string
-  setValue: (id: string) => void
-} & FilterOptions<Budget> & Omit<SelectTriggerProps, 'value'>
+  onChange: (id: string) => void
+} & FilterOptions<Budget> & Omit<SelectTriggerProps, 'value' | 'onChange'>
 
-const BudgetSelect = ({ value, setValue, filterBy, excludeBy, ...props }: BudgetSelectProps) => {
+const BudgetSelect = forwardRef<HTMLButtonElement, BudgetSelectProps>(({
+  value, onChange, filterBy, excludeBy, ...props
+}, ref) => {
   const { data: budgets, isLoading } = useBudgets({
     filter: { filterBy, excludeBy }
   })
@@ -21,10 +25,10 @@ const BudgetSelect = ({ value, setValue, filterBy, excludeBy, ...props }: Budget
   return (
     <Select
       value={value}
-      onValueChange={setValue}
+      onValueChange={onChange}
       disabled={!budgets || isLoading}
     >
-      <SelectTrigger className={cn(!value && "text-muted-foreground")} {...props}>
+      <SelectTrigger className={cn(!value && "text-muted-foreground")} ref={ref} {...props}>
         <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
@@ -36,6 +40,6 @@ const BudgetSelect = ({ value, setValue, filterBy, excludeBy, ...props }: Budget
       </SelectContent>
     </Select>
   )
-}
+})
 
 export default BudgetSelect

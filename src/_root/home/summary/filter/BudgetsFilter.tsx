@@ -8,7 +8,7 @@ const BudgetsFilter = () => {
       {() => (
         <BudgetMultiSelect
           selected={[]}
-          onChange={() => {}}
+          onSelect={() => {}}
         />
       )}
     </FilterInput>

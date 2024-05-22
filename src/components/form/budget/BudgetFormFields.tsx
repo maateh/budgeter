@@ -62,12 +62,9 @@ const BudgetFormFields = ({ type, disabled, control }: BudgetFormFieldsProps) =>
         disabled={disabled}
         render={({ field }) => (
           <FormItem className="flex items-center gap-x-2.5">
-            <FormLabel htmlFor="theme">Custom Theme Color</FormLabel>
+            <FormLabel>Custom Theme Color</FormLabel>
             <FormControl>
-              <ColorPicker id="theme"
-                color={field.value}
-                onChange={field.onChange}
-              />
+              <ColorPicker {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

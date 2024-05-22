@@ -45,7 +45,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
                   { value: 'default', Icon: Receipt },
                   { value: 'borrow', Icon: Handshake }
                 ]}
-                setValue={field.onChange}
+                onChange={field.onChange}
               />
             </FormControl>
             <FormMessage />
@@ -75,10 +75,7 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
               <FormItem className="min-w-36 flex-1">
                 <FormLabel>Select a Budget</FormLabel>
                 <FormControl>
-                  <BudgetSelect
-                    value={field.value}
-                    setValue={field.onChange}
-                  />
+                  <BudgetSelect {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

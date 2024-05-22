@@ -1,3 +1,5 @@
+import { forwardRef } from 'react'
+
 // react-colorful
 import { HexColorPicker } from 'react-colorful'
 
@@ -9,31 +11,32 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from '@/lib/utils'
 
 type ColorPickerProps = {
-  color: string
+  value: string
   onChange: React.Dispatch<React.SetStateAction<string>>
 } & ButtonProps
 
-const ColorPicker = ({
-  color, onChange,
-  className, size = 'icon', style = { backgroundColor: color }, ...props
-}: ColorPickerProps) => {
+const ColorPicker = forwardRef<HTMLButtonElement, ColorPickerProps>(({
+  value, onChange,
+  className, size = 'icon', style = { backgroundColor: value }, ...props
+}, ref) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button className={cn("w-8 h-8 rounded-md border-[3px] border-border shadow-md cursor-pointer", className)}
           size={size}
           style={style}
+          ref={ref}
           {...props}
         />
       </PopoverTrigger>
       <PopoverContent>
         <HexColorPicker
-          color={color}
+          color={value}
           onChange={onChange}
         />
       </PopoverContent>
     </Popover>
   )
-}
+})
 
 export default ColorPicker

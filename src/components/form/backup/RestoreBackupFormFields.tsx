@@ -32,7 +32,7 @@ const RestoreBackupFormFields = ({ control }: RestoreBackupFormFieldsProps) => {
             <FormLabel>Select a Backup File</FormLabel>
             <FormControl>
               <FileInput
-                setFileContent={(value) => {
+                onFileChange={(value) => {
                   field.onChange(JSON.parse(value as string))
                 }}
               />

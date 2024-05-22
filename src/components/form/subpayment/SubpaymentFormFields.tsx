@@ -29,10 +29,7 @@ const SubpaymentFormFields = ({ control, isPending }: SubpaymentFormFieldsProps)
           <FormItem className="min-w-36 flex-1">
             <FormLabel>Budget to Credit</FormLabel>
             <FormControl>
-              <BudgetSelect
-                value={field.value}
-                setValue={field.onChange}
-              />
+              <BudgetSelect {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

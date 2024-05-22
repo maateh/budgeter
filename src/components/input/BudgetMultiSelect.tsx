@@ -7,17 +7,17 @@ import { Budget, FilterOptions } from "@/services/api/types"
 
 type BudgetMultiSelectProps = {
   selected: string[]
-  onChange: (ids: React.SetStateAction<string[]>) => void
+  onSelect: (ids: React.SetStateAction<string[]>) => void
   filter?: FilterOptions<Budget>
 } & Omit<MultiSelectProps, 'options'>
 
-const BudgetMultiSelect = ({ selected, onChange, filter }: BudgetMultiSelectProps) => {
+const BudgetMultiSelect = ({ selected, onSelect, filter }: BudgetMultiSelectProps) => {
   const { data: budgets, isLoading } = useBudgets({ filter })
 
   return (
     <MultiSelect
       selected={selected}
-      setSelected={onChange}
+      onSelect={onSelect}
       disabled={isLoading || !budgets}
       options={budgets ? budgets.reduce((options, budget) => ([
         ...options, {

@@ -8,7 +8,7 @@ const CurrenciesFilter = () => {
       {() => (
         <CurrencyMultiSelect
           selected={[]}
-          onChange={() => {}}
+          onSelect={() => {}}
         />
       )}
     </FilterInput>

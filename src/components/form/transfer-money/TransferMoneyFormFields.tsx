@@ -52,7 +52,7 @@ const TransferMoneyFormFields = ({ isPending, budgetId, control, resetField }: T
               <FormControl>
                 <BudgetSelect
                   value={field.value}
-                  setValue={(id) => {
+                  onChange={(id) => {
                     resetField('customExchangeRate')
                     field.onChange(id)
                   }}

@@ -29,7 +29,7 @@ const BasicFilter = () => {
         {(filterKey) => (
           <BudgetSelect id="budgetId"
             value={filterEntries.budgetId as string}
-            setValue={(id) => setFilterEntry(filterKey, { budgetId: id })}
+            onChange={(id) => setFilterEntry(filterKey, { budgetId: id })}
             key={filterEntries.budgetId as string}
           />
         )}

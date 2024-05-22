@@ -11,19 +11,18 @@ export type TabItem<T extends string> = {
 type TabsSelectProps<T extends string> = {
   tabItems: TabItem<T>[]
   defaultValue?: T
-  setValue: React.Dispatch<React.SetStateAction<T>>
-  ref?: React.Ref<HTMLDivElement>
-} & TabsListProps
+  onChange: React.Dispatch<React.SetStateAction<T>>
+} & Omit<TabsListProps, 'onChange'>
 
-function TabsSelect<T extends string>({ tabItems, defaultValue, setValue, children, ref, ...props }: TabsSelectProps<T>) {
+function TabsSelect<T extends string>({ tabItems, defaultValue, onChange, children, ...props }: TabsSelectProps<T>) {
   return (
     <Tabs defaultValue={defaultValue || tabItems[0].value}>
-      <TabsList {...props} ref={ref}>
+      <TabsList {...props}>
         {tabItems.map(({ value, Icon }) => (
           <TabsTrigger className="icon-wrapper"
             key={value}
             value={value}
-            onClick={() => setValue(value)}
+            onClick={() => onChange(value)}
           >
             <Icon />
             <p className="font-heading small-caps">{value}</p>
