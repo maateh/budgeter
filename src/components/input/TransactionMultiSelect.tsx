@@ -10,11 +10,12 @@ import { FilterOptions, Transaction } from "@/services/api/types"
 type TransactionMultiSelectProps = {
   selected: string[]
   setSelected: (ids: React.SetStateAction<string[]>) => void
-} & FilterOptions<Transaction> & Omit<MultiSelectProps, 'options'>
+  filter?: FilterOptions<Transaction>
+} & Omit<MultiSelectProps, 'options'>
 
-const TransactionMultiSelect = ({ selected, setSelected, filterBy, excludeBy }: TransactionMultiSelectProps) => {
+const TransactionMultiSelect = ({ selected, setSelected, filter }: TransactionMultiSelectProps) => {
   const { data: transactions, isLoading } = useTransactions({
-    filter: { filterBy, excludeBy },
+    filter,
     sortBy: { updatedAt: -1 }
   })
 
@@ -22,13 +23,13 @@ const TransactionMultiSelect = ({ selected, setSelected, filterBy, excludeBy }: 
     <MultiSelect
       selected={selected}
       setSelected={setSelected}
+      disabled={isLoading || !transactions}
       options={transactions ? transactions.reduce((options, tr) => ([
         ...options,{
           label: tr.name,
           value: tr.id
         }
       ]), [] as OptionType[]) : []}
-      disabled={isLoading}
     />
   )
 }
