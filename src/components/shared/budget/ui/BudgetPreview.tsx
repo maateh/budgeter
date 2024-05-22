@@ -98,8 +98,9 @@ const BudgetPreview = ({ budget }: BudgetPreviewProps) => {
             separatorProps={{ className: "h-3" }}
             orientation="vertical"
             size="sm"
-            iconSize={18}
+            iconProps={{ size: 18 }}
             balance={budget.balance}
+            customLabel=""
           />
         </div>
       </div>

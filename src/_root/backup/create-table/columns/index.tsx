@@ -24,7 +24,7 @@ export const columns: ColumnDef<Budget>[] = [
         separatorProps={{ className: "h-4" }}
         orientation="vertical"
         size="xs"
-        iconSize={18}
+        iconProps={{ size: 18 }}
         balance={row.original.balance}
       />
     )

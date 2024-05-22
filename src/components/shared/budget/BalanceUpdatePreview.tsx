@@ -29,7 +29,7 @@ const BalanceUpdatePreview = ({ budget, payment }: BalanceUpdatePreviewProps) =>
           separatorProps={{ className: "h-4" }}
           orientation="vertical"
           size="sm"
-          iconSize={18}
+          iconProps={{ size: 18 }}
           balance={budget.balance}
         />
 
@@ -47,7 +47,7 @@ const BalanceUpdatePreview = ({ budget, payment }: BalanceUpdatePreviewProps) =>
           separatorProps={{ className: "h-4" }}
           orientation="vertical"
           size="sm"
-          iconSize={18}
+          iconProps={{ size: 18 }}
           balance={{
             ...budget.balance,
             current: budget.balance.current - (payment.type === '+' ? -payment.amount : payment.amount)
