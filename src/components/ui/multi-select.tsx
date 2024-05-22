@@ -48,23 +48,23 @@ function MultiSelect({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button className={cn("w-full h-fit justify-between", className)}
+        <Button className={cn("w-full flex-1 h-fit sm:h-fit justify-between rounded-3xl", className)}
           variant={variant}
           role="combobox"
           aria-expanded={open}
           onClick={() => setOpen((open) => !open)}
           {...props}
         >
-          <div className="flex flex-wrap gap-x-2 gap-y-1.5">
+          <div className="w-5/6 max-w-fit flex flex-wrap gap-x-2 gap-y-1 sm:w-11/12">
             {selected.length ? selected.map((item) => (
-              <Badge className="px-2.5 py-0.5 icon-wrapper"
+              <Badge className="w-full max-w-fit px-2.5 py-0.5 icon-wrapper"
                 variant="secondary"
                 size="sm"
                 key={item}
                 onClick={() => handleUnselect(item)}
               >
-                <span>{getLabel(item)}</span>
-                <a className="border ring-offset-background rounded-full outline-none hover:ring-2 hover:ring-destructive hover:ring-offset focus:ring-2 focus:ring-destructive focus:ring-offset"
+                <span className="truncate">{getLabel(item)}</span>
+                <a className="border ring-offset-background rounded-full outline-none hover:ring-1 hover:ring-destructive hover:ring-offset focus:ring-1 focus:ring-destructive focus:ring-offset"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleUnselect(item)
@@ -76,13 +76,11 @@ function MultiSelect({
                   }}
                   onClick={() => handleUnselect(item)}
                 >
-                  <X className="text-muted-foreground hover:text-destructive focus:text-destructive"
-                    size={14}
-                  />
+                  <X className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive focus:text-destructive" />
                 </a>
               </Badge>
             )) : (
-              <span className="text-muted-foreground">
+              <span className="text-sm font-normal text-muted-foreground truncate">
                 Select from available options...
               </span>
             )}

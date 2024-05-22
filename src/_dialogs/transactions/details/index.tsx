@@ -46,7 +46,7 @@ const TransactionDetails = () => {
               <span className="text-base font-normal">Related transactions</span>
             </div>
           </AccordionTrigger>
-          <AccordionContent className="w-5/6 mx-auto">
+          <AccordionContent className="w-11/12 mx-auto sm:w-5/6">
             <RelatedTransactions
               transaction={transaction}
               budget={transaction.budget}
