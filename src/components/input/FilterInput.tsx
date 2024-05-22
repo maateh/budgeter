@@ -107,27 +107,25 @@ function FilterInput({
         </div>
       )}
 
-      <div className="flex flex-wrap-reverse justify-end items-center">
-        {children ? children(type) : (
-          <Select
-            value={value}
-            onValueChange={(value) => setValue(value, type)}
+      {children ? children(type) : (
+        <Select
+          value={value}
+          onValueChange={(value) => setValue(value, type)}
+        >
+          <SelectTrigger {...triggerProps}
+            className={cn(!value && "text-muted-foreground", triggerProps?.className)}
           >
-            <SelectTrigger {...triggerProps}
-              className={cn(!value && "text-muted-foreground", triggerProps?.className)}
-            >
-              <SelectValue placeholder="Choose..." />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map(({ value, label }) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-      </div>
+            <SelectValue placeholder="Choose..." />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map(({ value, label }) => (
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
     </div>
   )
 }
