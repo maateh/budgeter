@@ -3,13 +3,15 @@ import { Separator } from "@/components/ui/separator"
 
 // components
 import { BalanceSummary, BalanceSummarySkeleton } from "@/components/shared/budget/BalanceSummary"
-import SummaryFilter from "./filter"
+import ManageSummary from "./manage"
 
 // hooks
 import { useSummarizedBalance } from "@/lib/react-query/queries"
+import { useManageSummary } from "./manage/context"
 
 const Summary = () => {
-  const { data: balance, isLoading: isBalanceLoading } = useSummarizedBalance('HUF')
+  const { currency } = useManageSummary()
+  const { data: balance, isLoading: isBalanceLoading } = useSummarizedBalance(currency)
 
   return (
     <>
@@ -20,7 +22,7 @@ const Summary = () => {
       </div>
 
       <div className="px-4 py-5 bg-primary/40 rounded-[2rem] shadow-border/10 shadow-md drop-shadow-md">
-        <SummaryFilter />
+        <ManageSummary />
 
         <Separator className="w-4/5 h-0.5 mx-auto my-4 rounded-full" />
 
