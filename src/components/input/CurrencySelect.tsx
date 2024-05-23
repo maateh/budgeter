@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 type CurrencySelectProps = {
   value?: string
   onChange: (id: string) => void
-} & Omit<SelectTriggerProps, 'value'>
+} & Omit<SelectTriggerProps, 'value' | 'onChange'>
 
 const CurrencySelect = forwardRef<HTMLButtonElement, CurrencySelectProps>(({ value, onChange, ...props }, ref) => {
   const { data: currencies, isLoading } = useCurrencies()

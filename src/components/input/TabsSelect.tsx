@@ -12,7 +12,7 @@ type TabsSelectProps<T extends string> = {
   tabItems: TabItem<T>[]
   defaultValue?: T
   onChange: React.Dispatch<React.SetStateAction<T>>
-} & Omit<TabsListProps, 'onChange'>
+} & Omit<TabsListProps, 'defaultValue' | 'onChange'>
 
 function TabsSelect<T extends string>({ tabItems, defaultValue, onChange, children, ...props }: TabsSelectProps<T>) {
   return (

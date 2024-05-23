@@ -13,7 +13,7 @@ type TransactionMultiSelectProps = {
   filter?: FilterOptions<Transaction>
 } & Omit<MultiSelectProps, 'options'>
 
-const TransactionMultiSelect = ({ selected, onSelect, filter }: TransactionMultiSelectProps) => {
+const TransactionMultiSelect = ({ selected, onSelect, filter, ...props }: TransactionMultiSelectProps) => {
   const { data: transactions, isLoading } = useTransactions({
     filter,
     sortBy: { updatedAt: -1 }
@@ -30,6 +30,7 @@ const TransactionMultiSelect = ({ selected, onSelect, filter }: TransactionMulti
           value: tr.id
         }
       ]), [] as OptionType[]) : []}
+      {...props}
     />
   )
 }

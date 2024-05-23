@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 type ColorPickerProps = {
   value: string
   onChange: React.Dispatch<React.SetStateAction<string>>
-} & ButtonProps
+} & Omit<ButtonProps, 'value' | 'onChange'>
 
 const ColorPicker = forwardRef<HTMLButtonElement, ColorPickerProps>(({
   value, onChange,
