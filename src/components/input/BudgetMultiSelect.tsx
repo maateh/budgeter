@@ -11,7 +11,7 @@ type BudgetMultiSelectProps = {
   filter?: FilterOptions<Budget>
 } & Omit<MultiSelectProps, 'options'>
 
-const BudgetMultiSelect = ({ selected, onSelect, filter }: BudgetMultiSelectProps) => {
+const BudgetMultiSelect = ({ selected, onSelect, filter, ...props }: BudgetMultiSelectProps) => {
   const { data: budgets, isLoading } = useBudgets({ filter })
 
   return (
@@ -25,6 +25,7 @@ const BudgetMultiSelect = ({ selected, onSelect, filter }: BudgetMultiSelectProp
           value: budget.id
         }
       ]), [] as OptionType[]) : []}
+      {...props}
     />
   )
 }

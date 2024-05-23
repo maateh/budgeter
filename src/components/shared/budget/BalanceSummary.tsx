@@ -35,7 +35,7 @@ const BalanceSummary = ({
         <BalanceBadge {...balanceBadgeProps}
           className={cn("w-full px-8 py-3 max-w-72 min-w-48", balanceBadgeProps?.className)}
           size={balanceBadgeProps?.size || 'lg'}
-          iconProps={{ size: 22, strokeWidth: 2.5 }}
+          iconProps={balanceBadgeProps?.iconProps || { size: 22, strokeWidth: 2.5 }}
           balance={balance}
         />
       </div>

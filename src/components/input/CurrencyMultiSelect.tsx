@@ -9,7 +9,7 @@ type CurrencyMultiSelectProps = {
   onSelect: (ids: React.SetStateAction<string[]>) => void
 } & Omit<MultiSelectProps, 'options'>
 
-const CurrencyMultiSelect = ({ selected, onSelect }: CurrencyMultiSelectProps) => {
+const CurrencyMultiSelect = ({ selected, onSelect, ...props }: CurrencyMultiSelectProps) => {
   const { data: currencies, isLoading } = useCurrencies()
 
   return (
@@ -23,6 +23,7 @@ const CurrencyMultiSelect = ({ selected, onSelect }: CurrencyMultiSelectProps) =
           value: code
         }
       ]), [] as OptionType[]) : []}
+      {...props}
     />
   )
 }
