@@ -10,7 +10,7 @@ const SummaryFilter = () => {
   /* TODO: option to calculate balance by a given currency (baseCurrency) */
 
   return (
-    <div className="flex flex-wrap justify-between items-center gap-x-8 gap-y-4">
+    <div className="flex flex-wrap justify-between items-end gap-x-8 gap-y-4">
       <FilterInput className="flex-auto w-3/5 min-w-40 gap-y-1"
         labelProps={{ htmlFor: 'budgets' }} // TODO: replace with type
         label={<TypeSelect />}
@@ -30,13 +30,13 @@ const SummaryFilter = () => {
         )}
       </FilterInput>
 
-      <FilterInput className="flex-auto w-1/5 min-w-32 max-w-56 ml-auto justify-center gap-y-1"
+      <FilterInput className="flex-auto w-1/5 min-w-36 max-w-56 ml-auto gap-y-1"
         labelProps={{ className: 'indent-border', htmlFor: 'currency' }}
         label={<><span className="text-accent overline">Calculate</span> by</>}
         onReset={() => {}}
       >
         {() => (
-          <CurrencySelect className="h-10 bg-background/50 rounded-full"
+          <CurrencySelect className="h-fit py-2.5 bg-background/50 rounded-full"
             id="currency"
             onChange={() => {}} // TODO:
           />

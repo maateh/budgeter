@@ -4,7 +4,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const TypeSelect = () => {
   return (
-    <div className="flex items-center gap-x-3">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
       <p className="text-base font-heading indent-border">
         <span className="text-accent overline">Filter</span> by
       </p>
