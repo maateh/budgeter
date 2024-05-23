@@ -12,6 +12,9 @@ import Transactions from "@/components/shared/transaction/Transactions"
 import Budgets from "./budgets"
 import Summary from "./summary"
 
+// context
+import { SummaryProvider } from "./summary/filter/context"
+
 const Home = () => {
   const navigate = useNavigate()
 
@@ -34,7 +37,9 @@ const Home = () => {
       <div className="w-full flex flex-col justify-between gap-x-8 gap-y-10 md:flex-row">
         <div className="flex-1 w-full min-w-60 flex flex-col gap-y-4 md:min-w-80 md:max-w-4xl">
           <section className="w-full section-wrapper">
-            <Summary />
+            <SummaryProvider currency="HUF"> {/* TODO: set default currency based on... (?) */}
+              <Summary />
+            </SummaryProvider>
           </section>
 
           <Separator />
