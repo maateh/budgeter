@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 
 // icons
-import { Eraser, Filter, FilterX } from "lucide-react"
+import { Filter, FilterX, X } from "lucide-react"
 
 // shadcn
 import { ButtonTooltip } from "@/components/ui/button"
@@ -83,7 +83,7 @@ function FilterInput({
                   onClick={() => onReset(type)}
                   tooltip="Clear filter"
                 >
-                  <Eraser size={14} strokeWidth={2.5} />
+                  <X className="size-3 text-destructive/75" strokeWidth={4} />
                 </ButtonTooltip>
               )}
               {onTypeChange && (
@@ -91,8 +91,8 @@ function FilterInput({
                   status={type === 'filterBy' ? 'on' : 'off'}
                   onClick={handleTypeChange}
                   icon={{
-                    on: <Filter className="text-accent" size={16} strokeWidth={2.5} />,
-                    off: <FilterX className="text-destructive" size={16} strokeWidth={2.5} />
+                    on: <Filter className="size-3.5 text-accent" strokeWidth={2.5} />,
+                    off: <FilterX className="size-3.5 text-destructive" strokeWidth={2.5} />
                   }}
                   tooltip={{
                     on: "Switch to exclude",

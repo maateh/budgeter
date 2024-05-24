@@ -5,10 +5,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectTriggerProps, S
 
 // hooks
 import { useBudgets } from "@/lib/react-query/queries"
-import { cn } from "@/lib/utils"
 
 // types
 import { Budget, FilterOptions } from "@/services/api/types"
+
+// utils
+import { cn } from "@/lib/utils"
 
 type BudgetSelectProps = {
   value?: string

@@ -1,5 +1,5 @@
 // shadcn
-import { MultiSelect, MultiSelectProps, OptionType } from "@/components/ui/multi-select"
+import { MultiSelect, MultiSelectProps } from "@/components/ui/multi-select"
 
 // hooks
 import { useTransactions } from "@/lib/react-query/queries"
@@ -24,12 +24,7 @@ const TransactionMultiSelect = ({ selected, onSelect, filter, ...props }: Transa
       selected={selected}
       onSelect={onSelect}
       disabled={isLoading || !transactions}
-      options={transactions ? transactions.reduce((options, tr) => ([
-        ...options,{
-          label: tr.name,
-          value: tr.id
-        }
-      ]), [] as OptionType[]) : []}
+      options={transactions ? transactions.map((tr) => ({ label: tr.name, value: tr.id })) : []}
       {...props}
     />
   )

@@ -1,6 +1,7 @@
+import { forwardRef } from "react"
+
 // shadcn
 import { Input, InputProps } from "@/components/ui/input"
-import { forwardRef } from "react"
 
 type FileInputProps = {
   onFileChange: React.Dispatch<React.SetStateAction<string | null>>
