@@ -4,7 +4,7 @@ import { z } from "zod"
 import { IBudgetAPI } from "@/services/api/interfaces"
 
 // types
-import { Balance, Budget, Pagination, QueryOptions } from "@/services/api/types"
+import { Balance, Budget, Filter, Pagination, QueryOptions } from "@/services/api/types"
 import { BudgetDocument } from "@/services/storage/types"
 
 // validations
@@ -46,10 +46,11 @@ class BudgetStorageAPI implements IBudgetAPI {
     return paginate(budgets, { params, sortBy })
   }
 
-  public async getSummarizedBalance(currency: string): Promise<Balance> {
+  public async getSummarizedBalance(currency: string, filterBy?: Filter<Budget>): Promise<Balance> {
     const exchangeApi = ExchangeAPI.getInstance()
 
-    const budgets = await this.storage.find()
+    const budgets = await this.storage.find({ filterBy })
+    
     if (!budgets || !budgets.length) {
       throw new Error('There is no budget to summarize.')
     }

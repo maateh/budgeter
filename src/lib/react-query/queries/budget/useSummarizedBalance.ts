@@ -4,14 +4,18 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query"
 import { useAPI } from "@/services/providers/api/APIContext.hooks"
 
 // types
-import { Balance } from "@/services/api/types"
+import { Balance, Budget, Filter } from "@/services/api/types"
 
-const useSummarizedBalance = (currency: string, options?: Omit<UseQueryOptions<Balance>, 'queryKey' | 'queryFn'>) => {
+const useSummarizedBalance = (
+  currency: string,
+  filterBy?: Filter<Budget>,
+  options?: Omit<UseQueryOptions<Balance>, 'queryKey' | 'queryFn'>
+) => {
   const { api } = useAPI()
 
   return useQuery({
-    queryKey: ['budgets', 'summarizedBalance'],
-    queryFn: async () => await api.budget.getSummarizedBalance(currency),
+    queryKey: ['budgets', 'summarizedBalance', currency, filterBy],
+    queryFn: async () => await api.budget.getSummarizedBalance(currency, filterBy),
     ...options
   })
 }
