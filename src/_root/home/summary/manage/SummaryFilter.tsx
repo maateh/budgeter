@@ -1,6 +1,6 @@
 // shadcn
 import { Label } from '@/components/ui/label'
-import { MultiSelect } from '@/components/ui/multi-select'
+import { MultiSelect, OptionType } from '@/components/ui/multi-select'
 import { Separator } from '@/components/ui/separator'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
@@ -8,12 +8,36 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useBudgets } from '@/lib/react-query/queries'
 import { useManageSummary } from './context'
 
+// types
+import { Budget } from '@/services/api/types'
+
+const getOptions = (type?: 'budgets' | 'currencies', budgets?: Budget[]): OptionType[] => {
+  if (!type || !budgets || !budgets.length) return []
+
+  if (type === 'budgets') {
+    return budgets.map(({ id, name }) => ({ value: id, label: name }))
+  }
+
+  const currencies = [...new Set(budgets.map(({ balance }) => balance.currency))]
+  return currencies.map((currency) => ({
+    value: currency,
+    label: currency
+  }))
+}
+
 const SummaryFilter = () => {
-  const { type, dispatch } = useManageSummary()
+  const { type, selected, dispatch } = useManageSummary()
 
-  const { data: budgets, isLoading: isBudgetsLoading } = useBudgets()
+  const {
+    data: budgets,
+    isLoading: isBudgetsLoading
+  } = useBudgets({}, { enabled: !!type })
 
-  /* TODO: option to filter by: budgets, currencies (multi-select) */
+  const handleChangeType = (type: 'budgets' | 'currencies') => {
+    dispatch({ type: 'SET_TYPE', payload: type })
+    dispatch({ type: 'SET_SELECTED', payload: [] })
+  }
+
   return (
     <>
       <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -27,14 +51,14 @@ const SummaryFilter = () => {
           <ToggleGroupItem value="budgets"
             size="xs"
             variant="outline"
-            onClick={() => dispatch({ type: 'SET_TYPE', payload: 'budgets' })}
+            onClick={() => handleChangeType('budgets')}
           >
             Budgets
           </ToggleGroupItem>
           <ToggleGroupItem value="currencies"
             size="xs"
             variant="outline"
-            onClick={() => dispatch({ type: 'SET_TYPE', payload: 'currencies' })}
+            onClick={() => handleChangeType('currencies')}
           >
             Currencies
           </ToggleGroupItem>
@@ -43,10 +67,10 @@ const SummaryFilter = () => {
 
       <MultiSelect className="py-2.5 bg-background/50"
         id={type}
-        selected={[]}
-        onSelect={() => {}}
+        selected={selected}
+        onSelect={(value) => dispatch({ type: 'SET_SELECTED', payload: value })}
         disabled={!type || isBudgetsLoading || !budgets}
-        options={[]}
+        options={getOptions(type, budgets)}
       />
     </>
   )

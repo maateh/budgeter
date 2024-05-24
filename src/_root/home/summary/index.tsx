@@ -10,8 +10,15 @@ import { useSummarizedBalance } from "@/lib/react-query/queries"
 import { useManageSummary } from "./manage/context"
 
 const Summary = () => {
-  const { currency } = useManageSummary()
-  const { data: balance, isLoading: isBalanceLoading } = useSummarizedBalance(currency)
+  const { type, currency, selected } = useManageSummary()
+
+  const {
+    data: balance,
+    isLoading: isBalanceLoading
+  } = useSummarizedBalance(currency, {
+    id: type === 'budgets' && selected.length ? selected : undefined,
+    ['balance.currency']: type === 'currencies' && selected.length ? selected : undefined
+  })
 
   return (
     <>

@@ -24,7 +24,7 @@ const ManageSummary = () => {
           <CurrencySelect className="h-fit py-2.5 bg-background/50 rounded-full"
             id="currency"
             value={currency}
-            onChange={(code) => dispatch({ type: 'SET_CURRENCY', payload: code })}
+            onChange={(currency) => dispatch({ type: 'SET_CURRENCY', payload: currency })}
           />
         )}
       </FilterInput>

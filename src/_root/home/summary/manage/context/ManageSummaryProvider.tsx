@@ -12,6 +12,8 @@ const reducer = (state: ManageSummaryState, action: ManageSummaryAction): Manage
       return { ...state, currency: action.payload }
     case 'SET_TYPE':
       return { ...state, type: action.payload !== state.type ? action.payload : undefined }
+    case 'SET_SELECTED':
+      return { ...state, selected: action.payload }
     default:
       return state
   }
@@ -22,7 +24,10 @@ type ManageSummaryProviderProps = {
 } & React.PropsWithChildren
 
 const ManageSummaryProvider = ({ currency, children }: ManageSummaryProviderProps) => {
-  const [state, dispatch] = useReducer(reducer, { currency })
+  const [state, dispatch] = useReducer(reducer, {
+    currency,
+    selected: []
+  })
 
   return (
     <ManageSummaryContext.Provider value={{ ...state, dispatch }}>

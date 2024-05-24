@@ -5,6 +5,7 @@ import { ManageSummaryContextType } from "./types"
 
 const ManageSummaryContext = createContext<ManageSummaryContextType>({
   currency: '',
+  selected: [],
   dispatch: () => {}
 })
 
