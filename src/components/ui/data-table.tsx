@@ -54,6 +54,7 @@ interface DataTableProps<D> {
   columns: ColumnDef<D>[]
   data: D[]
   defaultSelectedRows?: RowSelectionState
+  defaultHiddenColumns?: VisibilityState
   pagination?: Pick<TableOptions<D>, 'manualPagination' | 'rowCount' | 'pageCount' | 'onPaginationChange'>
   state?: Partial<TableState>
   children?: (table: RTable<D>) => React.ReactNode
@@ -63,11 +64,12 @@ function DataTable<D>({
   data, columns, state,
   pagination,
   defaultSelectedRows = {},
+  defaultHiddenColumns = {},
   children
 }: DataTableProps<D>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(defaultSelectedRows)
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(defaultHiddenColumns)
 
   const table = useReactTable({
     /** Defaults */

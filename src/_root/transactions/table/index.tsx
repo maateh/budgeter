@@ -84,6 +84,7 @@ const TransactionsTable = () => {
             onPaginationChange: setPagination
           }}
           state={{ pagination }}
+          defaultHiddenColumns={{ ['Last Updated']: false }}
         >
           {(table) => (
             <div className="w-full py-3.5 px-3.5 flex flex-wrap justify-between items-center gap-x-2.5 gap-y-3 bg-primary rounded-3xl">

@@ -94,6 +94,19 @@ export const columns: ColumnDef<Transaction & { budget: Budget }>[] = [
     )
   },
   {
+    id: "Processed",
+    accessorKey: "payment.processedAt",
+    header: ({ column }) => <SortingButton sortingKey="payment.processedAt">{column.id}</SortingButton>,
+    cell: ({ row }) => (
+      <span className="text-xs font-normal">
+        {row.original.payment.processedAt
+          ? format(row.original.payment.processedAt || new Date(), 'yyyy. MM. dd.')
+          : 'Not processed yet.'
+        }
+      </span>
+    )
+  },
+  {
     id: "Last Updated",
     accessorKey: "updatedAt",
     header: ({ column }) => (
