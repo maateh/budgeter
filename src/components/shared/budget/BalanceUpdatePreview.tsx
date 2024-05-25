@@ -29,6 +29,7 @@ const BalanceUpdatePreview = ({ budget, payment }: BalanceUpdatePreviewProps) =>
           separatorProps={{ className: "h-4" }}
           orientation="vertical"
           size="sm"
+          customLabel=""
           iconProps={{ size: 18 }}
           balance={budget.balance}
         />
@@ -47,6 +48,7 @@ const BalanceUpdatePreview = ({ budget, payment }: BalanceUpdatePreviewProps) =>
           separatorProps={{ className: "h-4" }}
           orientation="vertical"
           size="sm"
+          customLabel=""
           iconProps={{ size: 18 }}
           balance={{
             ...budget.balance,
