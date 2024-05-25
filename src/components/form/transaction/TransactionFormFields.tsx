@@ -192,8 +192,8 @@ const TransactionFormFields = ({ control, budgetId }: TransactionFormFieldsProps
               <FormControl>
                 <DateTimePicker
                   label="Select the processing date..."
-                  selected={field.value!}
-                  onSelect={field.onChange}
+                  value={field.value || new Date()}
+                  onChange={field.onChange}
                 />
               </FormControl>
               <FormMessage />

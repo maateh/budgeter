@@ -1,21 +1,22 @@
 import { format } from "date-fns"
-import { SelectSingleEventHandler } from "react-day-picker"
 
 // icons
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Clock } from "lucide-react"
 
 // shadcn
 import { Button } from "@/components/ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator"
+import { TimePickerInput } from "@/components/ui/time-picker"
 
 type DateTimePickerProps = {
   label?: string
-  selected: Date
-  onSelect: SelectSingleEventHandler
+  value: Date
+  onChange: (date?: Date) => void
 }
 
-const DateTimePicker = ({ label = "Pick a date", selected, onSelect }: DateTimePickerProps) => {
+const DateTimePicker = ({ label = "Pick a date", value, onChange }: DateTimePickerProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -24,18 +25,26 @@ const DateTimePicker = ({ label = "Pick a date", selected, onSelect }: DateTimeP
           size="sm"
         >
           <CalendarIcon size={18} />
-          {selected ? format(selected, 'yyyy. MM. dd. HH:mm') : (
+          {value && label ? format(value, 'yyyy. MM. dd. HH:mm') : (
             <span>{label}</span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
-        {/* TODO: implement time picker */}
         <Calendar
           mode="single"
-          selected={selected}
-          onSelect={onSelect}
+          selected={value}
+          onSelect={onChange}
           initialFocus
+        />
+
+        <Separator className="w-5/6 mx-auto my-2" />
+
+        <Clock className="size-4 mx-auto" strokeWidth={3} />
+        <TimePickerInput
+          layoutProps={{ className: "mx-auto mt-4" }}
+          date={value}
+          onChange={onChange}
         />
       </PopoverContent>
     </Popover>
