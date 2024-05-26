@@ -1,8 +1,12 @@
+// icons
+import { BadgeInfo } from "lucide-react"
+
 // shadcn
 import { Separator } from "@/components/ui/separator"
 
 // components
 import { BalanceSummary, BalanceSummarySkeleton } from "@/components/shared/budget/BalanceSummary"
+import InfoBadge from "@/components/ui/custom/InfoBadge"
 import ManageSummary from "./manage"
 
 // hooks
@@ -15,10 +19,10 @@ const Summary = () => {
   const {
     data: balance,
     isLoading: isBalanceLoading
-  } = useSummarizedBalance(currency, {
+  } = useSummarizedBalance(currency!, {
     id: type === 'budgets' && selected.length ? selected : undefined,
     ['balance.currency']: type === 'currencies' && selected.length ? selected : undefined
-  })
+  }, { enabled: !!currency })
 
   return (
     <>
@@ -33,7 +37,7 @@ const Summary = () => {
 
         <Separator className="w-4/5 h-0.5 mx-auto my-4 rounded-full" />
 
-        {!isBalanceLoading && balance ? (
+        {!isBalanceLoading ? balance ? (
           <BalanceSummary balance={balance}
             balanceBadgeProps={{
               className: 'w-full px-5 py-2 max-w-56 min-w-32',
@@ -45,6 +49,16 @@ const Summary = () => {
               className: 'max-w-72 py-1.5',
               valueProps: { className: 'text-sm font-medium' }
             }}
+          />
+        ) : (
+          <InfoBadge className="w-fit mx-auto"
+            separatorProps={{ className: "h-4" }}
+            valueProps={{ className: "text-sm font-body font-normal break-words" }}
+            orientation="vertical"
+            variant="destructive"
+            size="sm"
+            icon={<BadgeInfo className="text-destructive" size={20} />}
+            value={currency ? 'There is no budget to summarize.' : 'Please select your preferred currency.'}
           />
         ) : <BalanceSummarySkeleton />}
       </div>

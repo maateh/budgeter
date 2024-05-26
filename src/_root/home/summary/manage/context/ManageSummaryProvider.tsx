@@ -6,9 +6,13 @@ import ManageSummaryContext from "./ManageSummaryContext"
 // types
 import { ManageSummaryAction, ManageSummaryState } from "./types"
 
+// utils
+import { getPreferredCurrency, setPrefferedCurrency } from "@/utils"
+
 const reducer = (state: ManageSummaryState, action: ManageSummaryAction): ManageSummaryState => {
   switch (action.type) {
     case 'SET_CURRENCY':
+      setPrefferedCurrency(action.payload)
       return { ...state, currency: action.payload }
     case 'SET_TYPE':
       return { ...state, type: action.payload !== state.type ? action.payload : undefined }
@@ -20,10 +24,10 @@ const reducer = (state: ManageSummaryState, action: ManageSummaryAction): Manage
 }
 
 type ManageSummaryProviderProps = {
-  currency: string
+  currency?: string
 } & React.PropsWithChildren
 
-const ManageSummaryProvider = ({ currency, children }: ManageSummaryProviderProps) => {
+const ManageSummaryProvider = ({ currency = getPreferredCurrency(), children }: ManageSummaryProviderProps) => {
   const [state, dispatch] = useReducer(reducer, {
     currency,
     selected: []

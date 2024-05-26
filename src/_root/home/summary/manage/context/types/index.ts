@@ -1,5 +1,5 @@
 export type ManageSummaryState = {
-  currency: string
+  currency?: string
   type?: 'budgets' | 'currencies'
   selected: string[]
 }
