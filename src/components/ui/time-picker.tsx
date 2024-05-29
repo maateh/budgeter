@@ -34,15 +34,18 @@ const TimeInput = forwardRef<HTMLInputElement, TimeInputProps>(({
     const value = e.target.value
     const numericValue = parseInt(value)
 
-    if (type === 'hours' && isValidHour(value)) {
+    if (type === 'hours') {
+      if (!isValidHour(value)) return
       date.setHours(numericValue)
     }
 
-    if (type === 'minutes' && isValidMinuteOrSecond(value)) {
+    if (type === 'minutes') {
+      if (!isValidMinuteOrSecond(value)) return
       date.setMinutes(numericValue)
     }
 
-    if (type === 'seconds' && isValidMinuteOrSecond(value)) {
+    if (type === 'seconds') {
+      if (!isValidMinuteOrSecond(value)) return
       date.setSeconds(numericValue)
     }
 
