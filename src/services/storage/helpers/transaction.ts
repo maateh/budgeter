@@ -59,7 +59,7 @@ function handlePaymentOnTransaction(
     payment: {
       ...basePayment,
       processed,
-      processedAt: processed ? date : undefined,
+      processedAt: processed ? basePayment.processedAt || date : undefined,
     }
   }
 }

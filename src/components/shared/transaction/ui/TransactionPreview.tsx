@@ -33,7 +33,7 @@ const TransactionPreview = ({ transaction, budget, className, ...props }: Transa
           <p className="text-sm font-heading font-medium truncate sm:text-base">{transaction.name}</p>
           <p className="text-xs max-sm:truncate sm:text-ellipsis">
             {formatDistance(
-              transaction.updatedAt, Date.now(), {
+              transaction.payment.processedAt || transaction.payment.createdAt, Date.now(), {
                 addSuffix: true
               }
             )}

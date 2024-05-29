@@ -97,7 +97,6 @@ class TransactionStorageAPI implements ITransactionAPI {
       }
     })
 
-
     let subpayment: Subpayment = {
       id: crypto.randomUUID(),
       budgetId,
