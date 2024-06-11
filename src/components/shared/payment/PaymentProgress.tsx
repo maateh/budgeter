@@ -133,8 +133,8 @@ const PaymentProgress = ({ transaction }: PaymentProgressProps) => {
 
       <Separator className="w-3/5 mx-auto mt-1 mb-1.5" />
 
-      {/* TODO: redesign progress ui component */}
       <Progress className="min-w-32 max-w-sm mx-auto"
+        variant={transaction.payment.processedAmount < 0 ? 'negative' : 'default'}
         maxValue={transaction.payment.amount}
         value={transaction.payment.processedAmount}
       />
