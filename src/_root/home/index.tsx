@@ -12,11 +12,16 @@ import Transactions from "@/components/shared/transaction/Transactions"
 import Budgets from "./budgets"
 import Summary from "./summary"
 
+// hooks
+import useTitle from "@/hooks/title"
+
 // context
 import { ManageSummaryProvider } from "./summary/manage/context"
 
 const Home = () => {
   const navigate = useNavigate()
+
+  useTitle('Home')
 
   return (
     <div className="page-wrapper">

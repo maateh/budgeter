@@ -1,7 +1,15 @@
 // icons
-import { Receipt, Coins, Gift } from "lucide-react"
+import { Receipt, Coins, Gift, LucideIcon } from "lucide-react"
 
-export const navLinks = [
+export const BASE_PAGE_TITLE: string = 'Budgeter'
+
+type NavLink = {
+  label: string
+  link: string
+  Icon: LucideIcon
+}
+
+export const navLinks: NavLink[] = [
   {
     label: 'Transactions',
     link: '/transactions',

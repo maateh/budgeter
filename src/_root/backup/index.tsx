@@ -5,7 +5,12 @@ import { Separator } from "@/components/ui/separator"
 import BackupCreateTable from "./create-table"
 import BackupRestore from "./restore"
 
+// hooks
+import useTitle from "@/hooks/title"
+
 const Backup = () => {
+  useTitle('Backups')
+
   return (
     <div className="page-wrapper">
       <h1>

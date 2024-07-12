@@ -5,7 +5,12 @@ import { Separator } from "@/components/ui/separator"
 import { RangeFilter, BasicFilter } from "./filter"
 import TransactionsTable from "./table"
 
+// hooks
+import useTitle from "@/hooks/title"
+
 const Transactions = () => {
+  useTitle('Transactions')
+
   return (
     <div className="page-wrapper">
       <h1>

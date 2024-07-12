@@ -16,12 +16,15 @@ import BudgetNotes from "./notes"
 
 // hooks
 import { useBudget } from "@/lib/react-query/queries"
+import useTitle from "@/hooks/title"
 
 const BudgetDetails = () => {
   const { id } = useParams() as { id: string }
   const navigate = useNavigate()
 
   const { data: budget, isLoading: isBudgetLoading } = useBudget(id)
+
+  useTitle(`${budget ? budget.name : 'Budget Details'}`)
 
   return (
     <div className="page-wrapper">
