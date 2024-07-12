@@ -40,12 +40,12 @@ const Navbar = () => {
           </div>
         </div>
 
-        <ul ref={linksRef} className="flex flex-wrap justify-around items-center gap-x-6 gap-y-2 mobile-closed max-lg:[&.mobile-closed]:hidden lg:mx-8 lg:justify-around">
+        <ul ref={linksRef} className="flex flex-wrap justify-around items-center gap-x-6 gap-y-2 mobile-closed max-lg:[&.mobile-closed]:hidden lg:mx-12 lg:justify-around">
           <Separator className="w-5/6 my-3 bg-foreground/15 lg:hidden" />
 
           {navLinks.map(({ link, label, Icon }) => (
             <li key={label}>
-              <NavLink className="py-2 px-4 icon-wrapper border-md [&.active]:bg-accent/65 [&.active]:shadow-lg drop-shadow-md"
+              <NavLink className="py-2 px-4 icon-wrapper border-md [&.active]:bg-accent/65 [&.active]:shadow-md drop-shadow-md"
                 to={link}
               >
                 <Icon size={22} />
