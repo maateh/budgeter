@@ -1,4 +1,4 @@
-# Budgeter
+# Budgeter (WIP)
 
 Budgeter is a quite simple application which helps you to manage your money manually.<br>
 It's just a personal project that has been made because I have always struggled to keep track of my payments and transactions that are paid in cash.
@@ -7,7 +7,7 @@ It's just a personal project that has been made because I have always struggled 
 
 ---
 
-> ## Options by pages
+## Options by pages
 > Here, you can find helpful information about the possibilities of the application separated by pages.
 
 ### Home
@@ -29,7 +29,7 @@ It's just a personal project that has been made because I have always struggled 
 
 ---
 
-> ## Core Logic of different data models
+## Core Logic of different data models
 > Here, you can find information that could be useful to understand how the different data models look like and how they are related with each other. This makes it easier to recognize how you should use different options within the application.
 
 ### Budgets
@@ -70,7 +70,7 @@ It's just a personal project that has been made because I have always struggled 
 
 ---
 
-> ### 3rd party APIs
+### 3rd party APIs
 
 | API                                                   | Used for
 | :---------------------------------------------------- | :--------------------------------------------------------------------
@@ -78,7 +78,7 @@ It's just a personal project that has been made because I have always struggled 
 
 ---
 
-> ### TODO
+### TODO
 
 - [ ] Authentication
 - [ ] REST API
