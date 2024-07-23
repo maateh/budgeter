@@ -7,7 +7,7 @@ import { BackupFileContent } from "@/services/backup/types"
 import { backupSchema } from "@/lib/validations"
 
 interface IBackupAPI {
-  create(complete: boolean, budgetIds: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }>
+  create(complete: boolean, budgetIds: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent, fileName: string }>
   restore(backupFile: z.infer<typeof backupSchema>): Promise<void>
 }
 

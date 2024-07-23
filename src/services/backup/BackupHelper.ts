@@ -15,6 +15,7 @@ import { IBackupAPI } from "@/services/api/interfaces"
 import { backupSchema } from "@/lib/validations"
 
 // utils
+import { format } from "date-fns"
 import { filterObject } from "@/services/storage/utils"
 
 class BackupHelper implements IBackupAPI {
@@ -39,13 +40,18 @@ class BackupHelper implements IBackupAPI {
     return this._instance
   }
 
-  public async create(complete: boolean, budgetIds: string[]): Promise<{ downloadUrl: string, fileContent: BackupFileContent }> {
+  public async create(complete: boolean, budgetIds: string[]): Promise<{
+    downloadUrl: string
+    fileName: string
+    fileContent: BackupFileContent
+  }> {
     const data = await this.collectData(complete, budgetIds)
     const fileContent = this.convertToFileContent(data, complete)
     const file = this.generateFile(fileContent)
     
     return {
       downloadUrl: URL.createObjectURL(file),
+      fileName: file.name,
       fileContent
     }
   }
@@ -107,8 +113,11 @@ class BackupHelper implements IBackupAPI {
     }
   }
 
-  private generateFile(backup: BackupFileContent): File {   
-    return new File([JSON.stringify(backup)], 'backup.json', {
+  private generateFile(backup: BackupFileContent): File {
+    const date = format(Date.now(), 'yyyy-MM-dd_hh-mm')
+    const fileName = `budgeter_backup${backup.complete ? '_complete' : ''}_${date}`
+
+    return new File([JSON.stringify(backup)], fileName, {
       type: 'application/json'
     })
   }

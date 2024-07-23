@@ -93,7 +93,7 @@ const BackupCreateTable = () => {
               <BackupInfo {...backup.fileContent} />
               <a className="w-fit ml-auto px-3.5 py-1.5 font-medium font-heading bg-foreground text-background rounded-full icon-wrapper"
                 href={backup.downloadUrl}
-                download
+                download={backup.fileName}
               >
                 <PackageCheck />
                 Your backup is ready to save
