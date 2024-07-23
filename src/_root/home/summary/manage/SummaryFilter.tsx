@@ -28,7 +28,7 @@ const SummaryFilter = () => {
     <>
       <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
         <Label className="text-base font-heading font-normal indent-border" htmlFor={type}>
-          <span className="text-accent overline">Filter</span> by
+          <span className="text-green-500 dark:text-green-300 font-medium overline">Filter</span> by
         </Label>
 
         <Separator className="h-3.5 w-1 rounded-full bg-foreground/10" orientation="vertical" />

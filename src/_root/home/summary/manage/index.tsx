@@ -17,7 +17,7 @@ const ManageSummary = () => {
 
       <FilterInput className="flex-auto w-1/5 h-full min-w-36 max-w-56 ml-auto gap-y-1"
         labelProps={{ className: 'indent-border', htmlFor: 'currency' }}
-        label={<><span className="text-accent overline">Calculate</span> by</>}
+        label={<><span className="text-green-500 dark:text-green-300 font-medium overline">Calculate</span> by</>}
         onReset={() => dispatch({ type: 'SET_CURRENCY', payload: undefined })}
       >
         {() => (
