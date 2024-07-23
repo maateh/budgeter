@@ -1,6 +1,6 @@
 // shadcn
 import { Label } from '@/components/ui/label'
-import { MultiSelect, OptionType } from '@/components/ui/multi-select'
+import { MultiSelect } from '@/components/ui/multi-select'
 import { Separator } from '@/components/ui/separator'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
@@ -8,22 +8,8 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useBudgets } from '@/lib/react-query/queries'
 import { useManageSummary } from './context'
 
-// types
-import { Budget } from '@/services/api/types'
-
-const getOptions = (type?: 'budgets' | 'currencies', budgets?: Budget[]): OptionType[] => {
-  if (!type || !budgets || !budgets.length) return []
-
-  if (type === 'budgets') {
-    return budgets.map(({ id, name }) => ({ value: id, label: name }))
-  }
-
-  const currencies = [...new Set(budgets.map(({ balance }) => balance.currency))]
-  return currencies.map((currency) => ({
-    value: currency,
-    label: currency
-  }))
-}
+// utils
+import { getSummaryOptions } from "@/_root/home/utils"
 
 const SummaryFilter = () => {
   const { type, selected, dispatch } = useManageSummary()
@@ -70,7 +56,7 @@ const SummaryFilter = () => {
         selected={selected}
         onSelect={(value) => dispatch({ type: 'SET_SELECTED', payload: value })}
         disabled={!type || isBudgetsLoading || !budgets}
-        options={getOptions(type, budgets)}
+        options={getSummaryOptions(type, budgets)}
       />
     </>
   )
