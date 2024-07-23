@@ -21,7 +21,6 @@ const BudgetList = ({ filter, params, sortBy }: QueryOptions<Budget>) => {
     return <BudgetListSkeleton />
   }
 
-  // TODO: add filter
   return (
     <>
       <Listing className="mb-4 flex flex-row flex-wrap justify-around gap-x-6 gap-y-4"

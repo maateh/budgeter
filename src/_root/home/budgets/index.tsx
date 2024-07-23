@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 // icons
 import { PackagePlus } from "lucide-react"
 
@@ -6,11 +8,14 @@ import { Button } from "@/components/ui/button"
 
 // components
 import BudgetList from "@/components/shared/budget/BudgetList"
+import BudgetCurrencyFilter from "@/_root/home/budgets/BudgetCurrencyFilter"
 
 // hooks
 import { useDialog } from "@/hooks"
 
 const Budgets = () => {
+  const [currencyFilter, setCurrencyFilter] = useState<string | undefined>()
+
   const { openDialog } = useDialog()
 
   return (
@@ -30,7 +35,11 @@ const Budgets = () => {
         </Button>
       </div>
 
-      <BudgetList params={{ limit: 8, offset: 0 }} />
+      <BudgetCurrencyFilter setCurrencyFilter={setCurrencyFilter} />
+      <BudgetList
+        params={{ limit: 8, offset: 0 }}
+        filter={{ filterBy: { ['balance.currency']: currencyFilter }}}
+      />
     </>
   )
 }
