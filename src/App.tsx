@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 
 // layouts
 import { RootLayout } from "@/_root/RootLayout"
-import { Home, BudgetDetails, Transactions, Wishlist, Splitter, Backup } from "@/_root"
+import { Home, BudgetDetails, Transactions, Backup } from "@/_root"
 
 import { DialogLayout, DialogSkeleton } from "@/_dialogs/DialogLayout"
 import { CreateTransaction, SaveBudget, TransactionDetails, TransferMoney } from "@/_dialogs"
@@ -41,18 +41,6 @@ const App = () => {
           <Route path="/transactions" element={(
             <Suspense fallback={<PageLoader />}>
               <Transactions />
-            </Suspense>
-          )} />
-
-          <Route path="/wishlist" element={(
-            <Suspense fallback={<PageLoader />}>
-              <Wishlist />
-            </Suspense>
-          )} />
-
-          <Route path="/splitter" element={(
-            <Suspense fallback={<PageLoader />}>
-              <Splitter />
             </Suspense>
           )} />
 
